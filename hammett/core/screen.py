@@ -1,17 +1,11 @@
 from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
-    ParseMode,
-    Update,
 )
+from telegram.constants import ParseMode
 from telegram.error import BadRequest
-from telegram.ext import (
-    CallbackContext,
-    ConversationHandler as BaseConversationHandler,
-    Dispatcher,
-)
-from telegram.ext.conversationhandler import CheckUpdateType
-from telegram.utils.helpers import DEFAULT_NONE
+from telegram.ext import ConversationHandler as NativeConversationHandler
+from telegram._utils.defaultvalue import DEFAULT_NONE
 
 from hammett.core.exceptions import (
     ImproperlyConfigured,
@@ -64,10 +58,10 @@ class Button:
         hiders_checker = import_string(settings.HIDERS_CHECKER)
         self.hiders_checker = hiders_checker(self.hiders.hiders_set)
 
-    def _specify_visibility(self, update, context):
+    async def _specify_visibility(self, update, context):
         visibility = True
         if self.hiders:
-            if not self.hiders_checker.run(update, context):
+            if not await self.hiders_checker.run(update, context):
                 visibility = False
 
         return visibility
@@ -80,8 +74,8 @@ class Button:
     def create_handler_pattern(handler):
         return f'{type(handler.__self__).__name__}.{handler.__name__}'
 
-    def create(self, update, context):
-        visibility = self._specify_visibility(update, context)
+    async def create(self, update, context):
+        visibility = await self._specify_visibility(update, context)
 
         if self.source_type in (GOTO_SOURCE_TYPE, HANDLER_SOURCE_TYPE, ):
             if self.source_type == GOTO_SOURCE_TYPE:
@@ -97,16 +91,17 @@ class Button:
             raise UnknownSourceType
 
 
-class ConversationHandler(BaseConversationHandler):
-    def handle_update(
+class ConversationHandler(NativeConversationHandler):
+    async def handle_update(
             self,
-            update: Update,
-            dispatcher: Dispatcher,
-            check_result: CheckUpdateType,
-            context: CallbackContext = None,
+            update,
+            dispatcher,
+            check_result,
+            context=None,
     ):
         try:
-            return super().handle_update(update, dispatcher, check_result, context)
+            res = await super().handle_update(update, dispatcher, check_result, context)
+            return res
         except BadRequest as exc:
             raise exc
 
@@ -133,12 +128,12 @@ class Screen:
     #
 
     @staticmethod
-    def _create_markup_keyboard(rows, update, context):
+    async def _create_markup_keyboard(rows, update, context):
         keyboard = []
         for row in rows:
             buttons = []
             for button in row:
-                inline_button, visible = button.create(update, context)
+                inline_button, visible = await button.create(update, context)
                 if visible:
                     buttons.append(inline_button)
 
@@ -150,13 +145,13 @@ class Screen:
     # Public methods
     #
 
-    def goto(self, update, context):
+    async def goto(self, update, context):
         """Switches to the screen. """
 
-        self.render(update, context)
+        await self.render(update, context)
         return DEFAULT_STAGE
 
-    def render(
+    async def render(
             self,
             update,
             context,
@@ -177,13 +172,13 @@ class Screen:
             send = context.bot.send_message
         else:
             query = update.callback_query
-            query.answer()
+            await query.answer()
 
             send = query.edit_message_text
 
-        send(
+        await send(
             parse_mode=ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
-            reply_markup=self._create_markup_keyboard(keyboard, update, context),
+            reply_markup=await self._create_markup_keyboard(keyboard, update, context),
             text=text,
             **kwargs,
         )
@@ -193,5 +188,5 @@ class Screen:
 
         return []
 
-    def start(self, update, context):
+    async def start(self, update, context):
         raise NotImplemented
