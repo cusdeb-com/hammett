@@ -27,13 +27,13 @@ class NotAdminConfirmation(Screen):
             ],
         ]
 
-    def exclude_user_from_admin_group(self, update, context):
+    async def exclude_user_from_admin_group(self, update, context):
         main_menu = MainMenu()
-        user = main_menu.get_user(update)
+        user = await main_menu.get_user(update)
 
         settings.ADMIN_GROUP.remove(user.id)
 
-        main_menu.render(update, context)
+        await main_menu.render(update, context)
         return DEFAULT_STAGE
 
 
@@ -56,7 +56,7 @@ class MainMenu(Screen):
     # Private methods
     #
 
-    def _get_user_status(self, user_id):
+    async def _get_user_status(self, user_id):
         if user_id in settings.ADMIN_GROUP:
             return self.admin_status
 
@@ -66,18 +66,18 @@ class MainMenu(Screen):
     # Public methods
     #
 
-    def get_user(self, update):
+    async def get_user(self, update):
         try:
             user = update.message.from_user
         except AttributeError:
             query = update.callback_query
-            query.answer()
+            await query.answer()
 
             user = update.effective_chat
 
         return user
 
-    def render(
+    async def render(
             self,
             update,
             context,
@@ -86,9 +86,10 @@ class MainMenu(Screen):
             keyboard=None,
             text=None,
     ):
-        user_status = self._get_user_status(self.get_user(update).id)
+        user = await self.get_user(update)
+        user_status = await self._get_user_status(user.id)
         text = self.text_map[user_status].format(user_status=user_status)
-        super().render(
+        await super().render(
             update,
             context,
             text=text,
@@ -113,14 +114,14 @@ class MainMenu(Screen):
             ],
         ]
 
-    def start(self, update, context):
+    async def start(self, update, context):
         """Replies to the /start command. """
 
-        user = self.get_user(update)
+        user = await self.get_user(update)
         settings.ADMIN_GROUP.append(user.id)
         LOGGER.info('The user %s (%s) was added to the admin group.', user.username, user.id)
 
-        self.render(update, context, as_new_message=True)
+        await self.render(update, context, as_new_message=True)
         return DEFAULT_STAGE
 
 
