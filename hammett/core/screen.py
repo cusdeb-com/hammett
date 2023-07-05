@@ -145,6 +145,17 @@ class Screen:
     # Public methods
     #
 
+    @staticmethod
+    async def get_callback_query(update):
+        """Gets CallbackQuery from Update. """
+
+        query = update.callback_query
+        # CallbackQueries need to be answered, even if no notification to the user is needed.
+        # Some clients may have trouble otherwise.
+        # See https://core.telegram.org/bots/api#callbackquery
+        await query.answer()
+        return query
+
     async def goto(self, update, context):
         """Switches to the screen. """
 
@@ -171,9 +182,7 @@ class Screen:
             kwargs['chat_id'] = chat_id
             send = context.bot.send_message
         else:
-            query = update.callback_query
-            await query.answer()
-
+            query = await self.get_callback_query(update)
             send = query.edit_message_text
 
         await send(
