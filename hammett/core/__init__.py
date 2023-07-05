@@ -1,7 +1,8 @@
+from telegram import Update
 from telegram.ext import (
+    Application as NativeApplication,
     CallbackQueryHandler,
     CommandHandler,
-    Updater,
 )
 
 from hammett.core.screen import (
@@ -33,12 +34,12 @@ class Application:
         self._name = name
         self._native_states = native_states or {}
         self._states = states
-        self._updater = Updater(settings.TOKEN)
+        self._native_application = NativeApplication.builder().token(settings.TOKEN).build()
 
         for state in self._states.items():
             self._register_handlers(*state)
 
-        self._updater.dispatcher.add_handler(ConversationHandler(
+        self._native_application.add_handler(ConversationHandler(
             entry_points=[CommandHandler('start', self._entry_point.start)],
             states=self._native_states,
             fallbacks=[CommandHandler('start', self._entry_point.start)],
@@ -78,5 +79,4 @@ class Application:
     def run(self):
         """Runs the application. """
 
-        self._updater.start_polling()
-        self._updater.idle()
+        self._native_application.run_polling(allowed_updates=Update.ALL_TYPES)

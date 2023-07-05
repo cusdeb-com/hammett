@@ -44,22 +44,22 @@ class HidersChecker:
     # Public methods
     #
 
-    def is_admin(self, update, context) -> bool:
+    async def is_admin(self, update, context) -> bool:
         """A stub for checking whether the user is an admin. """
 
         return False
 
-    def is_beta_tester(self, update, context) -> bool:
+    async def is_beta_tester(self, update, context) -> bool:
         """A stub for checking whether the user is a beta tester. """
 
         return False
 
-    def is_moderator(self, update, context) -> bool:
+    async def is_moderator(self, update, context) -> bool:
         """A stub for checking whether the user is a moderator. """
 
         return False
 
-    def run(self, update, context):
+    async def run(self, update, context):
         for hider in self._hiders_set:
             try:
                 hider_handler = self._registered_hiders[hider]
@@ -68,7 +68,7 @@ class HidersChecker:
                     f"The hider '{hider}' is unregistered"
                 )
 
-            if hider_handler(update, context):
+            if await hider_handler(update, context):
                 return True
         else:
             return False
