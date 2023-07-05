@@ -29,7 +29,7 @@ class NotAdminConfirmation(Screen):
 
     async def exclude_user_from_admin_group(self, update, context):
         main_menu = MainMenu()
-        user = await main_menu.get_user(update)
+        user = update.effective_user
 
         settings.ADMIN_GROUP.remove(user.id)
 
@@ -66,17 +66,6 @@ class MainMenu(Screen):
     # Public methods
     #
 
-    async def get_user(self, update):
-        try:
-            user = update.message.from_user
-        except AttributeError:
-            query = update.callback_query
-            await query.answer()
-
-            user = update.effective_chat
-
-        return user
-
     async def render(
             self,
             update,
@@ -86,7 +75,7 @@ class MainMenu(Screen):
             keyboard=None,
             text=None,
     ):
-        user = await self.get_user(update)
+        user = update.effective_user
         user_status = await self._get_user_status(user.id)
         text = self.text_map[user_status].format(user_status=user_status)
         await super().render(
@@ -117,7 +106,7 @@ class MainMenu(Screen):
     async def start(self, update, context):
         """Replies to the /start command. """
 
-        user = await self.get_user(update)
+        user = update.message.from_user
         settings.ADMIN_GROUP.append(user.id)
         LOGGER.info('The user %s (%s) was added to the admin group.', user.username, user.id)
 
