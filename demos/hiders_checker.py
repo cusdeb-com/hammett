@@ -5,12 +5,12 @@ from hammett.core.hiders import HidersChecker
 
 
 class DemoHidersChecker(HidersChecker):
-    def is_admin(self, update, context) -> bool:
+    async def is_admin(self, update, context) -> bool:
         try:
             user = update.message.from_user
         except AttributeError:
             query = update.callback_query
-            query.answer()
+            await query.answer()
 
             user = update.effective_chat
 
