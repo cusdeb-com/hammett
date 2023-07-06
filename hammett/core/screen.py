@@ -100,9 +100,10 @@ class ConversationHandler(NativeConversationHandler):
     ):
         try:
             res = await super().handle_update(update, dispatcher, check_result, context)
+        except BadRequest as exc:  # noqa: TRY302
+            raise exc  # noqa: TRY201
+        else:
             return res
-        except BadRequest as exc:
-            raise exc
 
 
 class Screen:
