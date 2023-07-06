@@ -2,14 +2,13 @@
 to control the visibility of the buttons on the screens.
 """
 
-from hammett.core import Application
-from hammett.core.screen import DEFAULT_STAGE
-
 from demos.screens import (
     MainMenu,
     NotAdminConfirmation,
     SecretRoom,
 )
+from hammett.core import Application
+from hammett.core.screen import DEFAULT_STAGE
 
 
 def main():

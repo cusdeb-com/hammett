@@ -2,10 +2,10 @@ from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
 )
+from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import ConversationHandler as NativeConversationHandler
-from telegram._utils.defaultvalue import DEFAULT_NONE
 
 from hammett.core.exceptions import (
     ImproperlyConfigured,
