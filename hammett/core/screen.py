@@ -80,10 +80,11 @@ class Button:
 
             pattern = self.create_handler_pattern(source)
             return InlineKeyboardButton(self.caption, callback_data=pattern), visibility
-        elif self.source_type == URL_SOURCE_TYPE:
+
+        if self.source_type == URL_SOURCE_TYPE:
             return InlineKeyboardButton(self.caption, url=self.source), visibility
-        else:
-            raise UnknownSourceType
+
+        raise UnknownSourceType
 
 
 class ConversationHandler(NativeConversationHandler):
