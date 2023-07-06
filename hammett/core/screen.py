@@ -195,4 +195,4 @@ class Screen:
         return []
 
     async def start(self, update, context):
-        raise NotImplemented
+        raise NotImplementedError
