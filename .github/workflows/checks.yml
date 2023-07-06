@@ -1,0 +1,23 @@
+name: Linter Runner
+
+on: [push]
+
+jobs:
+  linter:
+    name: Run linter
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install ruff
+
+      - name: Run ruff
+        run: ruff check . --config=ruff.toml
