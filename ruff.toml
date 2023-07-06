@@ -22,8 +22,6 @@ ignore = [
     "N818",  # error-suffix-on-exception-name
     "RET505",
     "RUF012",
-    "SIM102",
-    "SIM108",
 ]
 
 exclude = ["src/*"]
