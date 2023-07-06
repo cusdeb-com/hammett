@@ -72,7 +72,7 @@ class MainMenu(Screen):
             context,
             *,
             as_new_message=False,
-            keyboard=None,
+            _keyboard=None,
             text=None,
     ):
         user = update.effective_user

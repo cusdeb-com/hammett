@@ -44,17 +44,17 @@ class HidersChecker:
     # Public methods
     #
 
-    async def is_admin(self, update, context) -> bool:
+    async def is_admin(self, _update, _context) -> bool:
         """A stub for checking whether the user is an admin. """
 
         return False
 
-    async def is_beta_tester(self, update, context) -> bool:
+    async def is_beta_tester(self, _update, _context) -> bool:
         """A stub for checking whether the user is a beta tester. """
 
         return False
 
-    async def is_moderator(self, update, context) -> bool:
+    async def is_moderator(self, _update, _context) -> bool:
         """A stub for checking whether the user is a moderator. """
 
         return False
