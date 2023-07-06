@@ -69,5 +69,5 @@ class HidersChecker:
 
             if await hider_handler(update, context):
                 return True
-        else:
-            return False
+
+        return False
