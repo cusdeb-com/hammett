@@ -5,7 +5,6 @@ the HAMMETT_SETTINGS_MODULE environment variable.
 
 import os
 
-
 HIDERS_CHECKER = ''
 
 HTML_PARSE_MODE = True

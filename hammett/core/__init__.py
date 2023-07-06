@@ -1,17 +1,17 @@
 from telegram import Update
+from telegram.ext import Application as NativeApplication
 from telegram.ext import (
-    Application as NativeApplication,
     CallbackQueryHandler,
     CommandHandler,
 )
 
+from hammett.core.exceptions import TokenIsNotSpecified
 from hammett.core.screen import (
     GOTO_SOURCE_TYPE,
     HANDLER_SOURCE_TYPE,
     Button,
     ConversationHandler,
 )
-from hammett.core.exceptions import TokenIsNotSpecified
 from hammett.utils.module_loading import import_string
 
 
