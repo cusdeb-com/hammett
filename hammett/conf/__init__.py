@@ -214,7 +214,7 @@ class Settings:
     """The class implements the interface for working with settings of
     the projects based on Hammett.
     """
-    
+
     def __init__(self, settings_module):
         self.settings_module_name = settings_module
 
