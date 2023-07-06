@@ -58,7 +58,7 @@ class Settings:
 
         if self._is_overridden('PERMISSIONS'):
             setting_value = getattr(self._settings_module, 'PERMISSIONS')
-            if not isinstance(setting_value, (list, tuple)):
+            if not isinstance(setting_value, list | tuple):
                 msg = "The 'PERMISSIONS' setting must be a list or a tuple."
                 raise ImproperlyConfigured(msg)
 
