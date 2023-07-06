@@ -54,7 +54,7 @@ class Application:
             obj = screen()
             for buttons_row in obj.setup_keyboard():
                 for button in buttons_row:
-                    if button.source_type not in (GOTO_SOURCE_TYPE, HANDLER_SOURCE_TYPE, ):
+                    if button.source_type not in (GOTO_SOURCE_TYPE, HANDLER_SOURCE_TYPE):
                         continue
 
                     if button.source_type == GOTO_SOURCE_TYPE:

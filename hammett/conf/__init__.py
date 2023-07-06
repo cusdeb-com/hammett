@@ -29,7 +29,7 @@ class Settings:
         self._settings_module_name = os.environ.get(_HAMMETT_SETTINGS_MODULE)
         if not self._settings_module_name:
             raise ImproperlyConfigured(
-                'Config failed'
+                'Config failed',
             )
 
         self._settings_module = importlib.import_module(self._settings_module_name)
@@ -55,12 +55,12 @@ class Settings:
             setting_value = getattr(self._settings_module, 'HIDERS_CHECKER_CLASS')
             if not isinstance(setting_value, type) or not issubclass(setting_value, HidersChecker):
                 raise ImproperlyConfigured(
-                    'HIDERS_CHECKER_CLASS must be a subclass of HidersChecker'
+                    'HIDERS_CHECKER_CLASS must be a subclass of HidersChecker',
                 )
 
         if self._is_overridden('PERMISSIONS'):
             setting_value = getattr(self._settings_module, 'PERMISSIONS')
-            if not isinstance(setting_value, (list, tuple, )):
+            if not isinstance(setting_value, (list, tuple)):
                 raise ImproperlyConfigured("The 'PERMISSIONS' setting must be a list or a tuple.")
 
     def _is_overridden(self, setting):

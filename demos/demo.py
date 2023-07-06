@@ -25,7 +25,7 @@ def main():
                 NotAdminConfirmation,
                 SecretRoom,
             ],
-        }
+        },
     )
     app.run()
 
