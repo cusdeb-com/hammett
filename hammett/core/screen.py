@@ -52,7 +52,7 @@ class Button:
 
         if not settings.HIDERS_CHECKER:
             raise ImproperlyConfigured(
-                "The 'HIDERS_CHECKER' setting is not set"
+                "The 'HIDERS_CHECKER' setting is not set",
             )
 
         hiders_checker = import_string(settings.HIDERS_CHECKER)
@@ -77,7 +77,7 @@ class Button:
     async def create(self, update, context):
         visibility = await self._specify_visibility(update, context)
 
-        if self.source_type in (GOTO_SOURCE_TYPE, HANDLER_SOURCE_TYPE, ):
+        if self.source_type in (GOTO_SOURCE_TYPE, HANDLER_SOURCE_TYPE):
             if self.source_type == GOTO_SOURCE_TYPE:
                 source = self.source_goto
             else:
