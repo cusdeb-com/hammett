@@ -51,9 +51,8 @@ class Button:
         from hammett.conf import settings
 
         if not settings.HIDERS_CHECKER:
-            raise ImproperlyConfigured(
-                "The 'HIDERS_CHECKER' setting is not set",
-            )
+            msg = "The 'HIDERS_CHECKER' setting is not set"
+            raise ImproperlyConfigured(msg)
 
         hiders_checker = import_string(settings.HIDERS_CHECKER)
         self.hiders_checker = hiders_checker(self.hiders.hiders_set)
