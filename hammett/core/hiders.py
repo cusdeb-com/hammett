@@ -63,9 +63,9 @@ class HidersChecker:
         for hider in self._hiders_set:
             try:
                 hider_handler = self._registered_hiders[hider]
-            except KeyError:
+            except KeyError as exc:
                 msg = f"The hider '{hider}' is unregistered"
-                raise HiderIsUnregistered(msg)
+                raise HiderIsUnregistered(msg) from exc
 
             if await hider_handler(update, context):
                 return True

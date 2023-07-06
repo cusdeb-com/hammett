@@ -51,13 +51,13 @@ class Settings:
         """Checks the settings for gross errors. """
 
         if self._is_overridden('HIDERS_CHECKER_CLASS'):
-            setting_value = getattr(self._settings_module, 'HIDERS_CHECKER_CLASS')
+            setting_value = getattr(self._settings_module, 'HIDERS_CHECKER_CLASS')  # noqa: B009
             if not isinstance(setting_value, type) or not issubclass(setting_value, HidersChecker):
                 msg = 'HIDERS_CHECKER_CLASS must be a subclass of HidersChecker'
                 raise ImproperlyConfigured(msg)
 
         if self._is_overridden('PERMISSIONS'):
-            setting_value = getattr(self._settings_module, 'PERMISSIONS')
+            setting_value = getattr(self._settings_module, 'PERMISSIONS')  # noqa: B009
             if not isinstance(setting_value, list | tuple):
                 msg = "The 'PERMISSIONS' setting must be a list or a tuple."
                 raise ImproperlyConfigured(msg)
