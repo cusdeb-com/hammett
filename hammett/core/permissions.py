@@ -40,9 +40,9 @@ class Permission:
     async def handle_permission_denied(self, update, context):
         """Invoked in case of `has_permission` returns False. """
 
-        raise NotImplemented
+        raise NotImplementedError
 
     async def has_permission(self, update, context):
         """Invoked before running each Screen method to check a permission. """
 
-        raise NotImplemented
+        raise NotImplementedError
