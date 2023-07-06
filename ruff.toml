@@ -20,7 +20,6 @@ ignore = [
     "D419",
     "F901",
     "N818",  # error-suffix-on-exception-name
-    "RET505",
     "RUF012",
 ]
 
