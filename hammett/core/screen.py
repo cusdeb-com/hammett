@@ -59,9 +59,8 @@ class Button:
 
     async def _specify_visibility(self, update, context):
         visibility = True
-        if self.hiders:
-            if not await self.hiders_checker.run(update, context):
-                visibility = False
+        if self.hiders and not await self.hiders_checker.run(update, context):
+            visibility = False
 
         return visibility
 
@@ -77,10 +76,7 @@ class Button:
         visibility = await self._specify_visibility(update, context)
 
         if self.source_type in (GOTO_SOURCE_TYPE, HANDLER_SOURCE_TYPE):
-            if self.source_type == GOTO_SOURCE_TYPE:
-                source = self.source_goto
-            else:
-                source = self.source
+            source = self.source_goto if self.source_type == GOTO_SOURCE_TYPE else self.source
 
             pattern = self.create_handler_pattern(source)
             return InlineKeyboardButton(self.caption, callback_data=pattern), visibility
