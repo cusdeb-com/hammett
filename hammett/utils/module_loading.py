@@ -27,7 +27,7 @@
 from importlib import import_module
 
 
-def import_string(dotted_path):
+def import_string(dotted_path: str) -> type:
     """Imports a dotted module path and returns the attribute/class
     designated by the last name in the path.
     Raises `ImportError` if the import failed.

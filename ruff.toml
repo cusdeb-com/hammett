@@ -3,7 +3,6 @@ line-length = 100
 select = ["ALL"]
 
 ignore = [
-    "ANN",
     "D100",
     "D101",
     "D102",
@@ -22,7 +21,7 @@ ignore = [
     "RUF012",
 ]
 
-exclude = ["src/*"]
+exclude = ["demos/", "src/*"]
 
 target-version = "py311"
 
