@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
@@ -7,35 +9,38 @@ from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import ConversationHandler as NativeConversationHandler
 
+from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.exceptions import (
     ImproperlyConfigured,
     UnknownSourceType,
 )
 from hammett.utils.module_loading import import_string
 
-DEFAULT_STAGE = 0
+if TYPE_CHECKING:
+    from typing import Any, Self
 
-(
-    GOTO_SOURCE_TYPE,
-    HANDLER_SOURCE_TYPE,
-    URL_SOURCE_TYPE,
-) = range(3)
+    from telegram import CallbackQuery, Update
+    from telegram.ext import Application, CallbackContext
+    from telegram.ext._utils.types import CCT
+
+    from hammett.core.hiders import Hider
+    from hammett.types import CheckUpdateType, Handler, Keyboard, Sources
 
 
 class Button:
     hiders_checker = None
 
     def __init__(
-            self,
-            caption,
-            source,
-            *,
-            source_type=HANDLER_SOURCE_TYPE,
-            hiders=None,
-    ):
+        self: 'Self',
+        caption: str,
+        source: 'Sources',
+        *,
+        source_type: SourcesTypes = SourcesTypes.HANDLER_SOURCE_TYPE,
+        hiders: 'Hider | None' = None,
+    ) -> None:
         self.caption = caption
         self.source = source
-        self.source_goto = source().goto if source_type == GOTO_SOURCE_TYPE else None
+        self.source_goto = source().goto if source_type == SourcesTypes.GOTO_SOURCE_TYPE else None
         self.source_wrapped = None
         self.source_type = source_type
         self.hiders = hiders
@@ -47,7 +52,7 @@ class Button:
     # Private methods
     #
 
-    def _init_hider_checker(self):
+    def _init_hider_checker(self: 'Self') -> None:
         from hammett.conf import settings
 
         if not settings.HIDERS_CHECKER:
@@ -57,7 +62,11 @@ class Button:
         hiders_checker = import_string(settings.HIDERS_CHECKER)
         self.hiders_checker = hiders_checker(self.hiders.hiders_set)
 
-    async def _specify_visibility(self, update, context):
+    async def _specify_visibility(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext',
+    ) -> bool:
         visibility = True
         if self.hiders and not await self.hiders_checker.run(update, context):
             visibility = False
@@ -69,19 +78,26 @@ class Button:
     #
 
     @staticmethod
-    def create_handler_pattern(handler):
+    def create_handler_pattern(handler: 'Handler') -> str:
         return f'{type(handler.__self__).__name__}.{handler.__name__}'
 
-    async def create(self, update, context):
+    async def create(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext',
+    ) -> tuple[InlineKeyboardButton, bool]:
         visibility = await self._specify_visibility(update, context)
 
-        if self.source_type in (GOTO_SOURCE_TYPE, HANDLER_SOURCE_TYPE):
-            source = self.source_goto if self.source_type == GOTO_SOURCE_TYPE else self.source
+        if self.source_type in (SourcesTypes.GOTO_SOURCE_TYPE, SourcesTypes.HANDLER_SOURCE_TYPE):
+            if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
+                source = self.source_goto
+            else:
+                source = self.source
 
             pattern = self.create_handler_pattern(source)
             return InlineKeyboardButton(self.caption, callback_data=pattern), visibility
 
-        if self.source_type == URL_SOURCE_TYPE:
+        if self.source_type == SourcesTypes.URL_SOURCE_TYPE:
             return InlineKeyboardButton(self.caption, url=self.source), visibility
 
         raise UnknownSourceType
@@ -89,14 +105,14 @@ class Button:
 
 class ConversationHandler(NativeConversationHandler):
     async def handle_update(
-            self,
-            update,
-            dispatcher,
-            check_result,
-            context=None,
-    ):
+        self: 'Self',
+        update: 'Update',
+        application: 'Application[Any, CCT, Any, Any, Any, Any]',
+        check_result: 'CheckUpdateType[CCT]',
+        context: 'CCT',
+    ) -> object | None:
         try:
-            res = await super().handle_update(update, dispatcher, check_result, context)
+            res = await super().handle_update(update, application, check_result, context)
         except BadRequest as exc:  # noqa: TRY302
             raise exc  # noqa: TRY201
         else:
@@ -104,17 +120,17 @@ class ConversationHandler(NativeConversationHandler):
 
 
 class Screen:
-    html_parse_mode = DEFAULT_NONE
-    text = None
+    html_parse_mode: ParseMode = DEFAULT_NONE
+    text: str | None = None
 
-    _instance = None
+    _instance: 'Screen' = None
 
-    def __init__(self):
+    def __init__(self: 'Self') -> None:
         if self.html_parse_mode is DEFAULT_NONE:
             from hammett.conf import settings
             self.html_parse_mode = settings.HTML_PARSE_MODE
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls: type['Screen'], *args: tuple, **kwargs: dict) -> 'Screen':
         if not cls._instance:
             cls._instance = super().__new__(cls, *args, **kwargs)
 
@@ -125,7 +141,11 @@ class Screen:
     #
 
     @staticmethod
-    async def _create_markup_keyboard(rows, update, context):
+    async def _create_markup_keyboard(
+        rows: list[list['Button']],
+        update: 'Update',
+        context: 'CallbackContext',
+    ) -> InlineKeyboardMarkup:
         keyboard = []
         for row in rows:
             buttons = []
@@ -143,7 +163,7 @@ class Screen:
     #
 
     @staticmethod
-    async def get_callback_query(update):
+    async def get_callback_query(update: 'Update') -> 'CallbackQuery':
         """Gets CallbackQuery from Update. """
 
         query = update.callback_query
@@ -153,21 +173,21 @@ class Screen:
         await query.answer()
         return query
 
-    async def goto(self, update, context):
+    async def goto(self: 'Self', update: 'Update', context: 'CallbackContext') -> int:
         """Switches to the screen. """
 
         await self.render(update, context)
         return DEFAULT_STAGE
 
     async def render(
-            self,
-            update,
-            context,
-            *,
-            as_new_message=False,
-            keyboard=None,
-            text=None,
-    ):
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext',
+        *,
+        as_new_message: bool = False,
+        keyboard: 'Keyboard | None' = None,
+        text: str | None = None,
+    ) -> None:
         """Renders the screen components (i.e., text and keyboard). """
 
         keyboard = keyboard or self.setup_keyboard()
@@ -189,10 +209,10 @@ class Screen:
             **kwargs,
         )
 
-    def setup_keyboard(self):
+    def setup_keyboard(self: 'Self') -> list:
         """Sets up the keyboard for the screen. """
 
         return []
 
-    async def start(self, update, context):
+    async def start(self: 'Self', update: 'Update', context: 'CallbackContext') -> int:
         raise NotImplementedError

@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from telegram import Update
 from telegram.ext import Application as NativeApplication
 from telegram.ext import (
@@ -5,26 +7,27 @@ from telegram.ext import (
     CommandHandler,
 )
 
+from hammett.core.constants import SourcesTypes
 from hammett.core.exceptions import TokenIsNotSpecified
-from hammett.core.screen import (
-    GOTO_SOURCE_TYPE,
-    HANDLER_SOURCE_TYPE,
-    Button,
-    ConversationHandler,
-)
+from hammett.core.screen import Button, ConversationHandler
 from hammett.utils.module_loading import import_string
+
+if TYPE_CHECKING:
+    from typing import Self
+
+    from hammett.core.screen import Screen
+    from hammett.types import NativeStates, States
 
 
 class Application:
     def __init__(
-            self,
-            name,
-            *,
-            entry_point,
-            native_states=None,
-            states=None,
-
-    ):
+        self: 'Self',
+        name: str,
+        *,
+        entry_point: 'type[Screen]',
+        native_states: 'NativeStates | None' = None,
+        states: 'States | None' = None,
+    ) -> None:
         from hammett.conf import settings
 
         if not settings.TOKEN:
@@ -46,7 +49,7 @@ class Application:
             name=self._name,
         ))
 
-    def _register_handlers(self, state, screens):
+    def _register_handlers(self: 'Self', state: int, screens: list[type['Screen']]) -> None:
         from hammett.conf import settings
 
         self._native_states[state] = []
@@ -54,10 +57,11 @@ class Application:
             obj = screen()
             for buttons_row in obj.setup_keyboard():
                 for button in buttons_row:
-                    if button.source_type not in (GOTO_SOURCE_TYPE, HANDLER_SOURCE_TYPE):
+                    if button.source_type not in (SourcesTypes.GOTO_SOURCE_TYPE,
+                                                  SourcesTypes.HANDLER_SOURCE_TYPE):
                         continue
 
-                    if button.source_type == GOTO_SOURCE_TYPE:
+                    if button.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
                         source = button.source_goto
                     else:
                         source = button.source
@@ -76,7 +80,7 @@ class Application:
                         pattern=f'^{Button.create_handler_pattern(source)}$',
                     ))
 
-    def run(self):
+    def run(self: 'Self') -> None:
         """Runs the application. """
 
         self._native_application.run_polling(allowed_updates=Update.ALL_TYPES)
