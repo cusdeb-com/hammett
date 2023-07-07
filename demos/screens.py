@@ -3,14 +3,9 @@
 import logging
 
 from hammett.conf import settings
+from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.hiders import ONLY_FOR_ADMIN, Hider
-from hammett.core.screen import (
-    DEFAULT_STAGE,
-    GOTO_SOURCE_TYPE,
-    URL_SOURCE_TYPE,
-    Button,
-    Screen,
-)
+from hammett.core.screen import Button, Screen
 
 LOGGER = logging.getLogger(__name__)
 
@@ -23,7 +18,7 @@ class NotAdminConfirmation(Screen):
             [
                 Button('✅ Yes', self.exclude_user_from_admin_group),
                 Button('⬅️ Main Menu', MainMenu,
-                       source_type=GOTO_SOURCE_TYPE),
+                       source_type=SourcesTypes.GOTO_SOURCE_TYPE),
             ],
         ]
 
@@ -90,16 +85,16 @@ class MainMenu(Screen):
             [
                 Button('🔒 Available only for admins', SecretRoom,
                        hiders=Hider(ONLY_FOR_ADMIN),
-                       source_type=GOTO_SOURCE_TYPE),
+                       source_type=SourcesTypes.GOTO_SOURCE_TYPE),
             ],
             [
                 Button("❌ I'm not an admin!", NotAdminConfirmation,
                        hiders=Hider(ONLY_FOR_ADMIN),
-                       source_type=GOTO_SOURCE_TYPE),
+                       source_type=SourcesTypes.GOTO_SOURCE_TYPE),
             ],
             [
                 Button('🎸 Hammett Home Page', 'https://github.com/tolstoyevsky/hammett',
-                       source_type=URL_SOURCE_TYPE),
+                       source_type=SourcesTypes.URL_SOURCE_TYPE),
             ],
         ]
 
@@ -121,6 +116,6 @@ class SecretRoom(Screen):
         return [
             [
                 Button('⬅️ Main Menu', MainMenu,
-                       source_type=GOTO_SOURCE_TYPE),
+                       source_type=SourcesTypes.GOTO_SOURCE_TYPE),
             ],
         ]
