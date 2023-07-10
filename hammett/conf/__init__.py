@@ -34,7 +34,6 @@ specified via the HAMMETT_SETTINGS_MODULE environment variable.
 See the global_settings.py for a list of all possible settings.
 """
 
-import copy
 import importlib
 import operator
 import os
@@ -104,24 +103,6 @@ class LazyObject:
             self._setup()
 
         delattr(self._wrapped, name)
-
-    def __copy__(self):
-        if self._wrapped is _EMPTY:
-            # If uninitialized, copy the wrapper. Use type(self), not
-            # self.__class__, because the latter is proxied.
-            return type(self)()
-
-        # If initialized, return a copy of the wrapped object.
-        return copy.copy(self._wrapped)
-
-    def __deepcopy__(self, memo):
-        if self._wrapped is _EMPTY:
-            # Use type(self), not self.__class__, because the latter is proxied.
-            result = type(self)()
-            memo[id(self)] = result
-            return result
-
-        return copy.deepcopy(self._wrapped, memo)
 
     __bytes__ = new_method_proxy(bytes)
     __str__ = new_method_proxy(str)
