@@ -15,6 +15,8 @@ from hammett.utils.module_loading import import_string
 if TYPE_CHECKING:
     from typing import Self
 
+    from telegram.ext import BasePersistence
+
     from hammett.core.screen import Screen
     from hammett.types import NativeStates, States
 
@@ -26,6 +28,7 @@ class Application:
         *,
         entry_point: 'type[Screen]',
         native_states: 'NativeStates | None' = None,
+        persistence: 'BasePersistence | None' = None,
         states: 'States | None' = None,
     ) -> None:
         from hammett.conf import settings
@@ -37,7 +40,12 @@ class Application:
         self._name = name
         self._native_states = native_states or {}
         self._states = states
-        self._native_application = NativeApplication.builder().token(settings.TOKEN).build()
+
+        self._native_application = NativeApplication.builder().token(settings.TOKEN)
+        if persistence:
+            self._native_application.persistence(persistence)
+
+        self._native_application = self._native_application.build()
 
         for state in self._states.items():
             self._register_handlers(*state)
@@ -47,6 +55,7 @@ class Application:
             states=self._native_states,
             fallbacks=[CommandHandler('start', self._entry_point.start)],
             name=self._name,
+            persistent=bool(persistence),
         ))
 
     def _register_handlers(self: 'Self', state: int, screens: list[type['Screen']]) -> None:
