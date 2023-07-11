@@ -5,6 +5,10 @@ Hammett is a framework whose main goal is to simplify building *commercial* Tele
 * the permissions mechanism to implement a **maintenance mode**, **paywall**, etc.
 * storing the users state in and restoring it from Redis.
 
+<p align="center">
+    <img src="/logo/1500x1299.png" alt="Hammett" style="max-width: 100%; width: 500px">
+</p>
+
 ## Authors
 
 See [AUTHORS](AUTHORS.md).
