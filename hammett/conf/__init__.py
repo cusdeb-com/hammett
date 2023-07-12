@@ -137,7 +137,7 @@ class LazyObject:
 
 class LazySettings(LazyObject):
     """The class implements a lazy proxy for Hammett settings.
-    Hammett uses the settings module specified via the DJANGO_SETTINGS_MODULE
+    Hammett uses the settings module specified via the HAMMETT_SETTINGS_MODULE
     environment variable.
     """
 
@@ -168,7 +168,7 @@ class LazySettings(LazyObject):
         return f'<LazySettings "{self._wrapped.settings_module_name}">'
 
     def __getattr__(self: 'Self', name: str) -> 'Any':
-        """Return the value of a setting and cache it in self.__dict__. """
+        """Returns the value of a setting and caches it in self.__dict__. """
 
         if self._wrapped is _EMPTY:
             self._setup(name)
@@ -192,7 +192,7 @@ class LazySettings(LazyObject):
         super().__setattr__(name, value)
 
     def __delattr__(self: 'Self', name: str) -> None:
-        """Deletes a setting and clear it from cache if needed. """
+        """Deletes a setting and clears it from cache if needed. """
 
         super().__delattr__(name)
         self.__dict__.pop(name, None)
