@@ -17,6 +17,8 @@ See [AUTHORS](AUTHORS.md).
 
 The code of Hammett is licensed under the [Apache License 2.0](https://apache.org/licenses/LICENSE-2.0) except the following modules borrowed from Django:
 * `hammett/conf/__init__.py`
+* `hammett/test/base.py`
+* `hammett/test/utils.py`
 * `hammett/utils/module_loading.py`
 
 The modules are licensed under the [3-Clause BSD License](https://opensource.org/license/bsd-3-clause/).
