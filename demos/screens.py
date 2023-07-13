@@ -93,7 +93,7 @@ class MainMenu(Screen):
                        source_type=SourcesTypes.GOTO_SOURCE_TYPE),
             ],
             [
-                Button('🎸 Hammett Home Page', 'https://github.com/tolstoyevsky/hammett',
+                Button('🎸 Hammett Home Page', 'https://github.com/cusdeb-com/hammett',
                        source_type=SourcesTypes.URL_SOURCE_TYPE),
             ],
         ]
