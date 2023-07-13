@@ -21,7 +21,7 @@ ignore = [
     "RUF012",
 ]
 
-exclude = ["demos/", "src/*"]
+exclude = ["demos/", "src/*", "tests/*"]
 
 target-version = "py311"
 
