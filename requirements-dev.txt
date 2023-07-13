@@ -1,3 +1,4 @@
+asgiref==3.7.2
 ruff
 
 -r requirements.txt

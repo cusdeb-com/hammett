@@ -70,6 +70,18 @@ def new_method_proxy(func: 'Func') -> 'Callable[[Func], LazyObject, Func]':
     return inner
 
 
+class GlobalSettings:
+    """The class implements a simple interface for accessing
+    the global settings.
+    """
+
+    def __getattr__(self: 'Self', name: str) -> 'Any':
+        return getattr(global_settings, name)
+
+    def __repr__(self: 'Self') -> str:
+        return f'<{self.__class__.__name__}>'
+
+
 class LazyObject:
     """The class implements a wrapper for another class that can be used to delay
     instantiation of the wrapped class.
