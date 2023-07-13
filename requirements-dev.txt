@@ -1,5 +1,6 @@
 asgiref==3.7.2
 mypy
+pypandoc==1.5
 ruff
 types-redis
 typing_extensions
