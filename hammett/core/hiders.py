@@ -1,5 +1,6 @@
 """The module contains the implementation of the hiders mechanism. """
 
+import asyncio
 from typing import TYPE_CHECKING
 
 from hammett.core.exceptions import HiderIsUnregistered
@@ -75,7 +76,10 @@ class HidersChecker:
                 msg = f"The hider '{hider}' is unregistered"
                 raise HiderIsUnregistered(msg) from exc
 
-            if await hider_handler(update, context):
+            if asyncio.iscoroutinefunction(hider_handler):
+                if await hider_handler(update, context):
+                    return True
+            elif hider_handler(update, context):
                 return True
 
         return False
