@@ -17,11 +17,12 @@ from hammett.core.exceptions import (
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
-    from typing import Any, Self
+    from typing import Any
 
     from telegram import CallbackQuery, Update
     from telegram.ext import Application, CallbackContext
     from telegram.ext._utils.types import CCT
+    from typing_extensions import Self
 
     from hammett.core.hiders import Hider
     from hammett.types import CheckUpdateType, Handler, Keyboard, Sources

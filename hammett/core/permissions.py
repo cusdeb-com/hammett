@@ -7,10 +7,10 @@ from uuid import uuid4
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
-    from typing import Self
 
     from telegram import Update
     from telegram.ext import CallbackContext
+    from typing_extensions import Self
 
     from hammett.types import Func, Handler
 

@@ -23,7 +23,7 @@ ignore = [
 
 exclude = ["demos/", "src/*", "tests/*"]
 
-target-version = "py311"
+target-version = "py310"
 
 [flake8-quotes]
 inline-quotes = "single"
