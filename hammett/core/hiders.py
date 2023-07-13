@@ -6,10 +6,9 @@ from typing import TYPE_CHECKING
 from hammett.core.exceptions import HiderIsUnregistered
 
 if TYPE_CHECKING:
-    from typing import Self
-
     from telegram import Update
     from telegram.ext import CallbackContext
+    from typing_extensions import Self
 
 (
     ONLY_FOR_ADMIN,
@@ -72,7 +71,7 @@ class HidersChecker:
         for hider in self._hiders_set:
             try:
                 hider_handler = self._registered_hiders[hider]
-            except KeyError as exc:
+            except KeyError as exc:  # noqa: PERF203
                 msg = f"The hider '{hider}' is unregistered"
                 raise HiderIsUnregistered(msg) from exc
 

@@ -15,10 +15,11 @@ from hammett.conf import settings
 from hammett.core.exceptions import ImproperlyConfigured
 
 if TYPE_CHECKING:
-    from typing import Any, Self
+    from typing import Any
 
     from telegram.ext import PersistenceInput
     from telegram.ext._utils.types import CDCData, ConversationDict, ConversationKey
+    from typing_extensions import Self
 
 
 class RedisPersistence(BasePersistence[UD, CD, BD]):

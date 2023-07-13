@@ -45,7 +45,9 @@ from hammett.core.hiders import HidersChecker
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from typing import Any, Self
+    from typing import Any
+
+    from typing_extensions import Self
 
     from hammett.types import Func
 

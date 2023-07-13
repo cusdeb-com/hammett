@@ -13,9 +13,8 @@ from hammett.core.screen import Button, ConversationHandler
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
-    from typing import Self
-
     from telegram.ext import BasePersistence
+    from typing_extensions import Self
 
     from hammett.core.screen import Screen
     from hammett.types import NativeStates, States
