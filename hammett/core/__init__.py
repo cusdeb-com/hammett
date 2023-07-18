@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from telegram import Update
 from telegram.ext import Application as NativeApplication
@@ -14,10 +14,12 @@ from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
     from telegram.ext import BasePersistence
+    from telegram.ext._utils.types import BD, CD, UD
     from typing_extensions import Self
 
+    from hammett.core.permissions import Permission
     from hammett.core.screen import Screen
-    from hammett.types import NativeStates, States
+    from hammett.types import Handler, NativeStates, States
 
 
 class Application:
@@ -27,7 +29,7 @@ class Application:
         *,
         entry_point: 'type[Screen]',
         native_states: 'NativeStates | None' = None,
-        persistence: 'BasePersistence | None' = None,
+        persistence: 'BasePersistence[UD, CD, BD] | None' = None,
         states: 'States | None' = None,
     ) -> None:
         from hammett.conf import settings
@@ -40,14 +42,15 @@ class Application:
         self._native_states = native_states or {}
         self._states = states
 
-        self._native_application = NativeApplication.builder().token(settings.TOKEN)
+        builder = NativeApplication.builder().token(settings.TOKEN)
         if persistence:
-            self._native_application.persistence(persistence)
+            builder.persistence(persistence)
 
-        self._native_application = self._native_application.build()
+        self._native_application = builder.build()
 
-        for state in self._states.items():
-            self._register_handlers(*state)
+        if self._states:
+            for state in self._states.items():
+                self._register_handlers(*state)
 
         self._native_application.add_handler(ConversationHandler(
             entry_points=[CommandHandler('start', self._entry_point.start)],
@@ -70,21 +73,23 @@ class Application:
                         continue
 
                     if button.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
-                        source = button.source_goto
+                        source = cast('Handler[..., int]', button.source_goto)
                     else:
-                        source = button.source
+                        source = cast('Handler[..., int]', button.source)
 
                     for permission_path in settings.PERMISSIONS:
-                        permission = import_string(permission_path)
+                        permission: type['Permission'] = import_string(permission_path)
                         permissions_ignored = getattr(button.source, 'permissions_ignored', None)
                         if permissions_ignored and permission.CLASS_UUID in permissions_ignored:
                             continue
 
                         permission_instance = permission()
-                        button.source_wrapped = permission_instance.check_permission(source)
+                        button.source_wrapped = permission_instance.check_permission(
+                            source,  # type: ignore[assignment]
+                        )
 
                     self._native_states[state].append(CallbackQueryHandler(
-                        button.source_wrapped or source,
+                        button.source_wrapped or source,  # type: ignore[arg-type]
                         pattern=f'^{Button.create_handler_pattern(source)}$',
                     ))
 
