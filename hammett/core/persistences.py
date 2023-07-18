@@ -2,6 +2,7 @@
 the bots based on Hammett persistent, storing their data in Redis.
 """
 
+import contextlib
 import pickle
 from collections import defaultdict
 from typing import TYPE_CHECKING, cast
@@ -40,10 +41,13 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         update_interval: float = 60,
         context_types: 'ContextTypes[Any, UD, CD, BD] | None' = None,
     ) -> None:
-        super().__init__(store_data=store_data, update_interval=update_interval)
+        super().__init__(
+            store_data=store_data,  # type: ignore[arg-type]
+            update_interval=update_interval,
+        )
 
         try:
-            self.redis_cli = redis.Redis(
+            self.redis_cli: 'redis.Redis[Any]' = redis.Redis(
                 host=settings.REDIS_PERSISTENCE['HOST'],
                 port=settings.REDIS_PERSISTENCE['PORT'],
                 db=settings.REDIS_PERSISTENCE['DB'],
@@ -56,7 +60,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         self.bot_data: 'BD | None' = None
         self.callback_data: 'CDCData | None' = None
         self.chat_data: 'defaultdict[int, CD] | None' = None
-        self.conversations: dict[str, dict[tuple, object]] | None = None
+        self.conversations: dict[str, dict[tuple[str | int, ...], object]] | None = None
         self.context_types = cast('ContextTypes[Any, UD, CD, BD]', context_types or ContextTypes())
         self.on_flush = on_flush
         self.user_data: 'defaultdict[int, UD] | None' = None
@@ -95,7 +99,10 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         if self.chat_data is None:
             return
 
-        self.chat_data.pop(chat_id, None)
+        with contextlib.suppress(KeyError):
+            self.chat_data.pop(chat_id)
+
+
         if not self.on_flush:
             await self._set_data(self._CHAT_DATA_KEY, self.chat_data)
 
@@ -136,9 +143,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """
 
         if not self.bot_data:
-            data = await self._get_data(self._BOT_DATA_KEY)
-            if not data:
-                data = self.context_types.bot_data()
+            data = await self._get_data(self._BOT_DATA_KEY) or self.context_types.bot_data()
 
             self.bot_data = data
 
@@ -167,11 +172,9 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """
 
         if not self.chat_data:
-            data = await self._get_data(self._CHAT_DATA_KEY)
-            if not data:
-                data = defaultdict(self.context_types.chat_data)
-            else:
-                data = defaultdict(self.context_types.chat_data, data)
+            data = (await self._get_data(self._CHAT_DATA_KEY) or
+                    defaultdict(self.context_types.chat_data))
+            data = defaultdict(self.context_types.chat_data, data)
 
             self.chat_data = data
 
@@ -183,11 +186,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """
 
         if not self.conversations:
-            data = await self._get_data(self._CONVERSATIONS_KEY)
-            if not data:
-                data = {name: {}}
-
-            self.conversations = data
+            self.conversations = await self._get_data(self._CONVERSATIONS_KEY) or {name: {}}
 
         return self.conversations.get(name, {}).copy()
 
@@ -197,11 +196,9 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """
 
         if not self.user_data:
-            data = await self._get_data(self._USER_DATA_KEY)
-            if not data:
-                data = defaultdict(self.context_types.user_data)
-            else:
-                data = defaultdict(self.context_types.user_data, data)
+            data = (await self._get_data(self._USER_DATA_KEY) or
+                    defaultdict(self.context_types.user_data))
+            data = defaultdict(self.context_types.user_data, data)
 
             self.user_data = data
 

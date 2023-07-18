@@ -44,7 +44,6 @@ from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.hiders import HidersChecker
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
     from typing import Any
 
     from typing_extensions import Self
@@ -56,7 +55,7 @@ _EMPTY = object()
 _HAMMETT_SETTINGS_MODULE = 'HAMMETT_SETTINGS_MODULE'
 
 
-def new_method_proxy(func: 'Func') -> 'Callable[[Func], LazyObject, Func]':
+def new_method_proxy(func: 'Func') -> 'Any':
     """Routes functions to the _wrapped object. """
 
     # It's necessary to use the wraps decorator when wrapping functions.
@@ -64,7 +63,7 @@ def new_method_proxy(func: 'Func') -> 'Callable[[Func], LazyObject, Func]':
     # the magic methods which, as a rule, are not used directly. So, avoiding
     # using the decorator here can be considered as optimization.
 
-    def inner(self: 'LazyObject', *args: tuple) -> 'Callable[Func]':
+    def inner(self: 'LazyObject', *args: tuple['Any']) -> 'Any':
         if self._wrapped is _EMPTY:
             self._setup()
 
@@ -90,7 +89,7 @@ class LazyObject:
     """
 
     # Avoid infinite recursion when tracing __init__.
-    _wrapped = None
+    _wrapped: 'Settings | object' = _EMPTY
 
     def __init__(self: 'Self') -> None:
         # Note: if a subclass overrides __init__(), it will likely need to
@@ -133,7 +132,9 @@ class LazyObject:
     __dir__ = new_method_proxy(dir)
 
     # Pretend to be the wrapped class.
-    __class__ = property(new_method_proxy(operator.attrgetter('__class__')))
+    __class__ = property(
+        new_method_proxy(operator.attrgetter('__class__')),  # type: ignore[assignment]
+    )
     __eq__ = new_method_proxy(operator.eq)
     __lt__ = new_method_proxy(operator.lt)
     __gt__ = new_method_proxy(operator.gt)
@@ -179,7 +180,9 @@ class LazySettings(LazyObject):
         if self._wrapped is _EMPTY:
             return '<LazySettings [Unevaluated]>'
 
-        return f'<LazySettings "{self._wrapped.settings_module_name}">'
+        return (
+            f'<LazySettings "{self._wrapped.settings_module_name}">'  # type: ignore[attr-defined]
+        )
 
     def __getattr__(self: 'Self', name: str) -> 'Any':
         """Returns the value of a setting and caches it in self.__dict__. """

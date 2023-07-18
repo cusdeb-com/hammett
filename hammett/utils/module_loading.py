@@ -25,9 +25,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from importlib import import_module
+from typing import TYPE_CHECKING, cast
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
-def import_string(dotted_path: str) -> type:
+def import_string(dotted_path: str) -> type['Any']:
     """Imports a dotted module path and returns the attribute/class
     designated by the last name in the path.
     Raises `ImportError` if the import failed.
@@ -42,7 +46,7 @@ def import_string(dotted_path: str) -> type:
     module = import_module(module_path)
 
     try:
-        return getattr(module, class_name)
+        return cast(type, getattr(module, class_name))
     except AttributeError as err:
         msg = f'Module "{module_path}" does not define a "{class_name}" attribute/class'
         raise ImportError(msg) from err
