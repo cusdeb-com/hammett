@@ -17,7 +17,10 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install ruff
+        run: pip install -r requirements-dev.txt
 
       - name: Run ruff
         run: ruff check . --config=ruff.toml
+
+      - name: Run mypy
+        run: mypy --strict .

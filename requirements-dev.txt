@@ -1,5 +1,7 @@
 asgiref==3.7.2
+mypy
 ruff
+types-redis
 typing_extensions
 
 -r requirements.txt
