@@ -1,7 +1,5 @@
 """The module contains the tests for the hiders mechanism. """
 
-from unittest import main
-
 from hammett.conf import settings
 from hammett.core.constants import SourcesTypes
 from hammett.core.exceptions import ImproperlyConfigured
@@ -140,7 +138,3 @@ class HidersCheckerTests(BaseTestCase):
             )
 
             self.assertEqual(ImportError, context.exception.__class__)
-
-
-if __name__ == '__main__':
-    main()
