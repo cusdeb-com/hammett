@@ -24,3 +24,21 @@ jobs:
 
       - name: Run mypy
         run: mypy --strict .
+  tests:
+    name: Run tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: env PYTHONPATH=$(pwd) python3 tests/run_tests.py
