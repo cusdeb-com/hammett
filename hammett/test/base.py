@@ -11,7 +11,7 @@ from telegram import Update
 from telegram.ext import Application, CallbackContext
 
 if TYPE_CHECKING:
-    from typing import Self
+    from typing_extensions import Self
 
 
 class BaseTestCase(unittest.TestCase):
@@ -20,7 +20,9 @@ class BaseTestCase(unittest.TestCase):
     """
 
     def __init__(self: 'Self', method_name: str) -> None:
-        self.context = CallbackContext(Application.builder())
+        self.context: 'CallbackContext' = CallbackContext(  # type: ignore[type-arg]
+            Application.builder(),  # type: ignore[arg-type]
+        )
         self.update = Update(1)
 
         super().__init__(method_name)
