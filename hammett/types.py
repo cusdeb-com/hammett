@@ -1,7 +1,7 @@
 """The module contains the types used throughout the framework. """
 
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any, ParamSpec, Protocol, TypeVar
+from typing import TYPE_CHECKING, Any, NewType, ParamSpec, Protocol, TypeVar
 from uuid import UUID
 
 from telegram import Update
@@ -23,6 +23,8 @@ States = dict[int, list[type[Screen]]]
 
 Func = TypeVar('Func', bound=Callable[..., Any])
 
+Stage = NewType('Stage', int)
+
 P = ParamSpec('P')
 
 R_co = TypeVar('R_co', covariant=True)
@@ -36,7 +38,7 @@ class Handler(Protocol[P, R_co]):
         screen: 'Screen',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> int:
+    ) -> Stage:
         ...
 
     def __self__(self: 'Self') -> Screen:
