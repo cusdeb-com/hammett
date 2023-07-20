@@ -3,6 +3,7 @@ the bots based on Hammett persistent, storing their data in Redis.
 """
 
 import contextlib
+import logging
 import pickle
 from collections import defaultdict
 from typing import TYPE_CHECKING, cast
@@ -21,6 +22,9 @@ if TYPE_CHECKING:
     from telegram.ext import PersistenceInput
     from telegram.ext._utils.types import CDCData, ConversationDict, ConversationKey
     from typing_extensions import Self
+
+
+LOGGER = logging.getLogger(__name__)
 
 
 class RedisPersistence(BasePersistence[UD, CD, BD]):
@@ -76,8 +80,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             redis_data = await self.redis_cli.get(key)
             if redis_data:
                 return pickle.loads(redis_data)  # noqa: S301
-        except (ConnectionError, pickle.UnpicklingError):
-            # TODO (Dmitriy Ivanko<tmwsls12@gmail.com>): add error logging  # noqa: FIX002, TD003
+        except (ConnectionError, pickle.UnpicklingError) as exc:
+            LOGGER.error('Failed to get the data from Redis by the key %s (%s)', key, exc)
             return None
         else:
             return redis_data
