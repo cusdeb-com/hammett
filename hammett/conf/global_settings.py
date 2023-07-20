@@ -6,11 +6,15 @@ the HAMMETT_SETTINGS_MODULE environment variable.
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Any
+
     from hammett.core.permissions import Permission
 
 HIDERS_CHECKER = ''
 
 HTML_PARSE_MODE = True
+
+LOGGING: dict[str, 'Any'] = {}
 
 PERMISSIONS: list[type['Permission']] = []
 
