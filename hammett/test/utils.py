@@ -2,14 +2,16 @@
 
 import asyncio
 from functools import wraps
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from hammett.conf import GlobalSettings, settings
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
     from types import TracebackType
-    from typing import Any, Self
+    from typing import Any
+
+    from typing_extensions import Self
 
     from hammett.types import Func
 
@@ -50,7 +52,7 @@ class TestContextDecorator:
             # If the inner function is an async function, we must execute async
             # as well so that the `with` statement executes at the right time.
             @wraps(func)
-            async def inner(*args: tuple, **kwargs: dict) -> 'Any':
+            async def inner(*args: tuple['Any'], **kwargs: dict[str, 'Any']) -> 'Any':
                 with self as context:
                     if self.kwarg_name:
                         kwargs[self.kwarg_name] = context
@@ -58,7 +60,7 @@ class TestContextDecorator:
                     return await func(*args, **kwargs)
         else:
             @wraps(func)
-            def inner(*args: tuple, **kwargs: dict) -> 'Any':
+            def inner(*args: tuple['Any'], **kwargs: dict[str, 'Any']) -> 'Any':
                 with self as context:
                     if self.kwarg_name:
                         kwargs[self.kwarg_name] = context
@@ -78,9 +80,9 @@ class TestContextDecorator:
 class override_settings(TestContextDecorator):  # noqa: N801
     """Decorates tests to perform temporary alterations of the settings. """
 
-    def __init__(self: 'Self', **kwargs: dict) -> None:
+    def __init__(self: 'Self', **kwargs: dict[str, 'Any']) -> None:
         self.options = kwargs
-        self.wrapped = None
+        self.wrapped: 'GlobalSettings | None' = None
         super().__init__()
 
     def enable(self: 'Self') -> None:
@@ -88,7 +90,7 @@ class override_settings(TestContextDecorator):  # noqa: N801
         for key, new_value in self.options.items():
             setattr(overriden_settings, key, new_value)
 
-        self.wrapped = settings._wrapped  # noqa: SLF001
+        self.wrapped = cast('GlobalSettings', settings._wrapped)  # noqa: SLF001
         settings._wrapped = overriden_settings  # noqa: SLF001
         for key, new_value in self.options.items():
             setattr(settings, key, new_value)
