@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.hiders import Hider, HidersChecker
-    from hammett.types import CheckUpdateType, Handler, Keyboard, Source
+    from hammett.types import CheckUpdateType, Handler, Keyboard, Source, Stage
 
 
 class Button:
@@ -55,7 +55,7 @@ class Button:
                 raise TypeError(msg)
 
             screen = source()
-            self.source_goto = cast('Handler[..., int]', screen.goto)
+            self.source_goto = cast('Handler[..., Stage]', screen.goto)
 
         if self.hiders and not self.hiders_checker:
             self._init_hider_checker()
@@ -95,7 +95,7 @@ class Button:
     #
 
     @staticmethod
-    def create_handler_pattern(handler: 'Handler[..., int]') -> str:
+    def create_handler_pattern(handler: 'Handler[..., Stage]') -> str:
         return f'{type(handler.__self__).__name__}.{handler.__name__}'
 
     async def create(
@@ -109,7 +109,7 @@ class Button:
             if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE and self.source_goto:
                 source = self.source_goto
             else:
-                source = cast('Handler[..., int]', self.source)
+                source = cast('Handler[..., Stage]', self.source)
 
             pattern = self.create_handler_pattern(source)
             return InlineKeyboardButton(self.caption, callback_data=pattern), visibility
@@ -196,7 +196,7 @@ class Screen:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> int:
+    ) -> 'Stage':
         """Switches to the screen. """
 
         await self.render(update, context)
@@ -245,5 +245,5 @@ class Screen:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> int:
+    ) -> 'Stage':
         raise NotImplementedError

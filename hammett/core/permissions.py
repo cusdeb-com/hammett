@@ -14,17 +14,17 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.screen import Screen
-    from hammett.types import Handler
+    from hammett.types import Handler, Stage
 
 
 async def ignore_permissions(
     permissions: 'Iterable[Permission]',
-) -> 'Callable[[Handler[..., int]], Coroutine[Any, Any, Handler[..., int]]]':
+) -> 'Callable[[Handler[..., Stage]], Coroutine[Any, Any, Handler[..., Stage]]]':
     """The decorator is intended for decorating Screen methods to specify
     which permissions they are allowed to ignore.
     """
 
-    async def decorator(func: 'Handler[..., int]') -> 'Handler[..., int]':
+    async def decorator(func: 'Handler[..., Stage]') -> 'Handler[..., Stage]':
         func.permissions_ignored = [permission.CLASS_UUID for permission in permissions]
 
         @wraps(func)
@@ -32,10 +32,10 @@ async def ignore_permissions(
             self: 'Screen',
             update: 'Update',
             context: 'CallbackContext[BT, UD, CD, BD]',
-        ) -> int:
+        ) -> 'Stage':
             return func(self, update, context)
 
-        return cast('Handler[..., int]', wrapper)
+        return cast('Handler[..., Stage]', wrapper)
     return decorator
 
 
@@ -46,14 +46,14 @@ class Permission:
 
     def check_permission(
         self: 'Self',
-        handler: 'Handler[..., int]',
-    ) -> 'Callable[[Screen, Update, CallbackContext[BT, UD, CD, BD]], int]':
+        handler: 'Handler[..., Stage]',
+    ) -> 'Callable[[Screen, Update, CallbackContext[BT, UD, CD, BD]], Stage]':
         @wraps(handler)
         def wrapper(
             screen: 'Screen',
             update: 'Update',
             context: 'CallbackContext[BT, UD, CD, BD]',
-        ) -> int:
+        ) -> 'Stage':
             """"""
 
             if self.has_permission(update, context):
@@ -67,7 +67,7 @@ class Permission:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> int:
+    ) -> 'Stage':
         """Invoked in case of `has_permission` returns False. """
 
         raise NotImplementedError

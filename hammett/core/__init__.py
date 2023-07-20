@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
     from hammett.core.permissions import Permission
     from hammett.core.screen import Screen
-    from hammett.types import Handler, NativeStates, States
+    from hammett.types import Handler, NativeStates, Stage, States
 
 
 class Application:
@@ -73,9 +73,9 @@ class Application:
                         continue
 
                     if button.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
-                        source = cast('Handler[..., int]', button.source_goto)
+                        source = cast('Handler[..., Stage]', button.source_goto)
                     else:
-                        source = cast('Handler[..., int]', button.source)
+                        source = cast('Handler[..., Stage]', button.source)
 
                     for permission_path in settings.PERMISSIONS:
                         permission: type['Permission'] = import_string(permission_path)
