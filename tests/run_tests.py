@@ -1,5 +1,7 @@
 """The module runs all the tests. """
 
+# ruff: noqa: F401
+
 import os
 import unittest
 
