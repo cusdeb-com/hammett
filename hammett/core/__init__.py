@@ -10,6 +10,7 @@ from telegram.ext import (
 from hammett.core.constants import SourcesTypes
 from hammett.core.exceptions import TokenIsNotSpecified
 from hammett.core.screen import Button, ConversationHandler
+from hammett.utils.log import configure_logging
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
@@ -36,6 +37,8 @@ class Application:
 
         if not settings.TOKEN:
             raise TokenIsNotSpecified
+
+        self._setup()
 
         self._entry_point = entry_point()
         self._name = name
@@ -92,6 +95,12 @@ class Application:
                         button.source_wrapped or source,  # type: ignore[arg-type]
                         pattern=f'^{Button.create_handler_pattern(source)}$',
                     ))
+
+    def _setup(self: 'Self') -> None:
+        """Configures logging. """
+
+        from hammett.conf import settings
+        configure_logging(settings.LOGGING)
 
     def run(self: 'Self') -> None:
         """Runs the application. """
