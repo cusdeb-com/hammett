@@ -3,6 +3,7 @@ line-length = 100
 select = ["ALL"]
 
 ignore = [
+    "ANN401",  # any-type
     "D100",
     "D101",
     "D102",
@@ -20,6 +21,7 @@ ignore = [
     "N818",  # error-suffix-on-exception-name
     "PT009",  # pytest-unittest-assertion
     "RUF012",
+    "UP037",  # quoted-annotation
 ]
 
 exclude = ["demos/", "src/*"]
