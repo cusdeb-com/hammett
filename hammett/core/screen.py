@@ -147,7 +147,7 @@ class Screen:
             from hammett.conf import settings
             self.html_parse_mode = settings.HTML_PARSE_MODE
 
-    def __new__(cls: type['Screen'], *args: tuple['Any'], **kwargs: dict['Any', 'Any']) -> 'Screen':
+    def __new__(cls: type['Screen'], *args: tuple['Any'], **kwargs: dict[str, 'Any']) -> 'Screen':
         if not cls._instance:
             cls._instance = super().__new__(cls, *args, **kwargs)
 
