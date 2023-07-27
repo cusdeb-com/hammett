@@ -1,8 +1,10 @@
+from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
 from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
+    InputMediaPhoto,
 )
 from telegram._utils.defaultvalue import DEFAULT_NONE, DefaultValue
 from telegram.constants import ParseMode
@@ -17,6 +19,8 @@ from hammett.core.exceptions import (
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
+    from collections.abc import Awaitable, Callable
+    from os import PathLike
     from typing import Any
 
     from telegram import CallbackQuery, Update
@@ -137,8 +141,9 @@ class ConversationHandler(NativeConversationHandler['Any']):
 
 
 class Screen:
+    cover: 'str | PathLike[str]' = ''
+    description: str = ''
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
-    text: str | None = None
 
     _instance: 'Screen | None' = None
 
@@ -175,6 +180,63 @@ class Screen:
 
         return InlineKeyboardMarkup(keyboard)
 
+    async def _get_edit_render_method(
+        self: 'Self',
+        update: 'Update',
+        cover: 'str | PathLike[str]' = '',
+        description: str = '',
+    ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
+        """Returns the render method and its kwargs for editing a message. """
+
+        kwargs: dict[str, 'Any'] = {}
+        send: 'Callable[..., Awaitable[Any]] | None' = None
+
+        query = await self.get_callback_query(update)
+        if query:
+            if cover:
+                with Path(cover).open('rb') as infile:
+                    kwargs['media'] = InputMediaPhoto(
+                        caption=description,
+                        media=infile,
+                        parse_mode=ParseMode.HTML,
+                    )
+                send = query.edit_message_media
+            else:
+                kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
+                kwargs['text'] = description
+                send = query.edit_message_text
+
+        return send, kwargs
+
+    async def _get_new_message_render_method(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        cover: 'str | PathLike[str]' = '',
+        description: str = '',
+    ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
+        """Returns the render method and its kwargs for sending a new message. """
+
+        kwargs: dict[str, 'Any'] = {
+            'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
+        }
+
+        if update.effective_chat:
+            chat_id = update.effective_chat.id
+            kwargs['chat_id'] = chat_id
+
+        if cover:
+            kwargs['caption'] = description
+            kwargs['photo'] = cover
+
+            send = context.bot.send_photo
+        else:
+            kwargs['text'] = description
+
+            send = context.bot.send_message
+
+        return send, kwargs
+
     #
     # Public methods
     #
@@ -202,37 +264,36 @@ class Screen:
         await self.render(update, context)
         return DEFAULT_STAGE
 
-    async def render(
+    async def render(  # noqa: PLR0913
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         as_new_message: bool = False,
+        cover: 'str | PathLike[str]' = '',
+        description: str = '',
         keyboard: 'Keyboard | None' = None,
-        text: str | None = None,
     ) -> None:
-        """Renders the screen components (i.e., text and keyboard). """
+        """Renders the screen components (i.e., cover, description and keyboard). """
 
+        cover = cover or self.cover
+        description = description or self.description
         keyboard = keyboard or self.setup_keyboard()
-        text = text or self.text
 
-        kwargs = {}
+        send: 'Callable[..., Awaitable[Any]] | None' = None
         if as_new_message:
-            if update.effective_chat:
-                chat_id = update.effective_chat.id
-                kwargs['chat_id'] = chat_id
-            send = context.bot.send_message
+            send, kwargs = await self._get_new_message_render_method(
+                update,
+                context,
+                cover,
+                description,
+            )
         else:
-            send = None
-            query = await self.get_callback_query(update)
-            if query:
-                send = query.edit_message_text
+            send, kwargs = await self._get_edit_render_method(update, cover, description)
 
         if send:
             await send(
-                parse_mode=ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
                 reply_markup=await self._create_markup_keyboard(keyboard, update, context),
-                text=text,
                 **kwargs,
             )
 
