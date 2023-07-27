@@ -11,7 +11,7 @@ LOGGER = logging.getLogger('hammett')
 
 
 class NotAdminConfirmation(Screen):
-    text = 'Are you sure you want to remove yourself from the admin group?'
+    description = 'Are you sure you want to remove yourself from the admin group?'
 
     def setup_keyboard(self):
         return [
@@ -67,17 +67,19 @@ class MainMenu(Screen):
             context,
             *,
             as_new_message=False,
+            _cover='',
+            description='',
             _keyboard=None,
-            text=None,
+            **kwargs,
     ):
         user = update.effective_user
         user_status = await self._get_user_status(user.id)
-        text = self.text_map[user_status].format(user_status=user_status)
+        description = self.text_map[user_status].format(user_status=user_status)
         await super().render(
             update,
             context,
-            text=text,
             as_new_message=as_new_message,
+            description=description,
         )
 
     def setup_keyboard(self):
@@ -110,7 +112,7 @@ class MainMenu(Screen):
 
 
 class SecretRoom(Screen):
-    text = 'This is the secret room available only for admins.'
+    description = 'This is the secret room available only for admins.'
 
     def setup_keyboard(self):
         return [
