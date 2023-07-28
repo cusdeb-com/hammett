@@ -1,6 +1,6 @@
 """The module contains the types used throughout the framework. """
 
-from collections.abc import Callable
+from collections.abc import Callable, Coroutine
 from typing import TYPE_CHECKING, Any, NewType, ParamSpec, Protocol, TypeVar
 from uuid import UUID
 
@@ -25,6 +25,8 @@ Func = TypeVar('Func', bound=Callable[..., Any])
 
 Stage = NewType('Stage', int)
 
+HandlerR = Coroutine[Any, Any, Stage]
+
 P = ParamSpec('P')
 
 R_co = TypeVar('R_co', covariant=True)
@@ -38,7 +40,7 @@ class Handler(Protocol[P, R_co]):
         screen: 'Screen',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> Stage:
+    ) -> HandlerR:
         ...
 
     def __self__(self: 'Self') -> Screen:
