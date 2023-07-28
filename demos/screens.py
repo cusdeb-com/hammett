@@ -7,7 +7,7 @@ from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.hiders import ONLY_FOR_ADMIN, Hider
 from hammett.core.screen import Button, Screen
 
-LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger('hammett')
 
 
 class NotAdminConfirmation(Screen):
