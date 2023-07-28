@@ -17,14 +17,14 @@ if TYPE_CHECKING:
     from hammett.types import Handler, Stage
 
 
-async def ignore_permissions(
+def ignore_permissions(
     permissions: 'Iterable[Permission]',
-) -> 'Callable[[Handler[..., Stage]], Coroutine[Any, Any, Handler[..., Stage]]]':
+) -> 'Callable[[Handler[..., Stage]], Handler[..., Stage]]':
     """The decorator is intended for decorating Screen methods to specify
     which permissions they are allowed to ignore.
     """
 
-    async def decorator(func: 'Handler[..., Stage]') -> 'Handler[..., Stage]':
+    def decorator(func: 'Handler[..., Stage]') -> 'Handler[..., Stage]':
         func.permissions_ignored = [permission.CLASS_UUID for permission in permissions]
 
         @wraps(func)
@@ -33,7 +33,7 @@ async def ignore_permissions(
             update: 'Update',
             context: 'CallbackContext[BT, UD, CD, BD]',
         ) -> 'Stage':
-            return func(self, update, context)
+            return await func(self, update, context)
 
         return cast('Handler[..., Stage]', wrapper)
     return decorator
@@ -47,23 +47,22 @@ class Permission:
     def check_permission(
         self: 'Self',
         handler: 'Handler[..., Stage]',
-    ) -> 'Callable[[Screen, Update, CallbackContext[BT, UD, CD, BD]], Stage]':
+    ) -> 'Callable[[Update, CallbackContext[BT, UD, CD, BD]], Coroutine[Any, Any, Stage]]':
         @wraps(handler)
-        def wrapper(
-            screen: 'Screen',
+        async def wrapper(
             update: 'Update',
             context: 'CallbackContext[BT, UD, CD, BD]',
         ) -> 'Stage':
             """"""
 
-            if self.has_permission(update, context):
-                return handler(screen, update, context)
+            if await self.has_permission(update, context):
+                return await handler(update, context)  # type: ignore[call-arg, arg-type]
 
-            return self.handle_permission_denied(update, context)
+            return await self.handle_permission_denied(update, context)
 
         return wrapper
 
-    def handle_permission_denied(
+    async def handle_permission_denied(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
@@ -72,7 +71,7 @@ class Permission:
 
         raise NotImplementedError
 
-    def has_permission(
+    async def has_permission(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
