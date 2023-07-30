@@ -186,6 +186,7 @@ class Screen:
     async def _get_edit_render_method(
         self: 'Self',
         update: 'Update',
+        *,
         cache_covers: bool = False,
         cover: 'str | PathLike[str]' = '',
         description: str = '',
@@ -223,6 +224,7 @@ class Screen:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        *,
         cache_covers: bool = False,
         cover: 'str | PathLike[str]' = '',
         description: str = '',
@@ -308,16 +310,16 @@ class Screen:
             send, kwargs = await self._get_new_message_render_method(
                 update,
                 context,
-                cache_covers,
-                cover,
-                description,
+                cache_covers=cache_covers,
+                cover=cover,
+                description=description,
             )
         else:
             send, kwargs = await self._get_edit_render_method(
                 update,
-                cache_covers,
-                cover,
-                description,
+                cache_covers=cache_covers,
+                cover=cover,
+                description=description,
             )
 
         if send:
