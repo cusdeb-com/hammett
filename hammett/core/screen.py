@@ -1,5 +1,7 @@
+import re
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
+from uuid import uuid4
 
 from telegram import (
     InlineKeyboardButton,
@@ -141,6 +143,7 @@ class ConversationHandler(NativeConversationHandler['Any']):
 
 
 class Screen:
+    cache_covers: bool = False
     cover: 'str | PathLike[str]' = ''
     description: str = ''
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
@@ -183,6 +186,7 @@ class Screen:
     async def _get_edit_render_method(
         self: 'Self',
         update: 'Update',
+        cache_covers: bool = False,
         cover: 'str | PathLike[str]' = '',
         description: str = '',
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
@@ -194,12 +198,19 @@ class Screen:
         query = await self.get_callback_query(update)
         if query:
             if cover:
-                with Path(cover).open('rb') as infile:
+                if self._is_url(cover):
                     kwargs['media'] = InputMediaPhoto(
                         caption=description,
-                        media=infile,
+                        media=str(cover) if cache_covers else f'{cover}?{uuid4()}',
                         parse_mode=ParseMode.HTML,
                     )
+                else:
+                    with Path(cover).open('rb') as infile:
+                        kwargs['media'] = InputMediaPhoto(
+                            caption=description,
+                            media=infile,
+                            parse_mode=ParseMode.HTML,
+                        )
                 send = query.edit_message_media
             else:
                 kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
@@ -212,6 +223,7 @@ class Screen:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        cache_covers: bool = False,
         cover: 'str | PathLike[str]' = '',
         description: str = '',
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
@@ -226,6 +238,9 @@ class Screen:
             kwargs['chat_id'] = chat_id
 
         if cover:
+            if self._is_url(cover) and cache_covers:
+                cover = f'{cover}?{uuid4()}'
+
             kwargs['caption'] = description
             kwargs['photo'] = cover
 
@@ -236,6 +251,12 @@ class Screen:
             send = context.bot.send_message
 
         return send, kwargs
+
+    @staticmethod
+    def _is_url(cover: 'str | PathLike[str]') -> bool:
+        """Checks if the cover is specified using either a local path or a URL. """
+
+        return bool(re.search(r'^https?://', str(cover)))
 
     #
     # Public methods
@@ -270,12 +291,14 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         as_new_message: bool = False,
+        cache_covers: bool = False,
         cover: 'str | PathLike[str]' = '',
         description: str = '',
         keyboard: 'Keyboard | None' = None,
     ) -> None:
         """Renders the screen components (i.e., cover, description and keyboard). """
 
+        cache_covers = cache_covers or self.cache_covers
         cover = cover or self.cover
         description = description or self.description
         keyboard = keyboard or self.setup_keyboard()
@@ -285,11 +308,17 @@ class Screen:
             send, kwargs = await self._get_new_message_render_method(
                 update,
                 context,
+                cache_covers,
                 cover,
                 description,
             )
         else:
-            send, kwargs = await self._get_edit_render_method(update, cover, description)
+            send, kwargs = await self._get_edit_render_method(
+                update,
+                cache_covers,
+                cover,
+                description,
+            )
 
         if send:
             await send(
