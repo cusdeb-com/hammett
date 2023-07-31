@@ -33,6 +33,8 @@ R_co = TypeVar('R_co', covariant=True)
 
 
 class Handler(Protocol[P, R_co]):
+    """The class implements the Handler type. """
+
     permissions_ignored: list[UUID]
 
     def __call__(
@@ -41,6 +43,7 @@ class Handler(Protocol[P, R_co]):
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> HandlerR:
+        """The signature is required for every handler of the Handler type. """
         ...
 
     def __self__(self: 'Self') -> Screen:

@@ -22,6 +22,8 @@ if TYPE_CHECKING:
 
 
 class Hider:
+    """The class implements a hider. """
+
     def __init__(self: 'Self', hider: int) -> None:
         self.hider: int = hider
         self.hiders_set: set[int] = {hider}
@@ -32,6 +34,8 @@ class Hider:
 
 
 class HidersChecker:
+    """The base class for the implementations of custom hiders checkers. """
+
     def __init__(self: 'Self', hiders_set: set[int]) -> None:
         if getattr(self, 'custom_hiders', None) is None:
             self.custom_hiders: dict[int, 'Callable[[Any, Any], Awaitable[Any]]'] = {}
@@ -88,6 +92,12 @@ class HidersChecker:
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
+        """Runs the checks associated with the registered hiders.
+        The hiders are combined into chains using the OR operator, so the method
+        returns True if any of the checks is True.
+        The method is invoked under the hood, so you should not run it directly.
+        """
+
         for hider in self._hiders_set:
             try:
                 hider_handler = self._registered_hiders[hider]

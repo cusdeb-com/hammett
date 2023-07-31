@@ -24,6 +24,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+"""The module contains the routine for importing a class or a callable from
+a string-based module path.
+"""
+
 from importlib import import_module
 from typing import TYPE_CHECKING, cast
 
