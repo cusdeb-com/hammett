@@ -4,10 +4,6 @@ select = ["ALL"]
 
 ignore = [
     "ANN401",  # any-type
-    "D100",
-    "D101",
-    "D102",
-    "D104",
     "D105",
     "D107",
     "D202",  # no-blank-line-after-function

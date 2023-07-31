@@ -1,3 +1,7 @@
+"""The module contains the implementation of the screen components
+(i.e., cover, description and keyboard).
+"""
+
 import logging
 import re
 from dataclasses import dataclass
@@ -41,6 +45,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 class Button:
+    """The class implements the interface of a button.  """
+
     hiders_checker: 'HidersChecker | None' = None
 
     def __init__(
@@ -129,6 +135,10 @@ class Button:
 
     @staticmethod
     def create_handler_pattern(handler: 'Handler[..., Stage]') -> str:
+        """Creates a pattern. It's used to determine which handler should be triggered
+        when a specific button is pressed.
+        """
+
         return f'{type(handler.__self__).__name__}.{handler.__name__}'
 
     async def create(
@@ -136,6 +146,8 @@ class Button:
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> tuple[InlineKeyboardButton, bool]:
+        """Creates the button. """
+
         visibility = await self._specify_visibility(update, context)
 
         if self.source_type in (SourcesTypes.GOTO_SOURCE_TYPE, SourcesTypes.HANDLER_SOURCE_TYPE):
@@ -154,6 +166,11 @@ class Button:
 
 
 class ConversationHandler(NativeConversationHandler['Any']):
+    """The class for subclassing `telegram.ext.ConversationHandler` to
+    override its `handle_update` method. The main purpose of this is to
+    add custom error handling logic.
+    """
+
     async def handle_update(  # type: ignore[override]
         self: 'Self',
         update: 'Update',
@@ -161,6 +178,10 @@ class ConversationHandler(NativeConversationHandler['Any']):
         check_result: 'CheckUpdateType[CCT]',
         context: 'CCT',
     ) -> object | None:
+        """Catches and handles `BadRequest` exceptions that may occur during
+        the handling of updates.
+        """
+
         try:
             res = await super().handle_update(update, application, check_result, context)
         except BadRequest as exc:  # noqa: TRY302
@@ -181,6 +202,8 @@ class RenderConfig:
 
 
 class Screen:
+    """The class implements the interface of a screen. """
+
     cache_covers: bool = False
     cover: 'str | PathLike[str]' = ''
     description: str = ''
@@ -195,6 +218,8 @@ class Screen:
             self.html_parse_mode = settings.HTML_PARSE_MODE
 
     def __new__(cls: type['Screen'], *args: tuple['Any'], **kwargs: dict[str, 'Any']) -> 'Screen':
+        """Implements the singleton pattern. """
+
         if not cls._instance:
             cls._instance = super().__new__(cls, *args, **kwargs)
 
@@ -371,9 +396,15 @@ class Screen:
 
 
 class StartScreen(Screen):
+    """The base class for the start screens (i.e, the screens
+    that show up on the /start command).
+    """
+
     async def start(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Stage':
+        """Invoked on the /start command. """
+
         raise NotImplementedError

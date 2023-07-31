@@ -1,3 +1,5 @@
+"""The core of the Hammett framework. """
+
 from typing import TYPE_CHECKING, cast
 
 from telegram import Update
@@ -26,6 +28,13 @@ if TYPE_CHECKING:
 
 
 class Application:
+    """The class is a wrapper for the native Application class.
+    The wrapping solves the following tasks:
+    - hiding low-level technical details of python-telegram-bot from developers;
+    - registering handlers;
+    - configuring logging.
+    """
+
     def __init__(
         self: 'Self',
         name: str,

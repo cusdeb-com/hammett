@@ -21,8 +21,8 @@ if TYPE_CHECKING:
 def ignore_permissions(
     permissions: 'Iterable[Permission]',
 ) -> 'Callable[[Handler[..., Stage]], Handler[..., Stage]]':
-    """The decorator is intended for decorating Screen methods to specify
-    which permissions they are allowed to ignore.
+    """The decorator is intended for decorating handlers (Screen methods)
+    to specify which permissions they are allowed to ignore.
     """
 
     def decorator(func: 'Handler[..., Stage]') -> 'Handler[..., Stage]':
@@ -49,13 +49,15 @@ class Permission:
         self: 'Self',
         handler: 'Handler[..., Stage]',
     ) -> 'Callable[[Update, CallbackContext[BT, UD, CD, BD]], Coroutine[Any, Any, Stage]]':
+        """Checks if there is a permission to invoke handlers (Screen methods).
+        The method is invoked under the hood, so you should not run it directly.
+        """
+
         @wraps(handler)
         async def wrapper(
             update: 'Update',
             context: 'CallbackContext[BT, UD, CD, BD]',
         ) -> 'Stage':
-            """"""
-
             if asyncio.iscoroutinefunction(self.has_permission):
                 permitted = await self.has_permission(update, context)
             else:
