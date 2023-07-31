@@ -1,11 +1,12 @@
 """The module contains the implementation of the permissions mechanism. """
 
+import asyncio
 from functools import wraps
 from typing import TYPE_CHECKING, cast
 from uuid import uuid4
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Coroutine, Iterable
+    from collections.abc import Awaitable, Callable, Coroutine, Iterable
     from typing import Any
 
     from telegram import Update
@@ -55,7 +56,12 @@ class Permission:
         ) -> 'Stage':
             """"""
 
-            if await self.has_permission(update, context):
+            if asyncio.iscoroutinefunction(self.has_permission):
+                permitted = await self.has_permission(update, context)
+            else:
+                permitted = self.has_permission(update, context)
+
+            if permitted:
                 return await handler(update, context)  # type: ignore[call-arg, arg-type]
 
             return await self.handle_permission_denied(update, context)
@@ -71,11 +77,11 @@ class Permission:
 
         raise NotImplementedError
 
-    async def has_permission(
+    def has_permission(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> bool:
+    ) -> 'bool | Awaitable[bool]':
         """Invoked before running each Screen method to check a permission. """
 
         raise NotImplementedError
