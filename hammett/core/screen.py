@@ -1,3 +1,4 @@
+import logging
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -22,7 +23,7 @@ from hammett.core.exceptions import (
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
-    from collections.abc import Awaitable, Callable
+    from collections.abc import Awaitable, Callable, Iterable
     from os import PathLike
     from typing import Any
     from uuid import UUID
@@ -33,7 +34,10 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.hiders import Hider, HidersChecker
+    from hammett.core.permissions import Permission
     from hammett.types import CheckUpdateType, Handler, Keyboard, Source, Stage
+
+LOGGER = logging.getLogger(__name__)
 
 
 class Button:
@@ -46,12 +50,14 @@ class Button:
         *,
         source_type: SourcesTypes = SourcesTypes.HANDLER_SOURCE_TYPE,
         hiders: 'Hider | None' = None,
+        ignore_permissions: 'Iterable[type[Permission]] | None' = None,
     ) -> None:
         self.caption = caption
         self.source = source
         self.source_wrapped = None
         self.source_type = source_type
         self.hiders = hiders
+        self.ignore_permissions = ignore_permissions
 
         self.source_goto = None
         if source_type == SourcesTypes.GOTO_SOURCE_TYPE:
@@ -65,6 +71,7 @@ class Button:
             screen = source()
             self.source_goto = cast('Handler[..., Stage]', screen.goto)
 
+        self._init_permissions_ignored()
         if self.hiders and not self.hiders_checker:
             self._init_hider_checker()
 
@@ -82,6 +89,24 @@ class Button:
         if self.hiders:
             hiders_checker: type['HidersChecker'] = import_string(settings.HIDERS_CHECKER)
             self.hiders_checker = hiders_checker(self.hiders.hiders_set)
+
+    def _init_permissions_ignored(self: 'Self') -> None:
+        """Initializes the permissions_ignored attribute for the button source. """
+
+        if self.ignore_permissions:
+            permissions_ignored = [permission.CLASS_UUID for permission in self.ignore_permissions]
+            if self.source_type in (
+                SourcesTypes.HANDLER_SOURCE_TYPE,
+                SourcesTypes.GOTO_SOURCE_TYPE,
+            ) and not isinstance(self.source, str):
+                # Explicitly ignore the URL source type to avoid runtime errors.
+                self.source.permissions_ignored = permissions_ignored
+
+            if self.source_type == SourcesTypes.URL_SOURCE_TYPE:
+                LOGGER.warning(
+                    "Specifying 'ignore_permissions' for the source with "
+                    "URL_SOURCE_TYPE has no effect on the source.",
+                )
 
     async def _specify_visibility(
         self: 'Self',
