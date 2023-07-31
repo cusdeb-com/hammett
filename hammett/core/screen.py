@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
     from os import PathLike
     from typing import Any
+    from uuid import UUID
 
     from telegram import CallbackQuery, Update
     from telegram.ext import Application, CallbackContext
@@ -159,6 +160,7 @@ class Screen:
     cover: 'str | PathLike[str]' = ''
     description: str = ''
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
+    permissions_ignored: list['UUID'] = []
 
     _instance: 'Screen | None' = None
 
