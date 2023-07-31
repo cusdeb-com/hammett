@@ -62,15 +62,15 @@ class MainMenu(Screen):
     #
 
     async def render(
-            self,
-            update,
-            context,
-            *,
-            as_new_message=False,
-            _cover='',
-            description='',
-            _keyboard=None,
-            **kwargs,
+        self,
+        update,
+        context,
+        *,
+        as_new_message=False,
+        _cover='',
+        description='',
+        _keyboard=None,
+        **kwargs,
     ):
         user = update.effective_user
         user_status = await self._get_user_status(user.id)
