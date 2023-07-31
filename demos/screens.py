@@ -103,7 +103,13 @@ class MainMenu(Screen):
     async def start(self, update, context):
         """Replies to the /start command. """
 
-        user = update.message.from_user
+        try:
+            user = update.message.from_user
+        except AttributeError:
+            # When the start handler is invoked through editing
+            # the message with the /start command.
+            user = update.edited_message.from_user
+
         settings.ADMIN_GROUP.append(user.id)
         LOGGER.info('The user %s (%s) was added to the admin group.', user.username, user.id)
 
