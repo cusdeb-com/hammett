@@ -1,4 +1,5 @@
 import re
+from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 from uuid import uuid4
@@ -140,6 +141,17 @@ class ConversationHandler(NativeConversationHandler['Any']):
             raise exc  # noqa: TRY201
         else:
             return res
+
+
+@dataclass
+class RenderConfig:
+    """The class that represents a config for the Screen render method. """
+
+    as_new_message: bool = False
+    cache_covers: bool = False
+    cover: 'str | PathLike[str]' = ''
+    description: str = ''
+    keyboard: 'Keyboard | None' = None
 
 
 class Screen:
@@ -287,26 +299,23 @@ class Screen:
         await self.render(update, context)
         return DEFAULT_STAGE
 
-    async def render(  # noqa: PLR0913
+    async def render(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
-        as_new_message: bool = False,
-        cache_covers: bool = False,
-        cover: 'str | PathLike[str]' = '',
-        description: str = '',
-        keyboard: 'Keyboard | None' = None,
+        config: 'RenderConfig | None' = None,
     ) -> None:
         """Renders the screen components (i.e., cover, description and keyboard). """
 
-        cache_covers = cache_covers or self.cache_covers
-        cover = cover or self.cover
-        description = description or self.description
-        keyboard = keyboard or self.setup_keyboard()
+        config = config or RenderConfig()
+        cache_covers = config.cache_covers or self.cache_covers
+        cover = config.cover or self.cover
+        description = config.description or self.description
+        keyboard = config.keyboard or self.setup_keyboard()
 
         send: 'Callable[..., Awaitable[Any]] | None' = None
-        if as_new_message:
+        if config.as_new_message:
             send, kwargs = await self._get_new_message_render_method(
                 update,
                 context,
