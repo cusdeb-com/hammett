@@ -342,6 +342,8 @@ class Screen:
 
         return []
 
+
+class StartScreen(Screen):
     async def start(
         self: 'Self',
         update: 'Update',
