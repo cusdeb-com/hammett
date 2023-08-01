@@ -19,6 +19,9 @@ class BaseTestCase(unittest.TestCase):
     familiar with the specifics of the framework.
     """
 
+    update: 'Update'
+    context: 'CallbackContext'  # type: ignore[type-arg]
+
     def __init__(self: 'Self', method_name: str) -> None:
         self.context: 'CallbackContext' = CallbackContext(  # type: ignore[type-arg]
             Application.builder(),  # type: ignore[arg-type]
