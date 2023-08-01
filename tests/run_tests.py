@@ -6,6 +6,7 @@ import os
 import unittest
 
 from tests.test_hiders_check_mechanism import HidersCheckerTests
+from tests.test_permissions_mechanism import PermissionsTests
 
 if __name__ == '__main__':
     os.environ.setdefault('HAMMETT_SETTINGS_MODULE', 'tests.settings')
