@@ -5,7 +5,7 @@ import logging
 from hammett.conf import settings
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.hiders import ONLY_FOR_ADMIN, Hider
-from hammett.core.screen import Button, RenderConfig, Screen
+from hammett.core.screen import Button, RenderConfig, Screen, StartScreen
 
 LOGGER = logging.getLogger('hammett')
 
@@ -32,7 +32,7 @@ class NotAdminConfirmation(Screen):
         return DEFAULT_STAGE
 
 
-class MainMenu(Screen):
+class MainMenu(StartScreen):
     admin_status = 'admin'
     anonymous_status = 'anonymous'
     greeting = 'Hello, <b>{user_status}</b>!'
