@@ -5,7 +5,7 @@ import logging
 from hammett.conf import settings
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.hiders import ONLY_FOR_ADMIN, Hider
-from hammett.core.screen import Button, Screen
+from hammett.core.screen import Button, RenderConfig, Screen
 
 LOGGER = logging.getLogger('hammett')
 
@@ -66,20 +66,18 @@ class MainMenu(Screen):
         update,
         context,
         *,
-        as_new_message=False,
-        _cover='',
-        description='',
-        _keyboard=None,
-        **kwargs,
+        config: 'RenderConfig | None' = None,
     ):
         user = update.effective_user
         user_status = await self._get_user_status(user.id)
         description = self.text_map[user_status].format(user_status=user_status)
+
+        config = config or RenderConfig()
+        config.description = description
         await super().render(
             update,
             context,
-            as_new_message=as_new_message,
-            description=description,
+            config=config,
         )
 
     def setup_keyboard(self):
@@ -113,7 +111,8 @@ class MainMenu(Screen):
         settings.ADMIN_GROUP.append(user.id)
         LOGGER.info('The user %s (%s) was added to the admin group.', user.username, user.id)
 
-        await self.render(update, context, as_new_message=True)
+        config = RenderConfig(as_new_message=True)
+        await self.render(update, context, config=config)
         return DEFAULT_STAGE
 
 
