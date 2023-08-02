@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.permissions import Permission
-    from hammett.core.screen import Screen
+    from hammett.core.screen import Screen, StartScreen
     from hammett.types import Handler, NativeStates, Stage, States
 
 
@@ -28,7 +28,7 @@ class Application:
         self: 'Self',
         name: str,
         *,
-        entry_point: 'type[Screen]',
+        entry_point: 'type[StartScreen]',
         native_states: 'NativeStates | None' = None,
         persistence: 'BasePersistence[UD, CD, BD] | None' = None,
         states: 'States | None' = None,
