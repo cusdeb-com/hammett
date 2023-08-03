@@ -72,23 +72,23 @@ class Button:
             self.source_goto = cast('Handler[..., Stage]', screen.goto)
 
         self._init_permissions_ignored()
-        if self.hiders and not self.hiders_checker:
-            self._init_hider_checker()
+        self._init_hider_checker()
 
     #
     # Private methods
     #
 
     def _init_hider_checker(self: 'Self') -> None:
-        from hammett.conf import settings
+        if self.hiders and not self.hiders_checker:
+            from hammett.conf import settings
 
-        if not settings.HIDERS_CHECKER:
-            msg = "The 'HIDERS_CHECKER' setting is not set"
-            raise ImproperlyConfigured(msg)
+            if not settings.HIDERS_CHECKER:
+                msg = "The 'HIDERS_CHECKER' setting is not set"
+                raise ImproperlyConfigured(msg)
 
-        if self.hiders:
-            hiders_checker: type['HidersChecker'] = import_string(settings.HIDERS_CHECKER)
-            self.hiders_checker = hiders_checker(self.hiders.hiders_set)
+            if self.hiders:
+                hiders_checker: type['HidersChecker'] = import_string(settings.HIDERS_CHECKER)
+                self.hiders_checker = hiders_checker(self.hiders.hiders_set)
 
     def _init_permissions_ignored(self: 'Self') -> None:
         """Initializes the permissions_ignored attribute for the button source. """
