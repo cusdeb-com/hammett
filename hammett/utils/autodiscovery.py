@@ -21,7 +21,7 @@ def _autodiscover_screens_in_module(module: ModuleType) -> set[type[Screen]]:
     }
 
 
-def autodiscover_screens(package_name: str) -> list[type[Screen]]:
+def autodiscover_screens(package_name: str) -> set[type[Screen]]:
     """Automatically discovers screens (i.e., subclasses of the Screen class),
     looking them in the specified package.
     """
@@ -40,4 +40,4 @@ def autodiscover_screens(package_name: str) -> list[type[Screen]]:
             module = importlib.import_module(path)
             subclasses.update(_autodiscover_screens_in_module(module))
 
-    return list(subclasses)
+    return subclasses
