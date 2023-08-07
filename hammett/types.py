@@ -1,6 +1,6 @@
 """The module contains the types used throughout the framework. """
 
-from collections.abc import Callable, Coroutine
+from collections.abc import Callable, Coroutine, Iterable
 from typing import TYPE_CHECKING, Any, NewType, ParamSpec, Protocol, TypeVar
 from uuid import UUID
 
@@ -19,7 +19,7 @@ Keyboard = list[list[Button]]
 
 NativeStates = dict[object, list[BaseHandler]]  # type: ignore[type-arg]
 
-States = dict[int, list[type[Screen]]]
+States = dict[int, Iterable[type[Screen]]]
 
 Func = TypeVar('Func', bound=Callable[..., Any])
 

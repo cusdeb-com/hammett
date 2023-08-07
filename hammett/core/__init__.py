@@ -14,6 +14,8 @@ from hammett.utils.log import configure_logging
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from telegram.ext import BasePersistence
     from telegram.ext._utils.types import BD, CD, UD
     from typing_extensions import Self
@@ -63,7 +65,7 @@ class Application:
             persistent=bool(persistence),
         ))
 
-    def _register_handlers(self: 'Self', state: int, screens: list[type['Screen']]) -> None:
+    def _register_handlers(self: 'Self', state: int, screens: 'Iterable[type[Screen]]') -> None:
         from hammett.conf import settings
 
         self._native_states[state] = []
