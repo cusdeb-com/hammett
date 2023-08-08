@@ -115,7 +115,7 @@ class ApplicationTests(BaseTestCase):
             self.assertEqual(TokenIsNotSpecified, context.exception.__class__)
 
     @override_settings(LOGGING=_TEST_LOGGING, TOKEN='secret-token')
-    def test_init_app_logging_setup(self):
+    def test_app_init_with_logging_setup(self):
         """Tests the case when an application is initialized with
         an overriden LOGGING setting.
         """
@@ -127,7 +127,7 @@ class ApplicationTests(BaseTestCase):
         )
 
     @override_settings(PERMISSIONS=['tests.base.TestDenyingPermission'], TOKEN='secret-token')
-    def test_init_app_register_handler_permissions(self):
+    def test_app_init_with_permissions_specified(self):
         """Tests the case when an application is initialized with
         PERMISSIONS specified.
         """
@@ -138,7 +138,7 @@ class ApplicationTests(BaseTestCase):
         self.assertIsNotNone(is_wrapped)
 
     @override_settings(PERMISSIONS=['tests.base.TestDenyingPermission'], TOKEN='secret-token')
-    def test_init_app_register_handler_permissions_ignored(self):
+    def test_app_init_with_permissions_specified_but_ignored(self):
         """Tests the case when an application is initialized with both
         PERMISSIONS specified and ignore_permissions passed to the handler.
         """
