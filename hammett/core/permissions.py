@@ -1,4 +1,4 @@
-"""The module contains the implementation of the permissions mechanism. """
+"""The module contains the implementation of the permissions mechanism."""
 
 import asyncio
 from functools import wraps
@@ -41,7 +41,7 @@ def ignore_permissions(
 
 
 class Permission:
-    """The base class for the implementations of custom permissions. """
+    """The base class for the implementations of custom permissions."""
 
     CLASS_UUID = uuid4()
 
@@ -75,7 +75,7 @@ class Permission:
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Stage':
-        """Invoked in case of `has_permission` returns False. """
+        """Invoked in case of `has_permission` returns False."""
 
         raise NotImplementedError
 
@@ -84,6 +84,6 @@ class Permission:
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'bool | Awaitable[bool]':
-        """Invoked before running each Screen method to check a permission. """
+        """Invoked before running each Screen method to check a permission."""
 
         raise NotImplementedError

@@ -1,4 +1,4 @@
-"""The core of the Hammett framework. """
+"""The core of the Hammett framework."""
 
 from typing import TYPE_CHECKING, cast
 
@@ -108,12 +108,12 @@ class Application:
                     ))
 
     def _setup(self: 'Self') -> None:
-        """Configures logging. """
+        """Configures logging."""
 
         from hammett.conf import settings
         configure_logging(settings.LOGGING)
 
     def run(self: 'Self') -> None:
-        """Runs the application. """
+        """Runs the application."""
 
         self._native_application.run_polling(allowed_updates=Update.ALL_TYPES)

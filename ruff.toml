@@ -9,7 +9,6 @@ ignore = [
     "D202",  # no-blank-line-after-function
     "D203",  # no-blank-line-before-class
     "D205",
-    "D210",
     "D212",
     "D213",
     "D401",

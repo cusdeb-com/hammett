@@ -1,1 +1,1 @@
-"""The package contains the framework tests. """
+"""The package contains the framework tests."""

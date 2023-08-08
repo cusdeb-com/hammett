@@ -1,4 +1,4 @@
-"""The module contains the implementation of the hiders mechanism. """
+"""The module contains the implementation of the hiders mechanism."""
 
 import asyncio
 from typing import TYPE_CHECKING
@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 class Hider:
-    """The class implements a hider. """
+    """The class implements a hider."""
 
     def __init__(self: 'Self', hider: int) -> None:
         self.hider: int = hider
@@ -34,7 +34,7 @@ class Hider:
 
 
 class HidersChecker:
-    """The base class for the implementations of custom hiders checkers. """
+    """The base class for the implementations of custom hiders checkers."""
 
     def __init__(self: 'Self', hiders_set: set[int]) -> None:
         if getattr(self, 'custom_hiders', None) is None:
@@ -65,7 +65,7 @@ class HidersChecker:
         _update: 'Update',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
-        """A stub for checking whether the user is an admin. """
+        """A stub for checking whether the user is an admin."""
 
         return False
 
@@ -74,7 +74,7 @@ class HidersChecker:
         _update: 'Update',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
-        """A stub for checking whether the user is a beta tester. """
+        """A stub for checking whether the user is a beta tester."""
 
         return False
 
@@ -83,7 +83,7 @@ class HidersChecker:
         _update: 'Update',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
-        """A stub for checking whether the user is a moderator. """
+        """A stub for checking whether the user is a moderator."""
 
         return False
 

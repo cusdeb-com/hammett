@@ -1,4 +1,4 @@
-"""The module runs all the tests. """
+"""The module runs all the tests."""
 
 # ruff: noqa: F401
 

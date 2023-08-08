@@ -1,4 +1,4 @@
-"""The module contains the tests for the application. """
+"""The module contains the tests for the application."""
 
 # ruff: noqa: ANN001, ANN101, ANN201, ANN202, S106, SLF001
 
@@ -43,10 +43,10 @@ _TEST_LOGGING = {
 
 
 class TestScreenWithKeyboard(TestScreen):
-    """The class implements the screen to test starting an application. """
+    """The class implements the screen to test starting an application."""
 
     def setup_keyboard(self):
-        """Sets up the keyboard for the screen. """
+        """Sets up the keyboard for the screen."""
 
         return [
             [
@@ -62,7 +62,7 @@ class TestScreenWithPermissionIgnored(TestScreen):
     """
 
     def setup_keyboard(self):
-        """Sets up the keyboard for the screen. """
+        """Sets up the keyboard for the screen."""
 
         return [
             [
@@ -75,11 +75,11 @@ class TestScreenWithPermissionIgnored(TestScreen):
 
 
 class ApplicationTests(BaseTestCase):
-    """The class implements the tests for the application. """
+    """The class implements the tests for the application."""
 
     @staticmethod
     def _init_application(screen=None) -> 'Application':
-        """Returns an initialized application. """
+        """Returns an initialized application."""
 
         return Application(
             _APPLICATION_TEST_NAME,
@@ -90,7 +90,7 @@ class ApplicationTests(BaseTestCase):
         )
 
     def test_successful_app_init(self):
-        """Tests the case when an application is initialized successfully. """
+        """Tests the case when an application is initialized successfully."""
 
         app = self._init_application()
 

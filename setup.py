@@ -1,4 +1,4 @@
-"""The script for building the Hammett package. """
+"""The script for building the Hammett package."""
 
 from pathlib import Path
 
