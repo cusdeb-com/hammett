@@ -5,26 +5,42 @@
 import importlib
 import inspect
 import pkgutil
-from types import ModuleType
+from typing import TYPE_CHECKING
 
 from hammett.core.screen import Screen
 
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+    from types import ModuleType
 
-def _autodiscover_screens_in_module(module: ModuleType) -> set[type[Screen]]:
+
+def _autodiscover_screens_in_module(
+    module: 'ModuleType',
+    exclude_screens: 'Iterable[type[Screen]]',
+) -> 'set[type[Screen]]':
     """Looks through the specified module for subclasses of the Screen class.
     The function skips Screen itself.
     """
 
     return {
         obj for _, obj in inspect.getmembers(module)
-        if inspect.isclass(obj) and issubclass(obj, Screen) and obj is not Screen
+        if inspect.isclass(obj)
+        and issubclass(obj, Screen)
+        and obj is not Screen
+        and obj not in exclude_screens
     }
 
 
-def autodiscover_screens(package_name: str) -> set[type[Screen]]:
+def autodiscover_screens(
+    package_name: str,
+    exclude_screens: 'Iterable[type[Screen]] | None' = None,
+) -> 'set[type[Screen]]':
     """Automatically discovers screens (i.e., subclasses of the Screen class),
     looking them in the specified package.
     """
+
+    if exclude_screens is None:
+        exclude_screens = []
 
     subclasses = set()
 
@@ -34,10 +50,10 @@ def autodiscover_screens(package_name: str) -> set[type[Screen]]:
 
         if is_pkg:
             package = importlib.import_module(path)
-            subclasses.update(_autodiscover_screens_in_module(package))
-            subclasses.update(autodiscover_screens(path))
+            subclasses.update(_autodiscover_screens_in_module(package, exclude_screens))
+            subclasses.update(autodiscover_screens(path, exclude_screens))
         else:
             module = importlib.import_module(path)
-            subclasses.update(_autodiscover_screens_in_module(module))
+            subclasses.update(_autodiscover_screens_in_module(module, exclude_screens))
 
     return subclasses
