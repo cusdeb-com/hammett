@@ -1,1 +1,1 @@
-"""The package contains facilities for testing the framework. """
+"""The package contains facilities for testing the framework."""

@@ -1,4 +1,4 @@
-"""The module contains the tests for the permissions mechanism. """
+"""The module contains the tests for the permissions mechanism."""
 
 # ruff: noqa: ANN001, ANN101, ANN201, ANN202
 
@@ -19,19 +19,19 @@ if TYPE_CHECKING:
 
 
 class TestPermissionWithSyncChecker(BaseTestPermission):
-    """The class implements a permission where `has_permission` method is sync. """
+    """The class implements a permission where `has_permission` method is sync."""
 
     def has_permission(self, _update, _context):
-        """A stub permission checker for the testing purpose. """
+        """A stub permission checker for the testing purpose."""
 
         return False
 
 
 class PermissionsTests(BaseTestCase):
-    """The class implements the tests for the permissions mechanism. """
+    """The class implements the tests for the permissions mechanism."""
 
     async def test_giving_permission(self):
-        """Tests the case when the permission is giving. """
+        """Tests the case when the permission is giving."""
 
         screen = TestScreen()
         source = cast('Handler[..., Stage]', screen.goto)
@@ -43,7 +43,7 @@ class PermissionsTests(BaseTestCase):
         self.assertEqual(stage, DEFAULT_STAGE)
 
     async def test_denying_permission(self):
-        """Tests the case when the permission is denied. """
+        """Tests the case when the permission is denied."""
 
         screen = TestScreen()
         source = cast('Handler[..., Stage]', screen.goto)
@@ -55,7 +55,7 @@ class PermissionsTests(BaseTestCase):
         self.assertEqual(stage, PERMISSION_DENIED_STAGE)
 
     async def test_sync_permission_denied(self):
-        """Tests the case when the permission checker is a synchronous. """
+        """Tests the case when the permission checker is a synchronous."""
 
         screen = TestScreen()
         source = cast('Handler[..., Stage]', screen.goto)

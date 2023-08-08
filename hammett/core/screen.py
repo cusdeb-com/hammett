@@ -45,7 +45,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class Button:
-    """The class implements the interface of a button.  """
+    """The class implements the interface of a button."""
 
     hiders_checker: 'HidersChecker | None' = None
 
@@ -97,7 +97,7 @@ class Button:
                 self.hiders_checker = hiders_checker(self.hiders.hiders_set)
 
     def _init_permissions_ignored(self: 'Self') -> None:
-        """Initializes the permissions_ignored attribute for the button source. """
+        """Initializes the permissions_ignored attribute for the button source."""
 
         if self.ignore_permissions:
             permissions_ignored = [permission.CLASS_UUID for permission in self.ignore_permissions]
@@ -146,7 +146,7 @@ class Button:
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> tuple[InlineKeyboardButton, bool]:
-        """Creates the button. """
+        """Creates the button."""
 
         visibility = await self._specify_visibility(update, context)
 
@@ -192,7 +192,7 @@ class ConversationHandler(NativeConversationHandler['Any']):
 
 @dataclass
 class RenderConfig:
-    """The class that represents a config for the Screen render method. """
+    """The class that represents a config for the Screen render method."""
 
     as_new_message: bool = False
     cache_covers: bool = False
@@ -202,7 +202,7 @@ class RenderConfig:
 
 
 class Screen:
-    """The class implements the interface of a screen. """
+    """The class implements the interface of a screen."""
 
     cache_covers: bool = False
     cover: 'str | PathLike[str]' = ''
@@ -218,7 +218,7 @@ class Screen:
             self.html_parse_mode = settings.HTML_PARSE_MODE
 
     def __new__(cls: type['Screen'], *args: tuple['Any'], **kwargs: dict[str, 'Any']) -> 'Screen':
-        """Implements the singleton pattern. """
+        """Implements the singleton pattern."""
 
         if not cls._instance:
             cls._instance = super().__new__(cls, *args, **kwargs)
@@ -255,7 +255,7 @@ class Screen:
         cover: 'str | PathLike[str]' = '',
         description: str = '',
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
-        """Returns the render method and its kwargs for editing a message. """
+        """Returns the render method and its kwargs for editing a message."""
 
         kwargs: dict[str, 'Any'] = {}
         send: 'Callable[..., Awaitable[Any]] | None' = None
@@ -293,7 +293,7 @@ class Screen:
         cover: 'str | PathLike[str]' = '',
         description: str = '',
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
-        """Returns the render method and its kwargs for sending a new message. """
+        """Returns the render method and its kwargs for sending a new message."""
 
         kwargs: dict[str, 'Any'] = {
             'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
@@ -320,7 +320,7 @@ class Screen:
 
     @staticmethod
     def _is_url(cover: 'str | PathLike[str]') -> bool:
-        """Checks if the cover is specified using either a local path or a URL. """
+        """Checks if the cover is specified using either a local path or a URL."""
 
         return bool(re.search(r'^https?://', str(cover)))
 
@@ -330,7 +330,7 @@ class Screen:
 
     @staticmethod
     async def get_callback_query(update: 'Update') -> 'CallbackQuery | None':
-        """Gets CallbackQuery from Update. """
+        """Gets CallbackQuery from Update."""
 
         query = update.callback_query
         # CallbackQueries need to be answered, even if no notification to the user is needed.
@@ -346,7 +346,7 @@ class Screen:
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Stage':
-        """Switches to the screen. """
+        """Switches to the screen."""
 
         await self.render(update, context)
         return DEFAULT_STAGE
@@ -358,7 +358,7 @@ class Screen:
         *,
         config: 'RenderConfig | None' = None,
     ) -> None:
-        """Renders the screen components (i.e., cover, description and keyboard). """
+        """Renders the screen components (i.e., cover, description and keyboard)."""
 
         config = config or RenderConfig()
         cache_covers = config.cache_covers or self.cache_covers
@@ -390,7 +390,7 @@ class Screen:
             )
 
     def setup_keyboard(self: 'Self') -> 'Keyboard':
-        """Sets up the keyboard for the screen. """
+        """Sets up the keyboard for the screen."""
 
         return []
 
@@ -405,6 +405,6 @@ class StartScreen(Screen):
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Stage':
-        """Invoked on the /start command. """
+        """Invoked on the /start command."""
 
         raise NotImplementedError

@@ -1,4 +1,4 @@
-"""The module contains the types used throughout the framework. """
+"""The module contains the types used throughout the framework."""
 
 from collections.abc import Callable, Coroutine, Iterable
 from typing import TYPE_CHECKING, Any, NewType, ParamSpec, Protocol, TypeVar
@@ -33,7 +33,7 @@ R_co = TypeVar('R_co', covariant=True)
 
 
 class Handler(Protocol[P, R_co]):
-    """The class implements the Handler type. """
+    """The class implements the Handler type."""
 
     permissions_ignored: list[UUID]
 
@@ -43,7 +43,7 @@ class Handler(Protocol[P, R_co]):
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> HandlerR:
-        """The signature is required for every handler of the Handler type. """
+        """The signature is required for every handler of the Handler type."""
         ...
 
     def __self__(self: 'Self') -> Screen:

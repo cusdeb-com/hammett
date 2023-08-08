@@ -57,7 +57,7 @@ class BaseTestCase(unittest.TestCase):
         super().__init__(method_name)
 
     def __call__(self: 'Self', result: 'unittest.result.TestResult | None' = None) -> None:
-        """Overrides __call__ to wrap asynchronous tests. """
+        """Overrides __call__ to wrap asynchronous tests."""
 
         test_method = getattr(self, self._testMethodName)
         if asyncio.iscoroutinefunction(test_method):

@@ -1,4 +1,4 @@
-"""The module contains the tests for the hiders mechanism. """
+"""The module contains the tests for the hiders mechanism."""
 
 # ruff: noqa: ANN001, ANN101, ANN201, ANN202
 
@@ -21,15 +21,15 @@ _TEST_URL = 'https://github.com/cusdeb-com/hammett'
 
 
 class TestHidersChecker(HidersChecker):
-    """The class implements a hiders checker for the tests. """
+    """The class implements a hiders checker for the tests."""
 
     def is_admin(self, _update, _context):
-        """A stub hiders checker for the testing purposes. """
+        """A stub hiders checker for the testing purposes."""
 
         return settings.IS_ADMIN
 
     def is_moderator(self, _update, _context):
-        """A stub hiders checker for the testing purposes. """
+        """A stub hiders checker for the testing purposes."""
 
         return settings.IS_MODERATOR
 
@@ -40,18 +40,18 @@ class TestAsyncHidersChecker(HidersChecker):
     """
 
     async def is_admin(self, _update, _context):
-        """A stub hiders checker for the testing purposes. """
+        """A stub hiders checker for the testing purposes."""
 
         return settings.IS_ADMIN
 
     async def is_moderator(self, _update, _context):
-        """A stub hiders checker for the testing purposes. """
+        """A stub hiders checker for the testing purposes."""
 
         return settings.IS_MODERATOR
 
 
 class HidersCheckerTests(BaseTestCase):
-    """The class implements the tests for the hiders checker mechanism. """
+    """The class implements the tests for the hiders checker mechanism."""
 
     async def _test_hider(self):
         """The method is intended to be invoked by other tests that use
@@ -111,7 +111,7 @@ class HidersCheckerTests(BaseTestCase):
 
     @override_settings(HIDERS_CHECKER='tests.test_hiders_check_mechanism.TestHidersChecker')
     async def test_hiders_chain(self):
-        """Tests the case when hiders are combined using the OR operator. """
+        """Tests the case when hiders are combined using the OR operator."""
 
         settings.IS_ADMIN = False
         settings.IS_MODERATOR = True

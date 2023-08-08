@@ -1,4 +1,4 @@
-"""The module contains the constants used in the core. """
+"""The module contains the constants used in the core."""
 
 from enum import Enum, auto
 from typing import TYPE_CHECKING, cast
@@ -11,7 +11,7 @@ DEFAULT_STAGE = cast('Stage', 0)
 
 
 class SourcesTypes(Enum):
-    """The class contains the available types of sources. """
+    """The class contains the available types of sources."""
 
     GOTO_SOURCE_TYPE = auto()
     HANDLER_SOURCE_TYPE = auto()

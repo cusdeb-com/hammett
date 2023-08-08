@@ -1,1 +1,1 @@
-"""The Hammett framework. """
+"""The Hammett framework."""

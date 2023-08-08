@@ -1,4 +1,4 @@
-"""The module contains facilities for configuring logging in Hammett. """
+"""The module contains facilities for configuring logging in Hammett."""
 
 import logging
 import logging.config
@@ -33,7 +33,7 @@ DEFAULT_LOGGING: 'Final' = {
 
 
 def configure_logging(logging_settings: dict[str, 'Any']) -> None:
-    """Configures logging with either the given settings or default settings. """
+    """Configures logging with either the given settings or default settings."""
 
     logging.config.dictConfig(DEFAULT_LOGGING)
 

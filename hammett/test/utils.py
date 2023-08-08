@@ -24,7 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""The module contains utils for writing tests. """
+"""The module contains utils for writing tests."""
 
 import asyncio
 from functools import wraps
@@ -68,17 +68,17 @@ class TestContextDecorator:
         self.disable()
 
     def enable(self: 'Self') -> 'Any':
-        """Invoked when execution enters the context of the with statement. """
+        """Invoked when execution enters the context of the with statement."""
 
         raise NotImplementedError
 
     def disable(self: 'Self') -> 'Any':
-        """Invoked when execution leaves the context of the with statement. """
+        """Invoked when execution leaves the context of the with statement."""
 
         raise NotImplementedError
 
     def decorate_callable(self: 'Self', func: 'Func') -> 'Callable[..., Any | Awaitable[Any]]':
-        """Decorates either a coroutine or a function. """
+        """Decorates either a coroutine or a function."""
 
         if asyncio.iscoroutinefunction(func):
             # If the inner function is an async function, we must execute async
@@ -102,7 +102,7 @@ class TestContextDecorator:
         return inner
 
     def __call__(self: 'Self', decorated: 'Func') -> 'Callable[..., Any] | Awaitable[Any]':
-        """Wraps the specified coroutine or function, and invokes the decorator. """
+        """Wraps the specified coroutine or function, and invokes the decorator."""
 
         if callable(decorated):
             return self.decorate_callable(decorated)
@@ -112,7 +112,7 @@ class TestContextDecorator:
 
 
 class override_settings(TestContextDecorator):  # noqa: N801
-    """Decorates tests to perform temporary alterations of the settings. """
+    """Decorates tests to perform temporary alterations of the settings."""
 
     def __init__(self: 'Self', **kwargs: dict[str, 'Any']) -> None:
         self.options = kwargs
@@ -120,7 +120,7 @@ class override_settings(TestContextDecorator):  # noqa: N801
         super().__init__()
 
     def enable(self: 'Self') -> None:
-        """Invoked when execution enters the context of the with statement. """
+        """Invoked when execution enters the context of the with statement."""
 
         overriden_settings = GlobalSettings()
         for key, new_value in self.options.items():
@@ -132,7 +132,7 @@ class override_settings(TestContextDecorator):  # noqa: N801
             setattr(settings, key, new_value)
 
     def disable(self: 'Self') -> None:
-        """Invoked when execution leaves the context of the with statement. """
+        """Invoked when execution leaves the context of the with statement."""
 
         settings._wrapped = self.wrapped  # noqa: SLF001
         del self.wrapped

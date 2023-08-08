@@ -74,7 +74,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     #
 
     async def _get_data(self: 'Self', key: str) -> 'Any':
-        """Fetches the data from the database by the specified key. """
+        """Fetches the data from the database by the specified key."""
 
         try:
             redis_data = await self.redis_cli.get(key)
@@ -87,7 +87,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             return redis_data
 
     async def _set_data(self: 'Self', key: str, data: object) -> None:
-        """Stores the data to the database using the specified key. """
+        """Stores the data to the database using the specified key."""
 
         await self.redis_cli.set(key, pickle.dumps(data))
 
@@ -123,7 +123,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._USER_DATA_KEY, self.user_data)
 
     async def flush(self: 'Self') -> None:
-        """Stores all the data kept in the memory to the database. """
+        """Stores all the data kept in the memory to the database."""
 
         if self.bot_data:
             await self._set_data(self._BOT_DATA_KEY, self.bot_data)
@@ -283,10 +283,10 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._USER_DATA_KEY, self.user_data)
 
     async def refresh_bot_data(self: 'Self', bot_data: 'BD') -> None:
-        """Does nothing. Required by the `BasePersistence` interface. """
+        """Does nothing. Required by the `BasePersistence` interface."""
 
     async def refresh_chat_data(self: 'Self', chat_id: int, chat_data: 'CD') -> None:
-        """Does nothing. Required by the `BasePersistence` interface. """
+        """Does nothing. Required by the `BasePersistence` interface."""
 
     async def refresh_user_data(self: 'Self', user_id: int, user_data: 'UD') -> None:
-        """Does nothing. Required by the `BasePersistence` interface. """
+        """Does nothing. Required by the `BasePersistence` interface."""

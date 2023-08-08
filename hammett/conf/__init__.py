@@ -56,7 +56,7 @@ _HAMMETT_SETTINGS_MODULE = 'HAMMETT_SETTINGS_MODULE'
 
 
 def new_method_proxy(func: 'Func') -> 'Any':
-    """Routes functions to the _wrapped object. """
+    """Routes functions to the _wrapped object."""
 
     # It's necessary to use the wraps decorator when wrapping functions.
     # But not here. The point is that new_method_proxy is used mainly with
@@ -97,7 +97,7 @@ class LazyObject:
         self._wrapped = _EMPTY
 
     def _setup(self: 'Self') -> None:
-        """Initializes the wrapped object. """
+        """Initializes the wrapped object."""
 
         msg = 'subclasses of LazyObject must provide a _setup() method.'
         raise NotImplementedError(msg)
@@ -185,7 +185,7 @@ class LazySettings(LazyObject):
         )
 
     def __getattr__(self: 'Self', name: str) -> 'Any':
-        """Returns the value of a setting and caches it in self.__dict__. """
+        """Returns the value of a setting and caches it in self.__dict__."""
 
         if self._wrapped is _EMPTY:
             self._setup(name)
@@ -209,7 +209,7 @@ class LazySettings(LazyObject):
         super().__setattr__(name, value)
 
     def __delattr__(self: 'Self', name: str) -> None:
-        """Deletes a setting and clears it from cache if needed. """
+        """Deletes a setting and clears it from cache if needed."""
 
         super().__delattr__(name)
         self.__dict__.pop(name, None)
@@ -241,7 +241,7 @@ class Settings:
         self._check()
 
     def _check(self: 'Self') -> None:
-        """Checks the settings for gross errors. """
+        """Checks the settings for gross errors."""
 
         if self._is_overridden('HIDERS_CHECKER_CLASS'):
             setting_value = getattr(self._settings_module, 'HIDERS_CHECKER_CLASS')  # noqa: B009
@@ -256,7 +256,7 @@ class Settings:
                 raise ImproperlyConfigured(msg)
 
     def _is_overridden(self: 'Self', setting: str) -> bool:
-        """Checks if the specified setting is overriden. """
+        """Checks if the specified setting is overriden."""
 
         return setting in self._explicit_settings
 
