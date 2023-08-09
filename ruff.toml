@@ -19,7 +19,7 @@ ignore = [
     "UP037",  # quoted-annotation
 ]
 
-exclude = ["demos/", "src/*"]
+exclude = [".git/", "demos/", "src/*"]
 
 target-version = "py310"
 
