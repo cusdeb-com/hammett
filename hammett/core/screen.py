@@ -389,7 +389,7 @@ class Screen:
                 **kwargs,
             )
 
-    def setup_keyboard(self: 'Self') -> 'Keyboard':
+    def setup_keyboard(self: 'Self', *_args: tuple['Any'], **_kwargs: 'Any') -> 'Keyboard':
         """Sets up the keyboard for the screen."""
 
         return []
