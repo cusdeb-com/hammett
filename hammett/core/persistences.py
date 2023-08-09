@@ -80,8 +80,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             redis_data = await self.redis_cli.get(key)
             if redis_data:
                 return pickle.loads(redis_data)  # noqa: S301
-        except (ConnectionError, pickle.UnpicklingError) as exc:
-            LOGGER.error('Failed to get the data from Redis by the key %s (%s)', key, exc)
+        except (ConnectionError, pickle.UnpicklingError):
+            LOGGER.exception('Failed to get the data from Redis by the key %s', key)
             return None
         else:
             return redis_data
