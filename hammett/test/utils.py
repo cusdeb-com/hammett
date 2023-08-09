@@ -63,7 +63,7 @@ class TestContextDecorator:
         self: 'Self',
         exc_type: type[BaseException] | None,
         exc_value: BaseException | None,
-        traceback: 'TracebackType | None',
+        traceback: 'TracebackType | None',  # noqa: PYI036
     ) -> None:
         self.disable()
 
