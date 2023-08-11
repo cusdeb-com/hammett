@@ -104,7 +104,7 @@ class Application:
 
                     self._native_states[state].append(CallbackQueryHandler(
                         button.source_wrapped or source,  # type: ignore[arg-type]
-                        pattern=f'^{Button.create_handler_pattern(source)}$',
+                        pattern=f'^{Button.create_handler_pattern(source)}\|(.*)$',
                     ))
 
     def _setup(self: 'Self') -> None:

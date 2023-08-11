@@ -157,7 +157,7 @@ class Button:
             else:
                 source = cast('Handler[..., Stage]', self.source)
 
-            pattern = self.create_handler_pattern(source)
+            pattern = f'{self.create_handler_pattern(source)}|{self.caption}'
             return InlineKeyboardButton(self.caption, callback_data=pattern), visibility
 
         if self.source_type == SourcesTypes.URL_SOURCE_TYPE and isinstance(self.source, str):
@@ -333,15 +333,8 @@ class Screen:
         """Returns the caption of the pressed button."""
 
         query = await self.get_callback_query(update)
-        message = getattr(query, 'message', None)
-        if message is None:
-            raise CouldNotFindButtonCaption
-
-        reply_markup = getattr(message, 'reply_markup', None)
-        if reply_markup is None:
-            raise CouldNotFindButtonCaption
-
-        return str(reply_markup.inline_keyboard[0][0].text)
+        data = query.data
+        return data.split('|')[1]
 
     @staticmethod
     async def get_callback_query(update: 'Update') -> 'CallbackQuery | None':
