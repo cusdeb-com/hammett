@@ -20,8 +20,13 @@ from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import ConversationHandler as NativeConversationHandler
 
-from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
+from hammett.core.constants import (
+    DEFAULT_STAGE,
+    PAYLOAD_DELIMITER,
+    SourcesTypes,
+)
 from hammett.core.exceptions import (
+    FailedToGetDataAttributeOfQuery,
     ImproperlyConfigured,
     UnknownSourceType,
 )
@@ -58,8 +63,10 @@ class Button:
         source_type: SourcesTypes = SourcesTypes.HANDLER_SOURCE_TYPE,
         hiders: 'Hider | None' = None,
         ignore_permissions: 'Iterable[type[Permission]] | None' = None,
+        payload: str = '',
     ) -> None:
         self.caption = caption
+        self.payload = payload
         self.source = source
         self.source_wrapped = None
         self.source_type = source_type
@@ -158,7 +165,11 @@ class Button:
             else:
                 source = cast('Handler[..., Stage]', self.source)
 
-            pattern = self.create_handler_pattern(source)
+            pattern = (
+                f'{self.create_handler_pattern(source)}'
+                f'{PAYLOAD_DELIMITER}'
+                f'{self.payload}'
+            )
             return InlineKeyboardButton(self.caption, callback_data=pattern), visibility
 
         if self.source_type == SourcesTypes.URL_SOURCE_TYPE and isinstance(self.source, str):
@@ -342,6 +353,17 @@ class Screen:
             await query.answer()
 
         return query
+
+    async def get_payload(self: 'Self', update: 'Update') -> str:
+        """Returns the payload passed through the pressed button."""
+
+        query = await self.get_callback_query(update)
+        data = getattr(query, 'data', None)
+        if data is None:
+            raise FailedToGetDataAttributeOfQuery
+
+        payload = data.split(PAYLOAD_DELIMITER)
+        return str(payload[1])
 
     async def goto(
         self: 'Self',
