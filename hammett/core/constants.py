@@ -9,6 +9,8 @@ if TYPE_CHECKING:
 # Use 'cast' instead of 'Stage(0)' to avoid a circular import
 DEFAULT_STAGE = cast('Stage', 0)
 
+PAYLOAD_DELIMITER = ','
+
 
 class SourcesTypes(Enum):
     """The class contains the available types of sources."""

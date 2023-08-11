@@ -1,6 +1,10 @@
 """The module contains the global Hammett exception and warning classes."""
 
 
+class FailedToGetDataAttributeOfQuery(Exception):
+    """Raised when the attempt to get a data attribute of a query fails."""
+
+
 class ImproperlyConfigured(Exception):
     """Raised when Hammett is somehow improperly configured."""
 
