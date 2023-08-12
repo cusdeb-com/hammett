@@ -22,12 +22,16 @@ from telegram.ext import ConversationHandler as NativeConversationHandler
 
 from hammett.core.constants import (
     DEFAULT_STAGE,
+    MAX_DATA_SIZE,
     PAYLOAD_DELIMITER,
+    STR_BUFFER_SIZE_FOR_HANDLER,
+    STR_BUFFER_SIZE_FOR_PAYLOAD,
     SourcesTypes,
 )
 from hammett.core.exceptions import (
     FailedToGetDataAttributeOfQuery,
     ImproperlyConfigured,
+    PayloadTooLong,
     UnknownSourceType,
 )
 from hammett.utils.module_loading import import_string
@@ -85,12 +89,28 @@ class Button:
             screen = source()
             self.source_goto = cast('Handler[..., Stage]', screen.goto)
 
+        self._check_payload()
         self._init_permissions_ignored()
         self._init_hider_checker()
 
     #
     # Private methods
     #
+
+    def _check_payload(self: 'Self') -> None:
+        """
+        Checks the passed payload length. If the length exceeds the limit,
+        the method raises `PayloadTooLong`.
+        """
+
+        got = STR_BUFFER_SIZE_FOR_HANDLER + len(PAYLOAD_DELIMITER) + len(self.payload)
+        if got > MAX_DATA_SIZE:
+            exceeded = len(self.payload) - STR_BUFFER_SIZE_FOR_PAYLOAD
+            msg = (
+                f'A payload must not be longer than {STR_BUFFER_SIZE_FOR_PAYLOAD} characters. '
+                f'The payload exceeds the limit by {exceeded} character(s).'
+            )
+            raise PayloadTooLong(msg)
 
     def _init_hider_checker(self: 'Self') -> None:
         if self.hiders and not self.hiders_checker:
