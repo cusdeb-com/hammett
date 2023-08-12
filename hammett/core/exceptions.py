@@ -13,6 +13,10 @@ class HiderIsUnregistered(Exception):
     """Raised when an unregistered hider is used."""
 
 
+class PayloadTooLong(Exception):
+    """Raised when a payload passed through a button is too long."""
+
+
 class TokenIsNotSpecified(Exception):
     """Raised when the token is not specified."""
 
