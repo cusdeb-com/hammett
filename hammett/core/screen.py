@@ -21,7 +21,6 @@ from telegram.ext import ConversationHandler as NativeConversationHandler
 
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.exceptions import (
-    CouldNotFindButtonCaption,
     ImproperlyConfigured,
     UnknownSourceType,
 )
@@ -328,20 +327,6 @@ class Screen:
     #
     # Public methods
     #
-
-    async def get_button_caption(self: 'Self', update: 'Update') -> str:
-        """Returns the caption of the pressed button."""
-
-        query = await self.get_callback_query(update)
-        message = getattr(query, 'message', None)
-        if message is None:
-            raise CouldNotFindButtonCaption
-
-        reply_markup = getattr(message, 'reply_markup', None)
-        if reply_markup is None:
-            raise CouldNotFindButtonCaption
-
-        return str(reply_markup.inline_keyboard[0][0].text)
 
     @staticmethod
     async def get_callback_query(update: 'Update') -> 'CallbackQuery | None':
