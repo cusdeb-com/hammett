@@ -1,10 +1,6 @@
 """The module contains the global Hammett exception and warning classes."""
 
 
-class CouldNotFindButtonCaption(Exception):
-    """Raised when the attempt to find a button caption fails."""
-
-
 class ImproperlyConfigured(Exception):
     """Raised when Hammett is somehow improperly configured."""
 
