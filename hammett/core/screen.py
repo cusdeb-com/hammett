@@ -4,6 +4,7 @@
 
 import logging
 import re
+import zlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
@@ -139,7 +140,8 @@ class Button:
         when a specific button is pressed.
         """
 
-        return f'{type(handler.__self__).__name__}.{handler.__name__}'
+        pattern = f'{type(handler.__self__).__name__}.{handler.__name__}'
+        return str(zlib.adler32(pattern.encode('utf8')))
 
     async def create(
         self: 'Self',
