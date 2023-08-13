@@ -6,6 +6,7 @@ import os
 import unittest
 
 from tests.test_application import ApplicationTests
+from tests.test_buttons import ButtonsTests
 from tests.test_hiders_check_mechanism import HidersCheckerTests
 from tests.test_permissions_mechanism import PermissionsTests
 
