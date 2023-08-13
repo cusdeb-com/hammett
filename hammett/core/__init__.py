@@ -87,7 +87,7 @@ class Application:
                         continue
 
                     if button.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
-                        source = cast('Handler[..., Stage]', button.source_goto)
+                        source = button.source_goto
                     else:
                         source = cast('Handler[..., Stage]', button.source)
 
