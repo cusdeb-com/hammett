@@ -77,19 +77,8 @@ class Button:
         self.hiders = hiders
         self.ignore_permissions = ignore_permissions
 
-        self.source_goto = None
-        if source_type == SourcesTypes.GOTO_SOURCE_TYPE:
-            if not callable(source) or not isinstance(source, type(Screen)):
-                msg = (
-                    f'The source "{source}" must be callable if its '
-                    f'source_type is SourcesTypes.GOTO_SOURCE_TYPE'
-                )
-                raise TypeError(msg)
-
-            screen = source()
-            self.source_goto = cast('Handler[..., Stage]', screen.goto)
-
         self._check_payload()
+        self._check_source()
         self._init_permissions_ignored()
         self._init_hider_checker()
 
@@ -111,6 +100,27 @@ class Button:
                 f'The payload exceeds the limit by {exceeded} character(s).'
             )
             raise PayloadTooLong(msg)
+
+    def _check_source(self: 'Self') -> None:
+        """Checks if the source is valid. If it's invalid, the method raises `TypeError`."""
+
+        if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
+            screen = cast('type[Screen]', self.source)
+            if issubclass(screen, Screen):
+                self.source_goto = cast('Handler[..., Stage]', screen().goto)
+            else:
+                msg = (
+                    f'The source "{self.source}" must be a subclass of Screen if its '
+                    f'source_type is SourcesTypes.GOTO_SOURCE_TYPE'
+                )
+                raise TypeError(msg)
+
+        if self.source_type == SourcesTypes.HANDLER_SOURCE_TYPE and not callable(self.source):
+            msg = (
+                f'The source "{self.source}" must be callable if its '
+                f'source_type is SourcesTypes.HANDLER_SOURCE_TYPE'
+            )
+            raise TypeError(msg)
 
     def _init_hider_checker(self: 'Self') -> None:
         if self.hiders and not self.hiders_checker:
