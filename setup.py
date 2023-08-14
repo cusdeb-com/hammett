@@ -2,8 +2,19 @@
 
 from pathlib import Path
 
-import pypandoc
 from setuptools import find_packages, setup
+
+DESCRIPTION = (
+    'The framework for rapid development of Telegram bots '
+    'with a clean and pragmatic design.'
+)
+
+try:
+    import pypandoc
+    LONG_DESCRIPTION = pypandoc.convert('README.md', 'rst')
+except ImportError:
+    LONG_DESCRIPTION = DESCRIPTION
+
 
 with Path('requirements.txt').open(encoding='utf-8') as outfile:
     requirements = outfile.read().splitlines()
@@ -11,9 +22,8 @@ with Path('requirements.txt').open(encoding='utf-8') as outfile:
 setup(
     name='hammett',
     version='0.0.1',
-    description='The framework for rapid development of Telegram bots '
-                'with a clean and pragmatic design.',
-    long_description=pypandoc.convert('README.md', 'rst'),
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
     url='https://github.com/cusdeb-com/hammett',
     author='Evgeny Golyshev',
     author_email='eugulixes@gmail.com',
