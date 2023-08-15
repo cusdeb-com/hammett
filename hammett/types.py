@@ -52,5 +52,8 @@ class Handler(Protocol[P, R_co]):
     def __name__(self: 'Self') -> str:  # noqa: A003
         ...
 
+    def __qualname__(self: 'Self') -> str:
+        ...
+
 
 Source = str | type[Screen] | Handler
