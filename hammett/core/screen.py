@@ -177,7 +177,11 @@ class Button:
         when a specific button is pressed.
         """
 
-        pattern = f'{type(handler.__self__).__name__}.{handler.__name__}'
+        try:
+            pattern = f'{type(handler.__self__).__name__}.{handler.__name__}'
+        except AttributeError:  # when a handler is static
+            pattern = f'{handler.__qualname__}'
+
         return str(zlib.adler32(pattern.encode('utf8')))
 
     async def create(
