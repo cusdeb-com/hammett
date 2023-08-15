@@ -77,7 +77,11 @@ class Application:
     def _register_handlers(self: 'Self', state: int, screens: 'Iterable[type[Screen]]') -> None:
         from hammett.conf import settings
 
-        self._native_states[state] = []
+        try:
+            self._native_states[state]
+        except KeyError:
+            self._native_states[state] = []
+
         for screen in screens:
             obj = screen()
             for buttons_row in obj.setup_keyboard():
