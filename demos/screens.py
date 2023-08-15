@@ -22,7 +22,8 @@ class NotAdminConfirmation(Screen):
             ],
         ]
 
-    async def exclude_user_from_admin_group(self, update, context):
+    @staticmethod
+    async def exclude_user_from_admin_group(update, context):
         main_menu = MainMenu()
         user = update.effective_user
 
