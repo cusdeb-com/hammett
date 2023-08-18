@@ -1,0 +1,96 @@
+site_name: Hammett
+
+repo_url: https://github.com/cusdeb-com/hammett
+repo_name: cusdeb-com/hammett
+
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/cusdeb-com
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+            separate_signature: true
+            show_root_full_path: false
+            show_signature_annotations: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            signature_crossrefs: true
+
+  - search:
+      lang: en
+
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - def_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+nav:
+  - Home: index.md
+  - Getting started:
+    - Installation: getting-started.md
+    - Usage: usage.md
+    - Demos: demos.md
+    - Authors: AUTHORS.md
+    - License: license.md
+  - Docs:
+      - Application: docs/application.md
+      - Screen: docs/screen.md
+      - Hiders: docs/hiders.md
+      - Permissions: docs/permissions.md
+      - Exceptions: docs/exceptions.md
+
+theme:
+  name: "material"
+  logo: assets/images/logo.png
+  custom_dir: docs/overrides
+
+  features:
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    - content.code.annotate
+    - content.code.copy
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      primary: deep purple
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    - media: "(prefers-color-scheme: dark)"
+      primary: deep purple
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+  font:
+    text: Roboto
+    code: Roboto Mono

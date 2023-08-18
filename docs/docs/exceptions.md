@@ -1,0 +1,3 @@
+# Exceptions
+
+::: hammett.core.exceptions
