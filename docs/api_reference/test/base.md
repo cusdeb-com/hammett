@@ -1,0 +1,3 @@
+# BaseTestCase
+
+::: hammett.test.base

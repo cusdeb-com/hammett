@@ -1,0 +1,196 @@
+site_name: Hammett
+
+repo_name: cusdeb-com/hammett
+repo_url: https://github.com/cusdeb-com/hammett
+
+extra:
+  alternate:
+    - name: English
+      link: /hammett/
+      lang: en
+    - name: Russian
+      link: /hammett/ru/
+      lang: ru
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/cusdeb-com
+  version:
+    provider: mike
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - autorefs:
+      resolve_closest: true
+
+  - exclude:
+      glob:
+        - examples/*
+
+  - i18n:
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: ru
+          name: Русский
+          build: true
+          nav_translations:
+            About Hammett: О Hammett
+            API Reference: Справочник по API
+            Demos: Демо
+            Getting Started: Начало работы
+            Introduction to Bot Development: Введение в разработку ботов
+
+            # Introduction to Bot Development
+            Advanced: Расширенные возможности
+            Assemble and run bot: Сборка и запуск бота
+            Best practices: Лучшие практики
+            Error handlers: Обработчики ошибок
+            Hider-mechanism: Hider-механизм
+            Permission-mechanism: Permission-механизм
+            Screens: Экраны
+            Settings: Конфигурационный файл
+            States: Состояния
+            Testing: Тестирование бота
+            Three pillars: Три ключевых компонента
+            Translation: Переводы
+            Widgets: Виджеты
+
+  - include-markdown:
+
+  - minify:
+      minify_html: true
+
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+            separate_signature: true
+            show_root_full_path: false
+            show_signature_annotations: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            signature_crossrefs: true
+
+  - search:
+      lang: en
+
+markdown_extensions:
+  - def_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - toc:
+      permalink: '#'
+
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+
+nav:
+  - About Hammett: index.md
+  - Getting Started: getting-started.md
+  - Introduction to Bot Development:
+      - Three pillars: introduction_to_bot_development/three-pillars.md
+      - Screens: introduction_to_bot_development/screens.md
+      - Permission-mechanism: introduction_to_bot_development/permission-mechanism.md
+      - Hider-mechanism: introduction_to_bot_development/hider-mechanism.md
+      - States: introduction_to_bot_development/states.md
+      - Settings: introduction_to_bot_development/settings.md
+      - Assemble and run bot: introduction_to_bot_development/assemble-and-run-bot.md
+      - Error handlers: introduction_to_bot_development/error-handlers.md
+      - Translation: introduction_to_bot_development/translation.md
+      - Widgets: introduction_to_bot_development/widgets.md
+      - Testing: introduction_to_bot_development/testing.md
+      - Best practices: introduction_to_bot_development/best-practices.md
+      - Advanced: introduction_to_bot_development/advanced.md
+
+  - Demos: demos.md
+  - API Reference:
+      - Conf:
+          - __init__: api_reference/conf/__init__.md
+          - Global Settings: api_reference/conf/global_settings.md
+      - Core:
+          - __init__: api_reference/core/__init__.md
+          - Bot: api_reference/core/bot.md
+          - Button: api_reference/core/button.md
+          - Cache: api_reference/core/cache.md
+          - Constants: api_reference/core/constants.md
+          - Conversation Handler: api_reference/core/conversation_handler.md
+          - Exceptions: api_reference/core/exceptions.md
+          - Handlers: api_reference/core/handlers.md
+          - Hider: api_reference/core/hider.md
+          - Mixins: api_reference/core/mixins.md
+          - Permission: api_reference/core/permission.md
+          - Persistence: api_reference/core/persistence.md
+          - Renderer: api_reference/core/renderer.md
+          - Screen: api_reference/core/screen.md
+      - Test:
+          - __init__: api_reference/test/__init__.md
+          - BaseTestCase: api_reference/test/base.md
+          - Utils: api_reference/test/utils.md
+      - Utils:
+          - __init__: api_reference/utils/__init__.md
+          - Autodiscovery: api_reference/utils/autodiscovery.md
+          - Logging: api_reference/utils/log.md
+          - Miscellaneous: api_reference/utils/misc.md
+          - Module Loading: api_reference/utils/module_loading.md
+          - Render Config: api_reference/utils/render_config.md
+          - Translation: api_reference/utils/translation.md
+      - Widgets:
+          - __init__: api_reference/widgets/__init__.md
+          - Base Widgets: api_reference/widgets/base.md
+          - CalendarWidget: api_reference/widgets/calendar_widget.md
+          - CarouselWidget: api_reference/widgets/carousel_widget.md
+          - Exceptions: api_reference/widgets/exceptions.md
+          - MultiChoiceWidget: api_reference/widgets/multi_choice_widget.md
+          - SingleChoiceWidget: api_reference/widgets/single_choice_widget.md
+          - Types: api_reference/widgets/types.md
+      - Error Handler: api_reference/error_handler.md
+      - StartMarker: api_reference/start_marker.md
+      - Template: api_reference/template.md
+      - Types: api_reference/types.md
+
+theme:
+  name: 'material'
+  logo: assets/images/logo.png
+  custom_dir: docs/overrides
+
+  features:
+    - content.code.annotate
+    - content.code.copy
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+  palette:
+    - media: '(prefers-color-scheme: light)'
+      primary: custom
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    - media: '(prefers-color-scheme: dark)'
+      primary: custom
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
