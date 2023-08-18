@@ -48,10 +48,11 @@ logger = logging.getLogger(__name__)
 
 class Bot:
     """The class is a wrapper for the native Application class.
+
     The wrapping solves the following tasks:
-    - hiding low-level technical details of python-telegram-bot from developers;
-    - registering handlers;
-    - configuring logging.
+        - hiding low-level technical details of python-telegram-bot from developers;
+        - registering handlers;
+        - configuring logging.
     """
 
     def __init__(
