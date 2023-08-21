@@ -5,6 +5,8 @@ from functools import wraps
 from typing import TYPE_CHECKING, cast
 from uuid import uuid4
 
+from hammett.core.screen import Screen
+
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable, Coroutine, Iterable
     from typing import Any
@@ -14,7 +16,6 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.core.screen import Screen
     from hammett.types import Handler, Stage
 
 
@@ -40,7 +41,7 @@ def ignore_permissions(
     return decorator
 
 
-class Permission:
+class Permission(Screen):
     """The base class for the implementations of custom permissions."""
 
     CLASS_UUID = uuid4()
