@@ -1,6 +1,7 @@
 asgiref==3.7.2
 mypy
 pypandoc==1.5
+pytest==7.4.0
 ruff
 types-redis
 typing_extensions

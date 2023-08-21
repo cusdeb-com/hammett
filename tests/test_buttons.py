@@ -2,6 +2,8 @@
 
 # ruff: noqa: ANN101, ANN201
 
+import pytest
+
 from hammett.core.constants import SourcesTypes
 from hammett.core.exceptions import PayloadTooLong, UnknownSourceType
 from hammett.core.screen import STR_BUFFER_SIZE_FOR_PAYLOAD, Button
@@ -24,7 +26,7 @@ class ButtonsTests(BaseTestCase):
         """Tests the case when a payload exceeds the limit."""
 
         max_payload_length = '*' * STR_BUFFER_SIZE_FOR_PAYLOAD
-        with self.assertRaises(PayloadTooLong):
+        with pytest.raises(PayloadTooLong):
             Button(
                 'Test',
                 TestScreen,
@@ -47,7 +49,7 @@ class ButtonsTests(BaseTestCase):
     async def test_non_callable_source_as_handler(self):
         """Tests the case when a button handler is not callable."""
 
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             Button(
                 'Test',
                 None,  # is not callable, so it's invalid
@@ -68,12 +70,12 @@ class ButtonsTests(BaseTestCase):
     async def test_unknown_source_type(self):
         """Tests the case when an unknown source type passed."""
 
-        with self.assertRaises(UnknownSourceType):
-            button = Button(
-                'Test',
-                TestScreen,
-                source_type=_UNKNOWN_SOURCE_TYPE,
-            )
+        button = Button(
+            'Test',
+            TestScreen,
+            source_type=_UNKNOWN_SOURCE_TYPE,
+        )
+        with pytest.raises(UnknownSourceType):
             await button.create(self.update, self.context)
 
     async def test_using_random_class_instead_of_screen_for_goto(self):
@@ -82,7 +84,7 @@ class ButtonsTests(BaseTestCase):
         the source isn't a subclass of Screen.
         """
 
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             Button(
                 'Test',
                 AnythingElseButScreen,  # is not a subclass of Screen, so it's invalid

@@ -6,6 +6,7 @@ import logging
 import re
 import zlib
 
+import pytest
 from telegram.ext import CommandHandler
 
 from hammett.core import Application
@@ -111,10 +112,8 @@ class ApplicationTests(BaseTestCase):
         because of an empty token.
         """
 
-        with self.assertRaises(TokenIsNotSpecified) as context:
+        with pytest.raises(TokenIsNotSpecified):
             self._init_application()
-
-            self.assertEqual(TokenIsNotSpecified, context.exception.__class__)
 
     @override_settings(LOGGING=_TEST_LOGGING, TOKEN='secret-token')
     def test_app_init_with_logging_setup(self):
