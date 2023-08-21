@@ -35,6 +35,9 @@ R_co = TypeVar('R_co', covariant=True)
 class Handler(Protocol[P, R_co]):
     """The class implements the Handler type."""
 
+    __name__: str  # noqa: A003
+    __self__: Screen
+    __qualname__: str
     permissions_ignored: list[UUID]
 
     def __call__(
@@ -46,15 +49,6 @@ class Handler(Protocol[P, R_co]):
         **kwargs: 'Any',
     ) -> HandlerR:
         """The signature is required for every handler of the Handler type."""
-        ...
-
-    def __self__(self: 'Self') -> Screen:
-        ...
-
-    def __name__(self: 'Self') -> str:  # noqa: A003
-        ...
-
-    def __qualname__(self: 'Self') -> str:
         ...
 
 
