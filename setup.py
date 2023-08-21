@@ -21,7 +21,7 @@ with Path('requirements.txt').open(encoding='utf-8') as outfile:
 
 setup(
     name='hammett',
-    version='0.0.1',
+    version='0.1.0',
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     url='https://github.com/cusdeb-com/hammett',
