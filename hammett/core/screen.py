@@ -397,8 +397,7 @@ class Screen:
         if data is None:
             raise FailedToGetDataAttributeOfQuery
 
-        payload = data.split(PAYLOAD_DELIMITER)
-        return str(payload[1])
+        return str(data[data.index(PAYLOAD_DELIMITER) + 1:])
 
     async def goto(
         self: 'Self',
