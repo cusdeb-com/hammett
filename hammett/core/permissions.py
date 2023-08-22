@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 
 def ignore_permissions(
-    permissions: 'Iterable[Permission]',
+    permissions: 'Iterable[type[Permission]]',
 ) -> 'Callable[[Handler[..., Stage]], Handler[..., Stage]]':
     """The decorator is intended for decorating handlers (Screen methods)
     to specify which permissions they are allowed to ignore.
