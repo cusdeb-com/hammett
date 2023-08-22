@@ -15,6 +15,7 @@ ignore = [
     "D419",
     "N818",  # error-suffix-on-exception-name
     "PT009",  # pytest-unittest-assertion
+    "PT027",  # pytest-unittest-raises-assertion
     "RUF012",
     "UP037",  # quoted-annotation
 ]
