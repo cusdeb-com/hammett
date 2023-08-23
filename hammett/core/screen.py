@@ -264,7 +264,7 @@ class Screen:
             from hammett.conf import settings
             self.html_parse_mode = settings.HTML_PARSE_MODE
 
-    def __new__(cls: type['Screen'], *args: tuple['Any'], **kwargs: dict[str, 'Any']) -> 'Screen':
+    def __new__(cls: type['Screen'], *args: 'Any', **kwargs: 'Any') -> 'Screen':
         """Implements the singleton pattern."""
 
         if not cls._instance:
@@ -304,7 +304,7 @@ class Screen:
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
         """Returns the render method and its kwargs for editing a message."""
 
-        kwargs: dict[str, 'Any'] = {}
+        kwargs: 'Any' = {}
         send: 'Callable[..., Awaitable[Any]] | None' = None
 
         query = await self.get_callback_query(update)
@@ -342,7 +342,7 @@ class Screen:
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
         """Returns the render method and its kwargs for sending a new message."""
 
-        kwargs: dict[str, 'Any'] = {
+        kwargs: 'Any' = {
             'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
         }
 
