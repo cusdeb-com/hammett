@@ -42,6 +42,8 @@ class Handler(Protocol[P, R_co]):
         screen: 'Screen',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        *args: 'Any',
+        **kwargs: 'Any',
     ) -> HandlerR:
         """The signature is required for every handler of the Handler type."""
         ...
