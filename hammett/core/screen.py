@@ -406,7 +406,7 @@ class Screen:
             msg = f'The description of {self.__class__.__name__} is empty'
             raise ScreenDescriptionIsEmpty(msg)
 
-        keyboard = config.keyboard or self.setup_keyboard()
+        keyboard = [] if config.keyboard is None else config.keyboard or self.setup_keyboard()
 
         send: 'Callable[..., Awaitable[Any]] | None' = None
         if config.as_new_message:
