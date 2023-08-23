@@ -111,10 +111,8 @@ class ApplicationTests(BaseTestCase):
         because of an empty token.
         """
 
-        with self.assertRaises(TokenIsNotSpecified) as context:
+        with self.assertRaises(TokenIsNotSpecified):
             self._init_application()
-
-            self.assertEqual(TokenIsNotSpecified, context.exception.__class__)
 
     @override_settings(LOGGING=_TEST_LOGGING, TOKEN='secret-token')
     def test_app_init_with_logging_setup(self):

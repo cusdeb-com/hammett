@@ -83,15 +83,13 @@ class HidersCheckerTests(BaseTestCase):
         but the 'HIDERS_CHECKER' setting is empty.
         """
 
-        with self.assertRaises(ImproperlyConfigured) as context:
+        with self.assertRaises(ImproperlyConfigured):
             Button(
                 _TEST_BUTTON_NAME,
                 _TEST_URL,
                 hiders=Hider(ONLY_FOR_ADMIN),
                 source_type=SourcesTypes.URL_SOURCE_TYPE,
             )
-
-            self.assertEqual(ImproperlyConfigured, context.exception.__class__)
 
     @override_settings(HIDERS_CHECKER='tests.test_hiders_check_mechanism.TestAsyncHidersChecker')
     async def test_async_hider(self):
@@ -141,12 +139,10 @@ class HidersCheckerTests(BaseTestCase):
         an invalid module path.
         """
 
-        with self.assertRaises(ImportError) as context:
+        with self.assertRaises(ImportError):
             Button(
                 _TEST_BUTTON_NAME,
                 _TEST_URL,
                 hiders=Hider(ONLY_FOR_ADMIN),
                 source_type=SourcesTypes.URL_SOURCE_TYPE,
             )
-
-            self.assertEqual(ImportError, context.exception.__class__)
