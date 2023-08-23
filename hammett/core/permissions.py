@@ -34,8 +34,10 @@ def ignore_permissions(
             self: 'Screen',
             update: 'Update',
             context: 'CallbackContext[BT, UD, CD, BD]',
+            *args: 'Any',
+            **kwargs: 'Any',
         ) -> 'Stage':
-            return await func(self, update, context)
+            return await func(self, update, context, *args, **kwargs)
 
         return cast('Handler[..., Stage]', wrapper)
     return decorator
@@ -58,6 +60,8 @@ class Permission(Screen):
         async def wrapper(
             update: 'Update',
             context: 'CallbackContext[BT, UD, CD, BD]',
+            *args: 'Any',
+            **kwargs: 'Any',
         ) -> 'Stage':
             if asyncio.iscoroutinefunction(self.has_permission):
                 permitted = await self.has_permission(update, context)
@@ -65,7 +69,12 @@ class Permission(Screen):
                 permitted = self.has_permission(update, context)
 
             if permitted:
-                return await handler(update, context)  # type: ignore[call-arg, arg-type]
+                return await handler(
+                    update,  # type: ignore[arg-type]
+                    context,  # type: ignore[arg-type]
+                    *args,
+                    **kwargs,
+                )
 
             return await self.handle_permission_denied(update, context)
 
