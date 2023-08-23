@@ -13,8 +13,8 @@ class HiderIsUnregistered(Exception):
     """Raised when an unregistered hider is used."""
 
 
-class PayloadTooLong(Exception):
-    """Raised when a payload passed through a button is too long."""
+class PayloadIsEmpty(Exception):
+    """Raised when trying to get an empty payload."""
 
 
 class ScreenDescriptionIsEmpty(Exception):

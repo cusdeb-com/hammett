@@ -9,9 +9,10 @@ from telegram.ext import (
     CommandHandler,
 )
 
-from hammett.core.constants import PAYLOAD_DELIMITER, SourcesTypes
+from hammett.core.constants import SourcesTypes
 from hammett.core.exceptions import TokenIsNotSpecified
-from hammett.core.screen import Button, ConversationHandler
+from hammett.core.handlers import calc_checksum
+from hammett.core.screen import ConversationHandler
 from hammett.utils.log import configure_logging
 from hammett.utils.module_loading import import_string
 
@@ -110,9 +111,9 @@ class Application:
 
                     self._native_states[state].append(CallbackQueryHandler(
                         button.source_wrapped or source,  # type: ignore[arg-type]
-                        pattern=f'^{Button.create_handler_pattern(source)}'
-                                f'{PAYLOAD_DELIMITER}'
-                                f'(.*)$',
+                        # Specify a pattern. The pattern is used to determine which handler
+                        # should be triggered when a specific button is pressed.
+                        pattern=calc_checksum(source),
                     ))
 
     def _setup(self: 'Self') -> None:

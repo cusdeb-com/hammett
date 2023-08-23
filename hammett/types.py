@@ -19,6 +19,8 @@ Keyboard = list[list[Button]]
 
 NativeStates = dict[object, list[BaseHandler]]  # type: ignore[type-arg]
 
+PayloadStorage = dict[str, str]
+
 States = dict[int, Iterable[type[Screen]]]
 
 Func = TypeVar('Func', bound=Callable[..., Any])
