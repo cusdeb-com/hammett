@@ -14,6 +14,8 @@ HTML_PARSE_MODE = True
 
 LOGGING: dict[str, 'Any'] = {}
 
+PAYLOAD_NAMESPACE = 'hammett'
+
 PERMISSIONS: list[str] = []
 
 REDIS_PERSISTENCE = {

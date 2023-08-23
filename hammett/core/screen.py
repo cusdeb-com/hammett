@@ -4,7 +4,6 @@
 
 import logging
 import re
-import zlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
@@ -22,19 +21,16 @@ from telegram.ext import ConversationHandler as NativeConversationHandler
 
 from hammett.core.constants import (
     DEFAULT_STAGE,
-    MAX_DATA_SIZE,
-    PAYLOAD_DELIMITER,
-    STR_BUFFER_SIZE_FOR_HANDLER,
-    STR_BUFFER_SIZE_FOR_PAYLOAD,
     SourcesTypes,
 )
 from hammett.core.exceptions import (
     FailedToGetDataAttributeOfQuery,
     ImproperlyConfigured,
-    PayloadTooLong,
+    PayloadIsEmpty,
     ScreenDescriptionIsEmpty,
     UnknownSourceType,
 )
+from hammett.core.handlers import calc_checksum, get_payload_storage
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
@@ -78,7 +74,6 @@ class Button:
         self.hiders = hiders
         self.ignore_permissions = ignore_permissions
 
-        self._check_payload()
         self._check_source()
         self._init_permissions_ignored()
         self._init_hider_checker()
@@ -86,21 +81,6 @@ class Button:
     #
     # Private methods
     #
-
-    def _check_payload(self: 'Self') -> None:
-        """
-        Checks the passed payload length. If the length exceeds the limit,
-        the method raises `PayloadTooLong`.
-        """
-
-        got = STR_BUFFER_SIZE_FOR_HANDLER + len(PAYLOAD_DELIMITER) + len(self.payload)
-        if got > MAX_DATA_SIZE:
-            exceeded = len(self.payload) - STR_BUFFER_SIZE_FOR_PAYLOAD
-            msg = (
-                f'A payload must not be longer than {STR_BUFFER_SIZE_FOR_PAYLOAD} characters. '
-                f'The payload exceeds the limit by {exceeded} character(s).'
-            )
-            raise PayloadTooLong(msg)
 
     def _check_source(self: 'Self') -> None:
         """Checks if the source is valid. If it's invalid, the method raises `TypeError`."""
@@ -172,19 +152,6 @@ class Button:
     # Public methods
     #
 
-    @staticmethod
-    def create_handler_pattern(handler: 'Handler[..., Stage]') -> str:
-        """Creates a pattern. It's used to determine which handler should be triggered
-        when a specific button is pressed.
-        """
-
-        try:
-            pattern = f'{type(handler.__self__).__name__}.{handler.__name__}'
-        except AttributeError:  # when a handler is static
-            pattern = f'{handler.__qualname__}'
-
-        return str(zlib.adler32(pattern.encode('utf8')))
-
     async def create(
         self: 'Self',
         update: 'Update',
@@ -200,12 +167,17 @@ class Button:
             else:
                 source = cast('Handler[..., Stage]', self.source)
 
-            pattern = (
-                f'{self.create_handler_pattern(source)}'
-                f'{PAYLOAD_DELIMITER}'
-                f'{self.payload}'
+            data = (
+                f'{calc_checksum(source)},'
+                f'button={calc_checksum(self.caption)},'
+                f'user_id={update.effective_user.id}'  # type: ignore[union-attr]
             )
-            return InlineKeyboardButton(self.caption, callback_data=pattern), visibility
+
+            if self.payload:
+                payload_storage = get_payload_storage(context)
+                payload_storage[data] = self.payload
+
+            return InlineKeyboardButton(self.caption, callback_data=data), visibility
 
         if self.source_type == SourcesTypes.URL_SOURCE_TYPE and isinstance(self.source, str):
             return InlineKeyboardButton(self.caption, url=self.source), visibility
@@ -389,7 +361,11 @@ class Screen:
 
         return query
 
-    async def get_payload(self: 'Self', update: 'Update') -> str:
+    async def get_payload(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> str:
         """Returns the payload passed through the pressed button."""
 
         query = await self.get_callback_query(update)
@@ -397,7 +373,11 @@ class Screen:
         if data is None:
             raise FailedToGetDataAttributeOfQuery
 
-        return str(data[data.index(PAYLOAD_DELIMITER) + 1:])
+        try:
+            payload_storage = get_payload_storage(context)
+            return payload_storage.pop(data)
+        except KeyError as exc:
+            raise PayloadIsEmpty from exc
 
     async def goto(
         self: 'Self',

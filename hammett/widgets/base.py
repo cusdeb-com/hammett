@@ -119,7 +119,7 @@ class BaseChoiceWidget(BaseWidget):
         """Invoked when clicking on a choice."""
 
         choices = await self.get_state(update, context)
-        payload: dict[str, str] = json.loads(await self.get_payload(update))
+        payload: dict[str, str] = json.loads(await self.get_payload(update, context))
 
         await self.switch((payload['code'], payload['name']), choices)
         keyboard = self._build_keyboard(choices)
