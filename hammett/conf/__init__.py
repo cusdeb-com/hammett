@@ -63,7 +63,7 @@ def new_method_proxy(func: 'Func') -> 'Any':
     # the magic methods which, as a rule, are not used directly. So, avoiding
     # using the decorator here can be considered as optimization.
 
-    def inner(self: 'LazyObject', *args: tuple['Any']) -> 'Any':
+    def inner(self: 'LazyObject', *args: 'Any') -> 'Any':
         if self._wrapped is _EMPTY:
             self._setup()
 
