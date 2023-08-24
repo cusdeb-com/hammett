@@ -32,6 +32,7 @@ from hammett.core.exceptions import (
     FailedToGetDataAttributeOfQuery,
     ImproperlyConfigured,
     PayloadTooLong,
+    ScreenDescriptionIsEmpty,
     UnknownSourceType,
 )
 from hammett.utils.module_loading import import_string
@@ -422,6 +423,10 @@ class Screen:
         cache_covers = config.cache_covers or self.cache_covers
         cover = config.cover or self.cover
         description = config.description or self.description
+        if not description:
+            msg = f'The description of {self.__class__.__name__} is empty'
+            raise ScreenDescriptionIsEmpty(msg)
+
         keyboard = config.keyboard or self.setup_keyboard()
 
         send: 'Callable[..., Awaitable[Any]] | None' = None

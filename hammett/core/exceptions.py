@@ -17,6 +17,12 @@ class PayloadTooLong(Exception):
     """Raised when a payload passed through a button is too long."""
 
 
+class ScreenDescriptionIsEmpty(Exception):
+    """Raised when attempting to render a screen, but the description
+    of the screen is found to be empty.
+    """
+
+
 class TokenIsNotSpecified(Exception):
     """Raised when the token is not specified."""
 
