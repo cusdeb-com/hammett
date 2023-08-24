@@ -64,7 +64,7 @@ class Button:
         source_type: SourcesTypes = SourcesTypes.HANDLER_SOURCE_TYPE,
         hiders: 'Hider | None' = None,
         ignore_permissions: 'Iterable[type[Permission]] | None' = None,
-        payload: str = '',
+        payload: str | None = None,
     ) -> None:
         self.caption = caption
         self.payload = payload
@@ -173,7 +173,7 @@ class Button:
                 f'user_id={update.effective_user.id}'  # type: ignore[union-attr]
             )
 
-            if self.payload:
+            if self.payload is not None:
                 payload_storage = get_payload_storage(context)
                 payload_storage[data] = self.payload
 
