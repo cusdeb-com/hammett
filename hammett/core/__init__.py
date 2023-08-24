@@ -26,6 +26,8 @@ if TYPE_CHECKING:
     from hammett.core.screen import Screen, StartScreen
     from hammett.types import Handler, NativeStates, Stage, States
 
+__all__ = ('Application', )
+
 
 class Application:
     """The class is a wrapper for the native Application class.
