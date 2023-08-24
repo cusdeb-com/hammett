@@ -45,6 +45,8 @@ def autodiscover_screens(
     subclasses = set()
 
     target = importlib.import_module(package_name)
+    subclasses.update(_autodiscover_screens_in_module(target, exclude_screens))
+
     for _, module_name, is_pkg in pkgutil.walk_packages(target.__path__):
         path = f'{package_name}.{module_name}'
 
