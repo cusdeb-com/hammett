@@ -3,8 +3,8 @@
 # ruff: noqa: ANN101, ANN201
 
 from hammett.core.constants import SourcesTypes
-from hammett.core.exceptions import PayloadTooLong, UnknownSourceType
-from hammett.core.screen import STR_BUFFER_SIZE_FOR_PAYLOAD, Button
+from hammett.core.exceptions import UnknownSourceType
+from hammett.core.screen import Button
 from hammett.test.base import BaseTestCase
 from tests.base import TestScreen
 
@@ -20,30 +20,6 @@ class AnythingElseButScreen:
 class ButtonsTests(BaseTestCase):
     """The class implements the tests for buttons."""
 
-    async def test_exceeding_max_payload_length(self):
-        """Tests the case when a payload exceeds the limit."""
-
-        max_payload_length = '*' * STR_BUFFER_SIZE_FOR_PAYLOAD
-        with self.assertRaises(PayloadTooLong):
-            Button(
-                'Test',
-                TestScreen,
-                payload=max_payload_length + '*',  # plus one extra character to exceed the limit
-                source_type=SourcesTypes.GOTO_SOURCE_TYPE,
-            )
-
-    async def test_max_payload_length(self):
-        """Tests the case when a valid payload is passed through a button."""
-
-        max_payload_length = '*' * STR_BUFFER_SIZE_FOR_PAYLOAD
-        button = Button(
-            'Test',
-            TestScreen,
-            payload=max_payload_length,
-            source_type=SourcesTypes.GOTO_SOURCE_TYPE,
-        )
-        self.assertEqual(button.payload, max_payload_length)
-
     async def test_non_callable_source_as_handler(self):
         """Tests the case when a button handler is not callable."""
 
@@ -53,17 +29,6 @@ class ButtonsTests(BaseTestCase):
                 None,  # is not callable, so it's invalid
                 source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
             )
-
-    async def test_valid_payload(self):
-        """Tests the case when a valid payload is passed through a button."""
-
-        button = Button(
-            'Test',
-            TestScreen,
-            payload='test payload',
-            source_type=SourcesTypes.GOTO_SOURCE_TYPE,
-        )
-        self.assertEqual(button.payload, _TEST_PAYLOAD)
 
     async def test_unknown_source_type(self):
         """Tests the case when an unknown source type passed."""
