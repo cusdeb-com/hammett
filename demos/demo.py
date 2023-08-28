@@ -3,7 +3,7 @@ to control the visibility of the buttons on the screens.
 """
 
 from hammett.core import Application
-from hammett.core.screen import DEFAULT_STAGE
+from hammett.core.constants import DEFAULT_STAGE
 from hammett.utils.autodiscovery import autodiscover_screens
 
 from demos.screens import MainMenu
