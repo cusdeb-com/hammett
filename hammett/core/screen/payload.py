@@ -1,4 +1,4 @@
-"""The module contains the routines to ensure the functioning of handlers."""
+"""The module contains the routines to ensure the functioning of payload."""
 
 import zlib
 from typing import TYPE_CHECKING, Any, cast

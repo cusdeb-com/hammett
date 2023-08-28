@@ -1,6 +1,4 @@
-"""The module contains the implementation of the screen components
-(i.e., cover, description and keyboard).
-"""
+"""The module contains the implementation of the screen components."""
 
 import logging
 import re
@@ -9,20 +7,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING, cast
 from uuid import uuid4
 
-from telegram import (
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    InputMediaPhoto,
-)
-from telegram._utils.defaultvalue import DEFAULT_NONE, DefaultValue
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
+from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.constants import ParseMode
-from telegram.error import BadRequest
-from telegram.ext import ConversationHandler as NativeConversationHandler
 
-from hammett.core.constants import (
-    DEFAULT_STAGE,
-    SourcesTypes,
-)
+from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.exceptions import (
     FailedToGetDataAttributeOfQuery,
     ImproperlyConfigured,
@@ -30,7 +19,7 @@ from hammett.core.exceptions import (
     ScreenDescriptionIsEmpty,
     UnknownSourceType,
 )
-from hammett.core.handlers import calc_checksum, get_payload_storage
+from hammett.core.screen.payload import calc_checksum, get_payload_storage
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
@@ -40,15 +29,27 @@ if TYPE_CHECKING:
     from uuid import UUID
 
     from telegram import CallbackQuery, Update
-    from telegram.ext import Application, CallbackContext
-    from telegram.ext._utils.types import BD, BT, CCT, CD, UD
+    from telegram._utils.defaultvalue import DefaultValue
+    from telegram.ext import CallbackContext
+    from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
     from hammett.core.hiders import Hider, HidersChecker
     from hammett.core.permissions import Permission
-    from hammett.types import CheckUpdateType, Handler, Keyboard, Source, Stage
+    from hammett.types import Handler, Keyboard, Source, Stage
 
 LOGGER = logging.getLogger(__name__)
+
+
+@dataclass
+class RenderConfig:
+    """The class that represents a config for the Screen render method."""
+
+    as_new_message: bool = False
+    cache_covers: bool = False
+    cover: 'str | PathLike[str]' = ''
+    description: str = ''
+    keyboard: 'Keyboard | None' = None
 
 
 class Button:
@@ -61,7 +62,7 @@ class Button:
         caption: str,
         source: 'Source',
         *,
-        source_type: SourcesTypes = SourcesTypes.HANDLER_SOURCE_TYPE,
+        source_type: 'SourcesTypes' = SourcesTypes.HANDLER_SOURCE_TYPE,
         hiders: 'Hider | None' = None,
         ignore_permissions: 'Iterable[type[Permission]] | None' = None,
         payload: str | None = None,
@@ -156,7 +157,7 @@ class Button:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> tuple[InlineKeyboardButton, bool]:
+    ) -> tuple['InlineKeyboardButton', bool]:
         """Creates the button."""
 
         visibility = await self._specify_visibility(update, context)
@@ -183,42 +184,6 @@ class Button:
             return InlineKeyboardButton(self.caption, url=self.source), visibility
 
         raise UnknownSourceType
-
-
-class ConversationHandler(NativeConversationHandler['Any']):
-    """The class for subclassing `telegram.ext.ConversationHandler` to
-    override its `handle_update` method. The main purpose of this is to
-    add custom error handling logic.
-    """
-
-    async def handle_update(  # type: ignore[override]
-        self: 'Self',
-        update: 'Update',
-        application: 'Application[Any, CCT, Any, Any, Any, Any]',
-        check_result: 'CheckUpdateType[CCT]',
-        context: 'CCT',
-    ) -> object | None:
-        """Catches and handles `BadRequest` exceptions that may occur during
-        the handling of updates.
-        """
-
-        try:
-            res = await super().handle_update(update, application, check_result, context)
-        except BadRequest as exc:  # noqa: TRY302
-            raise exc  # noqa: TRY201
-        else:
-            return res
-
-
-@dataclass
-class RenderConfig:
-    """The class that represents a config for the Screen render method."""
-
-    as_new_message: bool = False
-    cache_covers: bool = False
-    cover: 'str | PathLike[str]' = ''
-    description: str = ''
-    keyboard: 'Keyboard | None' = None
 
 
 class Screen:
@@ -254,7 +219,7 @@ class Screen:
         rows: list[list['Button']],
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> InlineKeyboardMarkup:
+    ) -> 'InlineKeyboardMarkup':
         keyboard = []
         for row in rows:
             buttons = []

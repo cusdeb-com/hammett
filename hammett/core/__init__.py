@@ -11,8 +11,8 @@ from telegram.ext import (
 
 from hammett.core.constants import SourcesTypes
 from hammett.core.exceptions import TokenIsNotSpecified
-from hammett.core.handlers import calc_checksum
 from hammett.core.screen import ConversationHandler
+from hammett.core.screen.payload import calc_checksum
 from hammett.utils.log import configure_logging
 from hammett.utils.module_loading import import_string
 
