@@ -4,7 +4,7 @@ import json
 from typing import TYPE_CHECKING, Any, cast
 
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
-from hammett.core.screen import Button, RenderConfig, Screen
+from hammett.core.screen import EMPTY_KEYBOARD, Button, RenderConfig, Screen
 from hammett.widgets.exceptions import (
     ChoiceEmojisAreUndefined,
     ChoicesFormatIsInvalid,
@@ -136,7 +136,7 @@ class BaseChoiceWidget(BaseWidget):
     def add_extra_keyboard(self: 'Self') -> 'Keyboard':
         """Adds an extra keyboard below the choice buttons."""
 
-        return []
+        return EMPTY_KEYBOARD
 
     async def render(
         self: 'Self',
