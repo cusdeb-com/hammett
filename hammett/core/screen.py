@@ -48,6 +48,8 @@ if TYPE_CHECKING:
     from hammett.core.permissions import Permission
     from hammett.types import CheckUpdateType, Handler, Keyboard, Source, Stage
 
+EMPTY_KEYBOARD: 'Keyboard' = []
+
 LOGGER = logging.getLogger(__name__)
 
 
@@ -251,7 +253,7 @@ class Screen:
 
     @staticmethod
     async def _create_markup_keyboard(
-        rows: list[list['Button']],
+        rows: 'Keyboard',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> InlineKeyboardMarkup:
@@ -406,7 +408,8 @@ class Screen:
             msg = f'The description of {self.__class__.__name__} is empty'
             raise ScreenDescriptionIsEmpty(msg)
 
-        keyboard = [] if config.keyboard is None else config.keyboard or self.setup_keyboard()
+        if config.keyboard is None:
+            config.keyboard = config.keyboard or self.setup_keyboard()
 
         send: 'Callable[..., Awaitable[Any]] | None' = None
         if config.as_new_message:
@@ -427,14 +430,14 @@ class Screen:
 
         if send:
             await send(
-                reply_markup=await self._create_markup_keyboard(keyboard, update, context),
+                reply_markup=await self._create_markup_keyboard(config.keyboard, update, context),
                 **kwargs,
             )
 
     def setup_keyboard(self: 'Self') -> 'Keyboard':
         """Sets up the keyboard for the screen."""
 
-        return []
+        return EMPTY_KEYBOARD
 
 
 class StartScreen(Screen):
