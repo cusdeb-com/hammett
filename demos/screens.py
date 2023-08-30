@@ -4,6 +4,7 @@ import logging
 
 from hammett.conf import settings
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
+from hammett.core.handlers import register_handler
 from hammett.core.hiders import ONLY_FOR_ADMIN, Hider
 from hammett.core.screen import Button, RenderConfig, Screen, StartScreen
 
@@ -23,6 +24,7 @@ class NotAdminConfirmation(Screen):
         ]
 
     @staticmethod
+    @register_handler
     async def exclude_user_from_admin_group(update, context):
         main_menu = MainMenu()
         user = update.effective_user
