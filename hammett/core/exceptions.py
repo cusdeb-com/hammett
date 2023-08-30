@@ -27,5 +27,9 @@ class TokenIsNotSpecified(Exception):
     """Raised when the token is not specified."""
 
 
+class UnknownHandlerType(Exception):
+    """Raised when an unknown type is specified for a handler."""
+
+
 class UnknownSourceType(Exception):
     """Raised when an unknown source type is specified for an inline button."""

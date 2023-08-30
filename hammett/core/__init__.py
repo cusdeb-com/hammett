@@ -9,10 +9,10 @@ from telegram.ext import (
     CommandHandler,
 )
 
-from hammett.core.constants import SourcesTypes
-from hammett.core.exceptions import TokenIsNotSpecified
-from hammett.core.handlers import calc_checksum
-from hammett.core.screen import ConversationHandler
+from hammett.core.exceptions import TokenIsNotSpecified, UnknownHandlerType
+from hammett.core.handlers import calc_checksum, log_unregistered_handler
+from hammett.core.screen import ConversationHandler, Screen
+from hammett.types import HandlerType
 from hammett.utils.log import configure_logging
 from hammett.utils.module_loading import import_string
 
@@ -24,8 +24,8 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.permissions import Permission
-    from hammett.core.screen import Screen, StartScreen
-    from hammett.types import Handler, NativeStates, Stage, States
+    from hammett.core.screen import StartScreen
+    from hammett.types import NativeStates, States
 
 __all__ = ('Application', )
 
@@ -54,6 +54,7 @@ class Application:
 
         self._setup()
 
+        self._builtin_handlers = ('goto', 'start')
         self._entry_point = entry_point()
         self._name = name
         self._native_states = native_states or {}
@@ -86,35 +87,40 @@ class Application:
             self._native_states[state] = []
 
         for screen in screens:
-            obj = screen()
-            for buttons_row in obj.setup_keyboard():
-                for button in buttons_row:
-                    if button.source_type not in (SourcesTypes.GOTO_SOURCE_TYPE,
-                                                  SourcesTypes.HANDLER_SOURCE_TYPE):
+            instance = screen()
+            for name in dir(instance):
+                handler, handler_type = None, None
+                possible_handler = getattr(instance, name)
+                if (
+                    name in self._builtin_handlers or
+                    getattr(possible_handler, 'handler_type', '') == HandlerType.button_handler
+                ):
+                    handler, handler_type = possible_handler, HandlerType.button_handler
+
+                if handler is None:
+                    log_unregistered_handler(possible_handler)
+                    continue
+
+                handler_wrapped = None
+                for permission_path in settings.PERMISSIONS:
+                    permission: type['Permission'] = import_string(permission_path)
+                    permissions_ignored = getattr(handler, 'permissions_ignored', None)
+                    if permissions_ignored and permission.CLASS_UUID in permissions_ignored:
                         continue
 
-                    if button.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
-                        source = button.source_goto
-                    else:
-                        source = cast('Handler[..., Stage]', button.source)
+                    permission_instance = permission()
+                    handler_wrapped = permission_instance.check_permission(handler)
 
-                    for permission_path in settings.PERMISSIONS:
-                        permission: type['Permission'] = import_string(permission_path)
-                        permissions_ignored = getattr(button.source, 'permissions_ignored', None)
-                        if permissions_ignored and permission.CLASS_UUID in permissions_ignored:
-                            continue
-
-                        permission_instance = permission()
-                        button.source_wrapped = permission_instance.check_permission(
-                            source,  # type: ignore[assignment]
-                        )
-
-                    self._native_states[state].append(CallbackQueryHandler(
-                        button.source_wrapped or source,  # type: ignore[arg-type]
+                if handler_type == HandlerType.button_handler:
+                    handler_object = CallbackQueryHandler(
+                        handler_wrapped or handler,
                         # Specify a pattern. The pattern is used to determine which handler
                         # should be triggered when a specific button is pressed.
-                        pattern=calc_checksum(source),
-                    ))
+                        pattern=calc_checksum(handler),
+                    )
+                    self._native_states[state].append(handler_object)
+                else:
+                    raise UnknownHandlerType
 
     def _setup(self: 'Self') -> None:
         """Configures logging."""
