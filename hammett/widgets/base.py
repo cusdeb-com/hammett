@@ -4,6 +4,7 @@ import json
 from typing import TYPE_CHECKING, Any, cast
 
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
+from hammett.core.handlers import register_handler
 from hammett.core.screen import EMPTY_KEYBOARD, Button, RenderConfig, Screen
 from hammett.widgets.exceptions import (
     ChoiceEmojisAreUndefined,
@@ -103,7 +104,7 @@ class BaseChoiceWidget(BaseWidget):
             keyboard.append([
                 Button(
                     f'{box} {name}',
-                    self._on_choice_click,  # type: ignore[arg-type]
+                    self._on_choice_click,
                     payload=json.dumps({'code': code, 'name': name}),
                     source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
                 ),
@@ -111,6 +112,7 @@ class BaseChoiceWidget(BaseWidget):
 
         return keyboard + self.add_extra_keyboard()
 
+    @register_handler  # type: ignore[arg-type]
     async def _on_choice_click(
         self: 'Self',
         update: 'Update',
@@ -153,20 +155,6 @@ class BaseChoiceWidget(BaseWidget):
             config = RenderConfig(keyboard=self._build_keyboard())
 
         await super().render(update, context, config=config)
-
-    def setup_keyboard(self: 'Self') -> 'Keyboard':
-        """Registers the widget handlers."""
-
-        return [
-            [
-                Button(
-                    'ok',
-                    self._on_choice_click,  # type: ignore[arg-type]
-                    source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
-                ),
-            ],
-            *self.add_extra_keyboard(),
-        ]
 
     async def start(
         self: 'Self',
