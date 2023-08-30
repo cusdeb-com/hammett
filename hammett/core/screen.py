@@ -19,6 +19,7 @@ from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import ConversationHandler as NativeConversationHandler
 
+from hammett.core import handlers
 from hammett.core.constants import (
     DEFAULT_STAGE,
     SourcesTypes,
@@ -30,14 +31,12 @@ from hammett.core.exceptions import (
     ScreenDescriptionIsEmpty,
     UnknownSourceType,
 )
-from hammett.core.handlers import calc_checksum, get_payload_storage
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
-    from collections.abc import Awaitable, Callable, Iterable
+    from collections.abc import Awaitable, Callable
     from os import PathLike
     from typing import Any
-    from uuid import UUID
 
     from telegram import CallbackQuery, Update
     from telegram.ext import Application, CallbackContext
@@ -45,7 +44,6 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.hiders import Hider, HidersChecker
-    from hammett.core.permissions import Permission
     from hammett.types import CheckUpdateType, Handler, Keyboard, Source, Stage
 
 EMPTY_KEYBOARD: 'Keyboard' = []
@@ -65,7 +63,6 @@ class Button:
         *,
         source_type: SourcesTypes = SourcesTypes.HANDLER_SOURCE_TYPE,
         hiders: 'Hider | None' = None,
-        ignore_permissions: 'Iterable[type[Permission]] | None' = None,
         payload: str | None = None,
     ) -> None:
         self.caption = caption
@@ -74,10 +71,8 @@ class Button:
         self.source_wrapped = None
         self.source_type = source_type
         self.hiders = hiders
-        self.ignore_permissions = ignore_permissions
 
         self._check_source()
-        self._init_permissions_ignored()
         self._init_hider_checker()
 
     #
@@ -117,24 +112,6 @@ class Button:
                 hiders_checker: type['HidersChecker'] = import_string(settings.HIDERS_CHECKER)
                 self.hiders_checker = hiders_checker(self.hiders.hiders_set)
 
-    def _init_permissions_ignored(self: 'Self') -> None:
-        """Initializes the permissions_ignored attribute for the button source."""
-
-        if self.ignore_permissions:
-            permissions_ignored = [permission.CLASS_UUID for permission in self.ignore_permissions]
-            if self.source_type in (
-                SourcesTypes.HANDLER_SOURCE_TYPE,
-                SourcesTypes.GOTO_SOURCE_TYPE,
-            ) and not isinstance(self.source, str):
-                # Explicitly ignore the URL source type to avoid runtime errors.
-                self.source.permissions_ignored = permissions_ignored
-
-            if self.source_type == SourcesTypes.URL_SOURCE_TYPE:
-                LOGGER.warning(
-                    "Specifying 'ignore_permissions' for the source with "
-                    "URL_SOURCE_TYPE has no effect on the source.",
-                )
-
     async def _specify_visibility(
         self: 'Self',
         update: 'Update',
@@ -170,13 +147,13 @@ class Button:
                 source = cast('Handler[..., Stage]', self.source)
 
             data = (
-                f'{calc_checksum(source)},'
-                f'button={calc_checksum(self.caption)},'
+                f'{handlers.calc_checksum(source)},'
+                f'button={handlers.calc_checksum(self.caption)},'
                 f'user_id={update.effective_user.id}'  # type: ignore[union-attr]
             )
 
             if self.payload is not None:
-                payload_storage = get_payload_storage(context)
+                payload_storage = handlers.get_payload_storage(context)
                 payload_storage[data] = self.payload
 
             return InlineKeyboardButton(self.caption, callback_data=data), visibility
@@ -230,7 +207,6 @@ class Screen:
     cover: 'str | PathLike[str]' = ''
     description: str = ''
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
-    permissions_ignored: list['UUID'] = []
 
     _instance: 'Screen | None' = None
 
@@ -376,7 +352,7 @@ class Screen:
             raise FailedToGetDataAttributeOfQuery
 
         try:
-            payload_storage = get_payload_storage(context)
+            payload_storage = handlers.get_payload_storage(context)
             return payload_storage.pop(data)
         except KeyError as exc:
             raise PayloadIsEmpty from exc

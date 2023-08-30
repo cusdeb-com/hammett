@@ -1,6 +1,7 @@
 """The module contains the types used throughout the framework."""
 
 from collections.abc import Callable, Coroutine, Iterable
+from enum import Enum
 from typing import TYPE_CHECKING, Any, NewType, ParamSpec, Protocol, TypeVar
 from uuid import UUID
 
@@ -34,12 +35,19 @@ P = ParamSpec('P')
 R_co = TypeVar('R_co', covariant=True)
 
 
+class HandlerType(Enum):
+    """The class enumerates all types of handlers."""
+
+    button_handler = 'button_handler'
+
+
 class Handler(Protocol[P, R_co]):
     """The class implements the Handler type."""
 
     __name__: str  # noqa: A003
     __self__: Screen
     __qualname__: str
+    handler_type: HandlerType
     permissions_ignored: list[UUID]
 
     def __call__(
