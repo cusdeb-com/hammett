@@ -137,14 +137,13 @@ class Button:
 
     async def _specify_visibility(
         self: 'Self',
-        update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         visibility = True
         if (
             self.hiders and
             self.hiders_checker and
-            not await self.hiders_checker.run(update, context)
+            not await self.hiders_checker.run(context)
         ):
             visibility = False
 
@@ -161,7 +160,7 @@ class Button:
     ) -> tuple[InlineKeyboardButton, bool]:
         """Creates the button."""
 
-        visibility = await self._specify_visibility(update, context)
+        visibility = await self._specify_visibility(context)
 
         if self.source_type in (SourcesTypes.GOTO_SOURCE_TYPE, SourcesTypes.HANDLER_SOURCE_TYPE):
             if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE and self.source_goto:

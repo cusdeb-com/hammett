@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
     from typing import Any
 
-    from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
@@ -38,10 +37,10 @@ class HidersChecker:
 
     def __init__(self: 'Self', hiders_set: set[int]) -> None:
         if getattr(self, 'custom_hiders', None) is None:
-            self.custom_hiders: dict[int, 'Callable[[Any, Any], Awaitable[Any]]'] = {}
+            self.custom_hiders: dict[int, 'Callable[[Any], Awaitable[Any]]'] = {}
 
         self._hiders_set = hiders_set
-        self._registered_hiders: dict[int, 'Callable[[Any, Any], Awaitable[Any]]'] = {}
+        self._registered_hiders: dict[int, 'Callable[[Any], Awaitable[Any]]'] = {}
         self._register_hiders()
 
     #
@@ -62,7 +61,6 @@ class HidersChecker:
 
     async def is_admin(
         self: 'Self',
-        _update: 'Update',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """A stub for checking whether the user is an admin."""
@@ -71,7 +69,6 @@ class HidersChecker:
 
     async def is_beta_tester(
         self: 'Self',
-        _update: 'Update',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """A stub for checking whether the user is a beta tester."""
@@ -80,16 +77,22 @@ class HidersChecker:
 
     async def is_moderator(
         self: 'Self',
-        _update: 'Update',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """A stub for checking whether the user is a moderator."""
 
         return False
 
+    @staticmethod
+    def get_user_id_from_context(
+        context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> int | None:
+        """Returns user's id from context."""
+
+        return context._user_id  # noqa: SLF001
+
     async def run(
         self: 'Self',
-        update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """Runs the checks associated with the registered hiders.
@@ -106,9 +109,9 @@ class HidersChecker:
                 raise HiderIsUnregistered(msg) from exc
 
             if asyncio.iscoroutinefunction(hider_handler):
-                if await hider_handler(update, context):
+                if await hider_handler(context):
                     return True
-            elif hider_handler(update, context):
+            elif hider_handler(context):
                 return True
 
         return False
