@@ -23,12 +23,12 @@ _TEST_URL = 'https://github.com/cusdeb-com/hammett'
 class TestHidersChecker(HidersChecker):
     """The class implements a hiders checker for the tests."""
 
-    def is_admin(self, _update, _context):
+    def is_admin(self, _context):
         """A stub hiders checker for the testing purposes."""
 
         return settings.IS_ADMIN
 
-    def is_moderator(self, _update, _context):
+    def is_moderator(self, _context):
         """A stub hiders checker for the testing purposes."""
 
         return settings.IS_MODERATOR
@@ -39,12 +39,12 @@ class TestAsyncHidersChecker(HidersChecker):
     for the tests.
     """
 
-    async def is_admin(self, _update, _context):
+    async def is_admin(self, _context):
         """A stub hiders checker for the testing purposes."""
 
         return settings.IS_ADMIN
 
-    async def is_moderator(self, _update, _context):
+    async def is_moderator(self, _context):
         """A stub hiders checker for the testing purposes."""
 
         return settings.IS_MODERATOR
