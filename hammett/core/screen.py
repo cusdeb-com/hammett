@@ -100,6 +100,18 @@ class Button:
             )
             raise TypeError(msg)
 
+    @staticmethod
+    def _get_user_id(
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> int | None:
+        """Obtains the user ID from either an Update object or a CallbackContext object."""
+
+        if update is None:
+            return context._user_id  # noqa: SLF001
+
+        return update.effective_user.id  # type: ignore[union-attr]
+
     def _init_hider_checker(self: 'Self') -> None:
         if self.hiders and not self.hiders_checker:
             from hammett.conf import settings
@@ -114,7 +126,7 @@ class Button:
 
     async def _specify_visibility(
         self: 'Self',
-        update: 'Update',
+        update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         visibility = True
@@ -133,7 +145,7 @@ class Button:
 
     async def create(
         self: 'Self',
-        update: 'Update',
+        update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> tuple[InlineKeyboardButton, bool]:
         """Creates the button."""
@@ -149,7 +161,7 @@ class Button:
             data = (
                 f'{handlers.calc_checksum(source)},'
                 f'button={handlers.calc_checksum(self.caption)},'
-                f'user_id={update.effective_user.id}'  # type: ignore[union-attr]
+                f'user_id={self._get_user_id(update, context)}'
             )
 
             if self.payload is not None:
@@ -223,7 +235,7 @@ class Screen:
     @staticmethod
     async def _create_markup_keyboard(
         rows: 'Keyboard',
-        update: 'Update',
+        update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> InlineKeyboardMarkup:
         keyboard = []
