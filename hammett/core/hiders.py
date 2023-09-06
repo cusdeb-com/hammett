@@ -89,7 +89,7 @@ class HidersChecker:
 
     async def run(
         self: 'Self',
-        update: 'Update',
+        update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """Runs the checks associated with the registered hiders.

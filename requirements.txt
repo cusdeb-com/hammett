@@ -1,2 +1,2 @@
-python-telegram-bot==20.3
+python-telegram-bot[job-queue]==20.3
 redis==4.6.0

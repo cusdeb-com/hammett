@@ -47,6 +47,7 @@ class Application:
         native_states: 'NativeStates | None' = None,
         persistence: 'BasePersistence[UD, CD, BD] | None' = None,
         states: 'States | None' = None,
+        job_queue_handlers: 'list[dict[str, Any]] | None' = None,
     ) -> None:
         from hammett.conf import settings
 
@@ -70,6 +71,8 @@ class Application:
         if self._states:
             for state in self._states.items():
                 self._register_handlers(*state)
+
+        self._register_job_queue_handler(job_queue_handlers)
 
         start_handler = apply_permission_to(self._entry_point.start)
         self._native_application.add_handler(ConversationHandler(
@@ -123,6 +126,26 @@ class Application:
                     raise UnknownHandlerType
 
                 self._native_states[state].append(handler_object)
+
+    def _register_job_queue_handler(
+        self: 'Self',
+        job_queue_handlers: 'list[dict[str, Any]] | None' = None,
+    ) -> None:
+        """Registers the specified job queue handlers."""
+
+        if job_queue_handlers:
+            job_queue = self._native_application.job_queue
+            for job_queue_handler in job_queue_handlers:
+                handler = job_queue_handler['handler']
+                first_request = job_queue_handler['first_request']
+                interval_request = job_queue_handler['interval_request']
+
+                if job_queue:
+                    job_queue.run_repeating(
+                        handler,
+                        first=first_request,
+                        interval=interval_request,
+                    )
 
     def _setup(self: 'Self') -> None:
         """Configures logging."""
