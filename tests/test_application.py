@@ -14,7 +14,7 @@ from hammett.core.handlers import calc_checksum
 from hammett.core.screen import Button
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import override_settings
-from tests.base import TestDenyingPermission, TestScreen, TestStartScreen
+from tests.base import TestScreen, TestStartScreen
 
 _APPLICATION_TEST_NAME = 'test'
 
@@ -68,8 +68,8 @@ class TestScreenWithPermissionIgnored(TestScreen):
         return [
             [
                 Button(
-                    '⬅️ Main Menu', TestStartScreen, source_type=SourcesTypes.GOTO_SOURCE_TYPE,
-                    ignore_permissions=(TestDenyingPermission, ),
+                    '⬅️ Main Menu', TestStartScreen,
+                    source_type=SourcesTypes.GOTO_SOURCE_TYPE,
                 ),
             ],
         ]
@@ -79,14 +79,16 @@ class ApplicationTests(BaseTestCase):
     """The class implements the tests for the application."""
 
     @staticmethod
-    def _init_application(screen=None) -> 'Application':
+    def _init_application(screens=None) -> 'Application':
         """Returns an initialized application."""
+
+        screens = [TestScreenWithKeyboard] if screens is None else screens
 
         return Application(
             _APPLICATION_TEST_NAME,
             entry_point=TestStartScreen,
             states={
-                DEFAULT_STAGE: [screen or TestScreenWithKeyboard],
+                DEFAULT_STAGE: screens,
             },
         )
 
@@ -96,7 +98,7 @@ class ApplicationTests(BaseTestCase):
         app = self._init_application()
 
         handlers = app._native_application.handlers[DEFAULT_STAGE][0]
-        pattern = calc_checksum('TestStartScreen.goto')
+        pattern = calc_checksum('TestScreenWithKeyboard.goto')
 
         self.assertIsInstance(handlers.entry_points[0], CommandHandler)
         self.assertEqual(handlers.name, _APPLICATION_TEST_NAME)
@@ -136,14 +138,3 @@ class ApplicationTests(BaseTestCase):
         handlers = app._native_application.handlers[DEFAULT_STAGE][0]
         is_wrapped = getattr(handlers.states[DEFAULT_STAGE][0].callback, '__wrapped__', None)
         self.assertIsNotNone(is_wrapped)
-
-    @override_settings(PERMISSIONS=['tests.base.TestDenyingPermission'], TOKEN='secret-token')
-    def test_app_init_with_permissions_specified_but_ignored(self):
-        """Tests the case when an application is initialized with both
-        PERMISSIONS specified and ignore_permissions passed to the handler.
-        """
-
-        app = self._init_application(TestScreenWithPermissionIgnored)
-        handlers = app._native_application.handlers[DEFAULT_STAGE][0]
-        is_wrapped = getattr(handlers.states[DEFAULT_STAGE][0].callback, '__wrapped__', None)
-        self.assertIsNone(is_wrapped)
