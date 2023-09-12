@@ -39,6 +39,7 @@ class HandlerType(Enum):
     """The class enumerates all types of handlers."""
 
     button_handler = 'button_handler'
+    typing_handler = 'typing_handler'
 
 
 class Handler(Protocol[P, R_co]):
