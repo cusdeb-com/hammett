@@ -1,12 +1,15 @@
 """The core of the Hammett framework."""
 
-from typing import TYPE_CHECKING, cast
+import contextlib
+from typing import TYPE_CHECKING, Any, cast
 
 from telegram import Update
 from telegram.ext import Application as NativeApplication
 from telegram.ext import (
     CallbackQueryHandler,
     CommandHandler,
+    MessageHandler,
+    filters,
 )
 
 from hammett.core.exceptions import TokenIsNotSpecified, UnknownHandlerType
@@ -89,13 +92,18 @@ class Application:
         for screen in screens:
             instance = screen()
             for name in dir(instance):
+                acceptable_handler_types = (
+                    HandlerType.button_handler,
+                    HandlerType.typing_handler,
+                )
                 handler, handler_type = None, None
                 possible_handler = getattr(instance, name)
+                possible_handler_type = getattr(possible_handler, 'handler_type', '')
                 if (
                     name in self._builtin_handlers or
-                    getattr(possible_handler, 'handler_type', '') == HandlerType.button_handler
+                    possible_handler_type in acceptable_handler_types
                 ):
-                    handler, handler_type = possible_handler, HandlerType.button_handler
+                    handler, handler_type = possible_handler, possible_handler_type
 
                 if handler is None:
                     log_unregistered_handler(possible_handler)
@@ -111,16 +119,23 @@ class Application:
                     permission_instance = permission()
                     handler_wrapped = permission_instance.check_permission(handler)
 
-                if handler_type == HandlerType.button_handler:
+                handler_object: CallbackQueryHandler[Any] | MessageHandler[Any]
+                if handler_type in (HandlerType.button_handler, ''):
                     handler_object = CallbackQueryHandler(
                         handler_wrapped or handler,
                         # Specify a pattern. The pattern is used to determine which handler
                         # should be triggered when a specific button is pressed.
                         pattern=calc_checksum(handler),
                     )
-                    self._native_states[state].append(handler_object)
+                elif handler_type == HandlerType.typing_handler:
+                    handler_object = MessageHandler(
+                        filters.TEXT & (~filters.COMMAND),
+                        handler,
+                    )
                 else:
                     raise UnknownHandlerType
+
+                self._native_states[state].append(handler_object)
 
     def _setup(self: 'Self') -> None:
         """Configures logging."""
