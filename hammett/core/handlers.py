@@ -12,11 +12,9 @@ from hammett.types import HandlerType, Stage
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
 
-    from hammett.core.screen import Screen
     from hammett.types import Handler, PayloadStorage
 
 LOGGER = logging.getLogger(__name__)
@@ -43,13 +41,10 @@ def _register_handler(
 
         @wraps(func)
         async def wrapper(
-            self: 'Screen',
-            update: 'Update',
-            context: 'CallbackContext[BT, UD, CD, BD]',
             *args: 'Any',
             **kwargs: 'Any',
         ) -> 'Stage':
-            return await func(self, update, context, *args, **kwargs)
+            return await func(*args, **kwargs)
         return cast('Handler[..., Stage]', wrapper)
     return decorator
 
