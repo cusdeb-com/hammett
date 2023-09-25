@@ -1,7 +1,7 @@
 """The module contains the types used throughout the framework."""
 
 from collections.abc import Callable, Coroutine, Iterable
-from enum import Enum
+from enum import Enum, auto
 from typing import TYPE_CHECKING, Any, NewType, ParamSpec, Protocol, TypeVar
 from uuid import UUID
 
@@ -38,8 +38,8 @@ R_co = TypeVar('R_co', covariant=True)
 class HandlerType(Enum):
     """The class enumerates all types of handlers."""
 
-    button_handler = 'button_handler'
-    typing_handler = 'typing_handler'
+    BUTTON_HANDLER = auto()
+    TYPING_HANDLER = auto()
 
 
 class Handler(Protocol[P, R_co]):
