@@ -208,12 +208,16 @@ class Screen:
     description: str = ''
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
 
+    _initialized: bool = False
     _instance: 'Screen | None' = None
 
     def __init__(self: 'Self') -> None:
-        if self.html_parse_mode is DEFAULT_NONE:
-            from hammett.conf import settings
-            self.html_parse_mode = settings.HTML_PARSE_MODE
+        if not self._initialized:
+            if self.html_parse_mode is DEFAULT_NONE:
+                from hammett.conf import settings
+                self.html_parse_mode = settings.HTML_PARSE_MODE
+
+            self._initialized = True
 
     def __new__(cls: type['Screen'], *args: 'Any', **kwargs: 'Any') -> 'Screen':
         """Implements the singleton pattern."""
