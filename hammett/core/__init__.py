@@ -90,8 +90,8 @@ class Application:
             instance = screen()
             for name in dir(instance):
                 acceptable_handler_types = (
-                    HandlerType.button_handler,
-                    HandlerType.typing_handler,
+                    HandlerType.BUTTON_HANDLER,
+                    HandlerType.TYPING_HANDLER,
                 )
                 handler, handler_type = None, None
                 possible_handler = getattr(instance, name)
@@ -107,14 +107,14 @@ class Application:
                     continue
 
                 handler_object: CallbackQueryHandler[Any] | MessageHandler[Any]
-                if handler_type in (HandlerType.button_handler, ''):
+                if handler_type in (HandlerType.BUTTON_HANDLER, ''):
                     handler_object = CallbackQueryHandler(
                         apply_permission_to(handler),
                         # Specify a pattern. The pattern is used to determine which handler
                         # should be triggered when a specific button is pressed.
                         pattern=calc_checksum(handler),
                     )
-                elif handler_type == HandlerType.typing_handler:
+                elif handler_type == HandlerType.TYPING_HANDLER:
                     handler_object = MessageHandler(
                         filters.TEXT & (~filters.COMMAND),
                         handler,

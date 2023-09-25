@@ -108,8 +108,8 @@ def log_unregistered_handler(obj: 'Any') -> None:
         )
 
 
-register_handler = _register_handler('handler_type', HandlerType.button_handler)
+register_handler = _register_handler('handler_type', HandlerType.BUTTON_HANDLER)
 register_handler.__doc__ = 'Registers the specified screen method as a button click handler.'
 
-register_typing_handler = _register_handler('handler_type', HandlerType.typing_handler)
+register_typing_handler = _register_handler('handler_type', HandlerType.TYPING_HANDLER)
 register_handler.__doc__ = 'Registers the specified screen method as a typing handler.'
