@@ -1,7 +1,6 @@
 """The core of the Hammett framework."""
 
-import contextlib
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 from telegram import Update
 from telegram.ext import Application as NativeApplication
@@ -14,10 +13,10 @@ from telegram.ext import (
 
 from hammett.core.exceptions import TokenIsNotSpecified, UnknownHandlerType
 from hammett.core.handlers import calc_checksum, log_unregistered_handler
+from hammett.core.permissions import apply_permission_to
 from hammett.core.screen import ConversationHandler, Screen
 from hammett.types import HandlerType
 from hammett.utils.log import configure_logging
-from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -26,7 +25,6 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, CD, UD
     from typing_extensions import Self
 
-    from hammett.core.permissions import Permission
     from hammett.core.screen import StartScreen
     from hammett.types import NativeStates, States
 
@@ -73,17 +71,16 @@ class Application:
             for state in self._states.items():
                 self._register_handlers(*state)
 
+        start_handler = apply_permission_to(self._entry_point.start)
         self._native_application.add_handler(ConversationHandler(
-            entry_points=[CommandHandler('start', self._entry_point.start)],
+            entry_points=[CommandHandler('start', start_handler)],
             states=self._native_states,
-            fallbacks=[CommandHandler('start', self._entry_point.start)],
+            fallbacks=[CommandHandler('start', start_handler)],
             name=self._name,
             persistent=bool(persistence),
         ))
 
     def _register_handlers(self: 'Self', state: int, screens: 'Iterable[type[Screen]]') -> None:
-        from hammett.conf import settings
-
         try:
             self._native_states[state]
         except KeyError:
@@ -109,20 +106,10 @@ class Application:
                     log_unregistered_handler(possible_handler)
                     continue
 
-                handler_wrapped = None
-                for permission_path in settings.PERMISSIONS:
-                    permission: type['Permission'] = import_string(permission_path)
-                    permissions_ignored = getattr(handler, 'permissions_ignored', None)
-                    if permissions_ignored and permission.CLASS_UUID in permissions_ignored:
-                        continue
-
-                    permission_instance = permission()
-                    handler_wrapped = permission_instance.check_permission(handler)
-
                 handler_object: CallbackQueryHandler[Any] | MessageHandler[Any]
                 if handler_type in (HandlerType.button_handler, ''):
                     handler_object = CallbackQueryHandler(
-                        handler_wrapped or handler,
+                        apply_permission_to(handler),
                         # Specify a pattern. The pattern is used to determine which handler
                         # should be triggered when a specific button is pressed.
                         pattern=calc_checksum(handler),
