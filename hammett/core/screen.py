@@ -5,6 +5,7 @@
 import logging
 import re
 from dataclasses import dataclass
+from os import PathLike
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 from uuid import uuid4
@@ -35,7 +36,6 @@ from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
-    from os import PathLike
     from typing import Any
 
     from telegram import CallbackQuery, Update
@@ -208,6 +208,7 @@ class Screen:
     description: str = ''
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
 
+    _cached_covers: dict[str | PathLike[str], str] = {}
     _initialized: bool = False
     _instance: 'Screen | None' = None
 
@@ -271,6 +272,12 @@ class Screen:
                         media=str(cover) if cache_covers else f'{cover}?{uuid4()}',
                         parse_mode=ParseMode.HTML,
                     )
+                elif cover in self._cached_covers:
+                    kwargs['media'] = InputMediaPhoto(
+                        caption=description,
+                        media=self._cached_covers[cover],
+                        parse_mode=ParseMode.HTML,
+                    )
                 else:
                     with Path(cover).open('rb') as infile:
                         kwargs['media'] = InputMediaPhoto(
@@ -308,6 +315,9 @@ class Screen:
         if cover:
             if self._is_url(cover) and cache_covers:
                 cover = f'{cover}?{uuid4()}'
+            elif cache_covers:
+                cover_file_id = self._cached_covers.get(cover)
+                cover = cover_file_id if cover_file_id else cover
 
             kwargs['caption'] = description
             kwargs['photo'] = cover
@@ -409,10 +419,13 @@ class Screen:
             )
 
         if send:
-            await send(
+            send_object = await send(
                 reply_markup=await self._create_markup_keyboard(config.keyboard, update, context),
                 **kwargs,
             )
+            if cover and cache_covers and not self._is_url(cover):
+                photo_size_object = send_object.photo[-1]
+                self._cached_covers[cover] = photo_size_object.file_id
 
     def setup_keyboard(self: 'Self') -> 'Keyboard':
         """Sets up the keyboard for the screen."""
