@@ -18,13 +18,14 @@ if TYPE_CHECKING:
 
     from hammett.types import Keyboard, Stage
 
-_CAROUSEL_START_POSITION = 0
+_END_POSITION, _START_POSITION = -1, 0
 
 
 class CarouselWidget(BaseWidget, StartScreen):
     """Implements the display of a carousel with control buttons for a list of images."""
 
     images: list[list[str]] = []
+    infinity: bool = False
     back_caption: str = '⏮'
     next_caption: str = '⏭'
     disable_caption: str = '🔚'
@@ -58,9 +59,10 @@ class CarouselWidget(BaseWidget, StartScreen):
             self._do_nothing,
             source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
         )
+        self._infinity_keyboard = [[self._back_button, self._next_button]]
 
         if self.images:
-            self.cover, description = self.images[_CAROUSEL_START_POSITION]
+            self.cover, description = self.images[_START_POSITION]
             self.description = description or self.description
 
     async def _init(
@@ -73,10 +75,14 @@ class CarouselWidget(BaseWidget, StartScreen):
 
         with contextlib.suppress(FailedToGetStateKey):  # raised when invoked using /start
             current_image_key = await self._get_state_key(update)
-            context.user_data[current_image_key] = _CAROUSEL_START_POSITION  # type: ignore[index]
+            context.user_data[current_image_key] = _START_POSITION  # type: ignore[index]
 
         config = config or RenderConfig()
-        config.keyboard = await self._build_keyboard(_CAROUSEL_START_POSITION)
+
+        if self.infinity:
+            config.keyboard = self._infinity_keyboard
+        else:
+            config.keyboard = await self._build_keyboard(_START_POSITION)
 
         await self.render(update, context, config=config)
         return DEFAULT_STAGE
@@ -113,14 +119,28 @@ class CarouselWidget(BaseWidget, StartScreen):
             *self.add_extra_keyboard(),
         ]
 
-    async def _switch(
+    async def _switch_handle_method(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
         prev_state: int,
         next_state: int,
     ) -> None:
-        """Handles switching image."""
+        """Switches handle method."""
+
+        if self.infinity:
+            await self._handle_infinity_mode(update, context, next_state)
+        else:
+            await self._handle_regular_mode(update, context, prev_state, next_state)
+
+    async def _handle_regular_mode(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        prev_state: int,
+        next_state: int,
+    ) -> None:
+        """Handles switching image in a regular mode."""
 
         try:
             cover, description = self.images[next_state]
@@ -141,6 +161,37 @@ class CarouselWidget(BaseWidget, StartScreen):
         return await self.render(update, context, config=config)
 
     @register_button_handler
+    async def _handle_infinity_mode(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        next_state: int,
+    ) -> None:
+        """Handles switching image in an infinity mode."""
+
+        try:
+            cover, description = self.images[next_state]
+        except IndexError:
+            if next_state == len(self.images):
+                cover, description = self.images[_START_POSITION]
+                current_image_key = await self._get_state_key(update)
+                context.user_data[current_image_key] = _START_POSITION  # type: ignore[index]
+            else:
+                cover, description = self.images[_END_POSITION]
+                current_image_key = await self._get_state_key(update)
+                context.user_data[current_image_key] = _END_POSITION  # type: ignore[index]
+        else:
+            current_image_key = await self._get_state_key(update)
+            context.user_data[current_image_key] = next_state  # type: ignore[index]
+
+        config = RenderConfig(
+            description=description or self.description,
+            cover=cover,
+            keyboard=self._infinity_keyboard,
+        )
+        return await self.render(update, context, config=config)
+
+    @register_button_handler
     async def _next(
         self: 'Self',
         update: 'Update',
@@ -152,12 +203,12 @@ class CarouselWidget(BaseWidget, StartScreen):
 
         if context.user_data:
             current_image = context.user_data.get(  # type: ignore[attr-defined]
-                current_image_key, _CAROUSEL_START_POSITION,
+                current_image_key, _START_POSITION,
             )
         else:
-            current_image = _CAROUSEL_START_POSITION
+            current_image = _START_POSITION
 
-        return await self._switch(
+        return await self._switch_handle_method(
             update,
             context,
             current_image,
@@ -174,9 +225,9 @@ class CarouselWidget(BaseWidget, StartScreen):
 
         current_image_key = await self._get_state_key(update)
         current_image = context.user_data.get(  # type: ignore[union-attr]
-            current_image_key, _CAROUSEL_START_POSITION,
+            current_image_key, _START_POSITION,
         )
-        return await self._switch(
+        return await self._switch_handle_method(
             update,
             context,
             current_image,
