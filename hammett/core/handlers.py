@@ -112,4 +112,4 @@ register_handler = _register_handler('handler_type', HandlerType.BUTTON_HANDLER)
 register_handler.__doc__ = 'Registers the specified screen method as a button click handler.'
 
 register_typing_handler = _register_handler('handler_type', HandlerType.TYPING_HANDLER)
-register_handler.__doc__ = 'Registers the specified screen method as a typing handler.'
+register_typing_handler.__doc__ = 'Registers the specified screen method as a typing handler.'
