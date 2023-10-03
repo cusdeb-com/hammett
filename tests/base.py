@@ -9,9 +9,17 @@ from hammett.core.screen import Screen, StartScreen
 
 PERMISSION_DENIED_STAGE = 1
 
+PERMISSIONS_ORDER = []
+
 
 class BaseTestPermission(Permission, ABC):
     """The class implements a base permission for the tests."""
+
+    def has_permission(self, _update, _context):
+        """Appends the method path to the permission order list."""
+
+        PERMISSIONS_ORDER.append(f'{self.__class__.__name__}.{self.has_permission.__name__}')
+        return True
 
     async def handle_permission_denied(self, _update, _context):
         """A stub handler for the testing purposes."""

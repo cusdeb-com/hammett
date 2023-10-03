@@ -5,9 +5,11 @@
 from typing import TYPE_CHECKING, cast
 
 from hammett.core.constants import DEFAULT_STAGE
+from hammett.core.permissions import apply_permission_to
 from hammett.test.base import BaseTestCase
 from tests.base import (
     PERMISSION_DENIED_STAGE,
+    PERMISSIONS_ORDER,
     BaseTestPermission,
     TestDenyingPermission,
     TestGivingPermission,
@@ -27,8 +29,30 @@ class TestPermissionWithSyncChecker(BaseTestPermission):
         return False
 
 
+class MainPermission(BaseTestPermission):
+    """The class implements a main permission that is always given."""
+
+
+class SubPermission(BaseTestPermission):
+    """The class implements a sub permission that is always given."""
+
+
 class PermissionsTests(BaseTestCase):
     """The class implements the tests for the permissions mechanism."""
+
+    async def test_execution_order_of_permissions(self):
+        """Tests the scenario with multiple permission classes where
+        strict execution order is required.
+        """
+
+        screen = TestScreen()
+        wrapped_handler = apply_permission_to(screen.goto)
+        await wrapped_handler(self.update, self.context)
+        expected = [
+            'MainPermission.has_permission',
+            'SubPermission.has_permission',
+        ]
+        self.assertEqual(PERMISSIONS_ORDER, expected)
 
     async def test_giving_permission(self):
         """Tests the case when the permission is giving."""
