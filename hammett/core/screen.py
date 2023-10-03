@@ -39,6 +39,8 @@ if TYPE_CHECKING:
     from typing import Any
 
     from telegram import CallbackQuery, Update
+    from telegram._files.photosize import PhotoSize
+    from telegram._utils.types import FileInput
     from telegram.ext import Application, CallbackContext
     from telegram.ext._utils.types import BD, BT, CCT, CD, UD
     from typing_extensions import Self
@@ -232,6 +234,19 @@ class Screen:
     # Private methods
     #
 
+    def _create_input_media_photo(
+        self: 'Self',
+        caption: str,
+        media: 'FileInput | PhotoSize',
+    ) -> InputMediaPhoto:
+        """Creates an object that represents a photo to be sent."""
+
+        return InputMediaPhoto(
+            caption=caption,
+            media=media,
+            parse_mode=ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
+        )
+
     @staticmethod
     async def _create_markup_keyboard(
         rows: 'Keyboard',
@@ -267,24 +282,22 @@ class Screen:
         if query:
             if cover:
                 if self._is_url(cover):
-                    kwargs['media'] = InputMediaPhoto(
+                    kwargs['media'] = self._create_input_media_photo(
                         caption=description,
                         media=str(cover) if cache_covers else f'{cover}?{uuid4()}',
-                        parse_mode=ParseMode.HTML,
                     )
                 elif cover in self._cached_covers:
-                    kwargs['media'] = InputMediaPhoto(
+                    kwargs['media'] = self._create_input_media_photo(
                         caption=description,
                         media=self._cached_covers[cover],
-                        parse_mode=ParseMode.HTML,
                     )
                 else:
                     with Path(cover).open('rb') as infile:
-                        kwargs['media'] = InputMediaPhoto(
+                        kwargs['media'] = self._create_input_media_photo(
                             caption=description,
                             media=infile,
-                            parse_mode=ParseMode.HTML,
                         )
+
                 send = query.edit_message_media
             else:
                 kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
