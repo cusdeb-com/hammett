@@ -30,7 +30,7 @@ def apply_permission_to(
     from hammett.conf import settings
 
     handler_wrapped = handler
-    for permission_path in settings.PERMISSIONS:
+    for permission_path in reversed(settings.PERMISSIONS):
         permission: type['Permission'] = import_string(permission_path)
         permissions_ignored = getattr(handler_wrapped, 'permissions_ignored', None)
         permission_instance = permission()
