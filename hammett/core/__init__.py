@@ -11,10 +11,10 @@ from telegram.ext import (
     filters,
 )
 
+from hammett.core.conversation_handler import ConversationHandler
 from hammett.core.exceptions import TokenIsNotSpecified, UnknownHandlerType
 from hammett.core.handlers import calc_checksum, log_unregistered_handler
 from hammett.core.permissions import apply_permission_to
-from hammett.core.screen import ConversationHandler, Screen
 from hammett.types import HandlerType
 from hammett.utils.log import configure_logging
 
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, CD, UD
     from typing_extensions import Self
 
-    from hammett.core.screen import StartScreen
+    from hammett.core.screen import Screen, StartScreen
     from hammett.types import NativeStates, States
 
 __all__ = ('Application', )

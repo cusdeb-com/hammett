@@ -17,8 +17,6 @@ from telegram import (
 )
 from telegram._utils.defaultvalue import DEFAULT_NONE, DefaultValue
 from telegram.constants import ParseMode
-from telegram.error import BadRequest
-from telegram.ext import ConversationHandler as NativeConversationHandler
 
 from hammett.core import handlers
 from hammett.core.constants import (
@@ -41,12 +39,12 @@ if TYPE_CHECKING:
     from telegram import CallbackQuery, Update
     from telegram._files.photosize import PhotoSize
     from telegram._utils.types import FileInput
-    from telegram.ext import Application, CallbackContext
-    from telegram.ext._utils.types import BD, BT, CCT, CD, UD
+    from telegram.ext import CallbackContext
+    from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
     from hammett.core.hiders import Hider, HidersChecker
-    from hammett.types import CheckUpdateType, Handler, Keyboard, Source, Stage
+    from hammett.types import Handler, Keyboard, Source, Stage
 
 EMPTY_KEYBOARD: 'Keyboard' = []
 
@@ -164,31 +162,6 @@ class Button:
             return InlineKeyboardButton(self.caption, url=self.source), visibility
 
         raise UnknownSourceType
-
-
-class ConversationHandler(NativeConversationHandler['Any']):
-    """The class for subclassing `telegram.ext.ConversationHandler` to
-    override its `handle_update` method. The main purpose of this is to
-    add custom error handling logic.
-    """
-
-    async def handle_update(  # type: ignore[override]
-        self: 'Self',
-        update: 'Update',
-        application: 'Application[Any, CCT, Any, Any, Any, Any]',
-        check_result: 'CheckUpdateType[CCT]',
-        context: 'CCT',
-    ) -> object | None:
-        """Catches and handles `BadRequest` exceptions that may occur during
-        the handling of updates.
-        """
-
-        try:
-            res = await super().handle_update(update, application, check_result, context)
-        except BadRequest as exc:  # noqa: TRY302
-            raise exc  # noqa: TRY201
-        else:
-            return res
 
 
 @dataclass
