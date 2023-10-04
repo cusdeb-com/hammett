@@ -15,10 +15,11 @@ See [AUTHORS](AUTHORS.md).
 
 ## Licensing
 
-The code of Hammett is licensed under the [Apache License 2.0](https://apache.org/licenses/LICENSE-2.0) except the following modules borrowed from Django:
-* `hammett/conf/__init__.py`
-* `hammett/test/base.py`
-* `hammett/test/utils.py`
-* `hammett/utils/module_loading.py`
+The code of Hammett is licensed under the [Apache License 2.0](https://apache.org/licenses/LICENSE-2.0) except:
 
-The modules are licensed under the [3-Clause BSD License](https://opensource.org/license/bsd-3-clause/).
+* the modules borrowed from [Django](https://djangoproject.com) and licensed under the **[3-Clause BSD License](https://opensource.org/license/bsd-3-clause/)**:
+  * `hammett/conf/__init__.py`
+  * `hammett/test/base.py`
+  * `hammett/test/utils.py`
+  * `hammett/utils/module_loading.py`
+* the module `hammett/core/conversation_handler.py` borrowed [PTB](https://python-telegram-bot.org) and licensed under the **[GNU Lesser General Public License version 3](https://opensource.org/license/lgpl-3-0/)**.
