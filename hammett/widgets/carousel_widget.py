@@ -61,7 +61,7 @@ class CarouselWidget(BaseWidget, StartScreen):
 
         if self.images:
             self.cover, description = self.images[_CAROUSEL_START_POSITION]
-            self.description = description or description
+            self.description = description or self.description
 
     async def _init(
         self: 'Self',
