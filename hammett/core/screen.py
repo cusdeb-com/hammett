@@ -351,6 +351,33 @@ class Screen:
 
         return query
 
+    async def get_cache_covers(
+        self: 'Self',
+        _update: 'Update',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> bool:
+        """Returns the `cache_covers` attribute of the screen."""
+
+        return self.cache_covers
+
+    async def get_cover(
+        self: 'Self',
+        _update: 'Update',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'str | PathLike[str]':
+        """Returns the `cover` attribute of the screen."""
+
+        return self.cover
+
+    async def get_description(
+        self: 'Self',
+        _update: 'Update',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> str:
+        """Returns the `description` attribute of the screen."""
+
+        return self.description
+
     async def get_payload(
         self: 'Self',
         update: 'Update',
@@ -389,9 +416,9 @@ class Screen:
         """Renders the screen components (i.e., cover, description and keyboard)."""
 
         config = config or RenderConfig()
-        cache_covers = config.cache_covers or self.cache_covers
-        cover = config.cover or self.cover
-        description = config.description or self.description
+        cache_covers = config.cache_covers or await self.get_cache_covers(update, context)
+        cover = config.cover or await self.get_cover(update, context)
+        description = config.description or await self.get_description(update, context)
         if not description:
             msg = f'The description of {self.__class__.__name__} is empty'
             raise ScreenDescriptionIsEmpty(msg)
