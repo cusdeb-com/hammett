@@ -22,4 +22,4 @@ The code of Hammett is licensed under the [Apache License 2.0](https://apache.or
   * `hammett/test/base.py`
   * `hammett/test/utils.py`
   * `hammett/utils/module_loading.py`
-* the module `hammett/core/conversation_handler.py` borrowed [PTB](https://python-telegram-bot.org) and licensed under the **[GNU Lesser General Public License version 3](https://opensource.org/license/lgpl-3-0/)**.
+* the `hammett/core/conversation_handler.py` module borrowed from [PTB](https://python-telegram-bot.org) and licensed under the **[GNU Lesser General Public License version 3](https://opensource.org/license/lgpl-3-0/)**.
