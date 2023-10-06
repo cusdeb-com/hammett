@@ -53,14 +53,8 @@ def ignore_permissions(
         func.permissions_ignored = [permission().class_uuid for permission in permissions]
 
         @wraps(func)
-        async def wrapper(
-            self: 'Screen',
-            update: 'Update',
-            context: 'CallbackContext[BT, UD, CD, BD]',
-            *args: 'Any',
-            **kwargs: 'Any',
-        ) -> 'Stage':
-            return await func(self, update, context, *args, **kwargs)
+        async def wrapper(*args: 'Any', **kwargs: 'Any') -> 'Stage':
+            return await func(*args, **kwargs)
 
         return cast('Handler[..., Stage]', wrapper)
     return decorator

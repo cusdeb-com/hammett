@@ -53,7 +53,6 @@ class Handler(Protocol[P, R_co]):
 
     def __call__(
         self: 'Self',
-        screen: 'Screen',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
         *args: 'Any',
