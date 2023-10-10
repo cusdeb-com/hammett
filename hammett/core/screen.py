@@ -2,19 +2,22 @@
 (i.e., cover, description and keyboard).
 """
 
+import contextlib
 import logging
 import re
 from dataclasses import dataclass
 from os import PathLike
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, TypedDict, cast
 from uuid import uuid4
 
+import telegram.error
 from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     InputMediaPhoto,
 )
+from telegram._files.photosize import PhotoSize
 from telegram._utils.defaultvalue import DEFAULT_NONE, DefaultValue
 from telegram.constants import ParseMode
 
@@ -37,7 +40,6 @@ if TYPE_CHECKING:
     from typing import Any
 
     from telegram import CallbackQuery, Update
-    from telegram._files.photosize import PhotoSize
     from telegram._utils.types import FileInput
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
@@ -45,6 +47,8 @@ if TYPE_CHECKING:
 
     from hammett.core.hiders import Hider, HidersChecker
     from hammett.types import Handler, Keyboard, Source, Stage
+
+_LAST_SENT_MSG_KEY = 'last_sent_msg'
 
 EMPTY_KEYBOARD: 'Keyboard' = []
 
@@ -182,15 +186,25 @@ class RenderConfig:
 
     as_new_message: bool = False
     cache_covers: bool = False
+    hide_keyboard: bool = False
     cover: 'str | PathLike[str]' = ''
     description: str = ''
     keyboard: 'Keyboard | None' = None
+
+
+class LastMsgSent(TypedDict):
+    """The class that represents a last sent saved message."""
+
+    cover: 'str | PathLike[str]'
+    description: str
+    msg_id: int
 
 
 class Screen:
     """The class implements the interface of a screen."""
 
     cache_covers: bool = False
+    hide_keyboard: bool = False
     cover: 'str | PathLike[str]' = ''
     description: str = ''
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
@@ -218,6 +232,36 @@ class Screen:
     #
     # Private methods
     #
+
+    @staticmethod
+    async def _save_last_msg_sent(
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        cover: 'str | PathLike[str] | PhotoSize',
+        description: str,
+        msg_id: int,
+    ) -> None:
+        """Saves the last message sent."""
+
+        user_data = cast('dict[str, Any]', context.user_data)
+        user_data[_LAST_SENT_MSG_KEY] = {
+            'cover': cover,
+            'description': description,
+            'msg_id': msg_id,
+        }
+
+    @staticmethod
+    async def _get_last_msg_sent(
+        context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'LastMsgSent | None':
+        """Returns the last sent saved message."""
+
+        user_data = cast('dict[str, Any]', context.user_data)
+        try:
+            state: 'LastMsgSent | None' = user_data[_LAST_SENT_MSG_KEY]
+        except KeyError:
+            state = None
+
+        return state
 
     def _create_input_media_photo(
         self: 'Self',
@@ -250,12 +294,76 @@ class Screen:
 
         return InlineKeyboardMarkup(keyboard)
 
+    async def _get_edit_render_method_media_kwargs(
+        self: 'Self',
+        cover: 'str | PathLike[str] | PhotoSize',
+        *,
+        description: str = '',
+        cache_covers: bool = False,
+    ) -> 'Any':
+        """Returns the kwargs for edit render method with media."""
+
+        kwargs: 'Any' = {}
+        if isinstance(cover, PhotoSize):
+            kwargs['media'] = self._create_input_media_photo(
+                caption=description,
+                media=cover,
+            )
+        elif self._is_url(cover):
+            kwargs['media'] = self._create_input_media_photo(
+                caption=description,
+                media=str(cover) if cache_covers else f'{cover}?{uuid4()}',
+            )
+        elif cover in self._cached_covers:
+            kwargs['media'] = self._create_input_media_photo(
+                caption=description,
+                media=self._cached_covers[cover],
+            )
+        else:
+            with Path(cover).open('rb') as infile:
+                kwargs['media'] = self._create_input_media_photo(
+                    caption=description,
+                    media=infile,
+                )
+
+        return kwargs
+
+    async def _get_edit_render_method_by_bot(
+        self: 'Self',
+        update: 'Update',
+        *,
+        cache_covers: bool = False,
+        cover: 'str | PathLike[str] | PhotoSize' = '',
+        description: str = '',
+    ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
+        """Returns the render method from bot and its kwargs for editing a message."""
+
+        kwargs: 'Any' = {}
+        send: 'Callable[..., Awaitable[Any]] | None' = None
+
+        bot = update.get_bot()
+        if bot:
+            if cover:
+                kwargs = await self._get_edit_render_method_media_kwargs(
+                    cover,
+                    description=description,
+                    cache_covers=cache_covers,
+                )
+
+                send = bot.edit_message_media
+            else:
+                kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
+                kwargs['text'] = description
+                send = bot.edit_message_text
+
+        return send, kwargs
+
     async def _get_edit_render_method(
         self: 'Self',
         update: 'Update',
         *,
         cache_covers: bool = False,
-        cover: 'str | PathLike[str]' = '',
+        cover: 'str | PathLike[str] | PhotoSize' = '',
         description: str = '',
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
         """Returns the render method and its kwargs for editing a message."""
@@ -266,22 +374,11 @@ class Screen:
         query = await self.get_callback_query(update)
         if query:
             if cover:
-                if self._is_url(cover):
-                    kwargs['media'] = self._create_input_media_photo(
-                        caption=description,
-                        media=str(cover) if cache_covers else f'{cover}?{uuid4()}',
-                    )
-                elif cover in self._cached_covers:
-                    kwargs['media'] = self._create_input_media_photo(
-                        caption=description,
-                        media=self._cached_covers[cover],
-                    )
-                else:
-                    with Path(cover).open('rb') as infile:
-                        kwargs['media'] = self._create_input_media_photo(
-                            caption=description,
-                            media=infile,
-                        )
+                kwargs = await self._get_edit_render_method_media_kwargs(
+                    cover,
+                    description=description,
+                    cache_covers=cache_covers,
+                )
 
                 send = query.edit_message_media
             else:
@@ -327,6 +424,40 @@ class Screen:
             send = context.bot.send_message
 
         return send, kwargs
+
+    async def _hide_keyboard(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        *,
+        cache_covers: bool = False,
+    ) -> None:
+        """Removes the keyboard from the old message, leaving the cover and
+        description unchanged.
+        """
+
+        last_msg = await self._get_last_msg_sent(context)
+        if not last_msg:
+            return
+
+        send, kwargs = await self._get_edit_render_method_by_bot(
+            update,
+            cache_covers=cache_covers,
+            cover=last_msg['cover'],
+            description=last_msg['description'],
+        )
+        if send and update.effective_chat:
+            with contextlib.suppress(telegram.error.BadRequest):
+                await send(
+                    reply_markup=await self._create_markup_keyboard(
+                        EMPTY_KEYBOARD,
+                        update,
+                        context,
+                    ),
+                    chat_id=update.effective_chat.id,
+                    message_id=last_msg['msg_id'],
+                    **kwargs,
+                )
 
     @staticmethod
     def _is_url(cover: 'str | PathLike[str]') -> bool:
@@ -419,6 +550,8 @@ class Screen:
         cache_covers = config.cache_covers or await self.get_cache_covers(update, context)
         cover = config.cover or await self.get_cover(update, context)
         description = config.description or await self.get_description(update, context)
+        hide_keyboard = config.hide_keyboard or self.hide_keyboard
+
         if not description:
             msg = f'The description of {self.__class__.__name__} is empty'
             raise ScreenDescriptionIsEmpty(msg)
@@ -448,6 +581,13 @@ class Screen:
                 reply_markup=await self._create_markup_keyboard(config.keyboard, update, context),
                 **kwargs,
             )
+
+            if hide_keyboard:
+                if config.as_new_message:
+                    await self._hide_keyboard(update, context, cache_covers=cache_covers)
+
+                await self._save_last_msg_sent(context, cover, description, send_object.message_id)
+
             if cover and cache_covers and not self._is_url(cover):
                 photo_size_object = send_object.photo[-1]
                 self._cached_covers[cover] = photo_size_object.file_id
