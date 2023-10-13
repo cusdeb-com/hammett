@@ -197,6 +197,7 @@ class LastMsgSent(TypedDict):
 
     cover: 'str | PathLike[str]'
     description: str
+    hide_keyboard: bool
     msg_id: int
 
 
@@ -238,6 +239,7 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
         cover: 'str | PathLike[str] | PhotoSize',
         description: str,
+        hide_keyboard: bool,  # noqa: FBT001
         msg_id: int,
     ) -> None:
         """Saves the last message sent."""
@@ -246,6 +248,7 @@ class Screen:
         user_data[_LAST_SENT_MSG_KEY] = {
             'cover': cover,
             'description': description,
+            'hide_keyboard': hide_keyboard,
             'msg_id': msg_id,
         }
 
@@ -428,7 +431,10 @@ class Screen:
     async def _hide_keyboard(
         self: 'Self',
         update: 'Update',
+        description: str,
+        cover: 'str | PathLike[str]',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        msg_id: int,
         *,
         cache_covers: bool = False,
     ) -> None:
@@ -436,15 +442,11 @@ class Screen:
         description unchanged.
         """
 
-        last_msg = await self._get_last_msg_sent(context)
-        if not last_msg:
-            return
-
         send, kwargs = await self._get_edit_render_method_by_bot(
             update,
             cache_covers=cache_covers,
-            cover=last_msg['cover'],
-            description=last_msg['description'],
+            cover=cover,
+            description=description,
         )
         if send and update.effective_chat:
             with contextlib.suppress(telegram.error.BadRequest):
@@ -455,7 +457,7 @@ class Screen:
                         context,
                     ),
                     chat_id=update.effective_chat.id,
-                    message_id=last_msg['msg_id'],
+                    message_id=msg_id,
                     **kwargs,
                 )
 
@@ -582,11 +584,20 @@ class Screen:
                 **kwargs,
             )
 
-            if hide_keyboard:
-                if config.as_new_message:
-                    await self._hide_keyboard(update, context, cache_covers=cache_covers)
+            prev_msg_data = await self._get_last_msg_sent(context)
+            await self._save_last_msg_sent(
+                context, cover, description, hide_keyboard, send_object.message_id,
+            )
 
-                await self._save_last_msg_sent(context, cover, description, send_object.message_id)
+            if prev_msg_data and prev_msg_data['hide_keyboard'] and config.as_new_message:
+                await self._hide_keyboard(
+                    update,
+                    prev_msg_data['description'],
+                    prev_msg_data['cover'],
+                    context,
+                    prev_msg_data['msg_id'],
+                    cache_covers=cache_covers,
+                )
 
             if cover and cache_covers and not self._is_url(cover):
                 photo_size_object = send_object.photo[-1]
