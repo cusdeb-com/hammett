@@ -122,15 +122,14 @@ class Application:
             self._native_states[state] = []
 
         for screen in screens:
-            instance = screen()
-            for name in dir(instance):
+            for name in dir(screen):
                 acceptable_handler_types = (
                     HandlerType.BUTTON_HANDLER,
                     HandlerType.COMMAND_HANDLER,
                     HandlerType.TYPING_HANDLER,
                 )
                 handler, handler_type = None, None
-                possible_handler = getattr(instance, name)
+                possible_handler = getattr(screen, name)
                 possible_handler_type = getattr(possible_handler, 'handler_type', '')
                 if (
                     name in self._builtin_handlers or
@@ -142,23 +141,25 @@ class Application:
                     log_unregistered_handler(possible_handler)
                     continue
 
+                setattr(screen, name, apply_permission_to(handler))
+                instance_handler = getattr(screen(), name)
                 handler_object: CallbackQueryHandler[Any] | MessageHandler[Any]
                 if handler_type in (HandlerType.BUTTON_HANDLER, ''):
                     handler_object = CallbackQueryHandler(
-                        apply_permission_to(handler),
+                        instance_handler,
                         # Specify a pattern. The pattern is used to determine which handler
                         # should be triggered when a specific button is pressed.
-                        pattern=calc_checksum(handler),
+                        pattern=calc_checksum(instance_handler),
                     )
                 elif handler_type == HandlerType.COMMAND_HANDLER:
                     handler_object = MessageHandler(
                         filters.COMMAND & filters.Regex(f'^/{possible_handler.command_name}'),
-                        handler,
+                        instance_handler,
                     )
                 elif handler_type == HandlerType.TYPING_HANDLER:
                     handler_object = MessageHandler(
                         filters.TEXT & (~filters.COMMAND),
-                        handler,
+                        instance_handler,
                     )
                 else:
                     raise UnknownHandlerType
