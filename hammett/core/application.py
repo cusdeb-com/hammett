@@ -76,11 +76,10 @@ class Application:
         self._register_error_handlers(error_handlers)
         self._register_job_queue_handlers(job_queue_handlers)
 
-        start_handler = apply_permission_to(self._entry_point.start)
         self._native_application.add_handler(ConversationHandler(
-            entry_points=[CommandHandler('start', start_handler)],
+            entry_points=[CommandHandler('start', self._entry_point.start)],
             states=self._native_states,
-            fallbacks=[CommandHandler('start', start_handler)],
+            fallbacks=[CommandHandler('start', self._entry_point.start)],
             name=self._name,
             persistent=bool(persistence),
         ))
