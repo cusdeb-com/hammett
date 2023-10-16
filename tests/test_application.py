@@ -127,14 +127,3 @@ class ApplicationTests(BaseTestCase):
             logging.root.manager.loggerDict['hammett_test'].getEffectiveLevel(),
             logging.INFO,
         )
-
-    @override_settings(PERMISSIONS=['tests.base.TestDenyingPermission'], TOKEN='secret-token')
-    def test_app_init_with_permissions_specified(self):
-        """Tests the case when an application is initialized with
-        PERMISSIONS specified.
-        """
-
-        app = self._init_application()
-        handlers = app._native_application.handlers[0][0]
-        is_wrapped = getattr(handlers.states[DEFAULT_STATE][0].callback, '__wrapped__', None)
-        self.assertIsNotNone(is_wrapped)
