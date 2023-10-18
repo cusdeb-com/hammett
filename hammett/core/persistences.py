@@ -118,7 +118,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         if self.user_data is None:
             return
 
-        self.user_data.pop(user_id, None)  # type: ignore[arg-type]
+        self.user_data.pop(user_id, None)
         if not self.on_flush:
             await self._set_data(self._USER_DATA_KEY, self.user_data)
 
