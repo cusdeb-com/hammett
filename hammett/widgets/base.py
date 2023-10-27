@@ -36,6 +36,11 @@ class BaseWidget(Screen):
 
         return f'{self.__class__.__name__}_{message.chat_id}_{message.message_id}'
 
+    def add_extra_keyboard(self: 'Self') -> 'Keyboard':
+        """Adds an extra keyboard below the widget buttons."""
+
+        return EMPTY_KEYBOARD
+
     async def get_state(
         self: 'Self',
         update: 'Update',
@@ -136,11 +141,6 @@ class BaseChoiceWidget(BaseWidget):
     #
     # Public methods
     #
-
-    def add_extra_keyboard(self: 'Self') -> 'Keyboard':
-        """Adds an extra keyboard below the choice buttons."""
-
-        return EMPTY_KEYBOARD
 
     async def render(
         self: 'Self',
