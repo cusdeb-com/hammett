@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.handlers import register_handler
-from hammett.core.screen import EMPTY_KEYBOARD, Button, RenderConfig, StartScreen
+from hammett.core.screen import Button, RenderConfig, StartScreen
 from hammett.widgets.base import BaseWidget
 from hammett.widgets.exceptions import FailedToGetStateKey
 
@@ -186,11 +186,6 @@ class CarouselWidget(BaseWidget, StartScreen):
     #
     # Public methods
     #
-
-    def add_extra_keyboard(self: 'Self') -> 'Keyboard':
-        """Adds an extra keyboard below the control buttons."""
-
-        return EMPTY_KEYBOARD
 
     async def goto(
         self: 'Self',
