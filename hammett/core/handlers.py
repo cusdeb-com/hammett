@@ -7,7 +7,7 @@ from contextlib import suppress
 from functools import wraps
 from typing import TYPE_CHECKING, Any, cast
 
-from hammett.types import HandlerType, Stage
+from hammett.types import HandlerAlias, HandlerType, Stage
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 LOGGER = logging.getLogger(__name__)
 
 
-def _get_handler_name(handler: 'Handler[..., Stage]') -> str:
+def _get_handler_name(handler: 'Handler') -> str:
     """Returns the full name of the specified handler."""
 
     try:
@@ -32,20 +32,21 @@ def _get_handler_name(handler: 'Handler[..., Stage]') -> str:
 def _register_handler(
     name: str,
     value: HandlerType,
-) -> 'Callable[[Handler[..., Stage]], Handler[..., Stage]]':
+) -> 'Callable[[HandlerAlias], Handler]':
     """Sets the specified attribute of the decorated handler."""
 
-    def decorator(func: 'Handler[..., Stage]') -> 'Handler[..., Stage]':
-        setattr(func, name, value)
-        func.permissions_ignored = []
+    def decorator(func: 'HandlerAlias') -> 'Handler':
+        handler = cast('Handler', func)
+        setattr(handler, name, value)
+        handler.permissions_ignored = []
 
-        @wraps(func)
+        @wraps(handler)
         async def wrapper(
             *args: 'Any',
             **kwargs: 'Any',
-        ) -> 'Stage':
-            return await func(*args, **kwargs)
-        return cast('Handler[..., Stage]', wrapper)
+        ) -> 'Any':
+            return await handler(*args, **kwargs)
+        return cast('Handler', wrapper)
     return decorator
 
 

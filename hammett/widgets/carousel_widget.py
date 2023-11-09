@@ -1,7 +1,7 @@
 """The module contains the implementation of the carousel widget."""
 
 import contextlib
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.exceptions import ImproperlyConfigured
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.types import Handler, Keyboard, Stage
+    from hammett.types import Keyboard, Stage
 
 _CAROUSEL_START_POSITION = 0
 
@@ -55,7 +55,7 @@ class CarouselWidget(BaseWidget, StartScreen):
         )
         self._disabled_button = Button(
             self.disable_caption,
-            cast('Handler[..., Stage]', self._do_nothing),
+            self._do_nothing,
             source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
         )
 
@@ -140,7 +140,7 @@ class CarouselWidget(BaseWidget, StartScreen):
         config.keyboard = await self._build_keyboard(state)
         return await self.render(update, context, config=config)
 
-    @register_handler  # type: ignore[arg-type]
+    @register_handler
     async def _next(
         self: 'Self',
         update: 'Update',
@@ -164,7 +164,7 @@ class CarouselWidget(BaseWidget, StartScreen):
             current_image + 1,
         )
 
-    @register_handler  # type: ignore[arg-type]
+    @register_handler
     async def _back(
         self: 'Self',
         update: 'Update',

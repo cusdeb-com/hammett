@@ -112,11 +112,13 @@ class BaseChoiceWidget(BaseWidget):
 
         return keyboard + self.add_extra_keyboard()
 
-    @register_handler  # type: ignore[arg-type]
+    @register_handler
     async def _on_choice_click(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        *_args: 'Any',
+        **_kwargs: 'Any',
     ) -> 'Stage':
         """Invoked when clicking on a choice."""
 
