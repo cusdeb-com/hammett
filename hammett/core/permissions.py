@@ -1,35 +1,30 @@
 """The module contains the implementation of the permissions mechanism."""
 
 import asyncio
-from collections.abc import Callable, Coroutine
 from functools import wraps
 from typing import TYPE_CHECKING, Any, cast
 from uuid import uuid4
 
-from telegram import Update
-from telegram.ext import CallbackContext
-from telegram.ext._utils.types import BD, BT, CD, UD
-
 from hammett.core.screen import Screen
-from hammett.types import Stage
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
-    from collections.abc import Awaitable, Iterable
+    from collections.abc import Awaitable, Callable, Iterable
 
+    from telegram import Update
+    from telegram.ext import CallbackContext
+    from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.types import Handler
+    from hammett.types import Handler, HandlerAlias, Stage
 
 
-def apply_permission_to(
-    handler: 'Callable[[Update, CallbackContext[BT, UD, CD, BD]], Coroutine[Any, Any, Stage]]',
-) -> 'Callable[[Update, CallbackContext[BT, UD, CD, BD]], Coroutine[Any, Any, Stage]]':
+def apply_permission_to(handler: 'HandlerAlias') -> 'HandlerAlias':
     """Applies permissions to the specified handler."""
 
     from hammett.conf import settings
 
-    handler_wrapped = handler
+    handler_wrapped = cast('Handler', handler)
     for permission_path in reversed(settings.PERMISSIONS):
         permission: type['Permission'] = import_string(permission_path)
         permissions_ignored = getattr(handler_wrapped, 'permissions_ignored', None)
@@ -39,24 +34,25 @@ def apply_permission_to(
 
         handler_wrapped = permission_instance.check_permission(handler_wrapped)
 
-    return handler_wrapped
+    return cast('HandlerAlias', handler_wrapped)
 
 
 def ignore_permissions(
     permissions: 'Iterable[type[Permission]]',
-) -> 'Callable[[Handler[..., Stage]], Handler[..., Stage]]':
+) -> 'Callable[[HandlerAlias], Handler]':
     """The decorator is intended for decorating handlers (Screen methods)
     to specify which permissions they are allowed to ignore.
     """
 
-    def decorator(func: 'Handler[..., Stage]') -> 'Handler[..., Stage]':
-        func.permissions_ignored = [permission().class_uuid for permission in permissions]
+    def decorator(func: 'HandlerAlias') -> 'Handler':
+        handler = cast('Handler', func)
+        handler.permissions_ignored = [permission().class_uuid for permission in permissions]
 
-        @wraps(func)
-        async def wrapper(*args: 'Any', **kwargs: 'Any') -> 'Stage':
-            return await func(*args, **kwargs)
+        @wraps(handler)
+        async def wrapper(*args: 'Any', **kwargs: 'Any') -> 'Any':
+            return await handler(*args, **kwargs)
 
-        return cast('Handler[..., Stage]', wrapper)
+        return cast('Handler', wrapper)
     return decorator
 
 
@@ -69,16 +65,13 @@ class Permission(Screen):
 
         super().__init__()
 
-    def check_permission(
-        self: 'Self',
-        handler: Callable[[Update, CallbackContext[BT, UD, CD, BD]], Coroutine[Any, Any, Stage]],
-    ) -> 'Callable[[Update, CallbackContext[BT, UD, CD, BD]], Coroutine[Any, Any, Stage]]':
+    def check_permission(self: 'Self', handler: 'Handler') -> 'Handler':
         """Checks if there is a permission to invoke handlers (Screen methods).
         The method is invoked under the hood, so you should not run it directly.
         """
 
         @wraps(handler)
-        async def wrapper(*args: 'Any', **kwargs: 'Any') -> 'Stage':
+        async def wrapper(*args: 'Any', **kwargs: 'Any') -> 'Any':
             if asyncio.iscoroutinefunction(self.has_permission):
                 permitted = await self.has_permission(*args, **kwargs)
             else:
@@ -89,7 +82,7 @@ class Permission(Screen):
 
             return await self.handle_permission_denied(*args, **kwargs)
 
-        return wrapper
+        return cast('Handler', wrapper)
 
     async def handle_permission_denied(
         self: 'Self',

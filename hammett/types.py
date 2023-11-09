@@ -1,8 +1,8 @@
 """The module contains the types used throughout the framework."""
 
-from collections.abc import Callable, Coroutine, Iterable
+from collections.abc import Awaitable, Callable, Coroutine, Iterable
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, NewType, ParamSpec, Protocol, TypeVar
+from typing import TYPE_CHECKING, Any, NewType, Protocol, TypeVar
 from uuid import UUID
 
 from telegram import Update
@@ -28,12 +28,6 @@ Func = TypeVar('Func', bound=Callable[..., Any])
 
 Stage = NewType('Stage', int)
 
-HandlerR = Coroutine[Any, Any, Stage]
-
-P = ParamSpec('P')
-
-R_co = TypeVar('R_co', covariant=True)
-
 
 class HandlerType(Enum):
     """The class enumerates all types of handlers."""
@@ -42,7 +36,7 @@ class HandlerType(Enum):
     TYPING_HANDLER = auto()
 
 
-class Handler(Protocol[P, R_co]):
+class Handler(Protocol):
     """The class implements the Handler type."""
 
     __name__: str  # noqa: A003
@@ -51,15 +45,21 @@ class Handler(Protocol[P, R_co]):
     handler_type: HandlerType
     permissions_ignored: list[UUID]
 
+    # Callback protocols and Callable types can be used mostly interchangeably.
+    # Argument names in __call__ methods must be identical, unless a double
+    # underscore prefix is used.
+    # See: https://mypy.readthedocs.io/en/stable/protocols.html#callback-protocols
     def __call__(
         self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
+        __update: 'Update',
+        __context: 'CallbackContext[BT, UD, CD, BD]',
         *args: 'Any',
         **kwargs: 'Any',
-    ) -> HandlerR:
+    ) -> Awaitable[Any]:
         """The signature is required for every handler of the Handler type."""
         ...
 
 
-Source = str | type[Screen] | Handler
+HandlerAlias = Callable[..., Coroutine[Any, Any, Any]]
+
+Source = str | type[Screen] | Handler | HandlerAlias

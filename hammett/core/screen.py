@@ -85,7 +85,7 @@ class Button:
         if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
             screen = cast('type[Screen]', self.source)
             if issubclass(screen, Screen):
-                self.source_goto = cast('Handler[..., Stage]', screen().goto)
+                self.source_goto = cast('Handler', screen().goto)
             else:
                 msg = (
                     f'The source "{self.source}" must be a subclass of Screen if its '
@@ -156,7 +156,7 @@ class Button:
             if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE and self.source_goto:
                 source = self.source_goto
             else:
-                source = cast('Handler[..., Stage]', self.source)
+                source = cast('Handler', self.source)
 
             data = (
                 f'{handlers.calc_checksum(source)},'
