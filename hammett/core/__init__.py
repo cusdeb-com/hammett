@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.screen import Screen, StartScreen
-    from hammett.types import NativeStates, States
+    from hammett.types import Handler, NativeStates, States
 
 __all__ = ('Application', )
 
@@ -44,6 +44,7 @@ class Application:
         name: str,
         *,
         entry_point: 'type[StartScreen]',
+        error_handlers: 'list[Handler] | None' = None,
         native_states: 'NativeStates | None' = None,
         persistence: 'BasePersistence[UD, CD, BD] | None' = None,
         states: 'States | None' = None,
@@ -72,6 +73,7 @@ class Application:
             for state in self._states.items():
                 self._register_handlers(*state)
 
+        self._register_error_handlers(error_handlers)
         self._register_job_queue_handler(job_queue_handlers)
 
         start_handler = apply_permission_to(self._entry_point.start)
@@ -82,6 +84,16 @@ class Application:
             name=self._name,
             persistent=bool(persistence),
         ))
+
+    def _register_error_handlers(
+        self: 'Self',
+        error_handlers: 'list[Handler] | None',
+    ) -> None:
+        """Registers the specified error handlers."""
+
+        if error_handlers:
+            for error_handler in error_handlers:
+                self._native_application.add_error_handler(error_handler)  # type: ignore[arg-type]
 
     def _register_handlers(self: 'Self', state: int, screens: 'Iterable[type[Screen]]') -> None:
         try:
