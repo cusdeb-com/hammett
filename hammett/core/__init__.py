@@ -74,7 +74,7 @@ class Application:
                 self._register_handlers(*state)
 
         self._register_error_handlers(error_handlers)
-        self._register_job_queue_handler(job_queue_handlers)
+        self._register_job_queue_handlers(job_queue_handlers)
 
         start_handler = apply_permission_to(self._entry_point.start)
         self._native_application.add_handler(ConversationHandler(
@@ -139,7 +139,7 @@ class Application:
 
                 self._native_states[state].append(handler_object)
 
-    def _register_job_queue_handler(
+    def _register_job_queue_handlers(
         self: 'Self',
         job_queue_handlers: 'list[dict[str, Any]] | None' = None,
     ) -> None:
