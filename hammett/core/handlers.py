@@ -7,6 +7,7 @@ from contextlib import suppress
 from functools import wraps
 from typing import TYPE_CHECKING, Any, cast
 
+from hammett.core.exceptions import CommandNameIsEmpty
 from hammett.types import HandlerAlias, HandlerType, Stage
 
 if TYPE_CHECKING:
@@ -18,6 +19,21 @@ if TYPE_CHECKING:
     from hammett.types import Handler, PayloadStorage
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _clear_command_name(command_name: str) -> str:
+    """Clears the specified command name.
+
+    Raises `CommandNameIsEmpty` if the name either is empty or consists only of '/'.
+    """
+
+    if command_name and command_name[0] == '/':
+        command_name = command_name[1:]
+
+    if not command_name.strip():
+        raise CommandNameIsEmpty
+
+    return command_name
 
 
 def _get_handler_name(handler: 'Handler') -> str:
@@ -32,22 +48,34 @@ def _get_handler_name(handler: 'Handler') -> str:
 def _register_handler(
     name: str,
     value: HandlerType,
-) -> 'Callable[[HandlerAlias], Handler]':
+) -> 'Callable[[str], Callable[[HandlerAlias], Handler]]':
     """Sets the specified attribute of the decorated handler."""
 
-    def decorator(func: 'HandlerAlias') -> 'Handler':
-        handler = cast('Handler', func)
-        setattr(handler, name, value)
-        handler.permissions_ignored = []
+    def create_decorator(command_name: str) -> 'Callable[[HandlerAlias], Handler]':
+        def decorator(func: 'HandlerAlias') -> 'Handler':
+            handler = cast('Handler', func)
+            setattr(handler, name, value)
+            handler.permissions_ignored = []
 
-        @wraps(handler)
-        async def wrapper(
-            *args: 'Any',
-            **kwargs: 'Any',
-        ) -> 'Any':
-            return await handler(*args, **kwargs)
-        return cast('Handler', wrapper)
-    return decorator
+            if value == HandlerType.COMMAND_HANDLER:
+                try:
+                    handler.command_name = _clear_command_name(command_name)
+                except CommandNameIsEmpty as exc:
+                    msg = (
+                        f'Unable to register the {handler} handler for '
+                        f'a command with an empty name.'
+                    )
+                    raise CommandNameIsEmpty(msg) from exc
+
+            @wraps(handler)
+            async def wrapper(
+                *args: 'Any',
+                **kwargs: 'Any',
+            ) -> 'Any':
+                return await handler(*args, **kwargs)
+            return cast('Handler', wrapper)
+        return decorator
+    return create_decorator
 
 
 def calc_checksum(obj: 'Any') -> str:
@@ -109,8 +137,13 @@ def log_unregistered_handler(obj: 'Any') -> None:
         )
 
 
-register_handler = _register_handler('handler_type', HandlerType.BUTTON_HANDLER)
-register_handler.__doc__ = 'Registers the specified screen method as a button click handler.'
+_register_button_handler = _register_handler('handler_type', HandlerType.BUTTON_HANDLER)
+register_button_handler = _register_button_handler('')
+register_button_handler.__doc__ = 'Registers the specified screen method as a button click handler.'
 
-register_typing_handler = _register_handler('handler_type', HandlerType.TYPING_HANDLER)
+register_command_handler = _register_handler('handler_type', HandlerType.COMMAND_HANDLER)
+register_command_handler.__doc__ = 'Registers the specified screen method as a command handler.'
+
+_register_typing_handler = _register_handler('handler_type', HandlerType.TYPING_HANDLER)
+register_typing_handler = _register_typing_handler('')
 register_typing_handler.__doc__ = 'Registers the specified screen method as a typing handler.'

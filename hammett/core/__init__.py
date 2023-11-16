@@ -126,6 +126,7 @@ class Application:
             for name in dir(instance):
                 acceptable_handler_types = (
                     HandlerType.BUTTON_HANDLER,
+                    HandlerType.COMMAND_HANDLER,
                     HandlerType.TYPING_HANDLER,
                 )
                 handler, handler_type = None, None
@@ -148,6 +149,11 @@ class Application:
                         # Specify a pattern. The pattern is used to determine which handler
                         # should be triggered when a specific button is pressed.
                         pattern=calc_checksum(handler),
+                    )
+                elif handler_type == HandlerType.COMMAND_HANDLER:
+                    handler_object = MessageHandler(
+                        filters.COMMAND & filters.Regex(f'^/{possible_handler.command_name}'),
+                        handler,
                     )
                 elif handler_type == HandlerType.TYPING_HANDLER:
                     handler_object = MessageHandler(

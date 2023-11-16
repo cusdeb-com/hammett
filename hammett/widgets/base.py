@@ -4,7 +4,7 @@ import json
 from typing import TYPE_CHECKING, Any, cast
 
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
-from hammett.core.handlers import register_handler
+from hammett.core.handlers import register_button_handler
 from hammett.core.screen import EMPTY_KEYBOARD, Button, RenderConfig, Screen
 from hammett.widgets.exceptions import (
     ChoiceEmojisAreUndefined,
@@ -117,7 +117,7 @@ class BaseChoiceWidget(BaseWidget):
 
         return keyboard + self.add_extra_keyboard()
 
-    @register_handler
+    @register_button_handler
     async def _on_choice_click(
         self: 'Self',
         update: 'Update',
