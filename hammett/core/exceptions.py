@@ -29,6 +29,12 @@ class ScreenDescriptionIsEmpty(Exception):
     """
 
 
+class ScreenDocumentDataIsEmpty(Exception):
+    """Raised when attempting to send a screen with a document,
+    but the document data of the screen is found to be empty.
+    """
+
+
 class TokenIsNotSpecified(Exception):
     """Raised when the token is not specified."""
 

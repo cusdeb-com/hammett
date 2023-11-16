@@ -2,10 +2,11 @@
 
 from collections.abc import Awaitable, Callable, Coroutine, Iterable
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, NewType, Protocol, TypeVar
+from typing import TYPE_CHECKING, Any, NewType, Protocol, TypedDict, TypeVar
 from uuid import UUID
 
 from telegram import Update
+from telegram._utils.types import FileInput
 from telegram.ext import BaseHandler, CallbackContext
 from telegram.ext._utils.types import BD, BT, CCT, CD, UD, ConversationKey
 
@@ -15,6 +16,14 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
 CheckUpdateType = tuple[object, ConversationKey, BaseHandler[Update, CCT], object]
+
+
+class Document(TypedDict):
+    """The class implements the Document type."""
+
+    data: FileInput
+    name: str
+
 
 Keyboard = list[list[Button]]
 
