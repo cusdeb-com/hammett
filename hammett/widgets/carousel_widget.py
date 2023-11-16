@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
 from hammett.core.exceptions import ImproperlyConfigured
-from hammett.core.handlers import register_handler
+from hammett.core.handlers import register_button_handler
 from hammett.core.screen import Button, RenderConfig, StartScreen
 from hammett.widgets.base import BaseWidget
 from hammett.widgets.exceptions import FailedToGetStateKey
@@ -140,7 +140,7 @@ class CarouselWidget(BaseWidget, StartScreen):
         config.keyboard = await self._build_keyboard(state)
         return await self.render(update, context, config=config)
 
-    @register_handler
+    @register_button_handler
     async def _next(
         self: 'Self',
         update: 'Update',
@@ -164,7 +164,7 @@ class CarouselWidget(BaseWidget, StartScreen):
             current_image + 1,
         )
 
-    @register_handler
+    @register_button_handler
     async def _back(
         self: 'Self',
         update: 'Update',

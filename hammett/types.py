@@ -33,6 +33,7 @@ class HandlerType(Enum):
     """The class enumerates all types of handlers."""
 
     BUTTON_HANDLER = auto()
+    COMMAND_HANDLER = auto()
     TYPING_HANDLER = auto()
 
 
@@ -42,6 +43,7 @@ class Handler(Protocol):
     __name__: str  # noqa: A003
     __self__: Screen
     __qualname__: str
+    command_name: str
     handler_type: HandlerType
     permissions_ignored: list[UUID]
 

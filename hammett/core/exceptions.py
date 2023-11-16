@@ -1,6 +1,12 @@
 """The module contains the global Hammett exception and warning classes."""
 
 
+class CommandNameIsEmpty(Exception):
+    """Raised when trying to register a handler for
+    a command with an empty name (i.e., '/').
+    """
+
+
 class FailedToGetDataAttributeOfQuery(Exception):
     """Raised when the attempt to get a data attribute of a query fails."""
 
