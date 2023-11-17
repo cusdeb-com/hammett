@@ -62,8 +62,8 @@ def _register_handler(
                     handler.command_name = _clear_command_name(command_name)
                 except CommandNameIsEmpty as exc:
                     msg = (
-                        f'Unable to register the {handler} handler for '
-                        f'a command with an empty name.'
+                        f"Unable to register the '{handler.__name__}' handler for "
+                        f"a command with an empty name."
                     )
                     raise CommandNameIsEmpty(msg) from exc
 
