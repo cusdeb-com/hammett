@@ -168,4 +168,15 @@ class Application:
     def run(self: 'Self') -> None:
         """Runs the application."""
 
-        self._native_application.run_polling(allowed_updates=Update.ALL_TYPES)
+        from hammett.conf import settings
+
+        if settings.USE_WEBHOOK:
+            self._native_application.run_webhook(
+                listen=settings.WEBHOOK_LISTEN,
+                port=settings.WEBHOOK_PORT,
+                url_path=settings.WEBHOOK_URL_PATH,
+                webhook_url=settings.WEBHOOK_URL,
+                allowed_updates=Update.ALL_TYPES,
+            )
+        else:
+            self._native_application.run_polling(allowed_updates=Update.ALL_TYPES)
