@@ -182,6 +182,7 @@ class Button:
 class RenderConfig:
     """The class that represents a config for the Screen render method."""
 
+    chat_id: int = 0
     as_new_message: bool = False
     cache_covers: bool = False
     cover: 'str | PathLike[str]' = ''
@@ -346,22 +347,19 @@ class Screen:
 
     async def _get_new_message_render_method(
         self: 'Self',
-        update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         cache_covers: bool = False,
+        chat_id: int = 0,
         cover: 'str | PathLike[str]' = '',
         description: str = '',
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
         """Returns the render method and its kwargs for sending a new message."""
 
         kwargs: 'Any' = {
+            'chat_id': chat_id or context._chat_id,  # noqa: SLF001
             'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
         }
-
-        if update.effective_chat:
-            chat_id = update.effective_chat.id
-            kwargs['chat_id'] = chat_id
 
         if cover:
             if self._is_url(cover) and cache_covers:
@@ -406,7 +404,7 @@ class Screen:
 
     async def get_cache_covers(
         self: 'Self',
-        _update: 'Update',
+        _update: 'Update | None',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """Returns the `cache_covers` attribute of the screen."""
@@ -415,7 +413,7 @@ class Screen:
 
     async def get_cover(
         self: 'Self',
-        _update: 'Update',
+        _update: 'Update | None',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'str | PathLike[str]':
         """Returns the `cover` attribute of the screen."""
@@ -424,7 +422,7 @@ class Screen:
 
     async def get_description(
         self: 'Self',
-        _update: 'Update',
+        _update: 'Update | None',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> str:
         """Returns the `description` attribute of the screen."""
@@ -433,7 +431,7 @@ class Screen:
 
     async def get_document(
         self: 'Self',
-        _update: 'Update',
+        _update: 'Update | None',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Document | None':
         """Returns the `document` attribute of the screen."""
@@ -470,7 +468,7 @@ class Screen:
 
     async def render(
         self: 'Self',
-        update: 'Update',
+        update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
@@ -490,15 +488,16 @@ class Screen:
             config.keyboard = config.keyboard or self.setup_keyboard()
 
         send: 'Callable[..., Awaitable[Any]] | None' = None
+        kwargs: 'Any' = {}
         if config.as_new_message:
             send, kwargs = await self._get_new_message_render_method(
-                update,
                 context,
                 cache_covers=cache_covers,
+                chat_id=config.chat_id,
                 cover=cover,
                 description=description,
             )
-        else:
+        elif update:
             send, kwargs = await self._get_edit_render_method(
                 update,
                 cache_covers=cache_covers,
@@ -507,7 +506,7 @@ class Screen:
                 document=document,
             )
 
-        if send:
+        if send and kwargs:
             send_object = await send(
                 reply_markup=await self._create_markup_keyboard(config.keyboard, update, context),
                 **kwargs,
