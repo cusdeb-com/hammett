@@ -533,7 +533,8 @@ class StartScreen(Screen):
     ) -> 'Stage':
         """Invoked on the /start command."""
 
-        raise NotImplementedError
+        await self.render(update, context, config=RenderConfig(as_new_message=True))
+        return DEFAULT_STAGE
 
 
 class NotificationScreen(Screen):
