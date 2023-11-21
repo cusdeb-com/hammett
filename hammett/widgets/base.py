@@ -144,7 +144,7 @@ class BaseChoiceWidget(BaseWidget):
 
     async def render(
         self: 'Self',
-        update: 'Update',
+        update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
