@@ -534,3 +534,21 @@ class StartScreen(Screen):
         """Invoked on the /start command."""
 
         raise NotImplementedError
+
+
+class NotificationScreen(Screen):
+    """The base class for implementing custom notification screens."""
+
+    async def send(
+        self: 'Self',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        *,
+        config: 'RenderConfig | None' = None,
+    ) -> 'Stage':
+        """Sends the screen to the specified chat."""
+
+        config = config or RenderConfig()
+        config.as_new_message = True
+
+        await self.render(None, context, config=config)
+        return DEFAULT_STAGE
