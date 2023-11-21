@@ -114,9 +114,7 @@ class MainMenu(StartScreen):
         settings.ADMIN_GROUP.append(user.id)
         LOGGER.info('The user %s (%s) was added to the admin group.', user.username, user.id)
 
-        config = RenderConfig(as_new_message=True)
-        await self.render(update, context, config=config)
-        return DEFAULT_STAGE
+        return await super().start(update, context)
 
 
 class SecretRoom(Screen):

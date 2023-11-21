@@ -158,16 +158,6 @@ class BaseChoiceWidget(BaseWidget):
 
         await super().render(update, context, config=config)
 
-    async def start(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'Stage':
-        """Handles the /start command when the widget is used as a start screen."""
-
-        await self.render(update, context, config=RenderConfig(as_new_message=True))
-        return DEFAULT_STAGE
-
     async def switch(
         self: 'Self',
         choice: tuple[str, str],
