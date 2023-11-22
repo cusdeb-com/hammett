@@ -427,6 +427,7 @@ class Screen:
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
         config: 'FinalRenderConfig',
+        extra_data: 'Any | None',
     ) -> 'Message | None':
         """Runs before screen rendering."""
 
@@ -435,6 +436,7 @@ class Screen:
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
         config: 'FinalRenderConfig',
+        _extra_data: 'Any | None',
     ) -> 'Message | None':
         """Renders the screen components (i.e., cover, description and keyboard),
         and returns a corresponding object of the Message type.
@@ -478,6 +480,7 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
         message: 'Message',
         config: 'FinalRenderConfig',
+        extra_data: 'Any | None',
     ) -> None:
         """Runs after screen rendering."""
 
@@ -568,15 +571,16 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
+        extra_data: 'Any | None' = None,
     ) -> None:
         """Renders the screen components (i.e., cover, description and keyboard)."""
 
         final_config = await self._finalize_config(update, context, config)
-        await self._pre_render(update, context, final_config)
+        await self._pre_render(update, context, final_config, extra_data)
 
-        message = await self._render(update, context, final_config)
+        message = await self._render(update, context, final_config, extra_data)
         if message:
-            await self._post_render(update, context, message, final_config)
+            await self._post_render(update, context, message, final_config, extra_data)
 
     def setup_keyboard(self: 'Self') -> 'Keyboard':
         """Sets up the keyboard for the screen."""
@@ -608,11 +612,12 @@ class NotificationScreen(Screen):
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
+        extra_data: 'Any | None' = None,
     ) -> 'Stage':
         """Sends the screen to the specified chat."""
 
         config = config or RenderConfig()
         config.as_new_message = True
 
-        await self.render(None, context, config=config)
+        await self.render(None, context, config=config, extra_data=extra_data)
         return DEFAULT_STAGE
