@@ -26,15 +26,27 @@ if TYPE_CHECKING:
 class BaseWidget(Screen):
     """The class implements the base interface for widgets from the library."""
 
-    async def _get_state_key(self: 'Self', update: 'Update') -> str:
-        """Returns a widget state."""
+    async def _get_state_key(
+        self: 'Self',
+        update: 'Update | None' = None,
+        chat_id: int = 0,
+        message_id: int = 0,
+    ) -> str:
+        """Returns a widget state key."""
 
-        query = await self.get_callback_query(update)
-        message = getattr(query, 'message', None)
-        if message is None:
-            raise FailedToGetStateKey
+        if update:
+            query = await self.get_callback_query(update)
+            message = getattr(query, 'message', None)
+            if message is None:
+                raise FailedToGetStateKey
 
-        return f'{self.__class__.__name__}_{message.chat_id}_{message.message_id}'
+            current_chat_id = message.chat_id
+            current_message_id = message.message_id
+        else:
+            current_chat_id = chat_id
+            current_message_id = message_id
+
+        return f'{self.__class__.__name__}_{current_chat_id}_{current_message_id}'
 
     def add_extra_keyboard(self: 'Self') -> 'Keyboard':
         """Adds an extra keyboard below the widget buttons."""
