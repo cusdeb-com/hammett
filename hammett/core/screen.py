@@ -4,7 +4,7 @@
 
 import logging
 import re
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, field
 from os import PathLike
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
@@ -15,6 +15,7 @@ from telegram import (
     InlineKeyboardMarkup,
     InputMediaDocument,
     InputMediaPhoto,
+    Message,
 )
 from telegram._files.photosize import PhotoSize
 from telegram._utils.defaultvalue import DEFAULT_NONE, DefaultValue
@@ -189,6 +190,15 @@ class RenderConfig:
     description: str = ''
     document: 'Document | None' = None
     keyboard: 'Keyboard | None' = None
+
+
+@dataclass
+class FinalRenderConfig(RenderConfig):
+    """The class represents a final config intended for
+    the Screen render method.
+    """
+
+    keyboard: 'Keyboard' = field(default_factory=list)
 
 
 class Screen:
@@ -385,6 +395,92 @@ class Screen:
 
         return bool(re.search(r'^https?://', str(cover)))
 
+    async def _finalize_config(
+        self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        config: 'RenderConfig | None',
+    ) -> 'FinalRenderConfig':
+        """Finalizes an object of RenderConfig returning an object of FinalRenderConfig."""
+
+        final_config = FinalRenderConfig(**asdict(config)) if config else FinalRenderConfig()
+        final_config.cache_covers = (
+            final_config.cache_covers or await self.get_cache_covers(update, context)
+        )
+        final_config.cover = final_config.cover or await self.get_cover(update, context)
+
+        final_config.description = (
+            final_config.description or await self.get_description(update, context)
+        )
+        final_config.document = final_config.document or await self.get_document(update, context)
+        if not final_config.description and not final_config.document:
+            msg = f'The description of {self.__class__.__name__} is empty'
+            raise ScreenDescriptionIsEmpty(msg)
+
+        if not config or config.keyboard is None:
+            final_config.keyboard = final_config.keyboard or self.setup_keyboard()
+
+        return final_config
+
+    async def _pre_render(
+        self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        config: 'FinalRenderConfig',
+    ) -> 'Message | None':
+        """Runs before screen rendering."""
+
+    async def _render(
+        self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        config: 'FinalRenderConfig',
+    ) -> 'Message | None':
+        """Renders the screen components (i.e., cover, description and keyboard),
+        and returns a corresponding object of the Message type.
+        """
+
+        send: 'Callable[..., Awaitable[Any]] | None' = None
+        kwargs: 'Any' = {}
+        if config.as_new_message:
+            send, kwargs = await self._get_new_message_render_method(
+                context,
+                cache_covers=config.cache_covers,
+                chat_id=config.chat_id,
+                cover=config.cover,
+                description=config.description,
+            )
+        elif update:
+            send, kwargs = await self._get_edit_render_method(
+                update,
+                cache_covers=config.cache_covers,
+                cover=config.cover,
+                description=config.description,
+                document=config.document,
+            )
+
+        message: 'Message | None' = None
+        if send and kwargs:
+            send_object = await send(
+                reply_markup=await self._create_markup_keyboard(config.keyboard, update, context),
+                **kwargs,
+            )
+            message = send_object
+            if config.cover and config.cache_covers and not self._is_url(config.cover):
+                photo_size_object = send_object.photo[-1]
+                self._cached_covers[config.cover] = photo_size_object.file_id
+
+        return message
+
+    async def _post_render(
+        self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        message: 'Message',
+        config: 'FinalRenderConfig',
+    ) -> None:
+        """Runs after screen rendering."""
+
     #
     # Public methods
     #
@@ -475,45 +571,12 @@ class Screen:
     ) -> None:
         """Renders the screen components (i.e., cover, description and keyboard)."""
 
-        config = config or RenderConfig()
-        cache_covers = config.cache_covers or await self.get_cache_covers(update, context)
-        cover = config.cover or await self.get_cover(update, context)
-        description = config.description or await self.get_description(update, context)
-        document = config.document or await self.get_document(update, context)
-        if not description and not document:
-            msg = f'The description of {self.__class__.__name__} is empty'
-            raise ScreenDescriptionIsEmpty(msg)
+        final_config = await self._finalize_config(update, context, config)
+        await self._pre_render(update, context, final_config)
 
-        if config.keyboard is None:
-            config.keyboard = config.keyboard or self.setup_keyboard()
-
-        send: 'Callable[..., Awaitable[Any]] | None' = None
-        kwargs: 'Any' = {}
-        if config.as_new_message:
-            send, kwargs = await self._get_new_message_render_method(
-                context,
-                cache_covers=cache_covers,
-                chat_id=config.chat_id,
-                cover=cover,
-                description=description,
-            )
-        elif update:
-            send, kwargs = await self._get_edit_render_method(
-                update,
-                cache_covers=cache_covers,
-                cover=cover,
-                description=description,
-                document=document,
-            )
-
-        if send and kwargs:
-            send_object = await send(
-                reply_markup=await self._create_markup_keyboard(config.keyboard, update, context),
-                **kwargs,
-            )
-            if cover and cache_covers and not self._is_url(cover):
-                photo_size_object = send_object.photo[-1]
-                self._cached_covers[cover] = photo_size_object.file_id
+        message = await self._render(update, context, final_config)
+        if message:
+            await self._post_render(update, context, message, final_config)
 
     def setup_keyboard(self: 'Self') -> 'Keyboard':
         """Sets up the keyboard for the screen."""
