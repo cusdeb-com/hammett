@@ -148,6 +148,7 @@ class BaseChoiceWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
+        extra_data: 'Any | None' = None,
     ) -> None:
         """Overrides the render method to build the keyboard based on
         the specified choices before rendering the widget.
@@ -156,7 +157,7 @@ class BaseChoiceWidget(BaseWidget):
         if config is None:
             config = RenderConfig(keyboard=self._build_keyboard())
 
-        await super().render(update, context, config=config)
+        await super().render(update, context, config=config, extra_data=extra_data)
 
     async def switch(
         self: 'Self',
