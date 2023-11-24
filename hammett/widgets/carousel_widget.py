@@ -62,7 +62,10 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
             self._do_nothing,
             source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
         )
-        self._infinity_keyboard = [[self._back_button, self._next_button]]
+        self._infinity_keyboard = [
+            [self._back_button, self._next_button],
+            *self.add_extra_keyboard(),
+        ]
 
     async def _init(
         self: 'Self',
