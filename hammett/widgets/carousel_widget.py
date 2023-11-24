@@ -273,10 +273,10 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
         except IndexError:
             if next_state == len(images):
                 cover, description = images[_START_POSITION]
-                await self._set_state_value(update, context, 'position', next_state)
+                await self._set_state_value(update, context, 'position', _START_POSITION)
             else:
                 cover, description = images[_END_POSITION]
-                await self._set_state_value(update, context, 'position', next_state)
+                await self._set_state_value(update, context, 'position', _END_POSITION)
         else:
             await self._set_state_value(update, context, 'position', next_state)
 
