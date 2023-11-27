@@ -25,7 +25,9 @@ _END_POSITION, _START_POSITION = -1, 0
 
 
 class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
-    """Implements the display of a carousel with control buttons for a list of images."""
+    """Implements the display of a carousel widget with control buttons
+    for a list of images.
+    """
 
     images: list[list[str]] = []
     infinity: bool = False
