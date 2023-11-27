@@ -257,7 +257,6 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
         config.keyboard = await self._build_keyboard(images, state)
         return await self.render(update, context, config=config)
 
-    @register_button_handler
     async def _handle_infinity_mode(
         self: 'Self',
         update: 'Update',
