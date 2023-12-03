@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.hiders import Hider, HidersChecker
-    from hammett.types import Document, Handler, Keyboard, Source, Stage
+    from hammett.types import Document, Handler, Keyboard, Source, State
 
 EMPTY_KEYBOARD: 'Keyboard' = []
 
@@ -559,7 +559,7 @@ class Screen:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'Stage':
+    ) -> 'State':
         """Switches to the screen."""
 
         await self.render(update, context)
@@ -597,7 +597,7 @@ class StartScreen(Screen):
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'Stage':
+    ) -> 'State':
         """Invoked on the /start command."""
 
         await self.render(update, context, config=RenderConfig(as_new_message=True))
@@ -613,7 +613,7 @@ class NotificationScreen(Screen):
         *,
         config: 'RenderConfig | None' = None,
         extra_data: 'Any | None' = None,
-    ) -> 'Stage':
+    ) -> 'State':
         """Sends the screen to the specified chat."""
 
         config = config or RenderConfig()

@@ -8,7 +8,7 @@ from functools import wraps
 from typing import TYPE_CHECKING, Any, cast
 
 from hammett.core.exceptions import CommandNameIsEmpty
-from hammett.types import HandlerAlias, HandlerType, Stage
+from hammett.types import HandlerAlias, HandlerType, State
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -113,7 +113,7 @@ def log_unregistered_handler(obj: 'Any') -> None:
         return
 
     mandatory_params = {'context', 'update'}
-    mandatory_return_annotations = {'Stage', Stage, inspect.Signature.empty}
+    mandatory_return_annotations = {'State', State, inspect.Signature.empty}
 
     try:
         signature = inspect.signature(obj)

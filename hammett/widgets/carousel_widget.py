@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.screen import FinalRenderConfig
-    from hammett.types import Keyboard, Stage
+    from hammett.types import Keyboard, State
 
 _END_POSITION, _START_POSITION = -1, 0
 
@@ -75,7 +75,7 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
         context: 'CallbackContext[BT, UD, CD, BD]',
         config: 'RenderConfig | None' = None,
         images: list[list[str]] | None = None,
-    ) -> 'Stage':
+    ) -> 'State':
         """Initializes the widget."""
 
         config = config or RenderConfig()
@@ -343,7 +343,7 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'Stage':
+    ) -> 'State':
         """Handles the case when the widget is passed to Button as `GOTO_SOURCE_TYPE`."""
 
         return await self._init(update, context)
@@ -352,7 +352,7 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'Stage':
+    ) -> 'State':
         """Handles the case when the widget is used as StartScreen."""
 
         config = RenderConfig(as_new_message=True)
@@ -364,7 +364,7 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
         *,
         config: 'RenderConfig | None' = None,
         extra_data: 'Any | None' = None,
-    ) -> 'Stage':
+    ) -> 'State':
         """Handles the case when the widget is used as a notification."""
 
         config = config or RenderConfig()

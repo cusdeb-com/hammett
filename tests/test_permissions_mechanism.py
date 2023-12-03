@@ -17,7 +17,7 @@ from tests.base import (
 )
 
 if TYPE_CHECKING:
-    from hammett.types import Handler, Stage
+    from hammett.types import Handler, State
 
 
 class TestPermissionWithSyncChecker(BaseTestPermission):
@@ -58,7 +58,7 @@ class PermissionsTests(BaseTestCase):
         """Tests the case when the permission is giving."""
 
         screen = TestScreen()
-        source = cast('Handler[..., Stage]', screen.goto)
+        source = cast('Handler[..., State]', screen.goto)
 
         permission_instance = TestGivingPermission()
         handler = permission_instance.check_permission(source)
@@ -70,7 +70,7 @@ class PermissionsTests(BaseTestCase):
         """Tests the case when the permission is denied."""
 
         screen = TestScreen()
-        source = cast('Handler[..., Stage]', screen.goto)
+        source = cast('Handler[..., State]', screen.goto)
 
         permission_instance = TestDenyingPermission()
         handler = permission_instance.check_permission(source)
@@ -82,7 +82,7 @@ class PermissionsTests(BaseTestCase):
         """Tests the case when the permission checker is a synchronous."""
 
         screen = TestScreen()
-        source = cast('Handler[..., Stage]', screen.goto)
+        source = cast('Handler[..., State]', screen.goto)
 
         permission_instance = TestPermissionWithSyncChecker()
         handler = permission_instance.check_permission(source)
