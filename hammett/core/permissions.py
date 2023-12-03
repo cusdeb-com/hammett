@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.types import Handler, HandlerAlias, Stage
+    from hammett.types import Handler, HandlerAlias, State
 
 
 def apply_permission_to(handler: 'HandlerAlias') -> 'HandlerAlias':
@@ -88,7 +88,7 @@ class Permission(Screen):
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'Stage':
+    ) -> 'State':
         """Invoked in case of `has_permission` returns False."""
 
         raise NotImplementedError

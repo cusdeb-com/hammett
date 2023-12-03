@@ -35,7 +35,7 @@ States = dict[int, Iterable[type[Screen]]]
 
 Func = TypeVar('Func', bound=Callable[..., Any])
 
-Stage = NewType('Stage', int)
+State = NewType('State', int)
 
 
 class HandlerType(Enum):
