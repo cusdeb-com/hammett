@@ -3,10 +3,11 @@
 import logging
 
 from hammett.conf import settings
-from hammett.core.constants import DEFAULT_STATE, SourcesTypes
+from hammett.core import Button, Screen
+from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.hiders import ONLY_FOR_ADMIN, Hider
-from hammett.core.screen import Button, RenderConfig, Screen, StartScreen
+from hammett.core.screen import StartScreen
 
 LOGGER = logging.getLogger('hammett')
 
