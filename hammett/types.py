@@ -10,7 +10,8 @@ from telegram._utils.types import FileInput
 from telegram.ext import BaseHandler, CallbackContext
 from telegram.ext._utils.types import BD, BT, CCT, CD, UD, ConversationKey
 
-from hammett.core.screen import Button, Screen
+from hammett.core.button import Button
+from hammett.core.screen import Screen
 
 if TYPE_CHECKING:
     from typing_extensions import Self
