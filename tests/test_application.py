@@ -8,7 +8,7 @@ import re
 from telegram.ext import CommandHandler
 
 from hammett.core import Application
-from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, SourcesTypes
 from hammett.core.exceptions import TokenIsNotSpecified
 from hammett.core.handlers import calc_checksum
 from hammett.core.screen import Button
@@ -88,7 +88,7 @@ class ApplicationTests(BaseTestCase):
             _APPLICATION_TEST_NAME,
             entry_point=TestStartScreen,
             states={
-                DEFAULT_STAGE: screens,
+                DEFAULT_STATE: screens,
             },
         )
 
@@ -97,13 +97,13 @@ class ApplicationTests(BaseTestCase):
 
         app = self._init_application()
 
-        handlers = app._native_application.handlers[DEFAULT_STAGE][0]
+        handlers = app._native_application.handlers[DEFAULT_STATE][0]
         pattern = calc_checksum('TestScreenWithKeyboard.goto')
 
         self.assertIsInstance(handlers.entry_points[0], CommandHandler)
         self.assertEqual(handlers.name, _APPLICATION_TEST_NAME)
         self.assertEqual(
-            handlers.states[DEFAULT_STAGE][0].pattern,
+            handlers.states[DEFAULT_STATE][0].pattern,
             re.compile(pattern),
         )
 
@@ -135,6 +135,6 @@ class ApplicationTests(BaseTestCase):
         """
 
         app = self._init_application()
-        handlers = app._native_application.handlers[DEFAULT_STAGE][0]
-        is_wrapped = getattr(handlers.states[DEFAULT_STAGE][0].callback, '__wrapped__', None)
+        handlers = app._native_application.handlers[DEFAULT_STATE][0]
+        is_wrapped = getattr(handlers.states[DEFAULT_STATE][0].callback, '__wrapped__', None)
         self.assertIsNotNone(is_wrapped)

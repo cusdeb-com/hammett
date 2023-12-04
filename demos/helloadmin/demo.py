@@ -3,7 +3,7 @@ to control the visibility of the buttons on the screens.
 """
 
 from hammett.core import Application
-from hammett.core.screen import DEFAULT_STAGE
+from hammett.core.screen import DEFAULT_STATE
 from hammett.utils.autodiscovery import autodiscover_screens
 
 from demos.helloadmin.screens import MainMenu
@@ -17,7 +17,7 @@ def main():
         name,
         entry_point=MainMenu,
         states={
-            DEFAULT_STAGE: autodiscover_screens('demos.helloadmin'),
+            DEFAULT_STATE: autodiscover_screens('demos.helloadmin'),
         },
     )
     app.run()

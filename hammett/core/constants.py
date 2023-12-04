@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from hammett.types import State
 
 # Use 'cast' instead of 'State(0)' to avoid a circular import
-DEFAULT_STAGE = cast('State', 0)
+DEFAULT_STATE = cast('State', 0)
 
 
 class SourcesTypes(Enum):
