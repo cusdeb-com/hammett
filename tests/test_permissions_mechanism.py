@@ -63,8 +63,8 @@ class PermissionsTests(BaseTestCase):
         permission_instance = TestGivingPermission()
         handler = permission_instance.check_permission(source)
 
-        stage = await handler(self.update, self.context)
-        self.assertEqual(stage, DEFAULT_STATE)
+        state = await handler(self.update, self.context)
+        self.assertEqual(state, DEFAULT_STATE)
 
     async def test_denying_permission(self):
         """Tests the case when the permission is denied."""
@@ -75,8 +75,8 @@ class PermissionsTests(BaseTestCase):
         permission_instance = TestDenyingPermission()
         handler = permission_instance.check_permission(source)
 
-        stage = await handler(self.update, self.context)
-        self.assertEqual(stage, PERMISSION_DENIED_STAGE)
+        state = await handler(self.update, self.context)
+        self.assertEqual(state, PERMISSION_DENIED_STAGE)
 
     async def test_sync_permission_denied(self):
         """Tests the case when the permission checker is a synchronous."""
@@ -87,5 +87,5 @@ class PermissionsTests(BaseTestCase):
         permission_instance = TestPermissionWithSyncChecker()
         handler = permission_instance.check_permission(source)
 
-        stage = await handler(self.update, self.context)
-        self.assertEqual(stage, PERMISSION_DENIED_STAGE)
+        state = await handler(self.update, self.context)
+        self.assertEqual(state, PERMISSION_DENIED_STAGE)
