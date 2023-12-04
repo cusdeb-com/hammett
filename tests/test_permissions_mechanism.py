@@ -8,7 +8,7 @@ from hammett.core.constants import DEFAULT_STATE
 from hammett.core.permissions import apply_permission_to
 from hammett.test.base import BaseTestCase
 from tests.base import (
-    PERMISSION_DENIED_STAGE,
+    PERMISSION_DENIED_STATE,
     PERMISSIONS_ORDER,
     BaseTestPermission,
     TestDenyingPermission,
@@ -76,7 +76,7 @@ class PermissionsTests(BaseTestCase):
         handler = permission_instance.check_permission(source)
 
         state = await handler(self.update, self.context)
-        self.assertEqual(state, PERMISSION_DENIED_STAGE)
+        self.assertEqual(state, PERMISSION_DENIED_STATE)
 
     async def test_sync_permission_denied(self):
         """Tests the case when the permission checker is a synchronous."""
@@ -88,4 +88,4 @@ class PermissionsTests(BaseTestCase):
         handler = permission_instance.check_permission(source)
 
         state = await handler(self.update, self.context)
-        self.assertEqual(state, PERMISSION_DENIED_STAGE)
+        self.assertEqual(state, PERMISSION_DENIED_STATE)
