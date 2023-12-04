@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.screen import Screen, StartScreen
-    from hammett.types import Handler, NativeStates, States
+    from hammett.types import Handler, NativeStates, State, States
 
 __all__ = ('Application', )
 
@@ -115,7 +115,7 @@ class Application:
                         interval=interval_request,
                     )
 
-    def _register_handlers(self: 'Self', state: int, screens: 'Iterable[type[Screen]]') -> None:
+    def _register_handlers(self: 'Self', state: 'State', screens: 'Iterable[type[Screen]]') -> None:
         try:
             self._native_states[state]
         except KeyError:

@@ -31,11 +31,11 @@ NativeStates = dict[object, list[BaseHandler]]  # type: ignore[type-arg]
 
 PayloadStorage = dict[str, str]
 
-States = dict[int, Iterable[type[Screen]]]
+State = NewType('State', str)
+
+States = dict[State, Iterable[type[Screen]]]
 
 Func = TypeVar('Func', bound=Callable[..., Any])
-
-State = NewType('State', int)
 
 
 class HandlerType(Enum):

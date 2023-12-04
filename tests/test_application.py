@@ -97,7 +97,7 @@ class ApplicationTests(BaseTestCase):
 
         app = self._init_application()
 
-        handlers = app._native_application.handlers[DEFAULT_STATE][0]
+        handlers = app._native_application.handlers[0][0]
         pattern = calc_checksum('TestScreenWithKeyboard.goto')
 
         self.assertIsInstance(handlers.entry_points[0], CommandHandler)
@@ -135,6 +135,6 @@ class ApplicationTests(BaseTestCase):
         """
 
         app = self._init_application()
-        handlers = app._native_application.handlers[DEFAULT_STATE][0]
+        handlers = app._native_application.handlers[0][0]
         is_wrapped = getattr(handlers.states[DEFAULT_STATE][0].callback, '__wrapped__', None)
         self.assertIsNotNone(is_wrapped)
