@@ -3,9 +3,9 @@
 import json
 from typing import TYPE_CHECKING, Any, cast
 
-from hammett.core.constants import DEFAULT_STATE, SourcesTypes
+from hammett.core import Button, Screen
+from hammett.core.constants import DEFAULT_STATE, EMPTY_KEYBOARD, RenderConfig, SourcesTypes
 from hammett.core.handlers import register_button_handler
-from hammett.core.screen import EMPTY_KEYBOARD, Button, RenderConfig, Screen
 from hammett.widgets.exceptions import (
     ChoiceEmojisAreUndefined,
     ChoicesFormatIsInvalid,
