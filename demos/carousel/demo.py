@@ -1,7 +1,7 @@
 """The bot is designed to demonstrate how to use the carousel widget."""
 
 from hammett.core import Application
-from hammett.core.screen import DEFAULT_STAGE
+from hammett.core.screen import DEFAULT_STATE
 
 from demos.carousel.screens import MainMenu
 
@@ -14,7 +14,7 @@ def main():
         name,
         entry_point=MainMenu,
         states={
-            DEFAULT_STAGE: [MainMenu],
+            DEFAULT_STATE: [MainMenu],
         },
     )
     app.run()

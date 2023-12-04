@@ -23,7 +23,7 @@ from telegram.constants import ParseMode
 
 from hammett.core import handlers
 from hammett.core.constants import (
-    DEFAULT_STAGE,
+    DEFAULT_STATE,
     SourcesTypes,
 )
 from hammett.core.exceptions import (
@@ -563,7 +563,7 @@ class Screen:
         """Switches to the screen."""
 
         await self.render(update, context)
-        return DEFAULT_STAGE
+        return DEFAULT_STATE
 
     async def render(
         self: 'Self',
@@ -601,7 +601,7 @@ class StartScreen(Screen):
         """Invoked on the /start command."""
 
         await self.render(update, context, config=RenderConfig(as_new_message=True))
-        return DEFAULT_STAGE
+        return DEFAULT_STATE
 
 
 class NotificationScreen(Screen):
@@ -620,4 +620,4 @@ class NotificationScreen(Screen):
         config.as_new_message = True
 
         await self.render(None, context, config=config, extra_data=extra_data)
-        return DEFAULT_STAGE
+        return DEFAULT_STATE

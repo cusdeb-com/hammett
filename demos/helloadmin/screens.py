@@ -3,7 +3,7 @@
 import logging
 
 from hammett.conf import settings
-from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, SourcesTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.hiders import ONLY_FOR_ADMIN, Hider
 from hammett.core.screen import Button, RenderConfig, Screen, StartScreen
@@ -32,7 +32,7 @@ class NotAdminConfirmation(Screen):
         settings.ADMIN_GROUP.remove(user.id)
 
         await main_menu.render(update, context)
-        return DEFAULT_STAGE
+        return DEFAULT_STATE
 
 
 class MainMenu(StartScreen):

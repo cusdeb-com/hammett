@@ -4,7 +4,7 @@
 
 from typing import TYPE_CHECKING, cast
 
-from hammett.core.constants import DEFAULT_STAGE
+from hammett.core.constants import DEFAULT_STATE
 from hammett.core.permissions import apply_permission_to
 from hammett.test.base import BaseTestCase
 from tests.base import (
@@ -64,7 +64,7 @@ class PermissionsTests(BaseTestCase):
         handler = permission_instance.check_permission(source)
 
         stage = await handler(self.update, self.context)
-        self.assertEqual(stage, DEFAULT_STAGE)
+        self.assertEqual(stage, DEFAULT_STATE)
 
     async def test_denying_permission(self):
         """Tests the case when the permission is denied."""

@@ -3,7 +3,7 @@
 import contextlib
 from typing import TYPE_CHECKING, cast
 
-from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, SourcesTypes
 from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.handlers import register_button_handler
 from hammett.core.screen import Button, NotificationScreen, RenderConfig, StartScreen
@@ -92,7 +92,7 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
             config.keyboard = await self._build_keyboard(current_images, _START_POSITION)
 
         await self.render(update, context, config=config, extra_data={'images': current_images})
-        return DEFAULT_STAGE
+        return DEFAULT_STATE
 
     async def _post_render(
         self: 'Self',

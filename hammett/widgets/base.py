@@ -3,7 +3,7 @@
 import json
 from typing import TYPE_CHECKING, Any, cast
 
-from hammett.core.constants import DEFAULT_STAGE, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, SourcesTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.screen import EMPTY_KEYBOARD, Button, RenderConfig, Screen
 from hammett.widgets.exceptions import (
@@ -148,7 +148,7 @@ class BaseChoiceWidget(BaseWidget):
             keyboard=keyboard,
         )
         await self.render(update, context, config=config)
-        return DEFAULT_STAGE
+        return DEFAULT_STATE
 
     #
     # Public methods
