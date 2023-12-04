@@ -7,7 +7,7 @@ from abc import ABC
 from hammett.core.permissions import Permission
 from hammett.core.screen import Screen, StartScreen
 
-PERMISSION_DENIED_STATE = 1
+PERMISSION_DENIED_STATE = '1'
 
 PERMISSIONS_ORDER = []
 
