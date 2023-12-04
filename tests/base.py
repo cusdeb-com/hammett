@@ -7,7 +7,7 @@ from abc import ABC
 from hammett.core.permissions import Permission
 from hammett.core.screen import Screen, StartScreen
 
-PERMISSION_DENIED_STAGE = 1
+PERMISSION_DENIED_STATE = 1
 
 PERMISSIONS_ORDER = []
 
@@ -24,7 +24,7 @@ class BaseTestPermission(Permission, ABC):
     async def handle_permission_denied(self, _update, _context):
         """A stub handler for the testing purposes."""
 
-        return PERMISSION_DENIED_STAGE
+        return PERMISSION_DENIED_STATE
 
 
 class TestDenyingPermission(BaseTestPermission):
