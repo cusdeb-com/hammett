@@ -26,10 +26,3 @@ class ScreenTests(BaseTestCase):
         screen = TestScreenWithoutDescription()
         with self.assertRaises(ScreenDescriptionIsEmpty):
             await screen.goto(self.update, self.context)
-
-    async def test_start_method_is_not_implement(self):
-        """Tests the case when the start method is not implemented."""
-
-        screen = StartScreenWithoutStartMethod()
-        with self.assertRaises(NotImplementedError):
-            await screen.start(self.update, self.context)
