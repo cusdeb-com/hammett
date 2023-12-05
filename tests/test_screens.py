@@ -2,8 +2,9 @@
 
 # ruff: noqa: ANN101, ANN201
 
+from hammett.core import Screen
 from hammett.core.exceptions import ScreenDescriptionIsEmpty
-from hammett.core.screen import Screen, StartScreen
+from hammett.core.screen import StartScreen
 from hammett.test.base import BaseTestCase
 
 

@@ -3,7 +3,7 @@
 # ruff: noqa: ANN001, ANN101, ANN201, ANN202
 
 from hammett.conf import settings
-from hammett.core.button import Button
+from hammett.core import Button
 from hammett.core.constants import SourcesTypes
 from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.hiders import (

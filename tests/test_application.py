@@ -7,8 +7,7 @@ import re
 
 from telegram.ext import CommandHandler
 
-from hammett.core import Application
-from hammett.core.button import Button
+from hammett.core import Application, Button
 from hammett.core.constants import DEFAULT_STATE, SourcesTypes
 from hammett.core.exceptions import TokenIsNotSpecified
 from hammett.core.handlers import calc_checksum

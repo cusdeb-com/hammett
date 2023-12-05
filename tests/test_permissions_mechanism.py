@@ -4,11 +4,10 @@
 
 import pytest
 
-from hammett.core import Application
+from hammett.core import Application, Screen
 from hammett.core.constants import DEFAULT_STATE
 from hammett.core.handlers import register_button_handler
 from hammett.core.permissions import Permission, ignore_permissions
-from hammett.core.screen import Screen
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import override_settings
 from tests.base import (
