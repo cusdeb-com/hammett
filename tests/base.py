@@ -4,8 +4,9 @@
 
 from abc import ABC
 
+from hammett.core import Screen
 from hammett.core.permissions import Permission
-from hammett.core.screen import Screen, StartScreen
+from hammett.core.screen import StartScreen
 
 PERMISSION_DENIED_STATE = '1'
 

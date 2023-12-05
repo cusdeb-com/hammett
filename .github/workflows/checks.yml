@@ -41,4 +41,5 @@ jobs:
         run: pip install -r requirements-dev.txt
 
       - name: Run tests
-        run: env PYTHONPATH=$(pwd) python3 tests/run_tests.py
+        run: (env PYTHONPATH=$(pwd) HAMMETT_SETTINGS_MODULE=tests.settings 
+              pytest --dist=loadgroup --numprocesses=auto)

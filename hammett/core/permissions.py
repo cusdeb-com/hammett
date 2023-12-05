@@ -71,16 +71,20 @@ class Permission(Screen):
         """
 
         @wraps(handler)
-        async def wrapper(*args: 'Any', **kwargs: 'Any') -> 'Any':
+        async def wrapper(
+            screen: 'Screen',
+            update: 'Update',
+            context: 'CallbackContext[BT, UD, CD, BD]',
+        ) -> 'Any':
             if asyncio.iscoroutinefunction(self.has_permission):
-                permitted = await self.has_permission(*args, **kwargs)
+                permitted = await self.has_permission(update, context)
             else:
-                permitted = self.has_permission(*args, **kwargs)
+                permitted = self.has_permission(update, context)
 
             if permitted:
-                return await handler(*args, **kwargs)
+                return await handler(screen, update, context)  # type: ignore[arg-type]
 
-            return await self.handle_permission_denied(*args, **kwargs)
+            return await self.handle_permission_denied(update, context)
 
         return cast('Handler', wrapper)
 

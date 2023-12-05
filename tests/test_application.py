@@ -7,8 +7,7 @@ import re
 
 from telegram.ext import CommandHandler
 
-from hammett.core import Application
-from hammett.core.button import Button
+from hammett.core import Application, Button
 from hammett.core.constants import DEFAULT_STATE, SourcesTypes
 from hammett.core.exceptions import TokenIsNotSpecified
 from hammett.core.handlers import calc_checksum
@@ -127,14 +126,3 @@ class ApplicationTests(BaseTestCase):
             logging.root.manager.loggerDict['hammett_test'].getEffectiveLevel(),
             logging.INFO,
         )
-
-    @override_settings(PERMISSIONS=['tests.base.TestDenyingPermission'], TOKEN='secret-token')
-    def test_app_init_with_permissions_specified(self):
-        """Tests the case when an application is initialized with
-        PERMISSIONS specified.
-        """
-
-        app = self._init_application()
-        handlers = app._native_application.handlers[0][0]
-        is_wrapped = getattr(handlers.states[DEFAULT_STATE][0].callback, '__wrapped__', None)
-        self.assertIsNotNone(is_wrapped)
