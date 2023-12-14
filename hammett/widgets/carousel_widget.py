@@ -92,27 +92,28 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
         else:
             config.keyboard = await self._build_keyboard(current_images, _START_POSITION)
 
-        await self.render(update, context, config=config, extra_data={'images': current_images})
+        await self.render(update, context, config=config, carousel_images=current_images)
         return DEFAULT_STATE
 
     async def _post_render(
         self: 'Self',
-        update: 'Update | None',
+        update: 'Update | None',  # noqa: ARG002
         context: 'CallbackContext[BT, UD, CD, BD]',
         message: 'Message',
-        _config: 'FinalRenderConfig',
-        extra_data: 'Any | None',
+        config: 'FinalRenderConfig',  # noqa: ARG002
+        carousel_images: list[list[str]] | None = None,
+        **_kwargs: 'Any',
     ) -> None:
         """Saves to user_data images after screen rendering if it new message."""
 
-        if (not update or not update.callback_query) and extra_data:
+        if carousel_images is not None:
             state_key = await self._get_state_key(
                 chat_id=message.chat_id,
                 message_id=message.message_id,
             )
             try:
                 context.user_data[state_key] = {  # type: ignore[index]
-                    'images': extra_data.get('images', []),
+                    'images': carousel_images,
                 }
             except TypeError as exc:  # raised when messages are sent from jobs
                 if not context._application.persistence:  # noqa: SLF001
@@ -125,7 +126,7 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
                 user_data = cast('UD', {**context._application.user_data})  # noqa: SLF001
                 user_data[message.chat_id].update({  # type: ignore[index]
                     state_key: {
-                        'images': extra_data.get('images', []),
+                        'images': carousel_images,
                         'position': _START_POSITION,
                     },
                 })
@@ -363,15 +364,12 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
-        extra_data: 'Any | None' = None,
+        carousel_images: list[list[str]] | None = None,
+        **_kwargs: 'Any',
     ) -> 'State':
         """Handles the case when the widget is used as a notification."""
 
         config = config or RenderConfig()
         config.as_new_message = True
 
-        images = None
-        if extra_data:
-            images = extra_data.get('images', None)
-
-        return await self._init(None, context, config=config, images=images)
+        return await self._init(None, context, config=config, images=carousel_images)
