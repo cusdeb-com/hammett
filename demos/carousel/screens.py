@@ -20,3 +20,6 @@ class MainMenu(CarouselWidget):
         [settings.MEDIA_ROOT / '09.jpg', caption],
         [settings.MEDIA_ROOT / '10.jpg', homepage],
     ]
+
+    async def start(self, update, context):
+        return await self.jump(update, context)
