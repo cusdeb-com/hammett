@@ -18,6 +18,17 @@ if TYPE_CHECKING:
     from hammett.core.hiders import Hider, HidersChecker
     from hammett.types import Handler, Source
 
+_HANDLER_SOURCES_TYPES = (
+    SourcesTypes.GOTO_SOURCE_TYPE,
+    SourcesTypes.HANDLER_SOURCE_TYPE,
+    SourcesTypes.JUMP_SOURCE_TYPE,
+)
+
+_SHORTCUT_SOURCES_TYPES = (
+    SourcesTypes.GOTO_SOURCE_TYPE,
+    SourcesTypes.JUMP_SOURCE_TYPE,
+)
+
 
 class Button:
     """The class implements the interface of a button."""
@@ -52,14 +63,18 @@ class Button:
 
         from hammett.core.screen import Screen
 
-        if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
+        if self.source_type in _SHORTCUT_SOURCES_TYPES:
             screen = cast('type[Screen]', self.source)
             if issubclass(screen, Screen):
-                self.source_goto = cast('Handler', screen().goto)
+                if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
+                    self.source_shortcut = cast('Handler', screen().goto)
+                else:
+                    self.source_shortcut = cast('Handler', screen().jump)
             else:
                 msg = (
                     f'The source "{self.source}" must be a subclass of Screen if its '
-                    f'source_type is SourcesTypes.GOTO_SOURCE_TYPE'
+                    f'source_type is either SourcesTypes.GOTO_SOURCE_TYPE or '
+                    f'SourcesTypes.JUMP_SOURCE_TYPE'
                 )
                 raise TypeError(msg)
 
@@ -122,9 +137,9 @@ class Button:
 
         visibility = await self._specify_visibility(update, context)
 
-        if self.source_type in (SourcesTypes.GOTO_SOURCE_TYPE, SourcesTypes.HANDLER_SOURCE_TYPE):
-            if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE and self.source_goto:
-                source = self.source_goto
+        if self.source_type in _HANDLER_SOURCES_TYPES:
+            if self.source_type in _SHORTCUT_SOURCES_TYPES and self.source_shortcut:
+                source = self.source_shortcut
             else:
                 source = cast('Handler', self.source)
 
