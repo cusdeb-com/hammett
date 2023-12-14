@@ -48,15 +48,15 @@ class BaseWidget(Screen):
         context: 'CallbackContext[BT, UD, CD, BD]',
         message: 'Message | tuple[Message]',
         config: 'FinalRenderConfig',
-        extra_data: 'Any | None',
+        **kwargs: 'Any',
     ) -> None:
         """Save to user_data initialized state after screen rendering if it's new message."""
-        await super()._post_render(update, context, message, config, extra_data)
+        await super()._post_render(update, context, message, config, **kwargs)
 
         if isinstance(message, tuple):
             message = message[-1]
 
-        if extra_data is not None:
+        if kwargs:
             state_key = await self._get_state_key(
                 chat_id=message.chat_id,
                 message_id=message.message_id,
@@ -67,7 +67,7 @@ class BaseWidget(Screen):
                     context,
                     message,
                     config,
-                    extra_data,
+                    **kwargs,
                 )
             except TypeError as exc:  # raised when messages are sent from jobs
                 if not context._application.persistence:  # noqa: SLF001
@@ -85,7 +85,7 @@ class BaseWidget(Screen):
                             context,
                             message,
                             config,
-                            extra_data,
+                            **kwargs,
                         ),
                     })
                 except KeyError:
@@ -102,11 +102,11 @@ class BaseWidget(Screen):
 
     async def _initialized_state(
         self: 'Self',
-        update: 'Update | None',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        message: 'Message',
-        config: 'FinalRenderConfig',
-        extra_data: 'Any',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+        _message: 'Message',
+        _config: 'FinalRenderConfig',
+        **_kwargs: 'Any',
     ) -> 'dict[Any, Any]':
         """Return the post-initialization widget state to be saved in context."""
         raise NotImplementedError
@@ -222,11 +222,12 @@ class BaseChoiceWidget(BaseWidget):
         _context: 'CallbackContext[BT, UD, CD, BD]',
         _message: 'Message',
         _config: 'FinalRenderConfig',
-        extra_data: 'Any',
+        choices: 'Choices | None' = None,
+        **kwargs: 'Any',  # noqa: ARG002
     ) -> 'dict[Any, Any]':
         """Return the post-initialization widget state to be saved in context."""
         return {
-            'choices': extra_data.get('choices', ()),
+            'choices': choices or (),
         }
 
     async def _build_keyboard(
@@ -291,7 +292,7 @@ class BaseChoiceWidget(BaseWidget):
             update,
             context,
             config=config,
-            extra_data={'choices': initialized_choices},
+            choices=initialized_choices,
         )
         return DEFAULT_STATE
 
@@ -378,15 +379,12 @@ class BaseChoiceWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
-        extra_data: 'Any | None' = None,
+        choices: 'Choices | None' = None,
+        **_kwargs: 'Any',
     ) -> 'State':
         """Handle the case when the widget is used as a notification."""
         config = config or RenderConfig()
         config.as_new_message = True
-
-        choices = None
-        if extra_data:
-            choices = extra_data.get('choices', None)
 
         return await self._init(None, context, config, choices=choices)
 

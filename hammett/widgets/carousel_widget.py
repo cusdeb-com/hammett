@@ -92,7 +92,7 @@ class CarouselWidget(BaseWidget):
                 _START_POSITION,
             )
 
-        await self.render(update, context, config=config, extra_data={'images': current_images})
+        await self.render(update, context, config=config, images=current_images)
         return DEFAULT_STATE
 
     async def _initialized_state(
@@ -101,11 +101,11 @@ class CarouselWidget(BaseWidget):
         _context: 'CallbackContext[BT, UD, CD, BD]',
         _message: 'Message | tuple[Message]',
         _config: 'FinalRenderConfig',
-        extra_data: 'Any',
+        **kwargs: 'Any',
     ) -> 'dict[Any, Any]':
         """Return the post-initialization widget state to be saved in context."""
         return {
-            'images': extra_data.get('images', []),
+            'images': kwargs.get('images', []),
         }
 
     async def _do_nothing(
@@ -285,14 +285,11 @@ class CarouselWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
-        extra_data: 'Any | None' = None,
+        images: list[list[str]] | None = None,
+        **_kwargs: 'Any',
     ) -> 'State':
         """Handle the case when the widget is used as a notification."""
         config = config or RenderConfig()
         config.as_new_message = True
-
-        images = None
-        if extra_data:
-            images = extra_data.get('images', None)
 
         return await self._init(None, context, config=config, images=images)
