@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, TypedDict, cast
 
 if TYPE_CHECKING:
     from os import PathLike
@@ -13,6 +13,8 @@ if TYPE_CHECKING:
 DEFAULT_STATE = cast('State', '0')
 
 EMPTY_KEYBOARD: 'Keyboard' = []
+
+LAST_SENT_MSG_KEY = 'last_sent_msg'
 
 
 class SourcesTypes(Enum):
@@ -39,6 +41,7 @@ class RenderConfig:
     attachments: 'Attachments | None' = None
     document: 'Document | None' = None
     keyboard: 'Keyboard | None' = None
+    hide_keyboard: bool = False
 
 
 @dataclass
@@ -48,3 +51,17 @@ class FinalRenderConfig(RenderConfig):
     """
 
     keyboard: 'Keyboard' = field(default_factory=list)
+
+
+class SerializedFinalRenderConfig(TypedDict):
+    """The class represents a serialized final config after using `dataclasses.asdict`."""
+
+    chat_id: int | None
+    message_id: int
+    as_new_message: bool
+    cache_covers: bool
+    cover: 'str | PathLike[str]'
+    description: str
+    document: 'Document | None'
+    keyboard: 'Keyboard'
+    hide_keyboard: bool
