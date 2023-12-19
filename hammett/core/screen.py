@@ -17,7 +17,7 @@ from telegram import (
     Message,
 )
 from telegram._files.photosize import PhotoSize
-from telegram._utils.defaultvalue import DEFAULT_NONE, DefaultValue
+from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.constants import ParseMode
 
 from hammett.core import handlers
@@ -35,12 +35,13 @@ if TYPE_CHECKING:
     from typing import Any
 
     from telegram import CallbackQuery, Update
+    from telegram._utils.defaultvalue import DefaultValue
     from telegram._utils.types import FileInput
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.types import Attachments, Document, Keyboard, Routes, State
+    from hammett.types import Document, Keyboard, Routes, State
 
 LOGGER = logging.getLogger(__name__)
 
@@ -131,33 +132,32 @@ class Screen:
 
     async def _get_edit_render_method(
         self: 'Self',
-        update: 'Update',
-        *,
-        cache_covers: bool = False,
-        cover: 'str | PathLike[str] | PhotoSize' = '',
-        description: str = '',
-        document: 'Document | None' = None,
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        config: 'FinalRenderConfig',
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
         """Returns the render method and its kwargs for editing a message."""
 
-        kwargs: 'Any' = {}
+        kwargs: 'Any' = {
+            'chat_id': config.chat_id,
+            'message_id': config.message_id,
+        }
+
         send: 'Callable[..., Awaitable[Any]] | None' = None
+        if config.document or config.cover:
+            media = config.document or config.cover
+            media_kwargs = await self._get_edit_render_method_media_kwargs(
+                cache_covers=config.cache_covers,
+                description=config.description,
+                media=media,
+            )
+            kwargs.update(media_kwargs)
 
-        query = await self.get_callback_query(update)
-        if query:
-            if document or cover:
-                media = document or cover
-                kwargs = await self._get_edit_render_method_media_kwargs(
-                    cache_covers=cache_covers,
-                    description=description,
-                    media=media,
-                )
+            send = context.bot.edit_message_media
+        else:
+            kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
+            kwargs['text'] = config.description
 
-                send = query.edit_message_media
-            else:
-                kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
-                kwargs['text'] = description
-                send = query.edit_message_text
+            send = context.bot.edit_message_text
 
         return send, kwargs
 
@@ -204,43 +204,38 @@ class Screen:
     async def _get_new_message_render_method(
         self: 'Self',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        *,
-        cache_covers: bool = False,
-        chat_id: int = 0,
-        cover: 'str | PathLike[str]' = '',
-        description: str = '',
-        document: 'Document | None' = None,
-        attachments: 'Attachments | None' = None,
+        config: 'FinalRenderConfig',
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
         """Returns the render method and its kwargs for sending a new message."""
 
         kwargs: 'Any' = {
-            'chat_id': chat_id or context._chat_id,  # noqa: SLF001
+            'chat_id': config.chat_id,
             'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
         }
 
+        cover = config.cover
         if cover:
-            if self._is_url(cover) and cache_covers:
+            if self._is_url(cover) and config.cache_covers:
                 cover = f'{cover}?{uuid4()}'
-            elif cache_covers:
+            elif config.cache_covers:
                 cover_file_id = self._cached_covers.get(cover)
                 cover = cover_file_id if cover_file_id else cover
 
-            kwargs['caption'] = description
+            kwargs['caption'] = config.description
             kwargs['photo'] = cover
 
             send = context.bot.send_photo
-        elif document:
-            kwargs['document'] = self._create_input_media_document(document=document).media
-            kwargs['caption'] = description
+        elif config.document:
+            kwargs['document'] = self._create_input_media_document(document=config.document).media
+            kwargs['caption'] = config.description
 
             send = context.bot.send_document
-        elif attachments:
-            kwargs['media'] = attachments
+        elif config.attachments:
+            kwargs['media'] = config.attachments
 
             send = context.bot.send_media_group
         else:
-            kwargs['text'] = description
+            kwargs['text'] = config.description
 
             send = context.bot.send_message
 
@@ -265,6 +260,7 @@ class Screen:
             final_config.cache_covers or await self.get_cache_covers(update, context)
         )
         final_config.cover = final_config.cover or await self.get_cover(update, context)
+        final_config.chat_id = final_config.chat_id or context._chat_id  # noqa: SLF001
 
         final_config.description = (
             final_config.description or await self.get_description(update, context)
@@ -279,6 +275,11 @@ class Screen:
 
         if not config or config.keyboard is None:
             final_config.keyboard = final_config.keyboard or self.setup_keyboard()
+
+        if not final_config.message_id and update:
+            query = await self.get_callback_query(update)
+            if query and query.message:
+                final_config.message_id = query.message.message_id
 
         return final_config
 
@@ -305,23 +306,9 @@ class Screen:
         send: 'Callable[..., Awaitable[Any]] | None' = None
         kwargs: 'Any' = {}
         if config.as_new_message:
-            send, kwargs = await self._get_new_message_render_method(
-                context,
-                cache_covers=config.cache_covers,
-                chat_id=config.chat_id,
-                cover=config.cover,
-                description=config.description,
-                document=config.document,
-                attachments=config.attachments,
-            )
-        elif update:
-            send, kwargs = await self._get_edit_render_method(
-                update,
-                cache_covers=config.cache_covers,
-                cover=config.cover,
-                description=config.description,
-                document=config.document,
-            )
+            send, kwargs = await self._get_new_message_render_method(context, config)
+        else:
+            send, kwargs = await self._get_edit_render_method(context, config)
 
         message: 'Message | None' = None
         if send and kwargs:
