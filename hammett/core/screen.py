@@ -129,29 +129,32 @@ class Screen:
 
     async def _get_edit_render_method(
         self: 'Self',
-        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
         config: 'FinalRenderConfig',
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
         """Returns the render method and its kwargs for editing a message."""
 
-        kwargs: 'Any' = {}
+        kwargs: 'Any' = {
+            'chat_id': config.chat_id,
+            'message_id': config.message_id,
+        }
+
         send: 'Callable[..., Awaitable[Any]] | None' = None
+        if config.document or config.cover:
+            media = config.document or config.cover
+            media_kwargs = await self._get_edit_render_method_media_kwargs(
+                cache_covers=config.cache_covers,
+                description=config.description,
+                media=media,
+            )
+            kwargs.update(media_kwargs)
 
-        query = await self.get_callback_query(update)
-        if query:
-            if config.document or config.cover:
-                media = config.document or config.cover
-                kwargs = await self._get_edit_render_method_media_kwargs(
-                    cache_covers=config.cache_covers,
-                    description=config.description,
-                    media=media,
-                )
+            send = context.bot.edit_message_media
+        else:
+            kwargs['text'] = config.description
+            kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
 
-                send = query.edit_message_media
-            else:
-                kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
-                kwargs['text'] = config.description
-                send = query.edit_message_text
+            send = context.bot.edit_message_text
 
         return send, kwargs
 
@@ -202,7 +205,7 @@ class Screen:
         """Returns the render method and its kwargs for sending a new message."""
 
         kwargs: 'Any' = {
-            'chat_id': config.chat_id or context._chat_id,  # noqa: SLF001
+            'chat_id': config.chat_id,
             'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
         }
 
@@ -244,6 +247,7 @@ class Screen:
             final_config.cache_covers or await self.get_cache_covers(update, context)
         )
         final_config.cover = final_config.cover or await self.get_cover(update, context)
+        final_config.chat_id = final_config.chat_id or context._chat_id  # noqa: SLF001
 
         final_config.description = (
             final_config.description or await self.get_description(update, context)
@@ -255,6 +259,11 @@ class Screen:
 
         if not config or config.keyboard is None:
             final_config.keyboard = final_config.keyboard or self.setup_keyboard()
+
+        if not final_config.message_id and update:
+            query = await self.get_callback_query(update)
+            if query and query.message:
+                final_config.message_id = query.message.message_id
 
         return final_config
 
@@ -282,8 +291,8 @@ class Screen:
         kwargs: 'Any' = {}
         if config.as_new_message:
             send, kwargs = await self._get_new_message_render_method(context, config)
-        elif update:
-            send, kwargs = await self._get_edit_render_method(update, config)
+        else:
+            send, kwargs = await self._get_edit_render_method(context, config)
 
         message: 'Message | None' = None
         if send and kwargs:
