@@ -2,6 +2,7 @@
 (i.e., cover, description and keyboard).
 """
 
+import contextlib
 import logging
 import re
 from dataclasses import asdict
@@ -19,6 +20,7 @@ from telegram import (
 from telegram._files.photosize import PhotoSize
 from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.constants import ParseMode
+from telegram.error import BadRequest
 
 from hammett.core import handlers
 from hammett.core.constants import DEFAULT_STATE, EMPTY_KEYBOARD, FinalRenderConfig, RenderConfig
@@ -29,6 +31,7 @@ from hammett.core.exceptions import (
     ScreenDocumentDataIsEmpty,
     ScreenRouteIsEmpty,
 )
+from hammett.utils.render_config import get_last_msg_config, save_last_msg_config
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -41,6 +44,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
+    from hammett.core.constants import SerializedFinalRenderConfig
     from hammett.types import Document, Keyboard, Routes, State
 
 LOGGER = logging.getLogger(__name__)
@@ -55,6 +59,7 @@ class Screen:
     document: 'Document | None' = None
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
     routes: 'Routes | None' = None
+    hide_keyboard: bool = False
 
     _cached_covers: dict[str | PathLike[str], str] = {}
     _initialized: bool = False
@@ -241,6 +246,28 @@ class Screen:
 
         return send, kwargs
 
+    async def _hide_keyboard(
+        self: 'Self',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        last_msg_config: 'SerializedFinalRenderConfig',
+    ) -> None:
+        """Removes the keyboard from the old message, leaving the cover and
+        description unchanged.
+        """
+
+        config = FinalRenderConfig(**last_msg_config)
+        send, kwargs = await self._get_edit_render_method(context, config)
+        if send:
+            with contextlib.suppress(BadRequest):
+                await send(
+                    reply_markup=await self._create_markup_keyboard(
+                        EMPTY_KEYBOARD,
+                        None,
+                        context,
+                    ),
+                    **kwargs,
+                )
+
     @staticmethod
     def _is_url(cover: 'str | PathLike[str]') -> bool:
         """Checks if the cover is specified using either a local path or a URL."""
@@ -261,6 +288,9 @@ class Screen:
         )
         final_config.cover = final_config.cover or await self.get_cover(update, context)
         final_config.chat_id = final_config.chat_id or context._chat_id  # noqa: SLF001
+        final_config.hide_keyboard = (
+            final_config.hide_keyboard or await self.get_hide_keyboard(update, context)
+        )
 
         final_config.description = (
             final_config.description or await self.get_description(update, context)
@@ -332,13 +362,21 @@ class Screen:
 
     async def _post_render(
         self: 'Self',
-        update: 'Update | None',
+        update: 'Update | None',  # noqa: ARG002
         context: 'CallbackContext[BT, UD, CD, BD]',
         message: 'Message',
         config: 'FinalRenderConfig',
-        extra_data: 'Any | None',
+        extra_data: 'Any | None',  # noqa: ARG002
     ) -> None:
         """Runs after screen rendering."""
+
+        if config.as_new_message:
+            prev_msg_config = await get_last_msg_config(context, message)
+            if prev_msg_config and prev_msg_config['hide_keyboard']:
+                await self._hide_keyboard(context, prev_msg_config)
+
+        if config.hide_keyboard:
+            await save_last_msg_config(context, config, message)
 
     #
     # Public methods
@@ -411,6 +449,15 @@ class Screen:
         """Returns the `document` attribute of the screen."""
 
         return self.document
+
+    async def get_hide_keyboard(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> bool:
+        """Returns the `hide_keyboard` attribute of the screen."""
+
+        return self.hide_keyboard
 
     async def get_payload(
         self: 'Self',
