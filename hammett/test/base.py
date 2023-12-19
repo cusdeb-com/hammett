@@ -33,11 +33,43 @@ import unittest
 from typing import TYPE_CHECKING
 
 from asgiref.sync import async_to_sync
-from telegram import Update
+from telegram import Bot, Update
+from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.ext import Application, CallbackContext
 
+from hammett.conf import settings
+
 if TYPE_CHECKING:
+    from telegram._utils.types import JSONDict, ODVInput
     from typing_extensions import Self
+
+
+class TestBot(Bot):
+    """Class that represents a bot for testing purposes."""
+
+    async def _do_post(
+        self: 'Self',
+        endpoint: str,  # noqa: ARG002
+        data: 'JSONDict',  # noqa: ARG002
+        *,
+        read_timeout: 'ODVInput[float]' = DEFAULT_NONE,  # noqa: ARG002
+        write_timeout: 'ODVInput[float]' = DEFAULT_NONE,  # noqa: ARG002
+        connect_timeout: 'ODVInput[float]' = DEFAULT_NONE,  # noqa: ARG002
+        pool_timeout: 'ODVInput[float]' = DEFAULT_NONE,  # noqa: ARG002
+    ) -> 'bool | JSONDict | list[JSONDict]':
+        """Overrides the method not to send any request."""
+
+        return {}
+
+
+class TestContext(CallbackContext):  # type: ignore[type-arg]
+    """Class representing CallbackContext for testing purposes."""
+
+    @property
+    def bot(self: 'Self') -> 'TestBot':
+        """Returns the test bot instance."""
+
+        return TestBot(token=settings.TOKEN, base_file_url='')
 
 
 class BaseTestCase(unittest.TestCase):
@@ -49,7 +81,7 @@ class BaseTestCase(unittest.TestCase):
     context: 'CallbackContext'  # type: ignore[type-arg]
 
     def __init__(self: 'Self', method_name: str) -> None:
-        self.context: 'CallbackContext' = CallbackContext(  # type: ignore[type-arg]
+        self.context: 'CallbackContext' = TestContext(  # type: ignore[type-arg]
             Application.builder(),  # type: ignore[arg-type]
         )
         self.update = Update(1)
