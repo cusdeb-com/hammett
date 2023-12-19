@@ -30,7 +30,8 @@ class SourcesTypes(Enum):
 class RenderConfig:
     """The class that represents a config for the Screen render method."""
 
-    chat_id: int = 0
+    chat_id: int | None = 0
+    message_id: int = 0
     as_new_message: bool = False
     cache_covers: bool = False
     cover: 'str | PathLike[str]' = ''
