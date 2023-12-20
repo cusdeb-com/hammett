@@ -342,6 +342,7 @@ class CarouselWidget(BaseWidget):
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
     ) -> 'State':
         """Handles the case when the widget is passed to Button as `GOTO_SOURCE_TYPE`."""
 
@@ -351,6 +352,7 @@ class CarouselWidget(BaseWidget):
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
     ) -> 'State':
         """Handles the case when the widget is used as StartScreen."""
 
