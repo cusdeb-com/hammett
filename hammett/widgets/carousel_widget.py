@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING, cast
 
 from hammett.core import Button
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
-from hammett.core.exceptions import ImproperlyConfigured
+from hammett.core.exceptions import ImproperlyConfigured, MissingPersistence
 from hammett.core.handlers import register_button_handler
 from hammett.widgets.base import BaseWidget
-from hammett.widgets.exceptions import FailedToGetStateKey, MissingPersistence
+from hammett.widgets.exceptions import FailedToGetStateKey
 
 if TYPE_CHECKING:
     from typing import Any
