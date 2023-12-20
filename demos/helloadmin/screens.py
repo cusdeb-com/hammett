@@ -32,7 +32,7 @@ class NotAdminConfirmation(Screen):
 
         settings.ADMIN_GROUP.remove(user.id)
 
-        await main_menu.render(update, context)
+        await main_menu.goto(update, context)
         return DEFAULT_STATE
 
 
@@ -65,24 +65,15 @@ class MainMenu(StartScreen):
     # Public methods
     #
 
-    async def render(
-        self,
-        update,
-        context,
-        *,
-        config: 'RenderConfig | None' = None,
-    ):
+    async def get_config(self, update, _context, **_kwargs):
         user = update.effective_user
         user_status = await self._get_user_status(user.id)
         description = self.text_map[user_status].format(user_status=user_status)
 
-        config = config or RenderConfig()
+        config = RenderConfig()
         config.description = description
-        await super().render(
-            update,
-            context,
-            config=config,
-        )
+
+        return config
 
     def setup_keyboard(self):
         return [
