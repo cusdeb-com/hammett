@@ -376,6 +376,16 @@ class Screen:
 
         return self.cache_covers
 
+    async def get_config(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
+    ) -> 'RenderConfig':
+        """Returns the Screen's config."""
+
+        return RenderConfig()
+
     async def get_cover(
         self: 'Self',
         _update: 'Update | None',
@@ -447,22 +457,26 @@ class Screen:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        **_kwargs: 'Any',
+        **kwargs: 'Any',
     ) -> 'State':
         """Switches to the screen re-rendering the previous message."""
 
-        await self.render(update, context)
+        config = await self.get_config(update, context, **kwargs)
+
+        await self.render(update, context, config=config)
         return DEFAULT_STATE
 
     async def jump(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        **_kwargs: 'Any',
+        **kwargs: 'Any',
     ) -> 'State':
         """Switches to the screen sending it as a new message."""
 
-        config = RenderConfig(as_new_message=True)
+        config = await self.get_config(update, context, **kwargs)
+        config.as_new_message = True
+
         await self.render(update, context, config=config)
         return DEFAULT_STATE
 
