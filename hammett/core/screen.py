@@ -2,6 +2,7 @@
 (i.e., cover, description and keyboard).
 """
 
+import contextlib
 import logging
 import re
 from dataclasses import asdict
@@ -19,6 +20,7 @@ from telegram import (
 from telegram._files.photosize import PhotoSize
 from telegram._utils.defaultvalue import DEFAULT_NONE, DefaultValue
 from telegram.constants import ParseMode
+from telegram.error import BadRequest
 
 from hammett.core import handlers
 from hammett.core.constants import DEFAULT_STATE, EMPTY_KEYBOARD, FinalRenderConfig, RenderConfig
@@ -28,6 +30,7 @@ from hammett.core.exceptions import (
     ScreenDescriptionIsEmpty,
     ScreenDocumentDataIsEmpty,
 )
+from hammett.utils.render_config import get_last_msg_config, save_last_msg_config
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -39,6 +42,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
+    from hammett.core.constants import SerializedFinalRenderConfig
     from hammett.types import Document, Keyboard, State
 
 LOGGER = logging.getLogger(__name__)
@@ -52,6 +56,7 @@ class Screen:
     description: str = ''
     document: 'Document | None' = None
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
+    hide_keyboard: bool = False
 
     _cached_covers: dict[str | PathLike[str], str] = {}
     _initialized: bool = False
@@ -129,33 +134,32 @@ class Screen:
 
     async def _get_edit_render_method(
         self: 'Self',
-        update: 'Update',
-        *,
-        cache_covers: bool = False,
-        cover: 'str | PathLike[str] | PhotoSize' = '',
-        description: str = '',
-        document: 'Document | None' = None,
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        config: 'FinalRenderConfig',
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
         """Returns the render method and its kwargs for editing a message."""
 
-        kwargs: 'Any' = {}
+        kwargs: 'Any' = {
+            'chat_id': config.chat_id,
+            'message_id': config.message_id,
+        }
+
         send: 'Callable[..., Awaitable[Any]] | None' = None
+        if config.document or config.cover:
+            media = config.document or config.cover
+            media_kwargs = await self._get_edit_render_method_media_kwargs(
+                cache_covers=config.cache_covers,
+                description=config.description,
+                media=media,
+            )
+            kwargs.update(media_kwargs)
 
-        query = await self.get_callback_query(update)
-        if query:
-            if document or cover:
-                media = document or cover
-                kwargs = await self._get_edit_render_method_media_kwargs(
-                    cache_covers=cache_covers,
-                    description=description,
-                    media=media,
-                )
+            send = context.bot.edit_message_media
+        else:
+            kwargs['text'] = config.description
+            kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
 
-                send = query.edit_message_media
-            else:
-                kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
-                kwargs['text'] = description
-                send = query.edit_message_text
+            send = context.bot.edit_message_text
 
         return send, kwargs
 
@@ -201,36 +205,55 @@ class Screen:
     async def _get_new_message_render_method(
         self: 'Self',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        *,
-        cache_covers: bool = False,
-        chat_id: int = 0,
-        cover: 'str | PathLike[str]' = '',
-        description: str = '',
+        config: 'FinalRenderConfig',
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
         """Returns the render method and its kwargs for sending a new message."""
 
         kwargs: 'Any' = {
-            'chat_id': chat_id or context._chat_id,  # noqa: SLF001
+            'chat_id': config.chat_id,
             'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
         }
 
+        cover = config.cover
         if cover:
-            if self._is_url(cover) and cache_covers:
+            if self._is_url(cover) and config.cache_covers:
                 cover = f'{cover}?{uuid4()}'
-            elif cache_covers:
+            elif config.cache_covers:
                 cover_file_id = self._cached_covers.get(cover)
                 cover = cover_file_id if cover_file_id else cover
 
-            kwargs['caption'] = description
+            kwargs['caption'] = config.description
             kwargs['photo'] = cover
 
             send = context.bot.send_photo
         else:
-            kwargs['text'] = description
+            kwargs['text'] = config.description
 
             send = context.bot.send_message
 
         return send, kwargs
+
+    async def _hide_keyboard(
+        self: 'Self',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        last_msg_config: 'SerializedFinalRenderConfig',
+    ) -> None:
+        """Removes the keyboard from the old message, leaving the cover and
+        description unchanged.
+        """
+
+        config = FinalRenderConfig(**last_msg_config)
+        send, kwargs = await self._get_edit_render_method(context, config)
+        if send:
+            with contextlib.suppress(BadRequest):
+                await send(
+                    reply_markup=await self._create_markup_keyboard(
+                        EMPTY_KEYBOARD,
+                        None,
+                        context,
+                    ),
+                    **kwargs,
+                )
 
     @staticmethod
     def _is_url(cover: 'str | PathLike[str]') -> bool:
@@ -251,6 +274,10 @@ class Screen:
             final_config.cache_covers or await self.get_cache_covers(update, context)
         )
         final_config.cover = final_config.cover or await self.get_cover(update, context)
+        final_config.chat_id = final_config.chat_id or context._chat_id  # noqa: SLF001
+        final_config.hide_keyboard = (
+            final_config.hide_keyboard or await self.get_hide_keyboard(update, context)
+        )
 
         final_config.description = (
             final_config.description or await self.get_description(update, context)
@@ -262,6 +289,11 @@ class Screen:
 
         if not config or config.keyboard is None:
             final_config.keyboard = final_config.keyboard or self.setup_keyboard()
+
+        if not final_config.message_id and update:
+            query = await self.get_callback_query(update)
+            if query and query.message:
+                final_config.message_id = query.message.message_id
 
         return final_config
 
@@ -288,21 +320,9 @@ class Screen:
         send: 'Callable[..., Awaitable[Any]] | None' = None
         kwargs: 'Any' = {}
         if config.as_new_message:
-            send, kwargs = await self._get_new_message_render_method(
-                context,
-                cache_covers=config.cache_covers,
-                chat_id=config.chat_id,
-                cover=config.cover,
-                description=config.description,
-            )
-        elif update:
-            send, kwargs = await self._get_edit_render_method(
-                update,
-                cache_covers=config.cache_covers,
-                cover=config.cover,
-                description=config.description,
-                document=config.document,
-            )
+            send, kwargs = await self._get_new_message_render_method(context, config)
+        else:
+            send, kwargs = await self._get_edit_render_method(context, config)
 
         message: 'Message | None' = None
         if send and kwargs:
@@ -319,13 +339,21 @@ class Screen:
 
     async def _post_render(
         self: 'Self',
-        update: 'Update | None',
+        update: 'Update | None',  # noqa: ARG002
         context: 'CallbackContext[BT, UD, CD, BD]',
         message: 'Message',
         config: 'FinalRenderConfig',
-        extra_data: 'Any | None',
+        extra_data: 'Any | None',  # noqa: ARG002
     ) -> None:
         """Runs after screen rendering."""
+
+        if config.as_new_message:
+            prev_msg_config = await get_last_msg_config(context, message)
+            if prev_msg_config and prev_msg_config['hide_keyboard']:
+                await self._hide_keyboard(context, prev_msg_config)
+
+        if config.hide_keyboard:
+            await save_last_msg_config(context, config, message)
 
     #
     # Public methods
@@ -388,6 +416,15 @@ class Screen:
         """Returns the `document` attribute of the screen."""
 
         return self.document
+
+    async def get_hide_keyboard(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> bool:
+        """Returns the `hide_keyboard` attribute of the screen."""
+
+        return self.hide_keyboard
 
     async def get_payload(
         self: 'Self',

@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING, cast
 
 from hammett.core import Button
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
-from hammett.core.exceptions import ImproperlyConfigured
+from hammett.core.exceptions import ImproperlyConfigured, MissingPersistence
 from hammett.core.handlers import register_button_handler
 from hammett.widgets.base import BaseWidget
-from hammett.widgets.exceptions import FailedToGetStateKey, MissingPersistence
+from hammett.widgets.exceptions import FailedToGetStateKey
 
 if TYPE_CHECKING:
     from typing import Any
@@ -99,10 +99,12 @@ class CarouselWidget(BaseWidget):
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
         message: 'Message',
-        _config: 'FinalRenderConfig',
+        config: 'FinalRenderConfig',
         extra_data: 'Any | None',
     ) -> None:
         """Saves to user_data images after screen rendering if it new message."""
+
+        await super()._post_render(update, context, message, config, extra_data)
 
         if (not update or not update.callback_query) and extra_data:
             state_key = await self._get_state_key(
