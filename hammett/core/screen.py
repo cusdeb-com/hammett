@@ -447,6 +447,7 @@ class Screen:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
     ) -> 'State':
         """Switches to the screen re-rendering the previous message."""
 
@@ -457,6 +458,7 @@ class Screen:
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
     ) -> 'State':
         """Switches to the screen sending it as a new message."""
 
