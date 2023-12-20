@@ -19,6 +19,12 @@ class HiderIsUnregistered(Exception):
     """Raised when an unregistered hider is used."""
 
 
+class MissingPersistence(Exception):
+    """Raised when some feature requires persistence,
+    but it's not configured.
+    """
+
+
 class PayloadIsEmpty(Exception):
     """Raised when trying to get an empty payload."""
 
