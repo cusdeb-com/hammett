@@ -353,6 +353,16 @@ class Screen:
 
         return self.cache_covers
 
+    async def get_config(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
+    ) -> 'RenderConfig':
+        """Returns the Screen's config."""
+
+        return RenderConfig()
+
     async def get_cover(
         self: 'Self',
         _update: 'Update | None',
@@ -398,16 +408,6 @@ class Screen:
         except KeyError as exc:
             raise PayloadIsEmpty from exc
 
-    async def goto(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'State':
-        """Switches to the screen."""
-
-        await self.render(update, context)
-        return DEFAULT_STATE
-
     async def render(
         self: 'Self',
         update: 'Update | None',
@@ -430,25 +430,32 @@ class Screen:
 
         return EMPTY_KEYBOARD
 
-
-class StartScreen(Screen):
-    """The base class for the start screens (i.e, the screens
-    that show up on the /start command).
-    """
-
-    async def start(
+    async def goto(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        **kwargs: 'Any',
     ) -> 'State':
-        """Invoked on the /start command."""
+        """Switches to the screen re-rendering the previous message."""
 
-        await self.render(update, context, config=RenderConfig(as_new_message=True))
+        config = await self.get_config(update, context, **kwargs)
+
+        await self.render(update, context, config=config)
         return DEFAULT_STATE
 
+    async def jump(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        **kwargs: 'Any',
+    ) -> 'State':
+        """Switches to the screen sending it as a new message."""
 
-class NotificationScreen(Screen):
-    """The base class for implementing custom notification screens."""
+        config = await self.get_config(update, context, **kwargs)
+        config.as_new_message = True
+
+        await self.render(update, context, config=config)
+        return DEFAULT_STATE
 
     async def send(
         self: 'Self',
@@ -464,3 +471,18 @@ class NotificationScreen(Screen):
 
         await self.render(None, context, config=config, extra_data=extra_data)
         return DEFAULT_STATE
+
+
+class StartScreen(Screen):
+    """The base class for start screens (i.e, the screens
+    that show up on the /start command).
+    """
+
+    async def start(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'State':
+        """Invoked on the /start command."""
+
+        return await self.jump(update, context)

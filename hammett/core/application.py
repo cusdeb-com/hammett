@@ -57,7 +57,7 @@ class Application:
 
         self._setup()
 
-        self._builtin_handlers = ('goto', 'start')
+        self._builtin_handlers = ('goto', 'jump', 'start')
         self._entry_point = entry_point()
         self._name = name
         self._native_states = native_states or {}

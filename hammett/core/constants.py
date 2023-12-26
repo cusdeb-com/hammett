@@ -19,6 +19,7 @@ class SourcesTypes(Enum):
     """The class contains the available types of sources."""
 
     GOTO_SOURCE_TYPE = auto()
+    JUMP_SOURCE_TYPE = auto()
     HANDLER_SOURCE_TYPE = auto()
     URL_SOURCE_TYPE = auto()
 

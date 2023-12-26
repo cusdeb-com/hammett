@@ -7,7 +7,6 @@ from hammett.core import Button
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
 from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.handlers import register_button_handler
-from hammett.core.screen import NotificationScreen, StartScreen
 from hammett.widgets.base import BaseWidget
 from hammett.widgets.exceptions import FailedToGetStateKey, MissingPersistence
 
@@ -25,7 +24,7 @@ if TYPE_CHECKING:
 _END_POSITION, _START_POSITION = -1, 0
 
 
-class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
+class CarouselWidget(BaseWidget):
     """Implements the display of a carousel widget with control buttons
     for a list of images.
     """
@@ -343,15 +342,17 @@ class CarouselWidget(BaseWidget, NotificationScreen, StartScreen):
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
     ) -> 'State':
         """Handles the case when the widget is passed to Button as `GOTO_SOURCE_TYPE`."""
 
         return await self._init(update, context)
 
-    async def start(
+    async def jump(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
     ) -> 'State':
         """Handles the case when the widget is used as StartScreen."""
 
