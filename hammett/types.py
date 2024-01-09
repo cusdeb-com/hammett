@@ -9,6 +9,7 @@ from telegram import Update
 from telegram._utils.types import FileInput
 from telegram.ext import BaseHandler, CallbackContext
 from telegram.ext._utils.types import BD, BT, CCT, CD, UD, ConversationKey
+from telegram.ext.filters import BaseFilter
 
 from hammett.core.button import Button
 from hammett.core.screen import Screen
@@ -44,6 +45,7 @@ class HandlerType(Enum):
 
     BUTTON_HANDLER = auto()
     COMMAND_HANDLER = auto()
+    INPUT_HANDLER = auto()
     TYPING_HANDLER = auto()
 
 
@@ -54,6 +56,7 @@ class Handler(Protocol):
     __self__: Screen
     __qualname__: str
     command_name: str
+    filters: BaseFilter | None
     handler_type: HandlerType
     permissions_ignored: list[UUID]
 

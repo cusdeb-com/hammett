@@ -127,6 +127,7 @@ class Application:
                 acceptable_handler_types = (
                     HandlerType.BUTTON_HANDLER,
                     HandlerType.COMMAND_HANDLER,
+                    HandlerType.INPUT_HANDLER,
                     HandlerType.TYPING_HANDLER,
                 )
                 handler, handler_type = None, None
@@ -153,6 +154,11 @@ class Application:
                 elif handler_type == HandlerType.COMMAND_HANDLER:
                     handler_object = MessageHandler(
                         filters.COMMAND & filters.Regex(f'^/{possible_handler.command_name}'),
+                        handler,
+                    )
+                elif handler_type == HandlerType.INPUT_HANDLER:
+                    handler_object = MessageHandler(
+                        possible_handler.filters,
                         handler,
                     )
                 elif handler_type == HandlerType.TYPING_HANDLER:

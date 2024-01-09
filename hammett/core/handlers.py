@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
+    from telegram.ext.filters import BaseFilter
 
     from hammett.types import Handler, PayloadStorage
 
@@ -51,11 +52,15 @@ def _register_handler(
 ) -> 'Callable[[str], Callable[[HandlerAlias], Handler]]':
     """Sets the specified attribute of the decorated handler."""
 
-    def create_decorator(command_name: str) -> 'Callable[[HandlerAlias], Handler]':
+    def create_decorator(
+        command_name: str = '',
+        filters: 'BaseFilter | None' = None,
+    ) -> 'Callable[[HandlerAlias], Handler]':
         def decorator(func: 'HandlerAlias') -> 'Handler':
             handler = cast('Handler', func)
             setattr(handler, name, value)
             handler.permissions_ignored = []
+            handler.filters = filters
 
             if value == HandlerType.COMMAND_HANDLER:
                 try:
@@ -143,6 +148,9 @@ register_button_handler.__doc__ = 'Registers the specified screen method as a bu
 
 register_command_handler = _register_handler('handler_type', HandlerType.COMMAND_HANDLER)
 register_command_handler.__doc__ = 'Registers the specified screen method as a command handler.'
+
+register_input_handler = _register_handler('handler_type', HandlerType.INPUT_HANDLER)
+register_input_handler.__doc__ = 'Registers the specified screen method as an input handler.'
 
 _register_typing_handler = _register_handler('handler_type', HandlerType.TYPING_HANDLER)
 register_typing_handler = _register_typing_handler('')
