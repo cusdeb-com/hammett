@@ -15,7 +15,7 @@ from hammett.core.conversation_handler import ConversationHandler
 from hammett.core.exceptions import TokenIsNotSpecified, UnknownHandlerType
 from hammett.core.handlers import calc_checksum, log_unregistered_handler
 from hammett.core.permissions import apply_permission_to
-from hammett.types import HandlerType
+from hammett.types import HandlerAlias, HandlerType
 from hammett.utils.log import configure_logging
 
 if TYPE_CHECKING:
@@ -57,7 +57,8 @@ class Application:
 
         self._setup()
 
-        self._builtin_handlers = ('goto', 'jump', 'start')
+        self._route_handlers = ('sgoto', 'sjump')
+        self._builtin_handlers = ('goto', 'jump', 'start', *self._route_handlers)
         self._entry_point = entry_point()
         self._name = name
         self._native_states = native_states or {}
@@ -84,6 +85,42 @@ class Application:
             name=self._name,
             persistent=bool(persistence),
         ))
+
+    @staticmethod
+    def _get_handler_object(
+        handler: 'HandlerAlias',
+        handler_type: 'Any | str | None',
+        possible_handler: 'Handler',
+    ) -> CallbackQueryHandler[Any] | MessageHandler[Any]:
+        """Returns the handler object depending on its type."""
+
+        handler_object: CallbackQueryHandler[Any] | MessageHandler[Any]
+        if handler_type in (HandlerType.BUTTON_HANDLER, ''):
+            handler_object = CallbackQueryHandler(
+                apply_permission_to(handler),
+                # Specify a pattern. The pattern is used to determine which handler
+                # should be triggered when a specific button is pressed.
+                pattern=calc_checksum(handler),
+            )
+        elif handler_type == HandlerType.COMMAND_HANDLER:
+            handler_object = MessageHandler(
+                filters.COMMAND & filters.Regex(f'^/{possible_handler.command_name}'),
+                handler,
+            )
+        elif handler_type == HandlerType.INPUT_HANDLER:
+            handler_object = MessageHandler(
+                possible_handler.filters,  # type: ignore[arg-type]
+                handler,
+            )
+        elif handler_type == HandlerType.TYPING_HANDLER:
+            handler_object = MessageHandler(
+                filters.TEXT & (~filters.COMMAND),
+                handler,
+            )
+        else:
+            raise UnknownHandlerType
+
+        return handler_object
 
     def _register_error_handlers(
         self: 'Self',
@@ -116,10 +153,7 @@ class Application:
                     )
 
     def _register_handlers(self: 'Self', state: 'State', screens: 'Iterable[type[Screen]]') -> None:
-        try:
-            self._native_states[state]
-        except KeyError:
-            self._native_states[state] = []
+        self._set_default_value_to_native_states(state)
 
         for screen in screens:
             instance = screen()
@@ -143,33 +177,24 @@ class Application:
                     log_unregistered_handler(possible_handler)
                     continue
 
-                handler_object: CallbackQueryHandler[Any] | MessageHandler[Any]
-                if handler_type in (HandlerType.BUTTON_HANDLER, ''):
-                    handler_object = CallbackQueryHandler(
-                        apply_permission_to(handler),
-                        # Specify a pattern. The pattern is used to determine which handler
-                        # should be triggered when a specific button is pressed.
-                        pattern=calc_checksum(handler),
-                    )
-                elif handler_type == HandlerType.COMMAND_HANDLER:
-                    handler_object = MessageHandler(
-                        filters.COMMAND & filters.Regex(f'^/{possible_handler.command_name}'),
-                        handler,
-                    )
-                elif handler_type == HandlerType.INPUT_HANDLER:
-                    handler_object = MessageHandler(
-                        possible_handler.filters,
-                        handler,
-                    )
-                elif handler_type == HandlerType.TYPING_HANDLER:
-                    handler_object = MessageHandler(
-                        filters.TEXT & (~filters.COMMAND),
-                        handler,
-                    )
-                else:
-                    raise UnknownHandlerType
+                handler_object = self._get_handler_object(handler, handler_type, possible_handler)
 
-                self._native_states[state].append(handler_object)
+                if name in self._route_handlers and instance.routes:
+                    for route in instance.routes:
+                        route_states, _ = route
+                        for route_state in route_states:
+                            self._set_default_value_to_native_states(route_state)
+                            self._native_states[route_state].append(handler_object)
+                else:
+                    self._native_states[state].append(handler_object)
+
+    def _set_default_value_to_native_states(self: 'Self', state: 'State') -> None:
+        """Sets default value to native states."""
+
+        try:
+            self._native_states[state]
+        except KeyError:
+            self._native_states[state] = []
 
     def _setup(self: 'Self') -> None:
         """Configures logging."""
