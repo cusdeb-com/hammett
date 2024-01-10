@@ -35,6 +35,12 @@ class ScreenDocumentDataIsEmpty(Exception):
     """
 
 
+class ScreenRouteIsEmpty(Exception):
+    """Raised when the route of the route mixin is found
+    to be empty.
+    """
+
+
 class TokenIsNotSpecified(Exception):
     """Raised when the token is not specified."""
 

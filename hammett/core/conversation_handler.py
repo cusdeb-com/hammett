@@ -19,6 +19,7 @@ optimized for debugging purposes.
 """
 
 import asyncio
+import contextlib
 import logging
 from typing import TYPE_CHECKING
 
@@ -45,7 +46,8 @@ LOGGER = logging.getLogger(__name__)
 
 class ConversationHandler(NativeConversationHandler['Any']):
     """The class that subclasses `telegram.ext.ConversationHandler` to
-    enable logging of state transitions in debug mode.
+    enable logging of state transitions in debug mode and set in context
+    the value of new state.
     """
 
     async def handle_update(  # type: ignore[override]  # noqa:C901, PLR0912
@@ -128,6 +130,9 @@ class ConversationHandler(NativeConversationHandler['Any']):
 
         if current_state != self.WAITING:
             self._update_state(new_state, conversation_key, handler)
+
+            with contextlib.suppress(TypeError):
+                context.user_data['current_state'] = new_state  # type: ignore[index]
 
             try:
                 handler_name = (

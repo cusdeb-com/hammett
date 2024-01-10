@@ -22,11 +22,15 @@ _HANDLER_SOURCES_TYPES = (
     SourcesTypes.GOTO_SOURCE_TYPE,
     SourcesTypes.HANDLER_SOURCE_TYPE,
     SourcesTypes.JUMP_SOURCE_TYPE,
+    SourcesTypes.SGOTO_SOURCE_TYPE,
+    SourcesTypes.SJUMP_SOURCE_TYPE,
 )
 
 _SHORTCUT_SOURCES_TYPES = (
     SourcesTypes.GOTO_SOURCE_TYPE,
     SourcesTypes.JUMP_SOURCE_TYPE,
+    SourcesTypes.SGOTO_SOURCE_TYPE,
+    SourcesTypes.SJUMP_SOURCE_TYPE,
 )
 
 
@@ -68,8 +72,16 @@ class Button:
             if issubclass(screen, Screen):
                 if self.source_type == SourcesTypes.GOTO_SOURCE_TYPE:
                     self.source_shortcut = cast('Handler', screen().goto)
-                else:
+                elif self.source_type == SourcesTypes.JUMP_SOURCE_TYPE:
                     self.source_shortcut = cast('Handler', screen().jump)
+                elif self.source_type == SourcesTypes.SGOTO_SOURCE_TYPE:
+                    self.source_shortcut = cast(
+                        'Handler', screen().sgoto,  # type: ignore[attr-defined]
+                    )
+                else:
+                    self.source_shortcut = cast(
+                        'Handler', screen().sjump,   # type: ignore[attr-defined]
+                    )
             else:
                 msg = (
                     f'The source "{self.source}" must be a subclass of Screen if its '

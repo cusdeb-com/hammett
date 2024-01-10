@@ -83,4 +83,6 @@ class Handler(Protocol):
 
 HandlerAlias = Callable[..., Coroutine[Any, Any, Any]]
 
+Routes = tuple[tuple[set[State], State]]
+
 Source = str | type[Screen] | Handler | HandlerAlias
