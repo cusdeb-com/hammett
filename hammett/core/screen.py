@@ -39,7 +39,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.types import Document, Keyboard, State
+    from hammett.types import Attachments, Document, Keyboard, State
 
 LOGGER = logging.getLogger(__name__)
 
@@ -207,6 +207,7 @@ class Screen:
         cover: 'str | PathLike[str]' = '',
         description: str = '',
         document: 'Document | None' = None,
+        attachments: 'Attachments | None' = None,
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
         """Returns the render method and its kwargs for sending a new message."""
 
@@ -231,6 +232,10 @@ class Screen:
             kwargs['caption'] = description
 
             send = context.bot.send_document
+        elif attachments:
+            kwargs['media'] = attachments
+
+            send = context.bot.send_media_group
         else:
             kwargs['text'] = description
 
@@ -262,7 +267,10 @@ class Screen:
             final_config.description or await self.get_description(update, context)
         )
         final_config.document = final_config.document or await self.get_document(update, context)
-        if not final_config.description and not final_config.document:
+        if (
+            not final_config.description and not final_config.document and
+            not final_config.attachments
+        ):
             msg = f'The description of {self.__class__.__name__} is empty'
             raise ScreenDescriptionIsEmpty(msg)
 
@@ -301,6 +309,7 @@ class Screen:
                 cover=config.cover,
                 description=config.description,
                 document=config.document,
+                attachments=config.attachments,
             )
         elif update:
             send, kwargs = await self._get_edit_render_method(
@@ -313,10 +322,17 @@ class Screen:
 
         message: 'Message | None' = None
         if send and kwargs:
-            send_object = await send(
-                reply_markup=await self._create_markup_keyboard(config.keyboard, update, context),
-                **kwargs,
-            )
+            # Unfortunately, it's currently not possible to send a keyboard along
+            # with a group of attachments
+            if not config.attachments:
+                kwargs['reply_markup'] = await self._create_markup_keyboard(
+                    config.keyboard,
+                    update,
+                    context,
+                )
+
+            send_object = await send(**kwargs)
+
             message = send_object
             if config.cover and config.cache_covers and not self._is_url(config.cover):
                 photo_size_object = send_object.photo[-1]

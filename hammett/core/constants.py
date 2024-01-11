@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, cast
 if TYPE_CHECKING:
     from os import PathLike
 
-    from hammett.types import Document, Keyboard, State
+    from hammett.types import Attachments, Document, Keyboard, State
 
 # Use 'cast' instead of 'State(0)' to avoid a circular import
 DEFAULT_STATE = cast('State', '0')
@@ -32,6 +32,7 @@ class RenderConfig:
     cache_covers: bool = False
     cover: 'str | PathLike[str]' = ''
     description: str = ''
+    attachments: 'Attachments | None' = None
     document: 'Document | None' = None
     keyboard: 'Keyboard | None' = None
 

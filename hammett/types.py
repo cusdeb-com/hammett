@@ -1,10 +1,11 @@
 """The module contains the types used throughout the framework."""
 
-from collections.abc import Awaitable, Callable, Coroutine, Iterable
+from collections.abc import Awaitable, Callable, Coroutine, Iterable, Sequence
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Any, NewType, Protocol, TypedDict, TypeVar
 from uuid import UUID
 
+import telegram
 from telegram import Update
 from telegram._utils.types import FileInput
 from telegram.ext import BaseHandler, CallbackContext
@@ -38,6 +39,11 @@ State = NewType('State', str)
 States = dict[State, Iterable[type[Screen]]]
 
 Func = TypeVar('Func', bound=Callable[..., Any])
+
+Attachments = (
+    Sequence[telegram.InputMediaAudio] | Sequence[telegram.InputMediaDocument] |
+    Sequence[telegram.InputMediaPhoto] | Sequence[telegram.InputMediaVideo]
+)
 
 
 class HandlerType(Enum):
