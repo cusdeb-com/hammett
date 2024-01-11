@@ -206,6 +206,7 @@ class Screen:
         chat_id: int = 0,
         cover: 'str | PathLike[str]' = '',
         description: str = '',
+        document: 'Document | None' = None,
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
         """Returns the render method and its kwargs for sending a new message."""
 
@@ -225,6 +226,11 @@ class Screen:
             kwargs['photo'] = cover
 
             send = context.bot.send_photo
+        elif document:
+            kwargs['document'] = self._create_input_media_document(document=document).media
+            kwargs['caption'] = description
+
+            send = context.bot.send_document
         else:
             kwargs['text'] = description
 
@@ -294,6 +300,7 @@ class Screen:
                 chat_id=config.chat_id,
                 cover=config.cover,
                 description=config.description,
+                document=config.document,
             )
         elif update:
             send, kwargs = await self._get_edit_render_method(
