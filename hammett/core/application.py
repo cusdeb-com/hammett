@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from telegram.ext import BasePersistence
+    from telegram.ext._applicationbuilder import ApplicationBuilder
     from telegram.ext._utils.types import BD, CD, UD
     from typing_extensions import Self
 
@@ -64,7 +65,7 @@ class Application:
         self._native_states = native_states or {}
         self._states = states
 
-        builder = NativeApplication.builder().token(settings.TOKEN)
+        builder = self.provide_application_builder()
         if persistence:
             builder.persistence(persistence)
 
@@ -201,6 +202,13 @@ class Application:
 
         from hammett.conf import settings
         configure_logging(settings.LOGGING)
+
+    def provide_application_builder(self: 'Self') -> 'ApplicationBuilder':  # type: ignore[type-arg]
+        """Returns a native application builder."""
+
+        from hammett.conf import settings
+
+        return NativeApplication.builder().token(settings.TOKEN)
 
     def run(self: 'Self') -> None:
         """Runs the application."""
