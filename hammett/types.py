@@ -52,7 +52,7 @@ class HandlerType(Enum):
 class Handler(Protocol):
     """The class implements the Handler type."""
 
-    __name__: str  # noqa: A003
+    __name__: str
     __self__: Screen
     __qualname__: str
     command_name: str
