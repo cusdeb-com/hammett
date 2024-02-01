@@ -39,6 +39,14 @@ services:
       - valkey
     restart: always
 
+  dynamic-keyboard-bot:
+    build:
+      dockerfile: ./dynamic_keyboard_bot/Dockerfile
+    env_file: ./dynamic_keyboard_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   say-hello-bot:
     build:
       dockerfile: ./say_hello_bot/Dockerfile
