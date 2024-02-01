@@ -12,7 +12,7 @@ from demos.hiders.screens import MainMenu
 def main():
     """Runs the bot. """
 
-    name = 'demo'
+    name = 'hiders'
     app = Application(
         name,
         entry_point=MainMenu,
