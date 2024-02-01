@@ -6,7 +6,7 @@ from hammett.core import Application
 from hammett.core.constants import DEFAULT_STATE
 from hammett.utils.autodiscovery import autodiscover_screens
 
-from demos.helloadmin.screens import MainMenu
+from demos.hiders.screens import MainMenu
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
         name,
         entry_point=MainMenu,
         states={
-            DEFAULT_STATE: autodiscover_screens('demos.helloadmin'),
+            DEFAULT_STATE: autodiscover_screens('demos.hiders'),
         },
     )
     app.run()
