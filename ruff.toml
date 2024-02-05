@@ -1,8 +1,8 @@
 line-length = 100
 
-select = ["ALL"]
+lint.select = ["ALL"]
 
-ignore = [
+lint.ignore = [
     "ANN401",  # any-type
     "D105",
     "D107",
@@ -25,8 +25,8 @@ exclude = [".git/", "demos/", "src/*"]
 
 target-version = "py310"
 
-[flake8-quotes]
+[lint.flake8-quotes]
 inline-quotes = "single"
 
-[pylint]
+[lint.pylint]
 max-args = 7
