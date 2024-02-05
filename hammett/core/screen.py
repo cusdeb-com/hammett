@@ -6,10 +6,10 @@ import logging
 import re
 from dataclasses import asdict
 from os import PathLike
-from pathlib import Path
 from typing import TYPE_CHECKING, cast
 from uuid import uuid4
 
+import aiofiles
 from telegram import (
     InlineKeyboardMarkup,
     InputMediaDocument,
@@ -192,10 +192,11 @@ class Screen:
                 media=self._cached_covers[media],
             )
         else:
-            with Path(media).open('rb') as infile:
+            async with aiofiles.open(media, 'rb') as infile:
+                file = await infile.read()
                 kwargs['media'] = self._create_input_media_photo(
                     caption=description,
-                    media=infile,
+                    media=file,
                 )
 
         return kwargs
