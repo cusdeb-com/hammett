@@ -33,6 +33,7 @@ def _autodiscover_screens_in_module(
         and issubclass(obj, Screen)
         and obj is not Screen
         and obj not in exclude_screens
+        and not obj.__module__.startswith('hammett')
     }
 
 
