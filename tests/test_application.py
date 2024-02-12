@@ -46,7 +46,7 @@ _TEST_LOGGING = {
 class TestScreenWithKeyboard(TestScreen):
     """The class implements the screen to test starting an application."""
 
-    def setup_keyboard(self):
+    async def add_default_keyboard(self, _update, _context):
         """Sets up the keyboard for the screen."""
 
         return [
@@ -62,7 +62,7 @@ class TestScreenWithPermissionIgnored(TestScreen):
     a permission ignored.
     """
 
-    def setup_keyboard(self):
+    async def add_default_keyboard(self, _update, _context):
         """Sets up the keyboard for the screen."""
 
         return [
