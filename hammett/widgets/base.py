@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any, cast
 from hammett.core import Button, Screen
 from hammett.core.constants import DEFAULT_STATE, EMPTY_KEYBOARD, RenderConfig, SourcesTypes
 from hammett.core.handlers import register_button_handler
+from hammett.utils.misc import get_callback_query
 from hammett.widgets.exceptions import (
     ChoiceEmojisAreUndefined,
     ChoicesFormatIsInvalid,
@@ -35,7 +36,7 @@ class BaseWidget(Screen):
         """Returns a widget state key."""
 
         if update:
-            query = await self.get_callback_query(update)
+            query = await get_callback_query(update)
             message = getattr(query, 'message', None)
             if message is None:
                 raise FailedToGetStateKey
