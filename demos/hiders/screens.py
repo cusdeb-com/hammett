@@ -15,7 +15,7 @@ LOGGER = logging.getLogger('hammett')
 class NotAdminConfirmation(Screen):
     description = 'Are you sure you want to remove yourself from the admin group?'
 
-    def setup_keyboard(self):
+    async def add_default_keyboard(self, _update, _context):
         return [
             [
                 Button('✅ Yes', self.exclude_user_from_admin_group),
@@ -75,7 +75,7 @@ class MainMenu(StartScreen):
 
         return config
 
-    def setup_keyboard(self):
+    async def add_default_keyboard(self, _update, _context):
         return [
             [
                 Button('🔒 Available only for admins', SecretRoom,
@@ -112,7 +112,7 @@ class MainMenu(StartScreen):
 class SecretRoom(Screen):
     description = 'This is the secret room available only for admins.'
 
-    def setup_keyboard(self):
+    async def add_default_keyboard(self, _update, _context):
         return [
             [
                 Button('⬅️ Main Menu', MainMenu,

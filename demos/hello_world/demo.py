@@ -6,7 +6,7 @@ from hammett.core.screen import StartScreen
 class HelloScreen(StartScreen):
     description = 'Hello, World!'
 
-    def setup_keyboard(self):
+    async def add_default_keyboard(self, _update, _context):
         return [[
             Button(
                 'Next screen ➡️',
@@ -22,7 +22,7 @@ class YetAnotherScreen(StartScreen):
         'capability to switch between screens.'
     )
 
-    def setup_keyboard(self):
+    async def add_default_keyboard(self, _update, _context):
         return [[
             Button(
                 '⬅️ Back',
