@@ -4,8 +4,9 @@
 
 from abc import ABC
 
+from hammett.core.mixins import StartMixin
 from hammett.core.permissions import Permission
-from hammett.core.screen import Screen, StartScreen
+from hammett.core.screen import Screen
 
 PERMISSION_DENIED_STATE = '1'
 
@@ -51,7 +52,7 @@ class TestScreen(Screen):
     description = 'A test description.'
 
 
-class TestStartScreen(StartScreen):
+class TestStartScreen(StartMixin):
     """The class implements a start screen for the tests."""
 
     description = 'A test StartScreen description.'
