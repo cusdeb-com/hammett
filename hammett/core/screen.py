@@ -27,7 +27,6 @@ from hammett.core.exceptions import (
     PayloadIsEmpty,
     ScreenDescriptionIsEmpty,
     ScreenDocumentDataIsEmpty,
-    ScreenRouteIsEmpty,
 )
 
 if TYPE_CHECKING:
@@ -40,7 +39,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.types import Attachments, Document, Keyboard, Routes, State
+    from hammett.types import Attachments, Document, Keyboard, State
 
 LOGGER = logging.getLogger(__name__)
 
@@ -53,7 +52,6 @@ class Screen:
     description: str = ''
     document: 'Document | None' = None
     html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
-    routes: 'Routes | None' = None
 
     _cached_covers: dict[str | PathLike[str], str] = {}
     _initialized: bool = False
@@ -506,71 +504,6 @@ class Screen:
 
         await self.render(None, context, config=config, extra_data=extra_data)
         return DEFAULT_STATE
-
-
-class RouteMixin(Screen):
-    """Mixin to switch between screens which are registered
-    in different states.
-    """
-
-    def __init__(self: 'Self') -> None:
-        super().__init__()
-
-        if self.routes is None:
-            msg = f'The route of {self.__class__.__name__} is empty'
-            raise ScreenRouteIsEmpty(msg)
-
-    async def _get_return_state_from_routes(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        routes: 'Routes',
-    ) -> 'State':
-        """Returns the first found state in the routes."""
-
-        current_state = await self.get_current_state(update, context)
-
-        for route in routes:
-            route_states, return_state = route
-            if current_state in route_states:
-                return return_state
-
-        return current_state
-
-    async def sgoto(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        **kwargs: 'Any',
-    ) -> 'State':
-        """Changes the state and switches to the screen re-rendering
-        the previous message.
-        """
-
-        config = await self.get_config(update, context, **kwargs)
-
-        await self.render(update, context, config=config)
-        return await self._get_return_state_from_routes(
-            update, context, self.routes,  # type: ignore[arg-type]
-        )
-
-    async def sjump(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        **kwargs: 'Any',
-    ) -> 'State':
-        """Changes the state and switches to the screen sending
-        it as a new message.
-        """
-
-        config = await self.get_config(update, context, **kwargs)
-        config.as_new_message = True
-
-        await self.render(update, context, config=config)
-        return await self._get_return_state_from_routes(
-            update, context, self.routes,  # type: ignore[arg-type]
-        )
 
 
 class StartScreen(Screen):
