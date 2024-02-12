@@ -81,3 +81,16 @@ class RouteMixin(Screen):
         return await self._get_return_state_from_routes(
             update, context, self.routes,  # type: ignore[arg-type]
         )
+
+
+class StartMixin(Screen):
+    """Mixin for start screens (i.e, the screens that show up on the /start command)."""
+
+    async def start(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'State':
+        """Invoked on the /start command."""
+
+        return await self.jump(update, context)
