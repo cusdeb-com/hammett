@@ -180,7 +180,11 @@ class Application:
 
                 handler_object = self._get_handler_object(handler, handler_type, possible_handler)
 
-                if name in self._route_handlers and instance.routes:
+                if (
+                    hasattr(instance, 'routes')
+                    and name in self._route_handlers
+                    and instance.routes
+                ):
                     for route in instance.routes:
                         route_states, _ = route
                         for route_state in route_states:
