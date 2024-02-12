@@ -7,7 +7,7 @@ from hammett.core import Button, Screen
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.hiders import ONLY_FOR_ADMIN, Hider
-from hammett.core.screen import StartScreen
+from hammett.core.mixins import StartMixin
 
 LOGGER = logging.getLogger('hammett')
 
@@ -36,7 +36,7 @@ class NotAdminConfirmation(Screen):
         return DEFAULT_STATE
 
 
-class MainMenu(StartScreen):
+class MainMenu(StartMixin, Screen):
     admin_status = 'admin'
     anonymous_status = 'anonymous'
     greeting = 'Hello, <b>{user_status}</b>!'
