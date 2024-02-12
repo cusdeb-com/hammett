@@ -278,7 +278,9 @@ class Screen:
             raise ScreenDescriptionIsEmpty(msg)
 
         if not config or config.keyboard is None:
-            final_config.keyboard = final_config.keyboard or self.setup_keyboard()
+            final_config.keyboard = (
+                final_config.keyboard or await self.add_default_keyboard(update, context)
+            )
 
         return final_config
 
@@ -370,6 +372,15 @@ class Screen:
 
         return query
 
+    async def add_default_keyboard(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'Keyboard':
+        """Sets up the default keyboard for the screen."""
+
+        return EMPTY_KEYBOARD
+
     async def get_cache_covers(
         self: 'Self',
         _update: 'Update | None',
@@ -459,11 +470,6 @@ class Screen:
         message = await self._render(update, context, final_config, extra_data)
         if message:
             await self._post_render(update, context, message, final_config, extra_data)
-
-    def setup_keyboard(self: 'Self') -> 'Keyboard':
-        """Sets up the keyboard for the screen."""
-
-        return EMPTY_KEYBOARD
 
     async def goto(
         self: 'Self',
