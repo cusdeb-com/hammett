@@ -26,7 +26,8 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, CD, UD
     from typing_extensions import Self
 
-    from hammett.core.screen import Screen, StartScreen
+    from hammett.core.mixins import StartMixin
+    from hammett.core.screen import Screen
     from hammett.types import Handler, NativeStates, State, States
 
 __all__ = ('Application', )
@@ -44,7 +45,7 @@ class Application:
         self: 'Self',
         name: str,
         *,
-        entry_point: 'type[StartScreen]',
+        entry_point: 'type[StartMixin]',
         error_handlers: 'list[Handler] | None' = None,
         job_queue_handlers: 'list[dict[str, Any]] | None' = None,
         native_states: 'NativeStates | None' = None,
