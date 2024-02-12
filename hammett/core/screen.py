@@ -561,18 +561,3 @@ class Screen:
 
         await self.render(None, context, config=config, extra_data=extra_data)
         return DEFAULT_STATE
-
-
-class StartScreen(Screen):
-    """The base class for start screens (i.e, the screens
-    that show up on the /start command).
-    """
-
-    async def start(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'State':
-        """Invoked on the /start command."""
-
-        return await self.jump(update, context)
