@@ -1,9 +1,10 @@
 from hammett.core import Application, Button
 from hammett.core.constants import DEFAULT_STATE, SourcesTypes
-from hammett.core.screen import StartScreen
+from hammett.core.mixins import StartMixin
+from hammett.core.screen import Screen
 
 
-class HelloScreen(StartScreen):
+class HelloScreen(StartMixin, Screen):
     description = 'Hello, World!'
 
     async def add_default_keyboard(self, _update, _context):
@@ -16,7 +17,7 @@ class HelloScreen(StartScreen):
         ]]
 
 
-class YetAnotherScreen(StartScreen):
+class YetAnotherScreen(StartMixin, Screen):
     description = (
         'This is just another screen to demonstrate the built-in '
         'capability to switch between screens.'
