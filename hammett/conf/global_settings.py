@@ -25,6 +25,8 @@ REDIS_PERSISTENCE = {
     'PASSWORD': None,
 }
 
+SAVE_LAST_MESSAGE = False
+
 TOKEN = ''
 
 USE_WEBHOOK = False

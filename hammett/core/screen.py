@@ -22,6 +22,7 @@ from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
 
+from hammett.conf import settings
 from hammett.core import handlers
 from hammett.core.constants import DEFAULT_STATE, EMPTY_KEYBOARD, FinalRenderConfig, RenderConfig
 from hammett.core.exceptions import (
@@ -377,8 +378,15 @@ class Screen:
             if prev_msg_config and prev_msg_config['hide_keyboard']:
                 await self._hide_keyboard(context, prev_msg_config)
 
-        if config.hide_keyboard:
+        if settings.SAVE_LAST_MESSAGE:
             await save_last_msg_config(context, config, message)
+        elif config.hide_keyboard:
+            LOGGER.warning(
+                'The keyboard hiding feature does not work without '
+                'the SAVE_LAST_MESSAGE setting set to True, so either '
+                'set the hide_keyboard attribute of your screen to False or '
+                'set the SAVE_LAST_MESSAGE setting to True.',
+            )
 
     #
     # Public methods
