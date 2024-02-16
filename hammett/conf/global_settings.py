@@ -25,7 +25,7 @@ REDIS_PERSISTENCE = {
     'PASSWORD': None,
 }
 
-SAVE_LAST_MESSAGE = False
+SAVE_LATEST_MESSAGE = False
 
 TOKEN = ''
 

@@ -3,7 +3,7 @@
 from dataclasses import asdict
 from typing import TYPE_CHECKING, cast
 
-from hammett.core.constants import LAST_SENT_MSG_KEY
+from hammett.core.constants import LATEST_SENT_MSG_KEY
 from hammett.core.exceptions import MissingPersistence
 
 if TYPE_CHECKING:
@@ -14,53 +14,53 @@ if TYPE_CHECKING:
     from hammett.core.constants import FinalRenderConfig, SerializedFinalRenderConfig
 
 
-async def get_last_msg_config(
+async def get_latest_msg_config(
     context: 'CallbackContext[BT, UD, CD, BD]',
     message: 'Message',
 ) -> 'SerializedFinalRenderConfig | None':
-    """Returns the last sent saved render config."""
+    """Returns the latest sent saved render config."""
 
     state: 'SerializedFinalRenderConfig | None' = None
     try:
-        state = context.user_data[LAST_SENT_MSG_KEY]  # type: ignore[index]
+        state = context.user_data[LATEST_SENT_MSG_KEY]  # type: ignore[index]
     except KeyError:
         pass
     except TypeError:
         if context._application.persistence:  # noqa: SLF001
             try:
                 user_data = cast('UD', {**context._application.user_data})  # noqa: SLF001
-                state = user_data[message.chat_id][LAST_SENT_MSG_KEY]  # type: ignore[index]
+                state = user_data[message.chat_id][LATEST_SENT_MSG_KEY]  # type: ignore[index]
             except KeyError:
                 pass
 
     return state
 
 
-async def save_last_msg_config(
+async def save_latest_msg_config(
     context: 'CallbackContext[BT, UD, CD, BD]',
     config: 'FinalRenderConfig',
     message: 'Message',
 ) -> None:
-    """Saves the last render config."""
+    """Saves the latest render config."""
 
-    last_msg = {
+    latest_msg = {
         **asdict(config),
         'message_id': message.message_id,
     }
     try:
-        context.user_data[LAST_SENT_MSG_KEY] = last_msg  # type: ignore[index]
+        context.user_data[LATEST_SENT_MSG_KEY] = latest_msg  # type: ignore[index]
     except TypeError as exc:
         if not context._application.persistence:  # noqa: SLF001
             msg = (
                 "It's not possible to pass data to user_data. "
-                f"To solve the issue either don't use {save_last_msg_config.__name__} in jobs "
+                f"To solve the issue either don't use {save_latest_msg_config.__name__} in jobs "
                 f"or configure persistence."
             )
             raise MissingPersistence(msg) from exc
 
         user_data = cast('UD', {**context._application.user_data})   # noqa: SLF001
         user_data[message.chat_id].update({  # type: ignore[index]
-            LAST_SENT_MSG_KEY: last_msg,
+            LATEST_SENT_MSG_KEY: latest_msg,
         })
 
         await context._application.persistence.update_user_data(  # noqa: SLF001

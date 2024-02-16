@@ -14,7 +14,7 @@ DEFAULT_STATE = cast('State', '0')
 
 EMPTY_KEYBOARD: 'Keyboard' = []
 
-LAST_SENT_MSG_KEY = 'last_sent_msg'
+LATEST_SENT_MSG_KEY = 'latest_sent_msg'
 
 
 class SourcesTypes(Enum):
