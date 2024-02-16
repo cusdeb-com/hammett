@@ -32,7 +32,7 @@ from hammett.core.exceptions import (
     ScreenDocumentDataIsEmpty,
     ScreenRouteIsEmpty,
 )
-from hammett.utils.render_config import get_last_msg_config, save_last_msg_config
+from hammett.utils.render_config import get_latest_msg_config, save_latest_msg_config
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -250,13 +250,13 @@ class Screen:
     async def _hide_keyboard(
         self: 'Self',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        last_msg_config: 'SerializedFinalRenderConfig',
+        latest_msg_config: 'SerializedFinalRenderConfig',
     ) -> None:
         """Removes the keyboard from the old message, leaving the cover and
         description unchanged.
         """
 
-        config = FinalRenderConfig(**last_msg_config)
+        config = FinalRenderConfig(**latest_msg_config)
         send, kwargs = await self._get_edit_render_method(context, config)
         if send:
             with contextlib.suppress(BadRequest):
@@ -374,18 +374,18 @@ class Screen:
         """Runs after screen rendering."""
 
         if config.as_new_message:
-            prev_msg_config = await get_last_msg_config(context, message)
+            prev_msg_config = await get_latest_msg_config(context, message)
             if prev_msg_config and prev_msg_config['hide_keyboard']:
                 await self._hide_keyboard(context, prev_msg_config)
 
-        if settings.SAVE_LAST_MESSAGE:
-            await save_last_msg_config(context, config, message)
+        if settings.SAVE_LATEST_MESSAGE:
+            await save_latest_msg_config(context, config, message)
         elif config.hide_keyboard:
             LOGGER.warning(
                 'The keyboard hiding feature does not work without '
-                'the SAVE_LAST_MESSAGE setting set to True, so either '
+                'the SAVE_LATEST_MESSAGE setting set to True, so either '
                 'set the hide_keyboard attribute of your screen to False or '
-                'set the SAVE_LAST_MESSAGE setting to True.',
+                'set the SAVE_LATEST_MESSAGE setting to True.',
             )
 
     #
