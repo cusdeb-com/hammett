@@ -34,10 +34,20 @@ __all__ = ('Application', )
 
 class Application:
     """The class is a wrapper for the native Application class.
+
     The wrapping solves the following tasks:
-    - hiding low-level technical details of python-telegram-bot from developers;
-    - registering handlers;
-    - configuring logging.
+        - hiding low-level technical details of python-telegram-bot from developers;
+        - registering handlers;
+        - configuring logging.
+
+    Args:
+    ----
+        name: The name will pass for start conversation handler. Uses for persistence.
+        entry_point: Implement start handler.
+        native_states (NativeStates, optional): The states from python-telegram-bot library.
+        persistence (BasePersistence[UD, CD, BD] , optional): Any realization of persistence.
+        states (States, optional): dict with Stage key and list of Screens.
+
     """
 
     def __init__(

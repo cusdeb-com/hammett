@@ -1,0 +1,3 @@
+# Permissions
+
+::: hammett.core.permissions
