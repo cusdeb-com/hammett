@@ -11,6 +11,10 @@ class FailedToGetDataAttributeOfQuery(Exception):
     """Raised when the attempt to get a data attribute of a query fails."""
 
 
+class LocalePathIsNotSpecified(Exception):
+    """Raised when the locale path is not specified."""
+
+
 class ImproperlyConfigured(Exception):
     """Raised when Hammett is somehow improperly configured."""
 
