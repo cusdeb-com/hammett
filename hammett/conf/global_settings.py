@@ -8,9 +8,15 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Any
 
+DOMAIN = 'hammett'
+
 HIDERS_CHECKER = ''
 
 HTML_PARSE_MODE = True
+
+LANGUAGE_CODE = 'en'
+
+LOCALE_PATH = ''
 
 LOGGING: dict[str, 'Any'] = {}
 
