@@ -22,7 +22,6 @@ from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
 
-from hammett.conf import settings
 from hammett.core import handlers
 from hammett.core.constants import DEFAULT_STATE, EMPTY_KEYBOARD, FinalRenderConfig, RenderConfig
 from hammett.core.exceptions import (
@@ -372,6 +371,8 @@ class Screen:
         extra_data: 'Any | None',  # noqa: ARG002
     ) -> None:
         """Runs after screen rendering."""
+
+        from hammett.conf import settings
 
         if config.as_new_message:
             prev_msg_config = await get_latest_msg_config(context, message)
