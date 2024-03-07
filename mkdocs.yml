@@ -45,11 +45,12 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting started:
-    - Installation: getting-started.md
-    - Usage: usage.md
-    - Demos: demos.md
-    - Authors: AUTHORS.md
-    - License: license.md
+    - Installation: getting_started/index.md
+    - Introduction: getting_started/introduction.md
+    - Usage: getting_started/usage.md
+    - Demos: getting_started/demos.md
+    - Authors: getting_started/AUTHORS.md
+    - License: getting_started/license.md
   - Docs:
       - Application: docs/application.md
       - Screen: docs/screen.md
