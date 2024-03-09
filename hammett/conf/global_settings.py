@@ -29,6 +29,7 @@ REDIS_PERSISTENCE = {
     'PORT': 6379,
     'DB': 0,
     'PASSWORD': None,
+    'UNIX_SOCKET_PATH': None,
 }
 
 SAVE_LATEST_MESSAGE = False

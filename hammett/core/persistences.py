@@ -56,6 +56,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
                 port=settings.REDIS_PERSISTENCE['PORT'],
                 db=settings.REDIS_PERSISTENCE['DB'],
                 password=settings.REDIS_PERSISTENCE['PASSWORD'],
+                unix_socket_path=settings.REDIS_PERSISTENCE.get('UNIX_SOCKET_PATH'),
             )
         except KeyError as exc:
             msg = f'{exc.args[0]} is missing in the REDIS_PERSISTENCE setting.'
