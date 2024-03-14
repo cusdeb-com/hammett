@@ -98,13 +98,16 @@ class CarouselWidget(BaseWidget):
         self: 'Self',
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        message: 'Message',
+        message: 'Message | tuple[Message]',
         config: 'FinalRenderConfig',
         extra_data: 'Any | None',
     ) -> None:
         """Saves to user_data images after screen rendering if it new message."""
 
         await super()._post_render(update, context, message, config, extra_data)
+
+        if isinstance(message, tuple):
+            message = message[-1]
 
         if (not update or not update.callback_query) and extra_data:
             state_key = await self._get_state_key(
