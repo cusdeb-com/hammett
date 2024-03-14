@@ -330,7 +330,7 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
         config: 'FinalRenderConfig',
         _extra_data: 'Any | None',
-    ) -> 'Message | None':
+    ) -> 'Message | tuple[Message]| None':
         """Renders the screen components (i.e., cover, description and keyboard),
         and returns a corresponding object of the Message type.
         """
@@ -371,13 +371,16 @@ class Screen:
         self: 'Self',
         update: 'Update | None',  # noqa: ARG002
         context: 'CallbackContext[BT, UD, CD, BD]',
-        message: 'Message',
+        message: 'Message | tuple[Message]',
         config: 'FinalRenderConfig',
         extra_data: 'Any | None',  # noqa: ARG002
     ) -> None:
         """Runs after screen rendering."""
 
         from hammett.conf import settings
+
+        if isinstance(message, tuple):
+            message = message[-1]
 
         if config.as_new_message:
             prev_msg_config = await get_latest_msg_config(context, message)
