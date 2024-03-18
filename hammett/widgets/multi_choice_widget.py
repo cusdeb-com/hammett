@@ -19,7 +19,7 @@ class MultiChoiceWidget(BaseChoiceWidget):
     chosen_emoji = '✅'
     unchosen_emoji = '🔲'
 
-    async def get_choices(
+    async def get_chosen_choices(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
