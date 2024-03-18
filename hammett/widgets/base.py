@@ -85,14 +85,6 @@ class BaseChoiceWidget(BaseWidget):
     def __init__(self: 'Self') -> None:
         super().__init__()
 
-        if not isinstance(self.choices, tuple):
-            msg = f'The choices attribute of {self.__class__.__name__} must be a tuple of tuples'
-            raise ChoicesFormatIsInvalid(msg)
-
-        if not len(self.choices):
-            msg = f'{self.__class__.__name__} must specify at least one choice'
-            raise NoChoicesSpecified(msg)
-
         if self.chosen_emoji == '' or self.unchosen_emoji == '':
             msg = f'{self.__class__.__name__} must specify both chosen_emoji and unchosen_emoji'
             raise ChoiceEmojisAreUndefined(msg)
@@ -105,12 +97,21 @@ class BaseChoiceWidget(BaseWidget):
         self: 'Self',
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        choices: 'WidgetState',
+        chosen: 'WidgetState',
     ) -> 'Keyboard':
         """Builds the keyboard based on the specified choices."""
 
+        choices = await self.get_choices(update, context)
+        if not isinstance(choices, tuple):
+            msg = f'The choices attribute of {self.__class__.__name__} must be a tuple of tuples'
+            raise ChoicesFormatIsInvalid(msg)
+
+        if not len(choices):
+            msg = f'{self.__class__.__name__} must specify at least one choice'
+            raise NoChoicesSpecified(msg)
+
         keyboard = []
-        for choice in self.choices:
+        for choice in choices:
             try:
                 code, name = choice
             except (TypeError, ValueError) as exc:
@@ -120,7 +121,7 @@ class BaseChoiceWidget(BaseWidget):
                 )
                 raise ChoicesFormatIsInvalid(msg) from exc
 
-            box = self.chosen_emoji if choice in choices else self.unchosen_emoji
+            box = self.chosen_emoji if choice in chosen else self.unchosen_emoji
             keyboard.append([
                 Button(
                     f'{box} {name}',
@@ -169,6 +170,15 @@ class BaseChoiceWidget(BaseWidget):
             context,
             await self.get_state(update, context),
         )
+
+    async def get_choices(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'Choices':
+        """Returns the `choices` attribute of the widget."""
+
+        return self.choices
 
     async def switch(
         self: 'Self',
