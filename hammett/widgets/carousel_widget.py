@@ -64,10 +64,7 @@ class CarouselWidget(BaseWidget):
             self._do_nothing,
             source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
         )
-        self._infinity_keyboard = [
-            [self._back_button, self._next_button],
-            *self.add_extra_keyboard(),
-        ]
+        self._infinity_keyboard = [[self._back_button, self._next_button]]
 
     async def _init(
         self: 'Self',
@@ -87,9 +84,15 @@ class CarouselWidget(BaseWidget):
             config.description = description or self.description
 
         if self.infinity:
-            config.keyboard = self._infinity_keyboard
+            config.keyboard = (self._infinity_keyboard +
+                               await self.add_extra_keyboard(update, context))
         else:
-            config.keyboard = await self._build_keyboard(current_images, _START_POSITION)
+            config.keyboard = await self._build_keyboard(
+                update,
+                context,
+                current_images,
+                _START_POSITION,
+            )
 
         await self.render(update, context, config=config, extra_data={'images': current_images})
         return DEFAULT_STATE
@@ -144,6 +147,8 @@ class CarouselWidget(BaseWidget):
 
     async def _build_keyboard(
         self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
         images: list[list[str]],
         current_image: int,
     ) -> 'Keyboard':
@@ -168,7 +173,7 @@ class CarouselWidget(BaseWidget):
 
         return [
             [back_button, next_button],
-            *self.add_extra_keyboard(),
+            *await self.add_extra_keyboard(update, context),
         ]
 
     async def _get_state_value(
@@ -258,7 +263,7 @@ class CarouselWidget(BaseWidget):
                 cover=cover,
             )
 
-        config.keyboard = await self._build_keyboard(images, state)
+        config.keyboard = await self._build_keyboard(update, context, images, state)
         return await self.render(update, context, config=config)
 
     async def _handle_infinity_mode(
@@ -286,7 +291,7 @@ class CarouselWidget(BaseWidget):
         config = RenderConfig(
             description=description or self.description,
             cover=cover,
-            keyboard=self._infinity_keyboard,
+            keyboard=self._infinity_keyboard + await self.add_extra_keyboard(update, context),
         )
         return await self.render(update, context, config=config)
 

@@ -48,7 +48,11 @@ class BaseWidget(Screen):
 
         return f'{self.__class__.__name__}_{current_chat_id}_{current_message_id}'
 
-    def add_extra_keyboard(self: 'Self') -> 'Keyboard':
+    async def add_extra_keyboard(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'Keyboard':
         """Adds an extra keyboard below the widget buttons."""
 
         return EMPTY_KEYBOARD
@@ -97,8 +101,10 @@ class BaseChoiceWidget(BaseWidget):
     # Private methods
     #
 
-    def _build_keyboard(
+    async def _build_keyboard(
         self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
         choices: 'WidgetState | None' = None,
     ) -> 'Keyboard':
         """Builds the keyboard based on the specified choices."""
@@ -127,7 +133,7 @@ class BaseChoiceWidget(BaseWidget):
                 ),
             ])
 
-        return keyboard + self.add_extra_keyboard()
+        return keyboard + await self.add_extra_keyboard(update, context)
 
     @register_button_handler
     async def _on_choice_click(
@@ -143,7 +149,7 @@ class BaseChoiceWidget(BaseWidget):
         payload: dict[str, str] = json.loads(await self.get_payload(update, context))
 
         await self.switch((payload['code'], payload['name']), choices)
-        keyboard = self._build_keyboard(choices)
+        keyboard = await self._build_keyboard(update, context, choices)
         config = RenderConfig(
             keyboard=keyboard,
         )
@@ -167,7 +173,7 @@ class BaseChoiceWidget(BaseWidget):
         """
 
         if config is None:
-            config = RenderConfig(keyboard=self._build_keyboard())
+            config = RenderConfig(keyboard=await self._build_keyboard(update, context))
 
         await super().render(update, context, config=config, extra_data=extra_data)
 
