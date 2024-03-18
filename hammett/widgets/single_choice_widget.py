@@ -31,6 +31,8 @@ class SingleChoiceWidget(BaseChoiceWidget):
 
     async def switch(
         self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
         choice: tuple[str, str],
         choices: 'WidgetState',
     ) -> None:

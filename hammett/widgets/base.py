@@ -145,7 +145,7 @@ class BaseChoiceWidget(BaseWidget):
         choices = await self.get_state(update, context)
         payload: dict[str, str] = json.loads(await self.get_payload(update, context))
 
-        await self.switch((payload['code'], payload['name']), choices)
+        await self.switch(update, context, (payload['code'], payload['name']), choices)
         keyboard = await self._build_keyboard(update, context, choices)
         config = RenderConfig(
             keyboard=keyboard,
@@ -172,6 +172,8 @@ class BaseChoiceWidget(BaseWidget):
 
     async def switch(
         self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
         choice: tuple[str, str],
         choices: 'WidgetState',
     ) -> None:
