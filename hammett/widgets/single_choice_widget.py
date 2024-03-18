@@ -20,7 +20,7 @@ class SingleChoiceWidget(BaseChoiceWidget):
     chosen_emoji = '🔘'
     unchosen_emoji = '◯'
 
-    async def get_choice(
+    async def get_chosen_choice(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
