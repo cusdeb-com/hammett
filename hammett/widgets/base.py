@@ -59,7 +59,7 @@ class BaseWidget(Screen):
 
     async def get_state(
         self: 'Self',
-        update: 'Update',
+        update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'WidgetState':
         """Returns the widget state."""
@@ -105,12 +105,9 @@ class BaseChoiceWidget(BaseWidget):
         self: 'Self',
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        choices: 'WidgetState | None' = None,
+        choices: 'WidgetState',
     ) -> 'Keyboard':
         """Builds the keyboard based on the specified choices."""
-
-        if choices is None:
-            choices = []
 
         keyboard = []
         for choice in self.choices:
@@ -160,22 +157,18 @@ class BaseChoiceWidget(BaseWidget):
     # Public methods
     #
 
-    async def render(
+    async def add_default_keyboard(
         self: 'Self',
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        *,
-        config: 'RenderConfig | None' = None,
-        extra_data: 'Any | None' = None,
-    ) -> None:
-        """Overrides the render method to build the keyboard based on
-        the specified choices before rendering the widget.
-        """
+    ) -> 'Keyboard':
+        """Sets up the default keyboard for the widget."""
 
-        if config is None:
-            config = RenderConfig(keyboard=await self._build_keyboard(update, context))
-
-        await super().render(update, context, config=config, extra_data=extra_data)
+        return await self._build_keyboard(
+            update,
+            context,
+            await self.get_state(update, context),
+        )
 
     async def switch(
         self: 'Self',
