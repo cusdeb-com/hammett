@@ -1,44 +1,78 @@
 """The module contains the implementation of the single choice widget."""
 
-from contextlib import suppress
 from typing import TYPE_CHECKING
 
 from hammett.widgets.base import BaseChoiceWidget
 
 if TYPE_CHECKING:
+    from typing import Any
+
     from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.widgets.types import WidgetState
+    from hammett.widgets.types import Choice, Choices, InitializedChoices
 
 
 class SingleChoiceWidget(BaseChoiceWidget):
     """The class implements the single choice widget."""
 
     chosen_emoji = '🔘'
+    initial_value: str | None = None
     unchosen_emoji = '◯'
 
-    async def get_chosen_choice(
+    #
+    # Private methods
+    #
+
+    async def _initialize_choices(
         self: 'Self',
-        update: 'Update',
+        update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'WidgetState':
-        """Returns the choice made by the user."""
+        choices: 'Choices',
+        **_kwargs: 'Any',
+    ) -> 'InitializedChoices':
+        """Initialize choices."""
 
-        return await self.get_state(update, context)
+        initial_value = await self.get_initial_value(update, context)
+        if initial_value is not None:
+            initialized_choices = [
+                (choice_key == initial_value, choice_key, choice_value)
+                for choice_key, choice_value in choices
+            ]
+        else:
+            initialized_choices = [
+                (False, choice_key, choice_value)
+                for choice_key, choice_value in choices
+            ]
 
-    async def switch(
+        return tuple(initialized_choices)
+
+    #
+    # Public methods
+    #
+
+    async def get_initial_value(
         self: 'Self',
         _update: 'Update | None',
         _context: 'CallbackContext[BT, UD, CD, BD]',
-        choice: tuple[str, str],
-        choices: 'WidgetState',
-    ) -> None:
+    ) -> str | None:
+        """Returns the `initial_value` attribute of the widget."""
+
+        return self.initial_value
+
+    async def switch(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        selected_choice: 'Choice',
+    ) -> 'InitializedChoices':
         """Switches the widget from one state to another."""
 
-        with suppress(IndexError):
-            choices.pop()
+        current_choices = await self.get_initialized_choices(update, context)
 
-        choices.append(choice)
+        return tuple([
+            (choice_key == selected_choice[0], choice_key, choice_value)
+            for _, choice_key, choice_value in current_choices
+        ])
