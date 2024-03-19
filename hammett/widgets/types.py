@@ -1,5 +1,7 @@
 """The module contains types intended for use in the widgets only."""
 
-Choices = tuple[tuple[str, str]] | tuple[()]
+Choice = tuple[str, str]
+
+Choices = tuple[Choice] | tuple[()]
 
 WidgetState = list[tuple[str, str]]

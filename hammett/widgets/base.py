@@ -14,13 +14,15 @@ from hammett.widgets.exceptions import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
     from hammett.types import Keyboard, State
-    from hammett.widgets.types import Choices, WidgetState
+    from hammett.widgets.types import Choice, Choices, WidgetState
 
 
 class BaseWidget(Screen):
@@ -47,6 +49,20 @@ class BaseWidget(Screen):
             current_message_id = message_id
 
         return f'{self.__class__.__name__}_{current_chat_id}_{current_message_id}'
+
+    async def _set_state(
+        self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        value: list['Choice'] | None,
+        chat_id: int = 0,
+        message_id: int = 0,
+    ) -> None:
+        """Sets the widget state."""
+
+        if value:
+            user_data = cast('dict[str, Any]', context.user_data)
+            user_data[await self._get_state_key(update, chat_id, message_id)] = value
 
     async def add_extra_keyboard(
         self: 'Self',
@@ -97,7 +113,7 @@ class BaseChoiceWidget(BaseWidget):
         self: 'Self',
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        chosen: 'WidgetState',
+        chosen: 'WidgetState | Sequence[str]',
     ) -> 'Keyboard':
         """Builds the keyboard based on the specified choices."""
 
@@ -133,6 +149,35 @@ class BaseChoiceWidget(BaseWidget):
 
         return keyboard + await self.add_extra_keyboard(update, context)
 
+    async def _init(
+        self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        config: 'RenderConfig | None' = None,
+    ) -> 'State':
+        """Initialize the widget."""
+
+        await self._initialize_choices(update, context)
+
+        config = config or RenderConfig()
+        config.keyboard = await self._build_keyboard(
+            update,
+            context,
+            await self.get_state(update, context),
+        )
+
+        await self.render(update, context, config=config)
+        return DEFAULT_STATE
+
+    async def _initialize_choices(
+        self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> None:
+        """Initialize choices."""
+
+        raise NotImplementedError
+
     @register_button_handler
     async def _on_choice_click(
         self: 'Self',
@@ -158,19 +203,6 @@ class BaseChoiceWidget(BaseWidget):
     # Public methods
     #
 
-    async def add_default_keyboard(
-        self: 'Self',
-        update: 'Update | None',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'Keyboard':
-        """Sets up the default keyboard for the widget."""
-
-        return await self._build_keyboard(
-            update,
-            context,
-            await self.get_state(update, context),
-        )
-
     async def get_choices(
         self: 'Self',
         _update: 'Update | None',
@@ -179,6 +211,27 @@ class BaseChoiceWidget(BaseWidget):
         """Returns the `choices` attribute of the widget."""
 
         return self.choices
+
+    async def goto(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
+    ) -> 'State':
+        """Handles the case when the widget is passed to Button as `GOTO_SOURCE_TYPE`."""
+
+        return await self._init(update, context)
+
+    async def jump(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
+    ) -> 'State':
+        """Handles the case when the widget is used as StartScreen."""
+
+        config = RenderConfig(as_new_message=True)
+        return await self._init(update, context, config=config)
 
     async def switch(
         self: 'Self',
