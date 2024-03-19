@@ -320,7 +320,7 @@ class Screen:
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
         config: 'FinalRenderConfig',
-        extra_data: 'Any | None',
+        **kwargs: 'Any',
     ) -> 'Message | None':
         """Runs before screen rendering."""
 
@@ -329,31 +329,31 @@ class Screen:
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
         config: 'FinalRenderConfig',
-        _extra_data: 'Any | None',
+        **_kwargs: 'Any',
     ) -> 'Message | None':
         """Renders the screen components (i.e., cover, description and keyboard),
         and returns a corresponding object of the Message type.
         """
 
         send: 'Callable[..., Awaitable[Any]] | None' = None
-        kwargs: 'Any' = {}
+        method_kwargs: 'Any' = {}
         if config.as_new_message:
-            send, kwargs = await self._get_new_message_render_method(context, config)
+            send, method_kwargs = await self._get_new_message_render_method(context, config)
         else:
-            send, kwargs = await self._get_edit_render_method(context, config)
+            send, method_kwargs = await self._get_edit_render_method(context, config)
 
         message: 'Message | None' = None
-        if send and kwargs:
+        if send and method_kwargs:
             # Unfortunately, it's currently not possible to send a keyboard along
             # with a group of attachments
             if not config.attachments:
-                kwargs['reply_markup'] = await self._create_markup_keyboard(
+                method_kwargs['reply_markup'] = await self._create_markup_keyboard(
                     config.keyboard,
                     update,
                     context,
                 )
 
-            send_object = await send(**kwargs)
+            send_object = await send(**method_kwargs)
 
             message = send_object
             if config.cover and config.cache_covers and not self._is_url(config.cover):
@@ -368,7 +368,7 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
         message: 'Message',
         config: 'FinalRenderConfig',
-        extra_data: 'Any | None',  # noqa: ARG002
+        **kwargs: 'Any',  # noqa: ARG002
     ) -> None:
         """Runs after screen rendering."""
 
@@ -503,16 +503,16 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
-        extra_data: 'Any | None' = None,
+        **kwargs: 'Any',
     ) -> None:
         """Renders the screen components (i.e., cover, description and keyboard)."""
 
         final_config = await self._finalize_config(update, context, config)
-        await self._pre_render(update, context, final_config, extra_data)
+        await self._pre_render(update, context, final_config, **kwargs)
 
-        message = await self._render(update, context, final_config, extra_data)
+        message = await self._render(update, context, final_config, **kwargs)
         if message:
-            await self._post_render(update, context, message, final_config, extra_data)
+            await self._post_render(update, context, message, final_config, **kwargs)
 
     async def goto(
         self: 'Self',
@@ -546,14 +546,14 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
-        extra_data: 'Any | None' = None,
+        **kwargs: 'Any',
     ) -> 'State':
         """Sends the screen to the specified chat."""
 
         config = config or RenderConfig()
         config.as_new_message = True
 
-        await self.render(None, context, config=config, extra_data=extra_data)
+        await self.render(None, context, config=config, **kwargs)
         return DEFAULT_STATE
 
 
