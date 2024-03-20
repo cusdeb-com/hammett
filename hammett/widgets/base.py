@@ -118,10 +118,6 @@ class BaseChoiceWidget(BaseWidget):
         """Builds the keyboard based on the specified choices."""
 
         choices = await self.get_choices(update, context)
-        if not isinstance(choices, tuple):
-            msg = f'The choices attribute of {self.__class__.__name__} must be a tuple of tuples'
-            raise ChoicesFormatIsInvalid(msg)
-
         if not len(choices):
             msg = f'{self.__class__.__name__} must specify at least one choice'
             raise NoChoicesSpecified(msg)
