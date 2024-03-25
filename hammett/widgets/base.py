@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from hammett.core import Button, Screen
 from hammett.core.constants import DEFAULT_STATE, EMPTY_KEYBOARD, RenderConfig, SourcesTypes
+from hammett.core.exceptions import PayloadIsEmpty
 from hammett.core.handlers import register_button_handler
 from hammett.widgets.exceptions import (
     ChoiceEmojisAreUndefined,
@@ -140,7 +141,10 @@ class BaseChoiceWidget(BaseWidget):
         """Invoked when clicking on a choice."""
 
         choices = await self.get_state(update, context)
-        payload: dict[str, str] = json.loads(await self.get_payload(update, context))
+        try:
+            payload: dict[str, str] = json.loads(await self.get_payload(update, context))
+        except PayloadIsEmpty:
+            return DEFAULT_STATE
 
         await self.switch((payload['code'], payload['name']), choices)
         keyboard = self._build_keyboard(choices)
