@@ -356,7 +356,12 @@ class Screen:
             send_object = await send(**kwargs)
 
             message = send_object
-            if config.cover and config.cache_covers and not self._is_url(config.cover):
+            if (
+                config.cover
+                and config.cache_covers
+                and send_object.photo
+                and not self._is_url(config.cover)
+            ):
                 photo_size_object = send_object.photo[-1]
                 self._cached_covers[config.cover] = photo_size_object.file_id
 
