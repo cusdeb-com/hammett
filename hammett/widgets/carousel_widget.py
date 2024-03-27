@@ -1,14 +1,12 @@
 """The module contains the implementation of the carousel widget."""
 
-import contextlib
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from hammett.core import Button
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
-from hammett.core.exceptions import ImproperlyConfigured, MissingPersistence
+from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.handlers import register_button_handler
 from hammett.widgets.base import BaseWidget
-from hammett.widgets.exceptions import FailedToGetStateKey
 
 if TYPE_CHECKING:
     from typing import Any
@@ -64,10 +62,7 @@ class CarouselWidget(BaseWidget):
             self._do_nothing,
             source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
         )
-        self._infinity_keyboard = [
-            [self._back_button, self._next_button],
-            *self.add_extra_keyboard(),
-        ]
+        self._infinity_keyboard = [[self._back_button, self._next_button]]
 
     async def _init(
         self: 'Self',
@@ -87,53 +82,32 @@ class CarouselWidget(BaseWidget):
             config.description = description or self.description
 
         if self.infinity:
-            config.keyboard = self._infinity_keyboard
+            config.keyboard = (self._infinity_keyboard +
+                               await self.add_extra_keyboard(update, context))
         else:
-            config.keyboard = await self._build_keyboard(current_images, _START_POSITION)
+            config.keyboard = await self._build_keyboard(
+                update,
+                context,
+                current_images,
+                _START_POSITION,
+            )
 
         await self.render(update, context, config=config, extra_data={'images': current_images})
         return DEFAULT_STATE
 
-    async def _post_render(
+    async def _initialized_state(
         self: 'Self',
-        update: 'Update | None',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        message: 'Message',
-        config: 'FinalRenderConfig',
-        extra_data: 'Any | None',
-    ) -> None:
-        """Saves to user_data images after screen rendering if it new message."""
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+        _message: 'Message',
+        _config: 'FinalRenderConfig',
+        extra_data: 'Any',
+    ) -> 'dict[Any, Any]':
+        """Returns the post-initialization widget state to be saved in context."""
 
-        await super()._post_render(update, context, message, config, extra_data)
-
-        if (not update or not update.callback_query) and extra_data:
-            state_key = await self._get_state_key(
-                chat_id=message.chat_id,
-                message_id=message.message_id,
-            )
-            try:
-                context.user_data[state_key] = {  # type: ignore[index]
-                    'images': extra_data.get('images', []),
-                }
-            except TypeError as exc:  # raised when messages are sent from jobs
-                if not context._application.persistence:  # noqa: SLF001
-                    msg = (
-                        f"It's not possible to pass data to user_data. "
-                        f"To solve the issue either don't use {self.__class__.__name__} in jobs "
-                        f"or configure persistence."
-                    )
-                    raise MissingPersistence(msg) from exc
-                user_data = cast('UD', {**context._application.user_data})  # noqa: SLF001
-                user_data[message.chat_id].update({  # type: ignore[index]
-                    state_key: {
-                        'images': extra_data.get('images', []),
-                        'position': _START_POSITION,
-                    },
-                })
-                await context._application.persistence.update_user_data(  # noqa: SLF001
-                    message.chat_id,
-                    user_data,
-                )
+        return {
+            'images': extra_data.get('images', []),
+        }
 
     async def _do_nothing(
         self: 'Self',
@@ -144,6 +118,8 @@ class CarouselWidget(BaseWidget):
 
     async def _build_keyboard(
         self: 'Self',
+        update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
         images: list[list[str]],
         current_image: int,
     ) -> 'Keyboard':
@@ -168,56 +144,8 @@ class CarouselWidget(BaseWidget):
 
         return [
             [back_button, next_button],
-            *self.add_extra_keyboard(),
+            *await self.add_extra_keyboard(update, context),
         ]
-
-    async def _get_state_value(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        state_key: str,
-    ) -> 'Any | None':
-        """Safely gets the specified value from the widget state dictionary
-        stored in user_data.
-        """
-
-        state_value = None
-        if context.user_data:
-            user_data = cast('dict[str, Any]', context.user_data)
-            try:
-                current_state_key = await self._get_state_key(update)
-                state = user_data.get(current_state_key)
-            except FailedToGetStateKey:
-                return None
-
-            if state and state.get(state_key):
-                state_value = state[state_key]
-
-        return state_value
-
-    async def _set_state_value(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        state_key: str,
-        state_value: 'Any',
-    ) -> None:
-        """Safely sets the specified value to widget state dictionary
-        stored in user_data.
-        """
-
-        if not context.user_data:
-            return
-
-        with contextlib.suppress(FailedToGetStateKey):  # raised when invoked on /start
-            current_state_key = await self._get_state_key(update)
-            user_data = cast('dict[str, Any]', context.user_data)
-
-            current_state = user_data.get(current_state_key, {})
-            current_state.update({
-                state_key: state_value,
-            })
-            context.user_data[current_state_key] = current_state  # type: ignore[index]
 
     async def _switch_handle_method(
         self: 'Self',
@@ -242,7 +170,7 @@ class CarouselWidget(BaseWidget):
     ) -> None:
         """Handles switching image in a regular mode."""
 
-        images = await self._get_state_value(update, context, 'images') or []
+        images = await self.get_state_value(update, context, 'images') or []
 
         try:
             cover, description = images[next_state]
@@ -250,7 +178,7 @@ class CarouselWidget(BaseWidget):
             state = prev_state
             config = RenderConfig(description=self.description)
         else:
-            await self._set_state_value(update, context, 'position', next_state)
+            await self.set_state_value(update, context, 'position', next_state)
 
             state = next_state
             config = RenderConfig(
@@ -258,7 +186,7 @@ class CarouselWidget(BaseWidget):
                 cover=cover,
             )
 
-        config.keyboard = await self._build_keyboard(images, state)
+        config.keyboard = await self._build_keyboard(update, context, images, state)
         return await self.render(update, context, config=config)
 
     async def _handle_infinity_mode(
@@ -269,24 +197,24 @@ class CarouselWidget(BaseWidget):
     ) -> None:
         """Handles switching image in an infinity mode."""
 
-        images = await self._get_state_value(update, context, 'images') or []
+        images = await self.get_state_value(update, context, 'images') or []
 
         try:
             cover, description = images[next_state]
         except IndexError:
             if next_state == len(images):
                 cover, description = images[_START_POSITION]
-                await self._set_state_value(update, context, 'position', _START_POSITION)
+                await self.set_state_value(update, context, 'position', _START_POSITION)
             else:
                 cover, description = images[_END_POSITION]
-                await self._set_state_value(update, context, 'position', _END_POSITION)
+                await self.set_state_value(update, context, 'position', _END_POSITION)
         else:
-            await self._set_state_value(update, context, 'position', next_state)
+            await self.set_state_value(update, context, 'position', next_state)
 
         config = RenderConfig(
             description=description or self.description,
             cover=cover,
-            keyboard=self._infinity_keyboard,
+            keyboard=self._infinity_keyboard + await self.add_extra_keyboard(update, context),
         )
         return await self.render(update, context, config=config)
 
@@ -299,8 +227,9 @@ class CarouselWidget(BaseWidget):
         """Switches to the next image."""
 
         if context.user_data:
-            current_image = (await self._get_state_value(update, context, 'position') or
-                             _START_POSITION)
+            current_image = (
+                await self.get_state_value(update, context, 'position') or _START_POSITION
+            )
         else:
             current_image = _START_POSITION
 
@@ -319,7 +248,7 @@ class CarouselWidget(BaseWidget):
     ) -> None:
         """Switches to the previous image."""
 
-        current_image = await self._get_state_value(update, context, 'position') or _START_POSITION
+        current_image = await self.get_state_value(update, context, 'position') or _START_POSITION
         return await self._switch_handle_method(
             update,
             context,
