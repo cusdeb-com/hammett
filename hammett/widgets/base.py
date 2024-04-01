@@ -387,6 +387,24 @@ class BaseChoiceWidget(BaseWidget):
         config = RenderConfig(as_new_message=True)
         return await self._init(update, context, config=config)
 
+    async def send(
+        self: 'Self',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        *,
+        config: 'RenderConfig | None' = None,
+        extra_data: 'Any | None' = None,
+    ) -> 'State':
+        """Handles the case when the widget is used as a notification."""
+
+        config = config or RenderConfig()
+        config.as_new_message = True
+
+        choices = None
+        if extra_data:
+            choices = extra_data.get('choices', None)
+
+        return await self._init(None, context, config, choices=choices)
+
     async def switch(
         self: 'Self',
         _update: 'Update',
