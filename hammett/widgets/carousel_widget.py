@@ -1,6 +1,7 @@
 """The module contains the implementation of the carousel widget."""
 
 import contextlib
+import logging
 from typing import TYPE_CHECKING, cast
 
 from hammett.core import Button
@@ -22,6 +23,8 @@ if TYPE_CHECKING:
     from hammett.types import Keyboard, State
 
 _END_POSITION, _START_POSITION = -1, 0
+
+LOGGER = logging.getLogger(__name__)
 
 
 class CarouselWidget(BaseWidget):
@@ -124,12 +127,20 @@ class CarouselWidget(BaseWidget):
                     )
                     raise MissingPersistence(msg) from exc
                 user_data = cast('UD', {**context._application.user_data})  # noqa: SLF001
-                user_data[message.chat_id].update({  # type: ignore[index]
-                    state_key: {
-                        'images': extra_data.get('images', []),
-                        'position': _START_POSITION,
-                    },
-                })
+                try:
+                    user_data[message.chat_id].update({  # type: ignore[index]
+                        state_key: {
+                            'images': extra_data.get('images', []),
+                            'position': _START_POSITION,
+                        },
+                    })
+                except KeyError:
+                    msg = (
+                        f'Can not update user_data with the carousel widget message id '
+                        f'({message.id})'
+                    )
+                    LOGGER.warning(msg)
+
                 await context._application.persistence.update_user_data(  # noqa: SLF001
                     message.chat_id,
                     user_data,
