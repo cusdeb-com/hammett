@@ -1,5 +1,6 @@
 """The module contains helpers for working with RenderConfig."""
 
+import logging
 from dataclasses import asdict
 from typing import TYPE_CHECKING, cast
 
@@ -12,6 +13,8 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
 
     from hammett.core.constants import FinalRenderConfig, SerializedFinalRenderConfig
+
+LOGGER = logging.getLogger(__name__)
 
 
 async def get_latest_msg_config(
@@ -58,10 +61,14 @@ async def save_latest_msg_config(
             )
             raise MissingPersistence(msg) from exc
 
-        user_data = cast('UD', {**context._application.user_data})   # noqa: SLF001
-        user_data[message.chat_id].update({  # type: ignore[index]
-            LATEST_SENT_MSG_KEY: latest_msg,
-        })
+        user_data = cast('UD', {**context._application.user_data})  # noqa: SLF001
+        try:
+            user_data[message.chat_id].update({  # type: ignore[index]
+                LATEST_SENT_MSG_KEY: latest_msg,
+            })
+        except KeyError:
+            msg = f'Can not update user_data with the message id ({message.id})'
+            LOGGER.warning(msg)
 
         await context._application.persistence.update_user_data(  # noqa: SLF001
             message.chat_id,
