@@ -301,7 +301,7 @@ class CarouselWidget(BaseWidget):
         )
         return await self.render(update, context, config=config)
 
-    @register_button_handler
+    @register_button_handler('')
     async def _next(
         self: 'Self',
         update: 'Update',
@@ -322,7 +322,7 @@ class CarouselWidget(BaseWidget):
             current_image + 1,
         )
 
-    @register_button_handler
+    @register_button_handler('')
     async def _back(
         self: 'Self',
         update: 'Update',
