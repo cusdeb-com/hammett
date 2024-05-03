@@ -189,6 +189,11 @@ class Application:
                 else:
                     self._native_states[state].append(handler_object)
 
+                if getattr(handler, 'states', None):
+                    for handler_state in handler.states:
+                        self._native_states[state].remove(handler_object)
+                        self._native_states[handler_state].append(handler_object)
+
     def _set_default_value_to_native_states(self: 'Self', state: 'State') -> None:
         """Sets default value to native states."""
 

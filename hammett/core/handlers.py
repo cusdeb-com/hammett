@@ -7,11 +7,11 @@ from contextlib import suppress
 from functools import wraps
 from typing import TYPE_CHECKING, Any, cast
 
-from hammett.core.exceptions import CommandNameIsEmpty
+from hammett.core.exceptions import CommandNameIsEmpty, StatesAttributeIsNotSupported
 from hammett.types import HandlerAlias, HandlerType, State
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Iterable
 
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
@@ -55,12 +55,20 @@ def _register_handler(
     def create_decorator(
         command_name: str = '',
         filters: 'BaseFilter | None' = None,
+        states: 'Iterable[State] | None' = None,
     ) -> 'Callable[[HandlerAlias], Handler]':
         def decorator(func: 'HandlerAlias') -> 'Handler':
             handler = cast('Handler', func)
             setattr(handler, name, value)
             handler.permissions_ignored = []
             handler.filters = filters
+
+            if states:
+                if value != HandlerType.BUTTON_HANDLER:
+                    msg = f"{value} is not support 'states' attribute."
+                    raise StatesAttributeIsNotSupported(msg)
+
+                handler.states = states
 
             if value == HandlerType.COMMAND_HANDLER:
                 try:
@@ -142,8 +150,7 @@ def log_unregistered_handler(obj: 'Any') -> None:
         )
 
 
-_register_button_handler = _register_handler('handler_type', HandlerType.BUTTON_HANDLER)
-register_button_handler = _register_button_handler('')
+register_button_handler = _register_handler('handler_type', HandlerType.BUTTON_HANDLER)
 register_button_handler.__doc__ = 'Registers the specified screen method as a button click handler.'
 
 register_command_handler = _register_handler('handler_type', HandlerType.COMMAND_HANDLER)
