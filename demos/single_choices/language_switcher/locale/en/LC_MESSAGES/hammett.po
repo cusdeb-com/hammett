@@ -1,0 +1,10 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Hammett 0.4.0\n"
+"POT-Creation-Date: 2024-05-13 16:39+0300\n"
+"PO-Revision-Date: 2024-05-13 16:58+0300\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Main menu description"
+msgstr "This is main menu description in English"
