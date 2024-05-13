@@ -3,18 +3,18 @@
 from hammett.core import Application
 from hammett.core.constants import DEFAULT_STATE
 
-from demos.single_choices.screens import MainMenu
+from demos.single_choices.quiz.screens import MainMenu, Quiz, Result
 
 
 def main():
     """Runs the bot."""
 
-    name = 'single_choice'
+    name = 'quiz'
     app = Application(
         name,
         entry_point=MainMenu,
         states={
-            DEFAULT_STATE: [MainMenu],
+            DEFAULT_STATE: [MainMenu, Quiz, Result],
         },
     )
     app.run()
