@@ -16,7 +16,7 @@ lint.ignore = [
     "RUF012",
 ]
 
-exclude = [".git/", "demos/", "src/*"]
+exclude = [".git/", "demos/"]
 
 target-version = "py310"
 
