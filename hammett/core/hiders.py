@@ -29,6 +29,8 @@ class Hider:
         self.hiders_set: set[int] = {hider}
 
     def __or__(self: 'Self', other: 'Hider') -> 'Self':
+        """Performs `or` operation."""
+
         self.hiders_set.add(other.hider)
         return self
 

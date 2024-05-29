@@ -76,9 +76,13 @@ class GlobalSettings:
     """
 
     def __getattr__(self: 'Self', name: str) -> 'Any':
+        """Returns the value of a global setting."""
+
         return getattr(global_settings, name)
 
     def __repr__(self: 'Self') -> str:
+        """Returns a system representation of a global setting."""
+
         return f'<{self.__class__.__name__}>'
 
 
@@ -104,6 +108,8 @@ class LazyObject:
     __getattr__ = new_method_proxy(getattr)
 
     def __setattr__(self: 'Self', name: str, value: 'Any') -> None:
+        """Sets the value of a lazy object."""
+
         if name == '_wrapped':
             # Assign to __dict__ to avoid infinite __setattr__ loops.
             self.__dict__['_wrapped'] = value
@@ -114,6 +120,8 @@ class LazyObject:
             setattr(self._wrapped, name, value)
 
     def __delattr__(self: 'Self', name: str) -> None:
+        """Delete a lazy object."""
+
         if name == '_wrapped':
             msg = "can't delete _wrapped."
             raise TypeError(msg)
@@ -175,6 +183,8 @@ class LazySettings(LazyObject):
         self._wrapped = Settings(settings_module)
 
     def __repr__(self: 'Self') -> str:
+        """Returns a system representation of a lazy setting."""
+
         # Hardcode the class name as otherwise it yields 'Settings'.
         if self._wrapped is _EMPTY:
             return '<LazySettings [Unevaluated]>'
@@ -259,6 +269,8 @@ class Settings:
         return setting in self._explicit_settings
 
     def __repr__(self: 'Self') -> str:
+        """Returns a system representation of a setting."""
+
         return f"<{self.__class__.__name__} '{self.settings_module_name}'>"
 
 
