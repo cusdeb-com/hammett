@@ -23,8 +23,7 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-The module contains facilities for working with settings of the projects based
+"""The module contains facilities for working with settings of the projects based
 on Hammett.
 
 hammett.conf.global_settings acts as a source for the settings and their
@@ -196,8 +195,7 @@ class LazySettings(LazyObject):
         return val
 
     def __setattr__(self: 'Self', name: str, value: 'Any') -> None:
-        """
-        Sets the value of setting. Clears all cached values if _wrapped changes
+        """Sets the value of setting. Clears all cached values if _wrapped changes
         (@override_settings does this) or clears single values when set.
         """
 
