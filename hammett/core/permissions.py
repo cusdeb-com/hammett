@@ -60,6 +60,8 @@ class Permission(Screen):
     """The base class for the implementations of custom permissions."""
 
     def __init__(self: 'Self') -> None:
+        """Initializes a permission object."""
+
         if getattr(self, 'class_uuid', None) is None:
             self.class_uuid = uuid4()
 

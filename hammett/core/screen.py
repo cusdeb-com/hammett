@@ -64,6 +64,8 @@ class Screen:
     _instance: 'Screen | None' = None
 
     def __init__(self: 'Self') -> None:
+        """Initializes a screen object."""
+
         if not self._initialized:
             if self.html_parse_mode is DEFAULT_NONE:
                 from hammett.conf import settings

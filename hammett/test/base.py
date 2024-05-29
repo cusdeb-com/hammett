@@ -81,6 +81,8 @@ class BaseTestCase(unittest.TestCase):
     context: 'CallbackContext'  # type: ignore[type-arg]
 
     def __init__(self: 'Self', method_name: str) -> None:
+        """Initializes a base test case object."""
+
         self.context: 'CallbackContext' = TestContext(  # type: ignore[type-arg]
             Application.builder(),  # type: ignore[arg-type]
         )

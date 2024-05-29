@@ -25,6 +25,8 @@ class Hider:
     """The class implements a hider."""
 
     def __init__(self: 'Self', hider: int) -> None:
+        """Initializes a hider object."""
+
         self.hider: int = hider
         self.hiders_set: set[int] = {hider}
 
@@ -39,6 +41,7 @@ class HidersChecker:
     """The base class for the implementations of custom hiders checkers."""
 
     def __init__(self: 'Self', hiders_set: set[int]) -> None:
+        """Initializes a hider checker object."""
         if getattr(self, 'custom_hiders', None) is None:
             self.custom_hiders: dict[int, 'Callable[[Any, Any], Awaitable[Any]]'] = {}
 

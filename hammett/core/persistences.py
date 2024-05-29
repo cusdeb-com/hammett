@@ -45,6 +45,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         update_interval: float = 60,
         context_types: 'ContextTypes[Any, UD, CD, BD] | None' = None,
     ) -> None:
+        """Initializes a redis persistence object."""
+
         super().__init__(
             store_data=store_data,  # type: ignore[arg-type]
             update_interval=update_interval,

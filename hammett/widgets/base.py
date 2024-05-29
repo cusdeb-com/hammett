@@ -200,6 +200,8 @@ class BaseChoiceWidget(BaseWidget):
     unchosen_emoji: str = ''
 
     def __init__(self: 'Self') -> None:
+        """Initializes a base choice widget object."""
+
         super().__init__()
 
         if self.chosen_emoji == '' or self.unchosen_emoji == '':

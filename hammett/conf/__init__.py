@@ -95,6 +95,8 @@ class LazyObject:
     _wrapped: 'Settings | object' = _EMPTY
 
     def __init__(self: 'Self') -> None:
+        """Initializes a lazy object."""
+
         # Note: if a subclass overrides __init__(), it will likely need to
         # override __copy__() and __deepcopy__() as well.
         self._wrapped = _EMPTY
@@ -229,6 +231,8 @@ class Settings:
     """
 
     def __init__(self: 'Self', settings_module: str) -> None:
+        """Initializes a settings object."""
+
         self.settings_module_name = settings_module
 
         self._explicit_settings = set()
