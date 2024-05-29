@@ -7,17 +7,13 @@ lint.ignore = [
     "D105",
     "D107",
     "D202",  # no-blank-line-after-function
-    "D203",  # no-blank-line-before-class
     "D205",
-    "D213",
     "D401",
-    "D419",
     "N818",  # error-suffix-on-exception-name
     "PLR0913",
     "PT009",  # pytest-unittest-assertion
     "PT027",  # pytest-unittest-raises-assertion
     "RUF012",
-    "UP037",  # quoted-annotation
 ]
 
 exclude = [".git/", "demos/", "src/*"]
