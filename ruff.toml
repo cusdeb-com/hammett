@@ -4,7 +4,6 @@ lint.select = ["ALL"]
 
 lint.ignore = [
     "ANN401",  # any-type
-    "D202",  # no-blank-line-after-function
     "D205",
     "D401",
     "N818",  # error-suffix-on-exception-name

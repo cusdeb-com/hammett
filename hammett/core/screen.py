@@ -65,7 +65,6 @@ class Screen:
 
     def __init__(self: 'Self') -> None:
         """Initializes a screen object."""
-
         if not self._initialized:
             if self.html_parse_mode is DEFAULT_NONE:
                 from hammett.conf import settings
@@ -75,7 +74,6 @@ class Screen:
 
     def __new__(cls: type['Screen'], *args: 'Any', **kwargs: 'Any') -> 'Screen':
         """Implements the singleton pattern."""
-
         if not cls._instance:
             cls._instance = super().__new__(cls, *args, **kwargs)
 
@@ -91,7 +89,6 @@ class Screen:
         caption: str = '',
     ) -> InputMediaDocument:
         """Creates an object that represents a document to be sent."""
-
         data = document.get('data')
         if not data:
             msg = f'The document data of {self.__class__.__name__} is empty'
@@ -110,7 +107,6 @@ class Screen:
         media: 'FileInput | PhotoSize',
     ) -> InputMediaPhoto:
         """Creates an object that represents a photo to be sent."""
-
         return InputMediaPhoto(
             caption=caption,
             media=media,
@@ -141,7 +137,6 @@ class Screen:
         config: 'FinalRenderConfig',
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
         """Returns the render method and its kwargs for editing a message."""
-
         kwargs: 'Any' = {
             'chat_id': config.chat_id,
             'message_id': config.message_id,
@@ -174,7 +169,6 @@ class Screen:
         cache_covers: bool = False,
     ) -> 'Any':
         """Returns the kwargs for edit render method with media."""
-
         kwargs: 'Any' = {}
         if isinstance(media, dict):
             kwargs['media'] = self._create_input_media_document(
@@ -212,7 +206,6 @@ class Screen:
         config: 'FinalRenderConfig',
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
         """Returns the render method and its kwargs for sending a new message."""
-
         kwargs: 'Any' = {
             'chat_id': config.chat_id,
             'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
@@ -254,7 +247,6 @@ class Screen:
         """Removes the keyboard from the old message, leaving the cover and
         description unchanged.
         """
-
         config = FinalRenderConfig(**latest_msg_config)
         send, kwargs = await self._get_edit_render_method(context, config)
         if send:
@@ -271,7 +263,6 @@ class Screen:
     @staticmethod
     def _is_url(cover: 'str | PathLike[str]') -> bool:
         """Checks if the cover is specified using either a local path or a URL."""
-
         return bool(re.search(r'^https?://', str(cover)))
 
     async def _finalize_config(
@@ -281,7 +272,6 @@ class Screen:
         config: 'RenderConfig | None',
     ) -> 'FinalRenderConfig':
         """Finalizes an object of RenderConfig returning an object of FinalRenderConfig."""
-
         final_config = FinalRenderConfig(**asdict(config)) if config else FinalRenderConfig()
         final_config.cache_covers = (
             final_config.cache_covers or await self.get_cache_covers(update, context)
@@ -334,7 +324,6 @@ class Screen:
         """Renders the screen components (i.e., cover, description and keyboard),
         and returns a corresponding object of the Message type.
         """
-
         send: 'Callable[..., Awaitable[Any]] | None' = None
         kwargs: 'Any' = {}
         if config.as_new_message:
@@ -376,7 +365,6 @@ class Screen:
         extra_data: 'Any | None',  # noqa: ARG002
     ) -> None:
         """Runs after screen rendering."""
-
         from hammett.conf import settings
 
         if isinstance(message, tuple):
@@ -404,7 +392,6 @@ class Screen:
     @staticmethod
     async def get_callback_query(update: 'Update') -> 'CallbackQuery | None':
         """Gets CallbackQuery from Update."""
-
         query = update.callback_query
         # CallbackQueries need to be answered, even if no notification to the user is needed.
         # Some clients may have trouble otherwise.
@@ -420,7 +407,6 @@ class Screen:
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Keyboard':
         """Sets up the default keyboard for the screen."""
-
         return EMPTY_KEYBOARD
 
     async def get_cache_covers(
@@ -429,7 +415,6 @@ class Screen:
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """Returns the `cache_covers` attribute of the screen."""
-
         return self.cache_covers
 
     async def get_config(
@@ -439,7 +424,6 @@ class Screen:
         **_kwargs: 'Any',
     ) -> 'RenderConfig':
         """Returns the Screen's config."""
-
         return RenderConfig()
 
     async def get_cover(
@@ -448,7 +432,6 @@ class Screen:
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'str | PathLike[str]':
         """Returns the `cover` attribute of the screen."""
-
         return self.cover
 
     async def get_current_state(
@@ -457,7 +440,6 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'State':
         """Returns the current state."""
-
         return cast('State', context.user_data.get('current_state'))  # type: ignore[union-attr]
 
     async def get_description(
@@ -466,7 +448,6 @@ class Screen:
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> str:
         """Returns the `description` attribute of the screen."""
-
         return self.description
 
     async def get_document(
@@ -475,7 +456,6 @@ class Screen:
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Document | None':
         """Returns the `document` attribute of the screen."""
-
         return self.document
 
     async def get_hide_keyboard(
@@ -484,7 +464,6 @@ class Screen:
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """Returns the `hide_keyboard` attribute of the screen."""
-
         return self.hide_keyboard
 
     async def get_payload(
@@ -493,7 +472,6 @@ class Screen:
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> str:
         """Returns the payload passed through the pressed button."""
-
         query = await self.get_callback_query(update)
         data = getattr(query, 'data', None)
         if data is None:
@@ -514,7 +492,6 @@ class Screen:
         extra_data: 'Any | None' = None,
     ) -> None:
         """Renders the screen components (i.e., cover, description and keyboard)."""
-
         final_config = await self._finalize_config(update, context, config)
         await self._pre_render(update, context, final_config, extra_data)
 
@@ -529,7 +506,6 @@ class Screen:
         **kwargs: 'Any',
     ) -> 'State':
         """Switches to the screen re-rendering the previous message."""
-
         config = await self.get_config(update, context, **kwargs)
 
         await self.render(update, context, config=config)
@@ -542,7 +518,6 @@ class Screen:
         **kwargs: 'Any',
     ) -> 'State':
         """Switches to the screen sending it as a new message."""
-
         config = await self.get_config(update, context, **kwargs)
         config.as_new_message = True
 
@@ -557,7 +532,6 @@ class Screen:
         extra_data: 'Any | None' = None,
     ) -> 'State':
         """Sends the screen to the specified chat."""
-
         config = config or RenderConfig()
         config.as_new_message = True
 

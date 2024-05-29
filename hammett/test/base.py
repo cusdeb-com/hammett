@@ -58,7 +58,6 @@ class TestBot(Bot):
         pool_timeout: 'ODVInput[float]' = DEFAULT_NONE,  # noqa: ARG002
     ) -> 'bool | JSONDict | list[JSONDict]':
         """Overrides the method not to send any request."""
-
         return {}
 
 
@@ -68,7 +67,6 @@ class TestContext(CallbackContext):  # type: ignore[type-arg]
     @property
     def bot(self: 'Self') -> 'TestBot':
         """Returns the test bot instance."""
-
         return TestBot(token=settings.TOKEN, base_file_url='')
 
 
@@ -82,7 +80,6 @@ class BaseTestCase(unittest.TestCase):
 
     def __init__(self: 'Self', method_name: str) -> None:
         """Initializes a base test case object."""
-
         self.context: 'CallbackContext' = TestContext(  # type: ignore[type-arg]
             Application.builder(),  # type: ignore[arg-type]
         )
@@ -92,7 +89,6 @@ class BaseTestCase(unittest.TestCase):
 
     def __call__(self: 'Self', result: 'unittest.result.TestResult | None' = None) -> None:
         """Overrides __call__ to wrap asynchronous tests."""
-
         test_method = getattr(self, self._testMethodName)
         if asyncio.iscoroutinefunction(test_method):
             setattr(self, self._testMethodName, async_to_sync(test_method))

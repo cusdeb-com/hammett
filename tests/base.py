@@ -18,13 +18,11 @@ class BaseTestPermission(Permission, ABC):
 
     def has_permission(self, _update, _context):
         """Appends the method path to the permission order list."""
-
         PERMISSIONS_ORDER.append(f'{self.__class__.__name__}.{self.has_permission.__name__}')
         return True
 
     async def handle_permission_denied(self, _update, _context):
         """A stub handler for the testing purposes."""
-
         return PERMISSION_DENIED_STATE
 
 
@@ -33,7 +31,6 @@ class TestDenyingPermission(BaseTestPermission):
 
     async def has_permission(self, _update, _context):
         """A stub permission checker for the testing purpose."""
-
         return False
 
 
@@ -42,7 +39,6 @@ class TestGivingPermission(BaseTestPermission):
 
     async def has_permission(self, _update, _context):
         """A stub permission checker for the testing purpose."""
-
         return True
 
 
@@ -59,5 +55,4 @@ class TestStartScreen(StartMixin):
 
     async def start(self, _update, _context):
         """Invoked on the /start command."""
-
         return

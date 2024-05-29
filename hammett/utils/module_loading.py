@@ -40,7 +40,6 @@ def import_string(dotted_path: str) -> type['Any']:
     designated by the last name in the path.
     Raises `ImportError` if the import failed.
     """
-
     try:
         module_path, class_name = dotted_path.rsplit('.', 1)
     except ValueError as err:

@@ -49,7 +49,6 @@ class Button:
         payload: str | None = None,
     ) -> None:
         """Initializes a button object."""
-
         self.caption = caption
         self.payload = payload
         self.source = source
@@ -66,7 +65,6 @@ class Button:
 
     def _check_source(self: 'Self') -> None:
         """Checks if the source is valid. If it's invalid, the method raises `TypeError`."""
-
         from hammett.core.screen import Screen
 
         if self.source_type in _SHORTCUT_SOURCES_TYPES:
@@ -105,7 +103,6 @@ class Button:
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> int | None:
         """Obtains the user ID from either an Update object or a CallbackContext object."""
-
         if update is None:
             return context._user_id  # noqa: SLF001
 
@@ -148,7 +145,6 @@ class Button:
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> tuple[InlineKeyboardButton, bool]:
         """Creates the button."""
-
         visibility = await self._specify_visibility(update, context)
 
         if self.source_type in _HANDLER_SOURCES_TYPES:

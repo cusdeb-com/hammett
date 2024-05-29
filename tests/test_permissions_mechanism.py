@@ -25,7 +25,6 @@ class TestPermissionWithSyncChecker(BaseTestPermission):
 
     def has_permission(self, _update, _context):
         """A stub permission checker for the testing purpose."""
-
         return False
 
 
@@ -44,7 +43,6 @@ class PermissionsTests(BaseTestCase):
         """Tests the scenario with multiple permission classes where
         strict execution order is required.
         """
-
         screen = TestScreen()
         wrapped_handler = apply_permission_to(screen.goto)
         await wrapped_handler(self.update, self.context)
@@ -56,7 +54,6 @@ class PermissionsTests(BaseTestCase):
 
     async def test_giving_permission(self):
         """Tests the case when the permission is giving."""
-
         screen = TestScreen()
         source = cast('Handler[..., State]', screen.goto)
 
@@ -68,7 +65,6 @@ class PermissionsTests(BaseTestCase):
 
     async def test_denying_permission(self):
         """Tests the case when the permission is denied."""
-
         screen = TestScreen()
         source = cast('Handler[..., State]', screen.goto)
 
@@ -80,7 +76,6 @@ class PermissionsTests(BaseTestCase):
 
     async def test_sync_permission_denied(self):
         """Tests the case when the permission checker is a synchronous."""
-
         screen = TestScreen()
         source = cast('Handler[..., State]', screen.goto)
 
