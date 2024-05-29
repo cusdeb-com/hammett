@@ -22,7 +22,6 @@ def _autodiscover_screens_in_module(
     """Looks through the specified module for subclasses of the Screen class.
     The function skips the Permission subclasses and Screen itself.
     """
-
     return {
         obj for _, obj in inspect.getmembers(module)
         if inspect.isclass(obj)
@@ -44,7 +43,6 @@ def autodiscover_screens(
     """Automatically discovers screens (i.e., subclasses of the Screen class),
     looking them in the specified package.
     """
-
     if exclude_screens is None:
         exclude_screens = []
 

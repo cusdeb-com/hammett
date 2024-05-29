@@ -50,7 +50,6 @@ class BaseWidget(Screen):
         extra_data: 'Any | None',
     ) -> None:
         """Saves to user_data initialized state after screen rendering if it's new message."""
-
         await super()._post_render(update, context, message, config, extra_data)
 
         if isinstance(message, tuple):
@@ -109,7 +108,6 @@ class BaseWidget(Screen):
         extra_data: 'Any',
     ) -> 'dict[Any, Any]':
         """Returns the post-initialization widget state to be saved in context."""
-
         raise NotImplementedError
 
     async def _get_state_key(
@@ -119,7 +117,6 @@ class BaseWidget(Screen):
         message_id: int = 0,
     ) -> str:
         """Returns a widget state key."""
-
         if update:
             query = await self.get_callback_query(update)
             message = getattr(query, 'message', None)
@@ -143,7 +140,6 @@ class BaseWidget(Screen):
         """Safely gets the specified value from the widget state dictionary
         stored in user_data.
         """
-
         state_value = None
         if context.user_data:
             user_data = cast('dict[str, Any]', context.user_data)
@@ -168,7 +164,6 @@ class BaseWidget(Screen):
         """Safely sets the specified value to widget state dictionary
         stored in user_data.
         """
-
         if not context.user_data:
             return
 
@@ -188,7 +183,6 @@ class BaseWidget(Screen):
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Keyboard':
         """Adds an extra keyboard below the widget buttons."""
-
         return EMPTY_KEYBOARD
 
 
@@ -201,7 +195,6 @@ class BaseChoiceWidget(BaseWidget):
 
     def __init__(self: 'Self') -> None:
         """Initializes a base choice widget object."""
-
         super().__init__()
 
         if self.chosen_emoji == '' or self.unchosen_emoji == '':
@@ -220,7 +213,6 @@ class BaseChoiceWidget(BaseWidget):
         **kwargs: 'Any',
     ) -> 'InitializedChoices':
         """Initialize choices."""
-
         raise NotImplementedError
 
     async def _initialized_state(
@@ -232,7 +224,6 @@ class BaseChoiceWidget(BaseWidget):
         extra_data: 'Any',
     ) -> 'dict[Any, Any]':
         """Returns the post-initialization widget state to be saved in context."""
-
         return {
             'choices': extra_data.get('choices', ()),
         }
@@ -244,7 +235,6 @@ class BaseChoiceWidget(BaseWidget):
         choices: 'InitializedChoices',
     ) -> 'Keyboard':
         """Builds the keyboard based on the specified choices."""
-
         if not len(choices):
             msg = f'{self.__class__.__name__} must specify at least one choice'
             raise NoChoicesSpecified(msg)
@@ -281,7 +271,6 @@ class BaseChoiceWidget(BaseWidget):
         **kwargs: 'Any',
     ) -> 'State':
         """Initialize the widget."""
-
         current_choices = choices or await self.get_choices(update, context, **kwargs)
         initialized_choices = await self._initialize_choices(
             update,
@@ -314,7 +303,6 @@ class BaseChoiceWidget(BaseWidget):
         **_kwargs: 'Any',
     ) -> 'State':
         """Invoked when clicking on a choice."""
-
         payload: dict[str, str] = json.loads(await self.get_payload(update, context))
 
         choices = await self.switch(update, context, (payload['code'], payload['name']))
@@ -340,7 +328,6 @@ class BaseChoiceWidget(BaseWidget):
         **_kwargs: 'Any',
     ) -> 'Choices':
         """Returns the `choices` attribute of the widget."""
-
         return self.choices
 
     async def get_initialized_choices(
@@ -349,7 +336,6 @@ class BaseChoiceWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'InitializedChoices':
         """Returns the initialized choices."""
-
         current_choices: 'InitializedChoices' = await self.get_state_value(
             update,
             context,
@@ -364,7 +350,6 @@ class BaseChoiceWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'InitializedChoices':
         """Returns the choices made by the user."""
-
         current_choices = await self.get_initialized_choices(update, context)
         return tuple(filter(lambda choice: choice[0], current_choices))
 
@@ -375,7 +360,6 @@ class BaseChoiceWidget(BaseWidget):
         **_kwargs: 'Any',
     ) -> 'State':
         """Handles the case when the widget is passed to Button as `GOTO_SOURCE_TYPE`."""
-
         return await self._init(update, context)
 
     async def jump(
@@ -385,7 +369,6 @@ class BaseChoiceWidget(BaseWidget):
         **_kwargs: 'Any',
     ) -> 'State':
         """Handles the case when the widget is used as StartScreen."""
-
         config = RenderConfig(as_new_message=True)
         return await self._init(update, context, config=config)
 
@@ -397,7 +380,6 @@ class BaseChoiceWidget(BaseWidget):
         extra_data: 'Any | None' = None,
     ) -> 'State':
         """Handles the case when the widget is used as a notification."""
-
         config = config or RenderConfig()
         config.as_new_message = True
 
@@ -414,5 +396,4 @@ class BaseChoiceWidget(BaseWidget):
         selected_choice: 'Choice',
     ) -> 'InitializedChoices':
         """Switches the widget from one state to another."""
-
         raise NotImplementedError

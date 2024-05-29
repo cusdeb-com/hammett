@@ -35,7 +35,6 @@ class CarouselWidget(BaseWidget):
 
     def __init__(self: 'Self') -> None:
         """Initializes a carousel widget object."""
-
         super().__init__()
 
         if not isinstance(self.images, list):
@@ -74,7 +73,6 @@ class CarouselWidget(BaseWidget):
         images: list[list[str]] | None = None,
     ) -> 'State':
         """Initializes the widget."""
-
         config = config or RenderConfig()
         current_images = images or await self.get_images(update, context)
 
@@ -106,7 +104,6 @@ class CarouselWidget(BaseWidget):
         extra_data: 'Any',
     ) -> 'dict[Any, Any]':
         """Returns the post-initialization widget state to be saved in context."""
-
         return {
             'images': extra_data.get('images', []),
         }
@@ -126,7 +123,6 @@ class CarouselWidget(BaseWidget):
         current_image: int,
     ) -> 'Keyboard':
         """Determines which button to disable and returns the updated keyboard."""
-
         try:
             images[current_image + 1]
         except IndexError:
@@ -157,7 +153,6 @@ class CarouselWidget(BaseWidget):
         next_state: int,
     ) -> None:
         """Switches handle method."""
-
         if self.infinity:
             await self._handle_infinity_mode(update, context, next_state)
         else:
@@ -171,7 +166,6 @@ class CarouselWidget(BaseWidget):
         next_state: int,
     ) -> None:
         """Handles switching image in a regular mode."""
-
         images = await self.get_state_value(update, context, 'images') or []
 
         try:
@@ -198,7 +192,6 @@ class CarouselWidget(BaseWidget):
         next_state: int,
     ) -> None:
         """Handles switching image in an infinity mode."""
-
         images = await self.get_state_value(update, context, 'images') or []
 
         try:
@@ -227,7 +220,6 @@ class CarouselWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> None:
         """Switches to the next image."""
-
         if context.user_data:
             current_image = (
                 await self.get_state_value(update, context, 'position') or _START_POSITION
@@ -249,7 +241,6 @@ class CarouselWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> None:
         """Switches to the previous image."""
-
         current_image = await self.get_state_value(update, context, 'position') or _START_POSITION
         return await self._switch_handle_method(
             update,
@@ -268,7 +259,6 @@ class CarouselWidget(BaseWidget):
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> list[list[str]]:
         """Returns the `images` attribute of the widget."""
-
         return self.images
 
     async def goto(
@@ -278,7 +268,6 @@ class CarouselWidget(BaseWidget):
         **_kwargs: 'Any',
     ) -> 'State':
         """Handles the case when the widget is passed to Button as `GOTO_SOURCE_TYPE`."""
-
         return await self._init(update, context)
 
     async def jump(
@@ -288,7 +277,6 @@ class CarouselWidget(BaseWidget):
         **_kwargs: 'Any',
     ) -> 'State':
         """Handles the case when the widget is used as StartScreen."""
-
         config = RenderConfig(as_new_message=True)
         return await self._init(update, context, config=config)
 
@@ -300,7 +288,6 @@ class CarouselWidget(BaseWidget):
         extra_data: 'Any | None' = None,
     ) -> 'State':
         """Handles the case when the widget is used as a notification."""
-
         config = config or RenderConfig()
         config.as_new_message = True
 

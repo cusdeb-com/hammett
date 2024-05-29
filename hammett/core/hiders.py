@@ -26,13 +26,11 @@ class Hider:
 
     def __init__(self: 'Self', hider: int) -> None:
         """Initializes a hider object."""
-
         self.hider: int = hider
         self.hiders_set: set[int] = {hider}
 
     def __or__(self: 'Self', other: 'Hider') -> 'Self':
         """Performs `or` operation."""
-
         self.hiders_set.add(other.hider)
         return self
 
@@ -71,7 +69,6 @@ class HidersChecker:
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """A stub for checking whether the user is an admin."""
-
         return False
 
     async def is_beta_tester(
@@ -80,7 +77,6 @@ class HidersChecker:
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """A stub for checking whether the user is a beta tester."""
-
         return False
 
     async def is_moderator(
@@ -89,7 +85,6 @@ class HidersChecker:
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
         """A stub for checking whether the user is a moderator."""
-
         return False
 
     async def run(
@@ -102,7 +97,6 @@ class HidersChecker:
         returns True if any of the checks is True.
         The method is invoked under the hood, so you should not run it directly.
         """
-
         for hider in self._hiders_set:
             try:
                 hider_handler = self._registered_hiders[hider]

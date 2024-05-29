@@ -96,7 +96,6 @@ class Application:
         possible_handler: 'Handler',
     ) -> CallbackQueryHandler[Any] | MessageHandler[Any]:
         """Returns the handler object depending on its type."""
-
         handler_object: CallbackQueryHandler[Any] | MessageHandler[Any]
         if handler_type in (HandlerType.BUTTON_HANDLER, ''):
             handler_object = CallbackQueryHandler(
@@ -130,7 +129,6 @@ class Application:
         error_handlers: 'list[Handler] | None',
     ) -> None:
         """Registers the specified error handlers."""
-
         if error_handlers:
             for error_handler in error_handlers:
                 self._native_application.add_error_handler(error_handler)  # type: ignore[arg-type]
@@ -140,7 +138,6 @@ class Application:
         job_queue_handlers: 'list[dict[str, Any]] | None' = None,
     ) -> None:
         """Registers the specified job queue handlers."""
-
         if job_queue_handlers:
             job_queue = self._native_application.job_queue
             for job_queue_handler in job_queue_handlers:
@@ -197,7 +194,6 @@ class Application:
 
     def _set_default_value_to_native_states(self: 'Self', state: 'State') -> None:
         """Sets default value to native states."""
-
         try:
             self._native_states[state]
         except KeyError:
@@ -205,20 +201,17 @@ class Application:
 
     def _setup(self: 'Self') -> None:
         """Configures logging."""
-
         from hammett.conf import settings
         configure_logging(settings.LOGGING)
 
     def provide_application_builder(self: 'Self') -> 'ApplicationBuilder':  # type: ignore[type-arg]
         """Returns a native application builder."""
-
         from hammett.conf import settings
 
         return NativeApplication.builder().token(settings.TOKEN)
 
     def run(self: 'Self') -> None:
         """Runs the application."""
-
         from hammett.conf import settings
 
         if settings.USE_WEBHOOK:

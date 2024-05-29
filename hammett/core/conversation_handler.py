@@ -58,7 +58,6 @@ class ConversationHandler(NativeConversationHandler['Any']):
         context: 'CCT',
     ) -> object | None:
         """Send the update to the callback for the current state and BaseHandler."""
-
         current_state, conversation_key, handler, handler_check_result = check_result
         raise_dp_handler_stop = False
 

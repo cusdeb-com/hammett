@@ -46,7 +46,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         context_types: 'ContextTypes[Any, UD, CD, BD] | None' = None,
     ) -> None:
         """Initializes a redis persistence object."""
-
         super().__init__(
             store_data=store_data,  # type: ignore[arg-type]
             update_interval=update_interval,
@@ -78,7 +77,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
     async def _get_data(self: 'Self', key: str) -> 'Any':
         """Fetches the data from the database by the specified key."""
-
         try:
             redis_data = await self.redis_cli.get(key)
             if redis_data:
@@ -91,7 +89,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
     async def _set_data(self: 'Self', key: str, data: object) -> None:
         """Stores the data to the database using the specified key."""
-
         await self.redis_cli.set(key, pickle.dumps(data))
 
     #
@@ -102,7 +99,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Deletes the specified key from `chat_data` and, depending on
         the on_flush attribute, reflects the change in the database.
         """
-
         if self.chat_data is None:
             return
 
@@ -117,7 +113,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Deletes the specified key from `user_data` and, depending on
         the on_flush attribute, reflects the change in the database.
         """
-
         if self.user_data is None:
             return
 
@@ -127,7 +122,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
     async def flush(self: 'Self') -> None:
         """Stores all the data kept in the memory to the database."""
-
         if self.bot_data:
             await self._set_data(self._BOT_DATA_KEY, self.bot_data)
 
@@ -148,7 +142,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         or an empty object of the type `telegram.ext.ContextTypes.bot_data`
         otherwise.
         """
-
         if not self.bot_data:
             data = await self._get_data(self._BOT_DATA_KEY) or self.context_types.bot_data()
 
@@ -160,7 +153,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Returns the callback data from the database, if it exists,
         or None otherwise.
         """
-
         if not self.callback_data:
             data = await self._get_data(self._CALLBACK_DATA_KEY)
             if not data:
@@ -177,7 +169,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Returns the chat data from the database, if it exists,
         or an empty dict otherwise.
         """
-
         if not self.chat_data:
             data = (await self._get_data(self._CHAT_DATA_KEY) or
                     defaultdict(self.context_types.chat_data))
@@ -191,7 +182,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Returns the conversations from the database, if it exists,
         or an empty dict otherwise.
         """
-
         if not self.conversations:
             self.conversations = await self._get_data(self._CONVERSATIONS_KEY) or {name: {}}
 
@@ -201,7 +191,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Returns the user data from the database, if it exists,
         or an empty dict otherwise.
         """
-
         if not self.user_data:
             data = (await self._get_data(self._USER_DATA_KEY) or
                     defaultdict(self.context_types.user_data))
@@ -215,7 +204,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Updates the bot data (if changed) and, depending on on_flush attribute,
         reflects the change in the database.
         """
-
         if self.bot_data == data:
             return
 
@@ -227,7 +215,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Updates the callback data (if changed) and, depending on on_flush attribute,
         reflects the change in the database.
         """
-
         if self.callback_data == data:
             return
 
@@ -239,7 +226,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Updates the chat data (if changed) and, depending on on_flush attribute,
         reflects the change in the database.
         """
-
         if self.chat_data is None:
             self.chat_data = defaultdict(self.context_types.chat_data)
 
@@ -259,7 +245,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Updates the conversations for the given handler and, depending on on_flush attribute,
         reflects the change in the database.
         """
-
         if not self.conversations:
             self.conversations = {}
 
@@ -274,7 +259,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Updates the user data (if changed) and, depending on the on_flush attribute,
         reflects the change in the database.
         """
-
         if self.user_data is None:
             self.user_data = defaultdict(self.context_types.user_data)
 

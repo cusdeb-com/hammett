@@ -25,7 +25,6 @@ class RouteMixin(Screen):
 
     def __init__(self: 'Self') -> None:
         """Initializes a route mixin object."""
-
         super().__init__()
 
         if self.routes is None:
@@ -39,7 +38,6 @@ class RouteMixin(Screen):
         routes: 'Routes',
     ) -> 'State':
         """Returns the first found state in the routes."""
-
         current_state = await self.get_current_state(update, context)
 
         for route in routes:
@@ -58,7 +56,6 @@ class RouteMixin(Screen):
         """Changes the state and switches to the screen re-rendering
         the previous message.
         """
-
         config = await self.get_config(update, context, **kwargs)
 
         await self.render(update, context, config=config)
@@ -75,7 +72,6 @@ class RouteMixin(Screen):
         """Changes the state and switches to the screen sending
         it as a new message.
         """
-
         config = await self.get_config(update, context, **kwargs)
         config.as_new_message = True
 
@@ -94,5 +90,4 @@ class StartMixin(Screen):
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'State':
         """Invoked on the /start command."""
-
         return await self.jump(update, context)

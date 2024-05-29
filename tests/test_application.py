@@ -48,7 +48,6 @@ class TestScreenWithKeyboard(TestScreen):
 
     async def add_default_keyboard(self, _update, _context):
         """Sets up the keyboard for the screen."""
-
         return [
             [
                 Button('⬅️ Main Menu', TestStartScreen,
@@ -64,7 +63,6 @@ class TestScreenWithPermissionIgnored(TestScreen):
 
     async def add_default_keyboard(self, _update, _context):
         """Sets up the keyboard for the screen."""
-
         return [
             [
                 Button(
@@ -81,7 +79,6 @@ class ApplicationTests(BaseTestCase):
     @staticmethod
     def _init_application(screens=None) -> 'Application':
         """Returns an initialized application."""
-
         screens = [TestScreenWithKeyboard] if screens is None else screens
 
         return Application(
@@ -94,7 +91,6 @@ class ApplicationTests(BaseTestCase):
 
     def test_successful_app_init(self):
         """Tests the case when an application is initialized successfully."""
-
         app = self._init_application()
 
         handlers = app._native_application.handlers[0][0]
@@ -112,7 +108,6 @@ class ApplicationTests(BaseTestCase):
         """Tests the case when an application is initialized unsuccessfully
         because of an empty token.
         """
-
         with self.assertRaises(TokenIsNotSpecified):
             self._init_application()
 
@@ -121,7 +116,6 @@ class ApplicationTests(BaseTestCase):
         """Tests the case when an application is initialized with
         an overriden LOGGING setting.
         """
-
         self._init_application()
         self.assertEqual(
             logging.root.manager.loggerDict['hammett_test'].getEffectiveLevel(),
@@ -133,7 +127,6 @@ class ApplicationTests(BaseTestCase):
         """Tests the case when an application is initialized with
         PERMISSIONS specified.
         """
-
         app = self._init_application()
         handlers = app._native_application.handlers[0][0]
         is_wrapped = getattr(handlers.states[DEFAULT_STATE][0].callback, '__wrapped__', None)

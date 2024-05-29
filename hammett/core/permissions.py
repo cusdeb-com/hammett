@@ -21,7 +21,6 @@ if TYPE_CHECKING:
 
 def apply_permission_to(handler: 'HandlerAlias') -> 'HandlerAlias':
     """Applies permissions to the specified handler."""
-
     from hammett.conf import settings
 
     handler_wrapped = cast('Handler', handler)
@@ -61,7 +60,6 @@ class Permission(Screen):
 
     def __init__(self: 'Self') -> None:
         """Initializes a permission object."""
-
         if getattr(self, 'class_uuid', None) is None:
             self.class_uuid = uuid4()
 
@@ -92,7 +90,6 @@ class Permission(Screen):
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'State':
         """Invoked in case of `has_permission` returns False."""
-
         raise NotImplementedError
 
     def has_permission(
@@ -101,5 +98,4 @@ class Permission(Screen):
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'bool | Awaitable[bool]':
         """Invoked before running each Screen method to check a permission."""
-
         raise NotImplementedError

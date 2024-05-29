@@ -27,7 +27,6 @@ def _clear_command_name(command_name: str) -> str:
 
     Raises `CommandNameIsEmpty` if the name either is empty or consists only of '/'.
     """
-
     if command_name and command_name[0] == '/':
         command_name = command_name[1:]
 
@@ -39,7 +38,6 @@ def _clear_command_name(command_name: str) -> str:
 
 def _get_handler_name(handler: 'Handler') -> str:
     """Returns the full name of the specified handler."""
-
     try:
         return f'{type(handler.__self__).__name__}.{handler.__name__}'
     except AttributeError:  # when a handler is static
@@ -85,7 +83,6 @@ def _register_handler(
 
 def calc_checksum(obj: 'Any') -> str:
     """Calculates a checksum of the specified object."""
-
     if callable(obj):  # in a case of a handler
         handler_name = _get_handler_name(obj)
         return str(zlib.adler32(handler_name.encode('utf8')))
@@ -98,7 +95,6 @@ def calc_checksum(obj: 'Any') -> str:
 
 def get_payload_storage(context: 'CallbackContext[BT, UD, CD, BD]') -> 'PayloadStorage':
     """Returns the payload storage."""
-
     from hammett.conf import settings
     namespace = settings.PAYLOAD_NAMESPACE
     bot_data = cast('dict[str, PayloadStorage]', context.bot_data)
@@ -113,7 +109,6 @@ def log_unregistered_handler(obj: 'Any') -> None:
     """Checks the specified object, and if it resembles an unregistered handler,
     logs a WARNING message about it.
     """
-
     if not callable(obj):
         return
 
