@@ -57,6 +57,8 @@ class TestContextDecorator:
         self.kwarg_name = kwarg_name
 
     def __enter__(self: 'Self') -> 'Any':
+        """Invoked when execution enters the context of the with statement."""
+
         return self.enable()
 
     def __exit__(
@@ -65,6 +67,8 @@ class TestContextDecorator:
         exc_value: BaseException | None,
         traceback: 'TracebackType | None',  # noqa: PYI036
     ) -> None:
+        """Invoked when execution leaves the context of the with statement."""
+
         self.disable()
 
     def enable(self: 'Self') -> 'Any':
