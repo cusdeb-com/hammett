@@ -1,5 +1,4 @@
-"""
-Default Hammett settings. Override these using the module specified via
+"""Default Hammett settings. Override these using the module specified via
 the HAMMETT_SETTINGS_MODULE environment variable.
 """
 

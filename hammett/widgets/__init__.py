@@ -1,5 +1,4 @@
-"""
-The package contains a widget library for solving various
+"""The package contains a widget library for solving various
 common tasks in bot development.
 """
 
