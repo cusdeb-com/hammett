@@ -54,6 +54,8 @@ class TestContextDecorator:
     """
 
     def __init__(self: 'Self', kwarg_name: str | None = None) -> None:
+        """Initializes a test context decorator object."""
+
         self.kwarg_name = kwarg_name
 
     def __enter__(self: 'Self') -> 'Any':
@@ -119,6 +121,8 @@ class override_settings(TestContextDecorator):  # noqa: N801
     """Decorates tests to perform temporary alterations of the settings."""
 
     def __init__(self: 'Self', **kwargs: 'Any') -> None:
+        """Initializes an overrider settings object."""
+
         self.options = kwargs
         self.wrapped: 'GlobalSettings | None' = None
         super().__init__()

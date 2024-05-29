@@ -48,6 +48,8 @@ class Button:
         hiders: 'Hider | None' = None,
         payload: str | None = None,
     ) -> None:
+        """Initializes a button object."""
+
         self.caption = caption
         self.payload = payload
         self.source = source

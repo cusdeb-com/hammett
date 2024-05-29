@@ -34,6 +34,8 @@ class CarouselWidget(BaseWidget):
     disable_caption: str = '🔚'
 
     def __init__(self: 'Self') -> None:
+        """Initializes a carousel widget object."""
+
         super().__init__()
 
         if not isinstance(self.images, list):

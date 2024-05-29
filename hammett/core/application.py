@@ -52,6 +52,7 @@ class Application:
         persistence: 'BasePersistence[UD, CD, BD] | None' = None,
         states: 'States | None' = None,
     ) -> None:
+        """Initializes an application object."""
         from hammett.conf import settings
 
         if not settings.TOKEN:
