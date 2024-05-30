@@ -22,7 +22,7 @@ async def get_latest_msg_config(
     message: 'Message',
 ) -> 'SerializedFinalRenderConfig | None':
     """Return the latest sent saved render config."""
-    state: 'SerializedFinalRenderConfig | None' = None
+    state: SerializedFinalRenderConfig | None = None
     try:
         state = context.user_data[LATEST_SENT_MSG_KEY]  # type: ignore[index]
     except KeyError:

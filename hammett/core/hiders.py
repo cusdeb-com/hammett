@@ -41,10 +41,10 @@ class HidersChecker:
     def __init__(self: 'Self', hiders_set: set[int]) -> None:
         """Initialize a hider checker object."""
         if getattr(self, 'custom_hiders', None) is None:
-            self.custom_hiders: dict[int, 'Callable[[Any, Any], Awaitable[Any]]'] = {}
+            self.custom_hiders: dict[int, Callable[[Any, Any], Awaitable[Any]]] = {}
 
         self._hiders_set = hiders_set
-        self._registered_hiders: dict[int, 'Callable[[Any, Any], Awaitable[Any]]'] = {}
+        self._registered_hiders: dict[int, Callable[[Any, Any], Awaitable[Any]]] = {}
         self._register_hiders()
 
     #

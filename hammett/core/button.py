@@ -117,7 +117,7 @@ class Button:
                 raise ImproperlyConfigured(msg)
 
             if self.hiders:
-                hiders_checker: type['HidersChecker'] = import_string(settings.HIDERS_CHECKER)
+                hiders_checker: type[HidersChecker] = import_string(settings.HIDERS_CHECKER)
                 self.hiders_checker = hiders_checker(self.hiders.hiders_set)
 
     async def _specify_visibility(

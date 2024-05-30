@@ -25,7 +25,7 @@ def apply_permission_to(handler: 'HandlerAlias') -> 'HandlerAlias':
 
     handler_wrapped = cast('Handler', handler)
     for permission_path in reversed(settings.PERMISSIONS):
-        permission: type['Permission'] = import_string(permission_path)
+        permission: type[Permission] = import_string(permission_path)
         permissions_ignored = getattr(handler_wrapped, 'permissions_ignored', None)
         permission_instance = permission()
         if permissions_ignored and permission_instance.class_uuid in permissions_ignored:

@@ -137,12 +137,12 @@ class Screen:
         config: 'FinalRenderConfig',
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
         """Return the render method and its kwargs for editing a message."""
-        kwargs: 'Any' = {
+        kwargs: Any = {
             'chat_id': config.chat_id,
             'message_id': config.message_id,
         }
 
-        send: 'Callable[..., Awaitable[Any]] | None' = None
+        send: Callable[..., Awaitable[Any]] | None = None
         if config.document or config.cover:
             media = config.document or config.cover
             media_kwargs = await self._get_edit_render_method_media_kwargs(
@@ -169,7 +169,7 @@ class Screen:
         cache_covers: bool = False,
     ) -> 'Any':
         """Return the kwargs for edit render method with media."""
-        kwargs: 'Any' = {}
+        kwargs: Any = {}
         if isinstance(media, dict):
             kwargs['media'] = self._create_input_media_document(
                 media,
@@ -206,7 +206,7 @@ class Screen:
         config: 'FinalRenderConfig',
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
         """Return the render method and its kwargs for sending a new message."""
-        kwargs: 'Any' = {
+        kwargs: Any = {
             'chat_id': config.chat_id,
             'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
         }
@@ -324,14 +324,14 @@ class Screen:
         """Render the screen components (i.e., cover, description and keyboard),
         and return a corresponding object of the Message type.
         """
-        send: 'Callable[..., Awaitable[Any]] | None' = None
-        kwargs: 'Any' = {}
+        send: Callable[..., Awaitable[Any]] | None = None
+        kwargs: Any = {}
         if config.as_new_message:
             send, kwargs = await self._get_new_message_render_method(context, config)
         else:
             send, kwargs = await self._get_edit_render_method(context, config)
 
-        message: 'Message | None' = None
+        message: Message | None = None
         if send and kwargs:
             # Unfortunately, it's currently not possible to send a keyboard along
             # with a group of attachments
