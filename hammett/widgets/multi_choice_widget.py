@@ -58,7 +58,7 @@ class MultiChoiceWidget(BaseChoiceWidget):
         _update: 'Update | None',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Sequence[str] | None':
-        """Returns the `initial_values` attribute of the widget."""
+        """Return the `initial_values` attribute of the widget."""
         return self.initial_values
 
     async def switch(
@@ -67,7 +67,7 @@ class MultiChoiceWidget(BaseChoiceWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
         selected_choice: 'Choice',
     ) -> 'InitializedChoices':
-        """Switches the widget from one state to another."""
+        """Switch the widget from one state to another."""
         current_choices = await self.get_initialized_choices(update, context)
 
         choices = []

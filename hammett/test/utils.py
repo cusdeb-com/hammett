@@ -54,11 +54,11 @@ class TestContextDecorator:
     """
 
     def __init__(self: 'Self', kwarg_name: str | None = None) -> None:
-        """Initializes a test context decorator object."""
+        """Initialize a test context decorator object."""
         self.kwarg_name = kwarg_name
 
     def __enter__(self: 'Self') -> 'Any':
-        """Invoked when execution enters the context of the with statement."""
+        """Invoke when execution enters the context of the with statement."""
         return self.enable()
 
     def __exit__(
@@ -67,19 +67,19 @@ class TestContextDecorator:
         exc_value: BaseException | None,
         traceback: 'TracebackType | None',  # noqa: PYI036
     ) -> None:
-        """Invoked when execution leaves the context of the with statement."""
+        """Invoke when execution leaves the context of the with statement."""
         self.disable()
 
     def enable(self: 'Self') -> 'Any':
-        """Invoked when execution enters the context of the with statement."""
+        """Invoke when execution enters the context of the with statement."""
         raise NotImplementedError
 
     def disable(self: 'Self') -> 'Any':
-        """Invoked when execution leaves the context of the with statement."""
+        """Invoke when execution leaves the context of the with statement."""
         raise NotImplementedError
 
     def decorate_callable(self: 'Self', func: 'Func') -> 'Callable[..., Any | Awaitable[Any]]':
-        """Decorates either a coroutine or a function."""
+        """Decorate either a coroutine or a function."""
         if asyncio.iscoroutinefunction(func):
             # If the inner function is an async function, we must execute async
             # as well so that the `with` statement executes at the right time.
@@ -102,7 +102,7 @@ class TestContextDecorator:
         return inner
 
     def __call__(self: 'Self', decorated: 'Func') -> 'Callable[..., Any] | Awaitable[Any]':
-        """Wraps the specified coroutine or function, and invokes the decorator."""
+        """Wrap the specified coroutine or function, and invoke the decorator."""
         if callable(decorated):
             return self.decorate_callable(decorated)
 
@@ -114,13 +114,13 @@ class override_settings(TestContextDecorator):  # noqa: N801
     """Decorates tests to perform temporary alterations of the settings."""
 
     def __init__(self: 'Self', **kwargs: 'Any') -> None:
-        """Initializes an overrider settings object."""
+        """Initialize an overrider settings object."""
         self.options = kwargs
         self.wrapped: 'GlobalSettings | None' = None
         super().__init__()
 
     def enable(self: 'Self') -> None:
-        """Invoked when execution enters the context of the with statement."""
+        """Invoke when execution enters the context of the with statement."""
         overriden_settings = GlobalSettings()
         for key, new_value in self.options.items():
             setattr(overriden_settings, key, new_value)
@@ -131,6 +131,6 @@ class override_settings(TestContextDecorator):  # noqa: N801
             setattr(settings, key, new_value)
 
     def disable(self: 'Self') -> None:
-        """Invoked when execution leaves the context of the with statement."""
+        """Invoke when execution leaves the context of the with statement."""
         settings._wrapped = self.wrapped  # noqa: SLF001
         del self.wrapped

@@ -19,7 +19,7 @@ def _autodiscover_screens_in_module(
     module: 'ModuleType',
     exclude_screens: 'Iterable[type[Screen]]',
 ) -> 'set[type[Screen]]':
-    """Looks through the specified module for subclasses of the Screen class.
+    """Look through the specified module for subclasses of the Screen class.
     The function skips the Permission subclasses and Screen itself.
     """
     return {

@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 
 def apply_permission_to(handler: 'HandlerAlias') -> 'HandlerAlias':
-    """Applies permissions to the specified handler."""
+    """Apply permissions to the specified handler."""
     from hammett.conf import settings
 
     handler_wrapped = cast('Handler', handler)
@@ -39,8 +39,8 @@ def apply_permission_to(handler: 'HandlerAlias') -> 'HandlerAlias':
 def ignore_permissions(
     permissions: 'Iterable[type[Permission]]',
 ) -> 'Callable[[HandlerAlias], Handler]':
-    """The decorator is intended for decorating handlers (Screen methods)
-    to specify which permissions they are allowed to ignore.
+    """Decorate handlers (Screen methods) to specify which permissions
+    they are allowed to ignore.
     """
 
     def decorator(func: 'HandlerAlias') -> 'Handler':
@@ -59,14 +59,14 @@ class Permission(Screen):
     """The base class for the implementations of custom permissions."""
 
     def __init__(self: 'Self') -> None:
-        """Initializes a permission object."""
+        """Initialize a permission object."""
         if getattr(self, 'class_uuid', None) is None:
             self.class_uuid = uuid4()
 
         super().__init__()
 
     def check_permission(self: 'Self', handler: 'Handler') -> 'Handler':
-        """Checks if there is a permission to invoke handlers (Screen methods).
+        """Check if there is a permission to invoke handlers (Screen methods).
         The method is invoked under the hood, so you should not run it directly.
         """
 
@@ -89,7 +89,7 @@ class Permission(Screen):
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'State':
-        """Invoked in case of `has_permission` returns False."""
+        """Invoke in case of `has_permission` returns False."""
         raise NotImplementedError
 
     def has_permission(
@@ -97,5 +97,5 @@ class Permission(Screen):
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'bool | Awaitable[bool]':
-        """Invoked before running each Screen method to check a permission."""
+        """Invoke before running each Screen method to check a permission."""
         raise NotImplementedError

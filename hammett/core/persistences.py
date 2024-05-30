@@ -45,7 +45,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         update_interval: float = 60,
         context_types: 'ContextTypes[Any, UD, CD, BD] | None' = None,
     ) -> None:
-        """Initializes a redis persistence object."""
+        """Initialize a redis persistence object."""
         super().__init__(
             store_data=store_data,  # type: ignore[arg-type]
             update_interval=update_interval,
@@ -76,7 +76,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     #
 
     async def _get_data(self: 'Self', key: str) -> 'Any':
-        """Fetches the data from the database by the specified key."""
+        """Fetch the data from the database by the specified key."""
         try:
             redis_data = await self.redis_cli.get(key)
             if redis_data:
@@ -88,7 +88,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             return redis_data
 
     async def _set_data(self: 'Self', key: str, data: object) -> None:
-        """Stores the data to the database using the specified key."""
+        """Store the data to the database using the specified key."""
         await self.redis_cli.set(key, pickle.dumps(data))
 
     #
@@ -96,8 +96,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     #
 
     async def drop_chat_data(self: 'Self', chat_id: int) -> None:
-        """Deletes the specified key from `chat_data` and, depending on
-        the on_flush attribute, reflects the change in the database.
+        """Delete the specified key from `chat_data` and, depending on
+        the on_flush attribute, reflect the change in the database.
         """
         if self.chat_data is None:
             return
@@ -110,8 +110,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._CHAT_DATA_KEY, self.chat_data)
 
     async def drop_user_data(self: 'Self', user_id: int) -> None:
-        """Deletes the specified key from `user_data` and, depending on
-        the on_flush attribute, reflects the change in the database.
+        """Delete the specified key from `user_data` and, depending on
+        the on_flush attribute, reflect the change in the database.
         """
         if self.user_data is None:
             return
@@ -121,7 +121,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._USER_DATA_KEY, self.user_data)
 
     async def flush(self: 'Self') -> None:
-        """Stores all the data kept in the memory to the database."""
+        """Store all the data kept in the memory to the database."""
         if self.bot_data:
             await self._set_data(self._BOT_DATA_KEY, self.bot_data)
 
@@ -138,7 +138,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._USER_DATA_KEY, self.user_data)
 
     async def get_bot_data(self: 'Self') -> 'BD':
-        """Returns the bot data from the database, if it exists,
+        """Return the bot data from the database, if it exists,
         or an empty object of the type `telegram.ext.ContextTypes.bot_data`
         otherwise.
         """
@@ -150,7 +150,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         return self.bot_data
 
     async def get_callback_data(self: 'Self') -> 'CDCData | None':
-        """Returns the callback data from the database, if it exists,
+        """Return the callback data from the database, if it exists,
         or None otherwise.
         """
         if not self.callback_data:
@@ -166,7 +166,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         return self.callback_data[0], self.callback_data[1].copy()
 
     async def get_chat_data(self: 'Self') -> 'defaultdict[int, CD]':
-        """Returns the chat data from the database, if it exists,
+        """Return the chat data from the database, if it exists,
         or an empty dict otherwise.
         """
         if not self.chat_data:
@@ -179,7 +179,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         return self.chat_data
 
     async def get_conversations(self: 'Self', name: str) -> 'ConversationDict':
-        """Returns the conversations from the database, if it exists,
+        """Return the conversations from the database, if it exists,
         or an empty dict otherwise.
         """
         if not self.conversations:
@@ -188,7 +188,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         return self.conversations.get(name, {}).copy()
 
     async def get_user_data(self: 'Self') -> 'defaultdict[int, UD]':
-        """Returns the user data from the database, if it exists,
+        """Return the user data from the database, if it exists,
         or an empty dict otherwise.
         """
         if not self.user_data:
@@ -201,8 +201,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         return self.user_data
 
     async def update_bot_data(self: 'Self', data: 'BD') -> None:
-        """Updates the bot data (if changed) and, depending on on_flush attribute,
-        reflects the change in the database.
+        """Update the bot data (if changed) and, depending on on_flush attribute,
+        reflect the change in the database.
         """
         if self.bot_data == data:
             return
@@ -212,8 +212,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._BOT_DATA_KEY, self.bot_data)
 
     async def update_callback_data(self: 'Self', data: 'CDCData') -> None:
-        """Updates the callback data (if changed) and, depending on on_flush attribute,
-        reflects the change in the database.
+        """Update the callback data (if changed) and, depending on on_flush attribute,
+        reflect the change in the database.
         """
         if self.callback_data == data:
             return
@@ -223,8 +223,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._CALLBACK_DATA_KEY, self.callback_data)
 
     async def update_chat_data(self: 'Self', chat_id: int, data: 'CD') -> None:
-        """Updates the chat data (if changed) and, depending on on_flush attribute,
-        reflects the change in the database.
+        """Update the chat data (if changed) and, depending on on_flush attribute,
+        reflect the change in the database.
         """
         if self.chat_data is None:
             self.chat_data = defaultdict(self.context_types.chat_data)
@@ -242,8 +242,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         key: 'ConversationKey',
         new_state: object | None,
     ) -> None:
-        """Updates the conversations for the given handler and, depending on on_flush attribute,
-        reflects the change in the database.
+        """Update the conversations for the given handler and, depending on on_flush attribute,
+        reflect the change in the database.
         """
         if not self.conversations:
             self.conversations = {}
@@ -256,8 +256,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._CONVERSATIONS_KEY, self.conversations)
 
     async def update_user_data(self: 'Self', user_id: int, data: 'UD') -> None:
-        """Updates the user data (if changed) and, depending on the on_flush attribute,
-        reflects the change in the database.
+        """Update the user data (if changed) and, depending on the on_flush attribute,
+        reflect the change in the database.
         """
         if self.user_data is None:
             self.user_data = defaultdict(self.context_types.user_data)
@@ -270,10 +270,10 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._USER_DATA_KEY, self.user_data)
 
     async def refresh_bot_data(self: 'Self', bot_data: 'BD') -> None:
-        """Does nothing. Required by the `BasePersistence` interface."""
+        """Do nothing. Required by the `BasePersistence` interface."""
 
     async def refresh_chat_data(self: 'Self', chat_id: int, chat_data: 'CD') -> None:
-        """Does nothing. Required by the `BasePersistence` interface."""
+        """Do nothing. Required by the `BasePersistence` interface."""
 
     async def refresh_user_data(self: 'Self', user_id: int, user_data: 'UD') -> None:
-        """Does nothing. Required by the `BasePersistence` interface."""
+        """Do nothing. Required by the `BasePersistence` interface."""

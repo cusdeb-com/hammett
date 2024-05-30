@@ -21,7 +21,7 @@ async def get_latest_msg_config(
     context: 'CallbackContext[BT, UD, CD, BD]',
     message: 'Message',
 ) -> 'SerializedFinalRenderConfig | None':
-    """Returns the latest sent saved render config."""
+    """Return the latest sent saved render config."""
     state: 'SerializedFinalRenderConfig | None' = None
     try:
         state = context.user_data[LATEST_SENT_MSG_KEY]  # type: ignore[index]
@@ -43,7 +43,7 @@ async def save_latest_msg_config(
     config: 'FinalRenderConfig',
     message: 'Message',
 ) -> None:
-    """Saves the latest render config."""
+    """Save the latest render config."""
     latest_msg = {
         **asdict(config),
         'message_id': message.message_id,

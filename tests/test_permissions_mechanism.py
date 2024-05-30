@@ -1,6 +1,6 @@
 """The module contains the tests for the permissions mechanism."""
 
-# ruff: noqa: ANN001, ANN101, ANN201, ANN202
+# ruff: noqa: ANN001, ANN101, ANN201, ANN202, D401
 
 from typing import TYPE_CHECKING, cast
 

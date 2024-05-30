@@ -7,7 +7,7 @@ from hammett.core.exceptions import LocalePathIsNotSpecified
 
 
 def gettext(caption: str, lang: str = settings.LANGUAGE_CODE) -> str:
-    """Returns translated text by its caption."""
+    """Return translated text by its caption."""
     if not settings.LOCALE_PATH:
         raise LocalePathIsNotSpecified
 
