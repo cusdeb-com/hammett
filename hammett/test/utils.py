@@ -116,7 +116,7 @@ class override_settings(TestContextDecorator):  # noqa: N801
     def __init__(self: 'Self', **kwargs: 'Any') -> None:
         """Initialize an overrider settings object."""
         self.options = kwargs
-        self.wrapped: 'GlobalSettings | None' = None
+        self.wrapped: GlobalSettings | None = None
         super().__init__()
 
     def enable(self: 'Self') -> None:

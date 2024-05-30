@@ -80,7 +80,7 @@ class BaseTestCase(unittest.TestCase):
 
     def __init__(self: 'Self', method_name: str) -> None:
         """Initialize a base test case object."""
-        self.context: 'CallbackContext' = TestContext(  # type: ignore[type-arg]
+        self.context: CallbackContext = TestContext(  # type: ignore[type-arg]
             Application.builder(),  # type: ignore[arg-type]
         )
         self.update = Update(1)

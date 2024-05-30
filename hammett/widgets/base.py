@@ -336,7 +336,7 @@ class BaseChoiceWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'InitializedChoices':
         """Return the initialized choices."""
-        current_choices: 'InitializedChoices' = await self.get_state_value(
+        current_choices: InitializedChoices = await self.get_state_value(
             update,
             context,
             'choices',

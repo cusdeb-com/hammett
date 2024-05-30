@@ -52,7 +52,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         )
 
         try:
-            self.redis_cli: 'redis.Redis[Any]' = redis.Redis(
+            self.redis_cli: redis.Redis[Any] = redis.Redis(
                 host=settings.REDIS_PERSISTENCE.get('HOST'),
                 port=settings.REDIS_PERSISTENCE.get('PORT'),
                 db=settings.REDIS_PERSISTENCE['DB'],
@@ -63,13 +63,13 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             msg = f'{exc.args[0]} is missing in the REDIS_PERSISTENCE setting.'
             raise ImproperlyConfigured(msg) from exc
 
-        self.bot_data: 'BD | None' = None
-        self.callback_data: 'CDCData | None' = None
-        self.chat_data: 'defaultdict[int, CD] | None' = None
+        self.bot_data: BD | None = None
+        self.callback_data: CDCData | None = None
+        self.chat_data: defaultdict[int, CD] | None = None
         self.conversations: dict[str, dict[tuple[str | int, ...], object]] | None = None
         self.context_types = cast('ContextTypes[Any, UD, CD, BD]', context_types or ContextTypes())
         self.on_flush = on_flush
-        self.user_data: 'defaultdict[int, UD] | None' = None
+        self.user_data: defaultdict[int, UD] | None = None
 
     #
     # Private methods
