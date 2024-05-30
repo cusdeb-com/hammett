@@ -40,7 +40,7 @@ def autodiscover_screens(
     package_name: str,
     exclude_screens: 'Iterable[type[Screen]] | None' = None,
 ) -> 'set[type[Screen]]':
-    """Automatically discovers screens (i.e., subclasses of the Screen class),
+    """Automatically discover screens (i.e., subclasses of the Screen class),
     looking them in the specified package.
     """
     if exclude_screens is None:
