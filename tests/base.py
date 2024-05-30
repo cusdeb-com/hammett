@@ -1,6 +1,6 @@
 """The module contains the classes for the Hammett tests."""
 
-# ruff: noqa: ANN001, ANN101, ANN201, ANN202
+# ruff: noqa: ANN001, ANN101, ANN201, ANN202, D401
 
 from abc import ABC
 

@@ -25,12 +25,12 @@ class Hider:
     """The class implements a hider."""
 
     def __init__(self: 'Self', hider: int) -> None:
-        """Initializes a hider object."""
+        """Initialize a hider object."""
         self.hider: int = hider
         self.hiders_set: set[int] = {hider}
 
     def __or__(self: 'Self', other: 'Hider') -> 'Self':
-        """Performs `or` operation."""
+        """Perform `or` operation."""
         self.hiders_set.add(other.hider)
         return self
 
@@ -39,7 +39,7 @@ class HidersChecker:
     """The base class for the implementations of custom hiders checkers."""
 
     def __init__(self: 'Self', hiders_set: set[int]) -> None:
-        """Initializes a hider checker object."""
+        """Initialize a hider checker object."""
         if getattr(self, 'custom_hiders', None) is None:
             self.custom_hiders: dict[int, 'Callable[[Any, Any], Awaitable[Any]]'] = {}
 
@@ -68,7 +68,7 @@ class HidersChecker:
         _update: 'Update',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
-        """A stub for checking whether the user is an admin."""
+        """Represent a stub for checking whether the user is an admin."""
         return False
 
     async def is_beta_tester(
@@ -76,7 +76,7 @@ class HidersChecker:
         _update: 'Update',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
-        """A stub for checking whether the user is a beta tester."""
+        """Represent a stub for checking whether the user is a beta tester."""
         return False
 
     async def is_moderator(
@@ -84,7 +84,7 @@ class HidersChecker:
         _update: 'Update',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
-        """A stub for checking whether the user is a moderator."""
+        """Represent a stub for checking whether the user is a moderator."""
         return False
 
     async def run(
@@ -92,7 +92,7 @@ class HidersChecker:
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> bool:
-        """Runs the checks associated with the registered hiders.
+        """Run the checks associated with the registered hiders.
         The hiders are combined into chains using the OR operator, so the method
         returns True if any of the checks is True.
         The method is invoked under the hood, so you should not run it directly.

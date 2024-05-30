@@ -55,7 +55,7 @@ _HAMMETT_SETTINGS_MODULE = 'HAMMETT_SETTINGS_MODULE'
 
 
 def new_method_proxy(func: 'Func') -> 'Any':
-    """Routes functions to the _wrapped object."""
+    """Route functions to the _wrapped object."""
     # It's necessary to use the wraps decorator when wrapping functions.
     # But not here. The point is that new_method_proxy is used mainly with
     # the magic methods which, as a rule, are not used directly. So, avoiding
@@ -75,11 +75,11 @@ class GlobalSettings:
     """
 
     def __getattr__(self: 'Self', name: str) -> 'Any':
-        """Returns the value of a global setting."""
+        """Return the value of a global setting."""
         return getattr(global_settings, name)
 
     def __repr__(self: 'Self') -> str:
-        """Returns a system representation of a global setting."""
+        """Return a system representation of a global setting."""
         return f'<{self.__class__.__name__}>'
 
 
@@ -92,20 +92,20 @@ class LazyObject:
     _wrapped: 'Settings | object' = _EMPTY
 
     def __init__(self: 'Self') -> None:
-        """Initializes a lazy object."""
+        """Initialize a lazy object."""
         # Note: if a subclass overrides __init__(), it will likely need to
         # override __copy__() and __deepcopy__() as well.
         self._wrapped = _EMPTY
 
     def _setup(self: 'Self') -> None:
-        """Initializes the wrapped object."""
+        """Initialize the wrapped object."""
         msg = 'subclasses of LazyObject must provide a _setup() method.'
         raise NotImplementedError(msg)
 
     __getattr__ = new_method_proxy(getattr)
 
     def __setattr__(self: 'Self', name: str, value: 'Any') -> None:
-        """Sets the value of a lazy object."""
+        """Set the value of a lazy object."""
         if name == '_wrapped':
             # Assign to __dict__ to avoid infinite __setattr__ loops.
             self.__dict__['_wrapped'] = value
@@ -159,7 +159,7 @@ class LazySettings(LazyObject):
     """
 
     def _setup(self: 'Self', name: str | None = None) -> None:
-        """Loads the settings module specified via the HAMMETT_SETTINGS_MODULE
+        """Load the settings module specified via the HAMMETT_SETTINGS_MODULE
         environment variable. This is used the first time settings are needed,
         if the user hasn't configured settings manually.
         """
@@ -177,7 +177,7 @@ class LazySettings(LazyObject):
         self._wrapped = Settings(settings_module)
 
     def __repr__(self: 'Self') -> str:
-        """Returns a system representation of a lazy setting."""
+        """Return a system representation of a lazy setting."""
         # Hardcode the class name as otherwise it yields 'Settings'.
         if self._wrapped is _EMPTY:
             return '<LazySettings [Unevaluated]>'
@@ -187,7 +187,7 @@ class LazySettings(LazyObject):
         )
 
     def __getattr__(self: 'Self', name: str) -> 'Any':
-        """Returns the value of a setting and caches it in self.__dict__."""
+        """Return the value of a setting and caches it in self.__dict__."""
         if self._wrapped is _EMPTY:
             self._setup(name)
 
@@ -197,7 +197,7 @@ class LazySettings(LazyObject):
         return val
 
     def __setattr__(self: 'Self', name: str, value: 'Any') -> None:
-        """Sets the value of setting. Clears all cached values if _wrapped changes
+        """Set the value of setting. Clear all cached values if _wrapped changes
         (@override_settings does this) or clears single values when set.
         """
         if name == '_wrapped':
@@ -208,7 +208,7 @@ class LazySettings(LazyObject):
         super().__setattr__(name, value)
 
     def __delattr__(self: 'Self', name: str) -> None:
-        """Deletes a setting and clears it from cache if needed."""
+        """Delete a setting and clear it from cache if needed."""
         super().__delattr__(name)
         self.__dict__.pop(name, None)
 
@@ -219,7 +219,7 @@ class Settings:
     """
 
     def __init__(self: 'Self', settings_module: str) -> None:
-        """Initializes a settings object."""
+        """Initialize a settings object."""
         self.settings_module_name = settings_module
 
         self._explicit_settings = set()
@@ -240,7 +240,7 @@ class Settings:
         self._check()
 
     def _check(self: 'Self') -> None:
-        """Checks the settings for gross errors."""
+        """Check the settings for gross errors."""
         if self._is_overridden('HIDERS_CHECKER_CLASS'):
             setting_value = getattr(self._settings_module, 'HIDERS_CHECKER_CLASS')  # noqa: B009
             if not isinstance(setting_value, type) or not issubclass(setting_value, HidersChecker):
@@ -254,11 +254,11 @@ class Settings:
                 raise ImproperlyConfigured(msg)
 
     def _is_overridden(self: 'Self', setting: str) -> bool:
-        """Checks if the specified setting is overriden."""
+        """Check if the specified setting is overriden."""
         return setting in self._explicit_settings
 
     def __repr__(self: 'Self') -> str:
-        """Returns a system representation of a setting."""
+        """Return a system representation of a setting."""
         return f"<{self.__class__.__name__} '{self.settings_module_name}'>"
 
 

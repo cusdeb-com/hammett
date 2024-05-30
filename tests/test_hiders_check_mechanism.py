@@ -1,6 +1,6 @@
 """The module contains the tests for the hiders mechanism."""
 
-# ruff: noqa: ANN001, ANN101, ANN201, ANN202
+# ruff: noqa: ANN001, ANN101, ANN201, ANN202, D401
 
 from hammett.conf import settings
 from hammett.core.button import Button

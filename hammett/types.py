@@ -77,7 +77,9 @@ class Handler(Protocol):
         *args: 'Any',
         **kwargs: 'Any',
     ) -> Awaitable[Any]:
-        """The signature is required for every handler of the Handler type."""
+        """Represent the signature which is required for every handler
+        of the Handler type.
+        """
         ...
 
 
