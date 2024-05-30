@@ -66,7 +66,7 @@ class TestContext(CallbackContext):  # type: ignore[type-arg]
 
     @property
     def bot(self: 'Self') -> 'TestBot':
-        """Returns the test bot instance."""
+        """Return the test bot instance."""
         return TestBot(token=settings.TOKEN, base_file_url='')
 
 

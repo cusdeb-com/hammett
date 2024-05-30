@@ -111,7 +111,7 @@ class TestContextDecorator:
 
 
 class override_settings(TestContextDecorator):  # noqa: N801
-    """Decorates tests to perform temporary alterations of the settings."""
+    """Decorate tests to perform temporary alterations of the settings."""
 
     def __init__(self: 'Self', **kwargs: 'Any') -> None:
         """Initialize an overrider settings object."""
