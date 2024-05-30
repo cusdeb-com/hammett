@@ -4,11 +4,11 @@ lint.select = ["ALL"]
 
 lint.ignore = [
     "ANN401",  # any-type
-    "D205",
+    "D205",  # blank-line-after-summary
     "N818",  # error-suffix-on-exception-name
     "PT009",  # pytest-unittest-assertion
     "PT027",  # pytest-unittest-raises-assertion
-    "RUF012",
+    "RUF012",  # mutable-class-default
 ]
 
 exclude = [".git/", "demos/"]
