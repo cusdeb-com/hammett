@@ -3,13 +3,13 @@
 from hammett.core import Application
 from hammett.core.constants import DEFAULT_STATE
 
-from demos.single_choices.screens import MainMenu
+from demos.single_choices.language_switcher.screens import MainMenu
 
 
 def main():
     """Runs the bot."""
 
-    name = 'single_choice'
+    name = 'language_switcher'
     app = Application(
         name,
         entry_point=MainMenu,
