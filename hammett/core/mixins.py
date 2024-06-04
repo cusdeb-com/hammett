@@ -31,16 +31,15 @@ class RouteMixin(Screen):
             msg = f'The route of {self.__class__.__name__} is empty'
             raise ScreenRouteIsEmpty(msg)
 
-    async def _get_return_state_from_routes(
+    async def get_return_state_from_routes(
         self: 'Self',
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        routes: 'Routes',
     ) -> 'State':
         """Return the first found state in the routes."""
         current_state = await self.get_current_state(update, context)
 
-        for route in routes:
+        for route in self.routes:  # type: ignore[union-attr]
             route_states, return_state = route
             if current_state in route_states:
                 return return_state
@@ -59,9 +58,7 @@ class RouteMixin(Screen):
         config = await self.get_config(update, context, **kwargs)
 
         await self.render(update, context, config=config)
-        return await self._get_return_state_from_routes(
-            update, context, self.routes,  # type: ignore[arg-type]
-        )
+        return await self.get_return_state_from_routes(update, context)
 
     async def sjump(
         self: 'Self',
@@ -76,9 +73,7 @@ class RouteMixin(Screen):
         config.as_new_message = True
 
         await self.render(update, context, config=config)
-        return await self._get_return_state_from_routes(
-            update, context, self.routes,  # type: ignore[arg-type]
-        )
+        return await self.get_return_state_from_routes(update, context)
 
 
 class StartMixin(Screen):
