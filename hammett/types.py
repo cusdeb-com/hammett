@@ -65,6 +65,7 @@ class Handler(Protocol):
     filters: BaseFilter | None
     handler_type: HandlerType
     permissions_ignored: list[UUID]
+    states: Iterable[State]
 
     # Callback protocols and Callable types can be used mostly interchangeably.
     # Argument names in __call__ methods must be identical, unless a double

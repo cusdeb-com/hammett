@@ -51,6 +51,12 @@ class ScreenRouteIsEmpty(Exception):
     """
 
 
+class StatesAttributeIsNotSupported(Exception):
+    """Raised when the states attribute of the register_button_handler
+    is not supported by HandlerType.
+    """
+
+
 class TokenIsNotSpecified(Exception):
     """Raised when the token is not specified."""
 

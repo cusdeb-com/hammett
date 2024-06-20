@@ -294,7 +294,7 @@ class BaseChoiceWidget(BaseWidget):
         )
         return DEFAULT_STATE
 
-    @register_button_handler
+    @register_button_handler('')
     async def _on_choice_click(
         self: 'Self',
         update: 'Update',
