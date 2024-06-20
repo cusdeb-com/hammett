@@ -2,10 +2,13 @@
 the bots based on Hammett persistent, storing their data in Redis.
 """
 
+import base64
 import contextlib
+import json
 import logging
 import pickle
 from collections import defaultdict
+from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
 import redis.asyncio as redis
@@ -25,6 +28,38 @@ if TYPE_CHECKING:
 
 
 LOGGER = logging.getLogger(__name__)
+
+
+class _Decoder(json.JSONDecoder):
+    """The class implements a custom decoder."""
+
+    def __init__(self: 'Self', *args: 'Any', **kwargs: 'Any') -> None:
+        """Initialize the decoder object."""
+        super().__init__(*args, **kwargs, object_hook=self.object_hook)
+
+    def object_hook(self: 'Self', obj: object) -> object:
+        """Decode the object."""
+        if isinstance(obj, dict) and obj.get('data'):
+            return {
+                'data': base64.b64decode(obj['data']),
+                'name': obj['name'],
+            }
+
+        return obj
+
+
+class _Encoder(json.JSONEncoder):
+    """The class implements a custom encoder."""
+
+    def default(self: 'Self', obj: 'Any') -> 'Any':
+        """Handle encoding some objects that cannot be serialized into JSON."""
+        if isinstance(obj, Path):
+            return str(obj)
+
+        if isinstance(obj, bytes):
+            return base64.b64encode(obj).decode('utf-8')
+
+        return super().default(obj)
 
 
 class RedisPersistence(BasePersistence[UD, CD, BD]):
@@ -69,7 +104,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         self.conversations: dict[str, dict[tuple[str | int, ...], object]] | None = None
         self.context_types = cast('ContextTypes[Any, UD, CD, BD]', context_types or ContextTypes())
         self.on_flush = on_flush
-        self.user_data: defaultdict[int, UD] | None = None
+        self.user_data: dict[int, UD] | None = None
 
     #
     # Private methods
@@ -86,6 +121,35 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             return None
         else:
             return redis_data
+
+    def _decode_data(self: 'Self', data: dict[bytes, bytes]) -> dict[int, 'UD']:
+        """Return decoded data."""
+        decoded_data = {}
+        for key, val in data.items():
+            decoded_data[json.loads(key, cls=_Decoder)] = json.loads(val, cls=_Decoder)
+
+        return decoded_data
+
+    async def _hdel_data(self: 'Self', key: str, user_id: int) -> None:
+        """Delete hash type of the data from the database."""
+        await self.redis_cli.hdel(key, str(user_id))
+
+    async def _hgetall_data(self: 'Self', key: str) -> dict[bytes, bytes]:
+        """Return hash type of the data from the database."""
+        return await self.redis_cli.hgetall(key)
+
+    async def _hset_data(self: 'Self', key: str, user_id: int, data: 'UD') -> None:
+        """Store the data to the database in the hash format under the specified key."""
+        await self.redis_cli.hset(key, str(user_id), json.dumps(data, cls=_Encoder))
+
+    async def _hsetall_data(self: 'Self', key: str, data: dict[int, 'UD']) -> None:
+        """Replace hash type of the data to specified value."""
+        async with self.redis_cli.pipeline() as pipe:
+            pipe.multi()
+            for field, value in data.items():
+                await pipe.hset(key, str(field), json.dumps(value, cls=_Encoder))
+
+            await pipe.execute()
 
     async def _set_data(self: 'Self', key: str, data: object) -> None:
         """Store the data to the database using the specified key."""
@@ -118,7 +182,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         self.user_data.pop(user_id, None)
         if not self.on_flush:
-            await self._set_data(self._USER_DATA_KEY, self.user_data)
+            await self._hdel_data(self._USER_DATA_KEY, user_id)
 
     async def flush(self: 'Self') -> None:
         """Store all the data kept in the memory to the database."""
@@ -135,7 +199,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._CONVERSATIONS_KEY, self.conversations)
 
         if self.user_data:
-            await self._set_data(self._USER_DATA_KEY, self.user_data)
+            await self._hsetall_data(self._USER_DATA_KEY, self.user_data)
 
     async def get_bot_data(self: 'Self') -> 'BD':
         """Return the bot data from the database, if it exists,
@@ -187,16 +251,13 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         return self.conversations.get(name, {}).copy()
 
-    async def get_user_data(self: 'Self') -> 'defaultdict[int, UD]':
+    async def get_user_data(self: 'Self') -> dict[int, 'UD']:
         """Return the user data from the database, if it exists,
         or an empty dict otherwise.
         """
         if not self.user_data:
-            data = (await self._get_data(self._USER_DATA_KEY) or
-                    defaultdict(self.context_types.user_data))
-            data = defaultdict(self.context_types.user_data, data)
-
-            self.user_data = data
+            data = await self._hgetall_data(self._USER_DATA_KEY)
+            self.user_data = self._decode_data(data)
 
         return self.user_data
 
@@ -260,14 +321,14 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         reflect the change in the database.
         """
         if self.user_data is None:
-            self.user_data = defaultdict(self.context_types.user_data)
+            self.user_data = {}
 
         if self.user_data.get(user_id) == data:
             return
 
         self.user_data[user_id] = data
         if not self.on_flush:
-            await self._set_data(self._USER_DATA_KEY, self.user_data)
+            await self._hset_data(self._USER_DATA_KEY, user_id, data)
 
     async def refresh_bot_data(self: 'Self', bot_data: 'BD') -> None:
         """Do nothing. Required by the `BasePersistence` interface."""
