@@ -376,6 +376,7 @@ class Screen:
                 await self._hide_keyboard(context, prev_msg_config)
 
         if settings.SAVE_LATEST_MESSAGE:
+            config.keyboard = None  # type: ignore[assignment]
             await save_latest_msg_config(context, config, message)
         elif config.hide_keyboard:
             LOGGER.warning(
