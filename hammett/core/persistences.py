@@ -3,11 +3,9 @@ the bots based on Hammett persistent, storing their data in Redis.
 """
 
 import base64
-import contextlib
 import json
 import logging
 import pickle
-from collections import defaultdict
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
@@ -100,7 +98,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         self.bot_data: BD | None = None
         self.callback_data: CDCData | None = None
-        self.chat_data: defaultdict[int, CD] | None = None
+        self.chat_data: dict[int, CD] | None = None
         self.conversations: dict[str, dict[tuple[str | int, ...], object]] | None = None
         self.context_types = cast('ContextTypes[Any, UD, CD, BD]', context_types or ContextTypes())
         self.on_flush = on_flush
@@ -122,7 +120,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         else:
             return redis_data
 
-    def _decode_data(self: 'Self', data: dict[bytes, bytes]) -> dict[int, 'UD']:
+    def _decode_data(self: 'Self', data: dict[bytes, bytes]) -> dict[int, 'Any']:
         """Return decoded data."""
         decoded_data = {}
         for key, val in data.items():
@@ -138,11 +136,15 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Return hash type of the data from the database."""
         return await self.redis_cli.hgetall(key)
 
-    async def _hset_data(self: 'Self', key: str, user_id: int, data: 'UD') -> None:
+    async def _hset_data(self: 'Self', key: str, user_id: int, data: 'CD | UD') -> None:
         """Store the data to the database in the hash format under the specified key."""
         await self.redis_cli.hset(key, str(user_id), json.dumps(data, cls=_Encoder))
 
-    async def _hsetall_data(self: 'Self', key: str, data: dict[int, 'UD']) -> None:
+    async def _hsetall_data(
+        self: 'Self',
+        key: str,
+        data: dict[int, 'UD'] | dict[int, 'CD'],
+    ) -> None:
         """Replace hash type of the data to specified value."""
         async with self.redis_cli.pipeline() as pipe:
             pipe.multi()
@@ -166,12 +168,9 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         if self.chat_data is None:
             return
 
-        with contextlib.suppress(KeyError):
-            self.chat_data.pop(chat_id)
-
-
+        self.chat_data.pop(chat_id, None)
         if not self.on_flush:
-            await self._set_data(self._CHAT_DATA_KEY, self.chat_data)
+            await self._hdel_data(self._CHAT_DATA_KEY, chat_id)
 
     async def drop_user_data(self: 'Self', user_id: int) -> None:
         """Delete the specified key from `user_data` and, depending on
@@ -193,7 +192,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._CALLBACK_DATA_KEY, self.callback_data)
 
         if self.chat_data:
-            await self._set_data(self._CHAT_DATA_KEY, self.chat_data)
+            await self._hsetall_data(self._CHAT_DATA_KEY, self.chat_data)
 
         if self.conversations:
             await self._set_data(self._CONVERSATIONS_KEY, self.conversations)
@@ -229,16 +228,13 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         return self.callback_data[0], self.callback_data[1].copy()
 
-    async def get_chat_data(self: 'Self') -> 'defaultdict[int, CD]':
+    async def get_chat_data(self: 'Self') -> dict[int, 'CD']:
         """Return the chat data from the database, if it exists,
         or an empty dict otherwise.
         """
         if not self.chat_data:
-            data = (await self._get_data(self._CHAT_DATA_KEY) or
-                    defaultdict(self.context_types.chat_data))
-            data = defaultdict(self.context_types.chat_data, data)
-
-            self.chat_data = data
+            data = await self._hgetall_data(self._CHAT_DATA_KEY)
+            self.chat_data = self._decode_data(data)
 
         return self.chat_data
 
@@ -288,14 +284,14 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         reflect the change in the database.
         """
         if self.chat_data is None:
-            self.chat_data = defaultdict(self.context_types.chat_data)
+            self.chat_data = {}
 
         if self.chat_data.get(chat_id) == data:
             return
 
         self.chat_data[chat_id] = data
         if not self.on_flush:
-            await self._set_data(self._CHAT_DATA_KEY, self.chat_data)
+            await self._hset_data(self._CHAT_DATA_KEY, chat_id, data)
 
     async def update_conversation(
         self: 'Self',
