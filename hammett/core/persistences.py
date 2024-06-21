@@ -108,6 +108,18 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     # Private methods
     #
 
+    async def _get_data(self: 'Self', key: str) -> 'Any':
+        """Fetch the data from the database by the specified key."""
+        try:
+            redis_data = await self.redis_cli.get(key)
+            if redis_data:
+                return json.loads(redis_data, cls=_Decoder)
+        except (ConnectionError, json.JSONDecodeError):
+            LOGGER.exception('Failed to get the data from the database by the key %s', key)
+            return None
+        else:
+            return redis_data
+
     async def _get_data_old(self: 'Self', key: str) -> 'Any':
         """Fetch the data from the database by the specified key."""
         try:
@@ -157,6 +169,10 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Store the data to the database using the specified key."""
         await self.redis_cli.set(key, pickle.dumps(data))
 
+    async def _set_data(self: 'Self', key: str, data: object) -> None:
+        """Store the data to the database using the specified key."""
+        await self.redis_cli.set(key, json.dumps(data, cls=_Encoder))
+
     #
     # Public methods
     #
@@ -186,7 +202,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     async def flush(self: 'Self') -> None:
         """Store all the data kept in the memory to the database."""
         if self.bot_data:
-            await self._set_data_old(self._BOT_DATA_KEY, self.bot_data)
+            await self._set_data(self._BOT_DATA_KEY, self.bot_data)
 
         if self.callback_data:
             await self._set_data_old(self._CALLBACK_DATA_KEY, self.callback_data)
@@ -206,7 +222,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         otherwise.
         """
         if not self.bot_data:
-            data = await self._get_data_old(self._BOT_DATA_KEY) or self.context_types.bot_data()
+            data = await self._get_data(self._BOT_DATA_KEY) or self.context_types.bot_data()
 
             self.bot_data = data
 
@@ -266,7 +282,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         self.bot_data = data
         if not self.on_flush:
-            await self._set_data_old(self._BOT_DATA_KEY, self.bot_data)
+            await self._set_data(self._BOT_DATA_KEY, self.bot_data)
 
     async def update_callback_data(self: 'Self', data: 'CDCData') -> None:
         """Update the callback data (if changed) and, depending on on_flush attribute,
