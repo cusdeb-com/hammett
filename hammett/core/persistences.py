@@ -205,7 +205,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._set_data(self._BOT_DATA_KEY, self.bot_data)
 
         if self.callback_data:
-            await self._set_data_old(self._CALLBACK_DATA_KEY, self.callback_data)
+            await self._set_data(self._CALLBACK_DATA_KEY, self.callback_data)
 
         if self.chat_data:
             await self._hsetall_data(self._CHAT_DATA_KEY, self.chat_data)
@@ -233,7 +233,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         or None otherwise.
         """
         if not self.callback_data:
-            data = await self._get_data_old(self._CALLBACK_DATA_KEY)
+            data = await self._get_data(self._CALLBACK_DATA_KEY)
             if not data:
                 data = None
 
@@ -293,7 +293,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         self.callback_data = (data[0], data[1].copy())
         if not self.on_flush:
-            await self._set_data_old(self._CALLBACK_DATA_KEY, self.callback_data)
+            await self._set_data(self._CALLBACK_DATA_KEY, self.callback_data)
 
     async def update_chat_data(self: 'Self', chat_id: int, data: 'CD') -> None:
         """Update the chat data (if changed) and, depending on on_flush attribute,
