@@ -317,6 +317,16 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     ) -> None:
         """Update the conversations for the given handler and, depending on on_flush attribute,
         reflect the change in the database.
+
+        The method uses pickle to serialize data, since the ConversationKey type
+        represents an object that has the following structure:
+        {
+            'bot_name': {
+                ('user_id', 'chat_id'): 'current_state',
+                ...
+            },
+        }
+        In this case we cannot use json.dumps method.
         """
         if not self.conversations:
             self.conversations = {}
