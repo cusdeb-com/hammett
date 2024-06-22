@@ -120,7 +120,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         else:
             return redis_data
 
-    async def _get_data_old(self: 'Self', key: str) -> 'Any':
+    async def _get_pickled_data(self: 'Self', key: str) -> 'Any':
         """Fetch the data from the database by the specified key."""
         try:
             redis_data = await self.redis_cli.get(key)
@@ -165,7 +165,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
             await pipe.execute()
 
-    async def _set_data_old(self: 'Self', key: str, data: object) -> None:
+    async def _set_pickled_data(self: 'Self', key: str, data: object) -> None:
         """Store the data to the database using the specified key."""
         await self.redis_cli.set(key, pickle.dumps(data))
 
@@ -211,7 +211,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._hsetall_data(self._CHAT_DATA_KEY, self.chat_data)
 
         if self.conversations:
-            await self._set_data_old(self._CONVERSATIONS_KEY, self.conversations)
+            await self._set_pickled_data(self._CONVERSATIONS_KEY, self.conversations)
 
         if self.user_data:
             await self._hsetall_data(self._USER_DATA_KEY, self.user_data)
@@ -259,7 +259,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         or an empty dict otherwise.
         """
         if not self.conversations:
-            self.conversations = await self._get_data_old(self._CONVERSATIONS_KEY) or {name: {}}
+            self.conversations = await self._get_pickled_data(self._CONVERSATIONS_KEY) or {name: {}}
 
         return self.conversations.get(name, {}).copy()
 
@@ -336,7 +336,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         self.conversations[name][key] = new_state
         if not self.on_flush:
-            await self._set_data_old(self._CONVERSATIONS_KEY, self.conversations)
+            await self._set_pickled_data(self._CONVERSATIONS_KEY, self.conversations)
 
     async def update_user_data(self: 'Self', user_id: int, data: 'UD') -> None:
         """Update the user data (if changed) and, depending on the on_flush attribute,
