@@ -24,7 +24,6 @@ ignore = [
     "PT009",  # pytest-unittest-assertion
     "PT027",  # pytest-unittest-raises-assertion
     "RUF012",  # mutable-class-default
-    "RUF022", # unsorted-dunder-all
 ]
 
 [lint.flake8-quotes]
