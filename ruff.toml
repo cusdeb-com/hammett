@@ -17,7 +17,6 @@ ignore = [
     "FURB118", # reimplemented-operator
     "N818",  # error-suffix-on-exception-name
     "PLC0415", # import-outside-top-level
-    "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
     "PLR6301", # no-self-use
     "PT009",  # pytest-unittest-assertion

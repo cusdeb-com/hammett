@@ -197,7 +197,7 @@ class BaseChoiceWidget(BaseWidget):
         """Initialize a base choice widget object."""
         super().__init__()
 
-        if self.chosen_emoji == '' or self.unchosen_emoji == '':
+        if not self.chosen_emoji or not self.unchosen_emoji:
             msg = f'{self.__class__.__name__} must specify both chosen_emoji and unchosen_emoji'
             raise ChoiceEmojisAreUndefined(msg)
 
