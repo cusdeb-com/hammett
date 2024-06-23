@@ -97,7 +97,7 @@ class Application:
     ) -> CallbackQueryHandler[Any] | MessageHandler[Any]:
         """Return the handler object depending on its type."""
         handler_object: CallbackQueryHandler[Any] | MessageHandler[Any]
-        if handler_type in (HandlerType.BUTTON_HANDLER, ''):
+        if handler_type in {HandlerType.BUTTON_HANDLER, ''}:
             handler_object = CallbackQueryHandler(
                 apply_permission_to(handler),
                 # Specify a pattern. The pattern is used to determine which handler
