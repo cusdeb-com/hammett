@@ -3,6 +3,7 @@
 import contextlib
 import json
 import logging
+import operator
 from typing import TYPE_CHECKING, cast
 
 import telegram
@@ -351,7 +352,7 @@ class BaseChoiceWidget(BaseWidget):
     ) -> 'InitializedChoices':
         """Return the choices made by the user."""
         current_choices = await self.get_initialized_choices(update, context)
-        return tuple(filter(lambda choice: choice[0], current_choices))
+        return tuple(filter(operator.itemgetter(0), current_choices))
 
     async def jump(
         self: 'Self',
