@@ -19,7 +19,6 @@ ignore = [
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
-    "PLR6201", # literal-membership
     "PLR6301", # no-self-use
     "PT009",  # pytest-unittest-assertion
     "PT027",  # pytest-unittest-raises-assertion
