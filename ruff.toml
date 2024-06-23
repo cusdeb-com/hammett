@@ -1,19 +1,31 @@
 line-length = 100
 
-lint.select = ["ALL"]
-
-lint.ignore = [
-    "ANN401",  # any-type
-    "D205",  # blank-line-after-summary
-    "N818",  # error-suffix-on-exception-name
-    "PT009",  # pytest-unittest-assertion
-    "PT027",  # pytest-unittest-raises-assertion
-    "RUF012",  # mutable-class-default
-]
-
 exclude = [".git/", "demos/"]
 
 target-version = "py310"
+
+[lint]
+select = ["ALL"]
+extend-select = ["W", "E"]
+preview = true
+
+ignore = [
+    "ANN401",  # any-type
+    "CPY001", # missing-copyright-notice
+    "D205",  # blank-line-after-summary
+    "FURB110", # if-exp-instead-of-or-operator
+    "FURB118", # reimplemented-operator
+    "N818",  # error-suffix-on-exception-name
+    "PLC0415", # import-outside-top-level
+    "PLC1901", # compare-to-empty-string
+    "PLC2701", # import-private-name
+    "PLR6201", # literal-membership
+    "PLR6301", # no-self-use
+    "PT009",  # pytest-unittest-assertion
+    "PT027",  # pytest-unittest-raises-assertion
+    "RUF012",  # mutable-class-default
+    "RUF022", # unsorted-dunder-all
+]
 
 [lint.flake8-quotes]
 inline-quotes = "single"
