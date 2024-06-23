@@ -217,7 +217,7 @@ class Screen:
                 cover = f'{cover}?{uuid4()}'
             elif config.cache_covers:
                 cover_file_id = self._cached_covers.get(cover)
-                cover = cover_file_id if cover_file_id else cover
+                cover = cover_file_id or cover
 
             kwargs['caption'] = config.description
             kwargs['photo'] = cover
