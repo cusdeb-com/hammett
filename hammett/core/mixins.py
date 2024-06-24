@@ -47,22 +47,6 @@ class RouteMixin(Screen):
 
         return current_state
 
-    async def sgoto(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        **kwargs: 'Any',
-    ) -> 'State':
-        """Change the state and switch to the screen re-rendering
-        the previous message.
-        """
-        config = await self.get_config(update, context, **kwargs)
-
-        await self.render(update, context, config=config)
-        return await self._get_return_state_from_routes(
-            update, context, self.routes,  # type: ignore[arg-type]
-        )
-
     async def sjump(
         self: 'Self',
         update: 'Update',
@@ -74,6 +58,22 @@ class RouteMixin(Screen):
         """
         config = await self.get_config(update, context, **kwargs)
         config.as_new_message = True
+
+        await self.render(update, context, config=config)
+        return await self._get_return_state_from_routes(
+            update, context, self.routes,  # type: ignore[arg-type]
+        )
+
+    async def smove(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        **kwargs: 'Any',
+    ) -> 'State':
+        """Change the state and switch to the screen re-rendering
+        the previous message.
+        """
+        config = await self.get_config(update, context, **kwargs)
 
         await self.render(update, context, config=config)
         return await self._get_return_state_from_routes(
