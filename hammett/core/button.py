@@ -52,7 +52,6 @@ class Button:
         self.caption = caption
         self.payload = payload
         self.source = source
-        self.source_wrapped = None
         self.source_type = source_type
         self.hiders = hiders
 
