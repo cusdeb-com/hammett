@@ -371,7 +371,7 @@ class Screen:
             message = message[-1]
 
         if config.as_new_message:
-            prev_msg_config = await get_latest_msg_config(context, message)
+            prev_msg_config = get_latest_msg_config(context, message)
             if prev_msg_config and prev_msg_config['hide_keyboard']:
                 await self._hide_keyboard(context, prev_msg_config)
 
