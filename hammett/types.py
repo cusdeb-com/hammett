@@ -67,13 +67,13 @@ class Handler(Protocol):
     permissions_ignored: list[UUID]
 
     # Callback protocols and Callable types can be used mostly interchangeably.
-    # Argument names in __call__ methods must be identical, unless a double
-    # underscore prefix is used.
+    # Argument names in __call__ methods must be identical.
     # See: https://mypy.readthedocs.io/en/stable/protocols.html#callback-protocols
     def __call__(
         self: 'Self',
-        __update: 'Update',
-        __context: 'CallbackContext[BT, UD, CD, BD]',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        /,
         *args: 'Any',
         **kwargs: 'Any',
     ) -> Awaitable[Any]:
