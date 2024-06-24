@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 LOGGER = logging.getLogger(__name__)
 
 
-async def get_latest_msg_config(
+def get_latest_msg_config(
     context: 'CallbackContext[BT, UD, CD, BD]',
     message: 'Message',
 ) -> 'SerializedFinalRenderConfig | None':
