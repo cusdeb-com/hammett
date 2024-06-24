@@ -94,7 +94,7 @@ class ApplicationTests(BaseTestCase):
         app = self._init_application()
 
         handlers = app._native_application.handlers[0][0]
-        pattern = calc_checksum('TestScreenWithKeyboard.goto')
+        pattern = calc_checksum('TestScreenWithKeyboard.move')
 
         self.assertIsInstance(handlers.entry_points[0], CommandHandler)
         self.assertEqual(handlers.name, _APPLICATION_TEST_NAME)

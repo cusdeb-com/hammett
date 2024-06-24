@@ -353,15 +353,6 @@ class BaseChoiceWidget(BaseWidget):
         current_choices = await self.get_initialized_choices(update, context)
         return tuple(filter(lambda choice: choice[0], current_choices))
 
-    async def goto(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        **_kwargs: 'Any',
-    ) -> 'State':
-        """Handle the case when the widget is passed to Button as `MOVE_SOURCE_TYPE`."""
-        return await self._init(update, context)
-
     async def jump(
         self: 'Self',
         update: 'Update',
@@ -371,6 +362,15 @@ class BaseChoiceWidget(BaseWidget):
         """Handle the case when the widget is used as StartScreen."""
         config = RenderConfig(as_new_message=True)
         return await self._init(update, context, config=config)
+
+    async def move(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
+    ) -> 'State':
+        """Handle the case when the widget is passed to Button as `MOVE_SOURCE_TYPE`."""
+        return await self._init(update, context)
 
     async def send(
         self: 'Self',

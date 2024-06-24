@@ -261,15 +261,6 @@ class CarouselWidget(BaseWidget):
         """Return the `images` attribute of the widget."""
         return self.images
 
-    async def goto(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        **_kwargs: 'Any',
-    ) -> 'State':
-        """Handle the case when the widget is passed to Button as `MOVE_SOURCE_TYPE`."""
-        return await self._init(update, context)
-
     async def jump(
         self: 'Self',
         update: 'Update',
@@ -279,6 +270,15 @@ class CarouselWidget(BaseWidget):
         """Handle the case when the widget is used as StartScreen."""
         config = RenderConfig(as_new_message=True)
         return await self._init(update, context, config=config)
+
+    async def move(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
+    ) -> 'State':
+        """Handle the case when the widget is passed to Button as `MOVE_SOURCE_TYPE`."""
+        return await self._init(update, context)
 
     async def send(
         self: 'Self',

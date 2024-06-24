@@ -500,18 +500,6 @@ class Screen:
         if message:
             await self._post_render(update, context, message, final_config, extra_data)
 
-    async def goto(
-        self: 'Self',
-        update: 'Update',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        **kwargs: 'Any',
-    ) -> 'State':
-        """Switch to the screen re-rendering the previous message."""
-        config = await self.get_config(update, context, **kwargs)
-
-        await self.render(update, context, config=config)
-        return DEFAULT_STATE
-
     async def jump(
         self: 'Self',
         update: 'Update',
@@ -521,6 +509,18 @@ class Screen:
         """Switch to the screen sending it as a new message."""
         config = await self.get_config(update, context, **kwargs)
         config.as_new_message = True
+
+        await self.render(update, context, config=config)
+        return DEFAULT_STATE
+
+    async def move(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        **kwargs: 'Any',
+    ) -> 'State':
+        """Switch to the screen re-rendering the previous message."""
+        config = await self.get_config(update, context, **kwargs)
 
         await self.render(update, context, config=config)
         return DEFAULT_STATE

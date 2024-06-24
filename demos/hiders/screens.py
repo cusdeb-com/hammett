@@ -32,7 +32,7 @@ class NotAdminConfirmation(Screen):
 
         settings.ADMIN_GROUP.remove(user.id)
 
-        await main_menu.goto(update, context)
+        await main_menu.move(update, context)
         return DEFAULT_STATE
 
 
