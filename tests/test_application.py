@@ -99,6 +99,8 @@ class ApplicationTests(BaseTestCase):
         self.assertIsInstance(handlers.entry_points[0], CommandHandler)
         self.assertEqual(handlers.name, _APPLICATION_TEST_NAME)
         self.assertEqual(
+            # Handlers are registered in alphabetical order,
+            # and the move method comes right after jump.
             handlers.states[DEFAULT_STATE][1].pattern,
             re.compile(pattern),
         )
