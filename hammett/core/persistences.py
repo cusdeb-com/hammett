@@ -5,14 +5,13 @@ the bots based on Hammett persistent, storing their data in Redis.
 import base64
 import json
 import logging
-import pickle
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
 import redis.asyncio as redis
 from redis.exceptions import ConnectionError
 from telegram.ext import BasePersistence, ContextTypes
-from telegram.ext._utils.types import BD, CD, UD
+from telegram.ext._utils.types import BD, CD, UD, ConversationDict
 
 from hammett.conf import settings
 from hammett.core.exceptions import ImproperlyConfigured
@@ -20,8 +19,9 @@ from hammett.core.exceptions import ImproperlyConfigured
 if TYPE_CHECKING:
     from typing import Any
 
+    from telegram._utils.types import JSONDict
     from telegram.ext import PersistenceInput
-    from telegram.ext._utils.types import CDCData, ConversationDict, ConversationKey
+    from telegram.ext._utils.types import CDCData, ConversationKey
     from typing_extensions import Self
 
 
@@ -108,6 +108,32 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     # Private methods
     #
 
+    @staticmethod
+    def _decode_conversations(json_string: str) -> dict[str, dict[tuple[str | int, ...], object]]:
+        """Decode a conversations dict (that uses tuples as keys) from a JSON-string."""
+        conversations: dict[str, dict[tuple[str | int, ...], object]] = {}
+
+        tmp = json.loads(json_string, cls=_Decoder)
+        for handler, states in tmp.items():
+            conversations[handler] = {}
+            for key, state in states.items():
+                conversations[handler][tuple(json.loads(key, cls=_Decoder))] = state
+
+        return conversations
+
+    @staticmethod
+    def _encode_conversations(conversations: dict[str, dict[tuple[str | int, ...], object]]) -> str:
+        """Encode a conversations dict (that uses tuples as keys) to a
+        JSON-serializable way.
+        """
+        tmp: dict[str, JSONDict] = {}
+        for handler, states in conversations.items():
+            tmp[handler] = {}
+            for key, state in states.items():
+                tmp[handler][json.dumps(key, cls=_Encoder)] = state
+
+        return json.dumps(tmp, cls=_Encoder)
+
     async def _get_data(self: 'Self', key: str) -> 'Any':
         """Fetch the data from the database by the specified key."""
         try:
@@ -116,18 +142,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
                 return json.loads(redis_data, cls=_Decoder)
         except (ConnectionError, json.JSONDecodeError):
             LOGGER.exception('Failed to get the data from the database by the key %s', key)
-            return None
-        else:
-            return redis_data
-
-    async def _get_pickled_data(self: 'Self', key: str) -> 'Any':
-        """Fetch the data from the database by the specified key."""
-        try:
-            redis_data = await self.redis_cli.get(key)
-            if redis_data:
-                return pickle.loads(redis_data)  # noqa: S301
-        except (ConnectionError, pickle.UnpicklingError):
-            LOGGER.exception('Failed to get the data from Redis by the key %s', key)
             return None
         else:
             return redis_data
@@ -165,13 +179,15 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
             await pipe.execute()
 
-    async def _set_pickled_data(self: 'Self', key: str, data: object) -> None:
+    async def _set_data(
+        self: 'Self',
+        key: str,
+        data: object | str,
+        ready_json: bool = False,  # noqa: FBT001, FBT002
+    ) -> None:
         """Store the data to the database using the specified key."""
-        await self.redis_cli.set(key, pickle.dumps(data))
-
-    async def _set_data(self: 'Self', key: str, data: object) -> None:
-        """Store the data to the database using the specified key."""
-        await self.redis_cli.set(key, json.dumps(data, cls=_Encoder))
+        data = data if isinstance(data, str) and ready_json else json.dumps(data, cls=_Encoder)
+        await self.redis_cli.set(key, data)
 
     #
     # Public methods
@@ -211,7 +227,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             await self._hsetall_data(self._CHAT_DATA_KEY, self.chat_data)
 
         if self.conversations:
-            await self._set_pickled_data(self._CONVERSATIONS_KEY, self.conversations)
+            conversations = self._encode_conversations(self.conversations)
+            await self._set_data(self._CONVERSATIONS_KEY, conversations, ready_json=True)
 
         if self.user_data:
             await self._hsetall_data(self._USER_DATA_KEY, self.user_data)
@@ -259,7 +276,10 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         or an empty dict otherwise.
         """
         if not self.conversations:
-            self.conversations = await self._get_pickled_data(self._CONVERSATIONS_KEY) or {name: {}}
+            conversations = await self.redis_cli.get(self._CONVERSATIONS_KEY)
+            self.conversations = self._decode_conversations(
+                conversations,
+            ) if conversations else {name: {}}
 
         return self.conversations.get(name, {}).copy()
 
@@ -317,16 +337,6 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     ) -> None:
         """Update the conversations for the given handler and, depending on on_flush attribute,
         reflect the change in the database.
-
-        The method uses pickle to serialize data, since the ConversationKey type
-        represents an object that has the following structure:
-        {
-            'bot_name': {
-                ('user_id', 'chat_id'): 'current_state',
-                ...
-            },
-        }
-        In this case we cannot use json.dumps method.
         """
         if not self.conversations:
             self.conversations = {}
@@ -336,7 +346,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         self.conversations[name][key] = new_state
         if not self.on_flush:
-            await self._set_pickled_data(self._CONVERSATIONS_KEY, self.conversations)
+            conversations = self._encode_conversations(self.conversations)
+            await self._set_data(self._CONVERSATIONS_KEY, conversations, ready_json=True)
 
     async def update_user_data(self: 'Self', user_id: int, data: 'UD') -> None:
         """Update the user data (if changed) and, depending on the on_flush attribute,
