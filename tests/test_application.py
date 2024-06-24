@@ -51,7 +51,7 @@ class TestScreenWithKeyboard(TestScreen):
         return [
             [
                 Button('⬅️ Main Menu', TestStartScreen,
-                       source_type=SourcesTypes.GOTO_SOURCE_TYPE),
+                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
             ],
         ]
 
@@ -67,7 +67,7 @@ class TestScreenWithPermissionIgnored(TestScreen):
             [
                 Button(
                     '⬅️ Main Menu', TestStartScreen,
-                    source_type=SourcesTypes.GOTO_SOURCE_TYPE,
+                    source_type=SourcesTypes.MOVE_SOURCE_TYPE,
                 ),
             ],
         ]

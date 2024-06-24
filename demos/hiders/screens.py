@@ -20,7 +20,7 @@ class NotAdminConfirmation(Screen):
             [
                 Button('✅ Yes', self.exclude_user_from_admin_group),
                 Button('⬅️ Main Menu', MainMenu,
-                       source_type=SourcesTypes.GOTO_SOURCE_TYPE),
+                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
             ],
         ]
 
@@ -80,12 +80,12 @@ class MainMenu(StartMixin, Screen):
             [
                 Button('🔒 Available only for admins', SecretRoom,
                        hiders=Hider(ONLY_FOR_ADMIN),
-                       source_type=SourcesTypes.GOTO_SOURCE_TYPE),
+                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
             ],
             [
                 Button("❌ I'm not an admin!", NotAdminConfirmation,
                        hiders=Hider(ONLY_FOR_ADMIN),
-                       source_type=SourcesTypes.GOTO_SOURCE_TYPE),
+                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
             ],
             [
                 Button('🎸 Hammett Home Page', 'https://github.com/cusdeb-com/hammett',
@@ -116,6 +116,6 @@ class SecretRoom(Screen):
         return [
             [
                 Button('⬅️ Main Menu', MainMenu,
-                       source_type=SourcesTypes.GOTO_SOURCE_TYPE),
+                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
             ],
         ]

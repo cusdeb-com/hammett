@@ -359,7 +359,7 @@ class BaseChoiceWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
         **_kwargs: 'Any',
     ) -> 'State':
-        """Handle the case when the widget is passed to Button as `GOTO_SOURCE_TYPE`."""
+        """Handle the case when the widget is passed to Button as `MOVE_SOURCE_TYPE`."""
         return await self._init(update, context)
 
     async def jump(
