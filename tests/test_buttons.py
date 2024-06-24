@@ -39,7 +39,7 @@ class ButtonsTests(BaseTestCase):
             )
             await button.create(self.update, self.context)
 
-    async def test_using_random_class_instead_of_screen_for_goto(self):
+    async def test_using_random_class_instead_of_screen_for_move(self):
         """Tests the case when the source type is `MOVE_SOURCE_TYPE` but
         the source isn't a subclass of Screen.
         """

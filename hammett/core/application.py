@@ -61,7 +61,7 @@ class Application:
         self._setup()
 
         self._route_handlers = ('sjump', 'smove')
-        self._builtin_handlers = ('goto', 'jump', 'start', *self._route_handlers)
+        self._builtin_handlers = ('jump', 'move', 'start', *self._route_handlers)
         self._entry_point = entry_point()
         self._name = name
         self._native_states = native_states or {}

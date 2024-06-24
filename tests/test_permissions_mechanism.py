@@ -44,7 +44,7 @@ class PermissionsTests(BaseTestCase):
         strict execution order is required.
         """
         screen = TestScreen()
-        wrapped_handler = apply_permission_to(screen.goto)
+        wrapped_handler = apply_permission_to(screen.move)
         await wrapped_handler(self.update, self.context)
         expected = [
             'MainPermission.has_permission',
@@ -55,7 +55,7 @@ class PermissionsTests(BaseTestCase):
     async def test_giving_permission(self):
         """Tests the case when the permission is giving."""
         screen = TestScreen()
-        source = cast('Handler[..., State]', screen.goto)
+        source = cast('Handler[..., State]', screen.move)
 
         permission_instance = TestGivingPermission()
         handler = permission_instance.check_permission(source)
@@ -66,7 +66,7 @@ class PermissionsTests(BaseTestCase):
     async def test_denying_permission(self):
         """Tests the case when the permission is denied."""
         screen = TestScreen()
-        source = cast('Handler[..., State]', screen.goto)
+        source = cast('Handler[..., State]', screen.move)
 
         permission_instance = TestDenyingPermission()
         handler = permission_instance.check_permission(source)
@@ -77,7 +77,7 @@ class PermissionsTests(BaseTestCase):
     async def test_sync_permission_denied(self):
         """Tests the case when the permission checker is a synchronous."""
         screen = TestScreen()
-        source = cast('Handler[..., State]', screen.goto)
+        source = cast('Handler[..., State]', screen.move)
 
         permission_instance = TestPermissionWithSyncChecker()
         handler = permission_instance.check_permission(source)
