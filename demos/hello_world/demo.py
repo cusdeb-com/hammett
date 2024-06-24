@@ -12,7 +12,7 @@ class HelloScreen(StartMixin, Screen):
             Button(
                 'Next screen ➡️',
                 YetAnotherScreen,
-                source_type=SourcesTypes.GOTO_SOURCE_TYPE,
+                source_type=SourcesTypes.MOVE_SOURCE_TYPE,
             )
         ]]
 
@@ -28,7 +28,7 @@ class YetAnotherScreen(StartMixin, Screen):
             Button(
                 '⬅️ Back',
                 HelloScreen,
-                source_type=SourcesTypes.GOTO_SOURCE_TYPE,
+                source_type=SourcesTypes.MOVE_SOURCE_TYPE,
             )
         ]]
 

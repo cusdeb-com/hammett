@@ -40,12 +40,12 @@ class ButtonsTests(BaseTestCase):
             await button.create(self.update, self.context)
 
     async def test_using_random_class_instead_of_screen_for_goto(self):
-        """Tests the case when the source type is `GOTO_SOURCE_TYPE` but
+        """Tests the case when the source type is `MOVE_SOURCE_TYPE` but
         the source isn't a subclass of Screen.
         """
         with self.assertRaises(TypeError):
             Button(
                 'Test',
                 AnythingElseButScreen,  # is not a subclass of Screen, so it's invalid
-                source_type=SourcesTypes.GOTO_SOURCE_TYPE,
+                source_type=SourcesTypes.MOVE_SOURCE_TYPE,
             )
