@@ -1,7 +1,7 @@
 """The module contains the hiders checker for the bot. """
 
 from hammett.conf import settings
-from hammett.core.hiders import HidersChecker
+from hammett.core.hider import HidersChecker
 
 
 class DemoHidersChecker(HidersChecker):

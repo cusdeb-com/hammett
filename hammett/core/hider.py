@@ -1,4 +1,4 @@
-"""The module contains the implementation of the hiders mechanism."""
+"""The module contains the implementation of the hider mechanism."""
 
 import asyncio
 from typing import TYPE_CHECKING

@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.core.hiders import Hider, HidersChecker
+    from hammett.core.hider import Hider, HidersChecker
     from hammett.types import Handler, Source
 
 _HANDLER_SOURCES_TYPES = (

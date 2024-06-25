@@ -40,7 +40,7 @@ from typing import TYPE_CHECKING
 
 from hammett.conf import global_settings
 from hammett.core.exceptions import ImproperlyConfigured
-from hammett.core.hiders import HidersChecker
+from hammett.core.hider import HidersChecker
 
 if TYPE_CHECKING:
     from typing import Any

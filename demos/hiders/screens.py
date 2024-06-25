@@ -6,7 +6,7 @@ from hammett.conf import settings
 from hammett.core import Button, Screen
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
 from hammett.core.handlers import register_button_handler
-from hammett.core.hiders import ONLY_FOR_ADMIN, Hider
+from hammett.core.hider import ONLY_FOR_ADMIN, Hider
 from hammett.core.mixins import StartMixin
 
 LOGGER = logging.getLogger('hammett')
