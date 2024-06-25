@@ -7,7 +7,7 @@ import inspect
 import pkgutil
 from typing import TYPE_CHECKING
 
-from hammett.core.permissions import Permission
+from hammett.core.permission import Permission
 from hammett.core.screen import Screen
 
 if TYPE_CHECKING:

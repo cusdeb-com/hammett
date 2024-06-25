@@ -14,7 +14,7 @@ from telegram.ext import (
 from hammett.core.conversation_handler import ConversationHandler
 from hammett.core.exceptions import TokenIsNotSpecified, UnknownHandlerType
 from hammett.core.handlers import calc_checksum, log_unregistered_handler
-from hammett.core.permissions import apply_permission_to
+from hammett.core.permission import apply_permission_to
 from hammett.types import HandlerAlias, HandlerType
 from hammett.utils.log import configure_logging
 
