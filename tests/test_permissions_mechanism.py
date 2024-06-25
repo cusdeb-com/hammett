@@ -5,7 +5,7 @@
 from typing import TYPE_CHECKING, cast
 
 from hammett.core.constants import DEFAULT_STATE
-from hammett.core.permissions import apply_permission_to
+from hammett.core.permission import apply_permission_to
 from hammett.test.base import BaseTestCase
 from tests.base import (
     PERMISSION_DENIED_STATE,

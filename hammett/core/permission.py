@@ -1,4 +1,4 @@
-"""The module contains the implementation of the permissions mechanism."""
+"""The module contains the implementation of the permission mechanism."""
 
 import asyncio
 from functools import wraps
