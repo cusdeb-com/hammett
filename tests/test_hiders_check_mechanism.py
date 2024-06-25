@@ -6,7 +6,7 @@ from hammett.conf import settings
 from hammett.core.button import Button
 from hammett.core.constants import SourcesTypes
 from hammett.core.exceptions import ImproperlyConfigured
-from hammett.core.hiders import (
+from hammett.core.hider import (
     ONLY_FOR_ADMIN,
     ONLY_FOR_MODERATORS,
     Hider,
