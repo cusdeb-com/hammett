@@ -146,7 +146,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         else:
             return redis_data
 
-    def _decode_data(self: 'Self', data: dict[bytes, bytes]) -> dict[int, 'Any']:
+    def _decode_data(self: 'Self', data: dict[bytes, bytes]) -> dict[int, 'CD | UD']:
         """Return decoded data."""
         decoded_data = {}
         for key, val in data.items():
@@ -267,7 +267,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """
         if not self.chat_data:
             data = await self._hgetall_data(self._CHAT_DATA_KEY)
-            self.chat_data = self._decode_data(data)
+            self.chat_data = cast(dict[int, 'CD'], self._decode_data(data))
 
         return self.chat_data
 
@@ -289,7 +289,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """
         if not self.user_data:
             data = await self._hgetall_data(self._USER_DATA_KEY)
-            self.user_data = self._decode_data(data)
+            self.user_data = cast(dict[int, 'UD'], self._decode_data(data))
 
         return self.user_data
 
