@@ -1,4 +1,5 @@
 asgiref==3.7.2
+fakeredis==2.23.2
 mypy==1.6.1
 pypandoc==1.5
 ruff
