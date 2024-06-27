@@ -17,6 +17,7 @@ from hammett.core.constants import (
 )
 from hammett.core.exceptions import MissingPersistence
 from hammett.core.handlers import register_button_handler
+from hammett.utils.misc import get_callback_query
 from hammett.widgets.exceptions import (
     ChoiceEmojisAreUndefined,
     ChoicesFormatIsInvalid,
@@ -119,7 +120,7 @@ class BaseWidget(Screen):
     ) -> str:
         """Return a widget state key."""
         if update:
-            query = await self.get_callback_query(update)
+            query = await get_callback_query(update)
             message = getattr(query, 'message', None)
             if message is None:
                 raise FailedToGetStateKey
