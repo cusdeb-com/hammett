@@ -2,10 +2,8 @@
 the bots based on Hammett persistent, storing their data in Redis.
 """
 
-import base64
 import json
 import logging
-from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
 import redis.asyncio as redis
@@ -26,38 +24,6 @@ if TYPE_CHECKING:
 
 
 LOGGER = logging.getLogger(__name__)
-
-
-class _Decoder(json.JSONDecoder):
-    """The class implements a custom decoder."""
-
-    def __init__(self: 'Self', *args: 'Any', **kwargs: 'Any') -> None:
-        """Initialize the decoder object."""
-        super().__init__(*args, **kwargs, object_hook=self.object_hook)
-
-    def object_hook(self: 'Self', obj: object) -> object:
-        """Decode the object."""
-        if isinstance(obj, dict) and obj.get('data'):
-            return {
-                'data': base64.b64decode(obj['data']),
-                'name': obj['name'],
-            }
-
-        return obj
-
-
-class _Encoder(json.JSONEncoder):
-    """The class implements a custom encoder."""
-
-    def default(self: 'Self', obj: 'Any') -> 'Any':
-        """Handle encoding some objects that cannot be serialized into JSON."""
-        if isinstance(obj, Path):
-            return str(obj)
-
-        if isinstance(obj, bytes):
-            return base64.b64encode(obj).decode('utf-8')
-
-        return super().default(obj)
 
 
 class RedisPersistence(BasePersistence[UD, CD, BD]):
@@ -113,11 +79,11 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Decode a conversations dict (that uses tuples as keys) from a JSON-string."""
         conversations: dict[str, dict[tuple[str | int, ...], object]] = {}
 
-        tmp = json.loads(json_string, cls=_Decoder)
+        tmp = json.loads(json_string)
         for handler, states in tmp.items():
             conversations[handler] = {}
             for key, state in states.items():
-                conversations[handler][tuple(json.loads(key, cls=_Decoder))] = state
+                conversations[handler][tuple(json.loads(key))] = state
 
         return conversations
 
@@ -130,16 +96,16 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         for handler, states in conversations.items():
             tmp[handler] = {}
             for key, state in states.items():
-                tmp[handler][json.dumps(key, cls=_Encoder)] = state
+                tmp[handler][json.dumps(key)] = state
 
-        return json.dumps(tmp, cls=_Encoder)
+        return json.dumps(tmp)
 
     async def _get_data(self: 'Self', key: str) -> 'Any':
         """Fetch the data from the database by the specified key."""
         try:
             redis_data = await self.redis_cli.get(key)
             if redis_data:
-                return json.loads(redis_data, cls=_Decoder)
+                return json.loads(redis_data)
         except (ConnectionError, json.JSONDecodeError):
             LOGGER.exception('Failed to get the data from the database by the key %s', key)
             return None
@@ -150,7 +116,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Return decoded data."""
         decoded_data = {}
         for key, val in data.items():
-            decoded_data[json.loads(key, cls=_Decoder)] = json.loads(val, cls=_Decoder)
+            decoded_data[json.loads(key)] = json.loads(val)
 
         return decoded_data
 
@@ -164,7 +130,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
     async def _hset_data(self: 'Self', key: str, user_id: int, data: 'CD | UD') -> None:
         """Store the data to the database in the hash format under the specified key."""
-        await self.redis_cli.hset(key, str(user_id), json.dumps(data, cls=_Encoder))
+        await self.redis_cli.hset(key, str(user_id), json.dumps(data))
 
     async def _hsetall_data(
         self: 'Self',
@@ -175,7 +141,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         async with self.redis_cli.pipeline() as pipe:
             pipe.multi()
             for field, value in data.items():
-                await pipe.hset(key, str(field), json.dumps(value, cls=_Encoder))
+                await pipe.hset(key, str(field), json.dumps(value))
 
             await pipe.execute()
 
@@ -186,7 +152,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         ready_json: bool = False,  # noqa: FBT001, FBT002
     ) -> None:
         """Store the data to the database using the specified key."""
-        data = data if isinstance(data, str) and ready_json else json.dumps(data, cls=_Encoder)
+        data = data if isinstance(data, str) and ready_json else json.dumps(data)
         await self.redis_cli.set(key, data)
 
     #
