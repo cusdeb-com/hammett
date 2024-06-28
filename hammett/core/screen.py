@@ -30,7 +30,7 @@ from hammett.core.exceptions import (
     ScreenDescriptionIsEmpty,
     ScreenDocumentDataIsEmpty,
 )
-from hammett.utils.render_config import get_latest_msg_config, save_latest_msg_config
+from hammett.utils.render_config import get_latest_msg, save_latest_msg
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -43,7 +43,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.core.constants import SerializedFinalRenderConfig
+    from hammett.core.constants import LatestMsg
     from hammett.types import Document, Keyboard, State
 
 LOGGER = logging.getLogger(__name__)
@@ -242,23 +242,21 @@ class Screen:
     async def _hide_keyboard(
         self: 'Self',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        latest_msg_config: 'SerializedFinalRenderConfig',
+        latest_msg: 'LatestMsg',
     ) -> None:
         """Remove the keyboard from the old message, leaving the cover and
         description unchanged.
         """
-        config = FinalRenderConfig(**latest_msg_config)
-        send, kwargs = await self._get_edit_render_method(context, config)
-        if send:
-            with contextlib.suppress(BadRequest):
-                await send(
-                    reply_markup=await self._create_markup_keyboard(
-                        EMPTY_KEYBOARD,
-                        None,
-                        context,
-                    ),
-                    **kwargs,
-                )
+        msg_id = latest_msg['message_id']
+        chat_id = latest_msg['chat_id']
+
+        with contextlib.suppress(BadRequest):
+            reply_markup = await self._create_markup_keyboard(EMPTY_KEYBOARD, None, context)
+            await context.bot.edit_message_reply_markup(
+                chat_id=chat_id,
+                message_id=msg_id,
+                reply_markup=reply_markup,
+            )
 
     @staticmethod
     def _is_url(cover: 'str | PathLike[str]') -> bool:
@@ -371,13 +369,12 @@ class Screen:
             message = message[-1]
 
         if config.as_new_message:
-            prev_msg_config = get_latest_msg_config(context, message)
-            if prev_msg_config and prev_msg_config['hide_keyboard']:
-                await self._hide_keyboard(context, prev_msg_config)
+            prev_msg = get_latest_msg(context, message)
+            if prev_msg and prev_msg['hide_keyboard']:
+                await self._hide_keyboard(context, prev_msg)
 
         if settings.SAVE_LATEST_MESSAGE:
-            config.keyboard = None  # type: ignore[assignment]
-            await save_latest_msg_config(context, config, message)
+            await save_latest_msg(context, config, message)
         elif config.hide_keyboard:
             LOGGER.warning(
                 'The keyboard hiding feature does not work without '

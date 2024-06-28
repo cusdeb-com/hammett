@@ -1,7 +1,6 @@
 """The module contains helpers for working with RenderConfig."""
 
 import logging
-from dataclasses import asdict
 from typing import TYPE_CHECKING, cast
 
 from hammett.core.constants import LATEST_SENT_MSG_KEY
@@ -12,17 +11,17 @@ if TYPE_CHECKING:
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
 
-    from hammett.core.constants import FinalRenderConfig, SerializedFinalRenderConfig
+    from hammett.core.constants import FinalRenderConfig, LatestMsg
 
 LOGGER = logging.getLogger(__name__)
 
 
-def get_latest_msg_config(
+def get_latest_msg(
     context: 'CallbackContext[BT, UD, CD, BD]',
     message: 'Message',
-) -> 'SerializedFinalRenderConfig | None':
-    """Return the latest sent saved render config."""
-    state: SerializedFinalRenderConfig | None = None
+) -> 'LatestMsg | None':
+    """Return the latest sent message info."""
+    state: LatestMsg | None = None
     try:
         state = context.user_data[LATEST_SENT_MSG_KEY]  # type: ignore[index]
     except KeyError:
@@ -38,15 +37,16 @@ def get_latest_msg_config(
     return state
 
 
-async def save_latest_msg_config(
+async def save_latest_msg(
     context: 'CallbackContext[BT, UD, CD, BD]',
     config: 'FinalRenderConfig',
     message: 'Message',
 ) -> None:
-    """Save the latest render config."""
+    """Save the latest message info."""
     latest_msg = {
-        **asdict(config),
+        'hide_keyboard': config.hide_keyboard,
         'message_id': message.message_id,
+        'chat_id': message.chat_id,
     }
     try:
         context.user_data[LATEST_SENT_MSG_KEY] = latest_msg  # type: ignore[index]
@@ -54,7 +54,7 @@ async def save_latest_msg_config(
         if not context._application.persistence:  # noqa: SLF001
             msg = (
                 "It's not possible to pass data to user_data. "
-                f"To solve the issue either don't use {save_latest_msg_config.__name__} in jobs "
+                f"To solve the issue either don't use {save_latest_msg.__name__} in jobs "
                 f"or configure persistence."
             )
             raise MissingPersistence(msg) from exc

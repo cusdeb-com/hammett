@@ -53,15 +53,9 @@ class FinalRenderConfig(RenderConfig):
     keyboard: 'Keyboard' = field(default_factory=list)
 
 
-class SerializedFinalRenderConfig(TypedDict):
-    """The class represents a serialized final config after using `dataclasses.asdict`."""
+class LatestMsg(TypedDict):
+    """The class represents information about the latest message sent."""
 
-    chat_id: int | None
+    chat_id: int
     message_id: int
-    as_new_message: bool
-    cache_covers: bool
-    cover: 'str | PathLike[str]'
-    description: str
-    document: 'Document | None'
-    keyboard: 'Keyboard'
     hide_keyboard: bool
