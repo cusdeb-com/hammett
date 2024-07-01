@@ -2,7 +2,6 @@
 the bots based on Hammett persistent, storing their data in Redis.
 """
 
-import base64
 import json
 import logging
 from pathlib import Path
@@ -28,24 +27,6 @@ if TYPE_CHECKING:
 LOGGER = logging.getLogger(__name__)
 
 
-class _Decoder(json.JSONDecoder):
-    """The class implements a custom decoder."""
-
-    def __init__(self: 'Self', *args: 'Any', **kwargs: 'Any') -> None:
-        """Initialize the decoder object."""
-        super().__init__(*args, **kwargs, object_hook=self.object_hook)
-
-    def object_hook(self: 'Self', obj: object) -> object:
-        """Decode the object."""
-        if isinstance(obj, dict) and obj.get('data'):
-            return {
-                'data': base64.b64decode(obj['data']),
-                'name': obj['name'],
-            }
-
-        return obj
-
-
 class _Encoder(json.JSONEncoder):
     """The class implements a custom encoder."""
 
@@ -53,9 +34,6 @@ class _Encoder(json.JSONEncoder):
         """Handle encoding some objects that cannot be serialized into JSON."""
         if isinstance(obj, Path):
             return str(obj)
-
-        if isinstance(obj, bytes):
-            return base64.b64encode(obj).decode('utf-8')
 
         return super().default(obj)
 
@@ -113,11 +91,11 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Decode a conversations dict (that uses tuples as keys) from a JSON-string."""
         conversations: dict[str, dict[tuple[str | int, ...], object]] = {}
 
-        tmp = json.loads(json_string, cls=_Decoder)
+        tmp = json.loads(json_string)
         for handler, states in tmp.items():
             conversations[handler] = {}
             for key, state in states.items():
-                conversations[handler][tuple(json.loads(key, cls=_Decoder))] = state
+                conversations[handler][tuple(json.loads(key))] = state
 
         return conversations
 
@@ -139,7 +117,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         try:
             redis_data = await self.redis_cli.get(key)
             if redis_data:
-                return json.loads(redis_data, cls=_Decoder)
+                return json.loads(redis_data)
         except (ConnectionError, json.JSONDecodeError):
             LOGGER.exception('Failed to get the data from the database by the key %s', key)
             return None
@@ -150,7 +128,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Return decoded data."""
         decoded_data = {}
         for key, val in data.items():
-            decoded_data[json.loads(key, cls=_Decoder)] = json.loads(val, cls=_Decoder)
+            decoded_data[json.loads(key)] = json.loads(val)
 
         return decoded_data
 
