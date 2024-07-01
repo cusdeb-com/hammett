@@ -50,9 +50,9 @@ class PersistenceTests(BaseTestCase):
     async def test_decoding_of_data(self):
         """Test decoding of the data."""
         decoded_data = self.persistence._decode_data({
-            str(_USER_ID).encode('utf-8'): json.dumps(_DATA).encode('utf-8'),
+            str(_USER_ID): json.dumps(_DATA).encode('utf-8'),
         })
-        self.assertEqual(decoded_data, {_USER_ID: _DATA})
+        self.assertDictEqual(decoded_data, {_USER_ID: _DATA})
 
     async def test_getting_and_setting_of_bot_data(self):
         """Test getting and setting of the bot_data."""
@@ -109,12 +109,12 @@ class PersistenceTests(BaseTestCase):
         dropped_user_data = await self.persistence.get_user_data()
         self.assertEqual(dropped_user_data, {})
 
-    async def test_hsetall_method(self):
-        """Test a hsetall persistence method."""
+    async def test_hgetall_by_chunks_method(self):
+        """Test a hgetall_by_chunks persistence method."""
         data = {_USER_ID: _DATA}
         await self.persistence._hsetall_data('test_key', data)
 
-        encoded_data = await self.persistence._hgetall_data('test_key')
+        encoded_data = await self.persistence._hgetall_by_chunks('test_key')
         decoded_data = self.persistence._decode_data(encoded_data)
         self.assertEqual(decoded_data, data)
 
