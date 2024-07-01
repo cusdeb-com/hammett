@@ -7,9 +7,9 @@ from uuid import UUID
 
 import telegram
 from telegram import Update
-from telegram._utils.types import FileInput
+from telegram._utils.types import FileInput, JSONDict
 from telegram.ext import BaseHandler, CallbackContext
-from telegram.ext._utils.types import BD, BT, CCT, CD, UD, ConversationKey
+from telegram.ext._utils.types import BD, BT, CCT, CD, UD, ConversationKey, JobCallback
 from telegram.ext.filters import BaseFilter
 
 from hammett.core.button import Button
@@ -84,6 +84,14 @@ class Handler(Protocol):
 
 
 HandlerAlias = Callable[..., Coroutine[Any, Any, Any]]
+
+
+class JobQueueHandlers(TypedDict):
+    """The class implements the JobQueueHandlers type."""
+
+    callback: JobCallback[CallbackContext[Any, Any, Any, Any]]
+    job_kwargs: JSONDict
+
 
 Routes = tuple[tuple[set[State], State]]
 
