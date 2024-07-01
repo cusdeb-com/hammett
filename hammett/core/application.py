@@ -20,7 +20,7 @@ from hammett.core.exceptions import (
 )
 from hammett.core.handlers import calc_checksum, log_unregistered_handler
 from hammett.core.permission import apply_permission_to
-from hammett.types import HandlerAlias, HandlerType, JobQueueHandlers
+from hammett.types import HandlerAlias, HandlerType, JobConfig
 from hammett.utils.log import configure_logging
 
 if TYPE_CHECKING:
@@ -52,7 +52,7 @@ class Application:
         *,
         entry_point: 'type[StartMixin]',
         error_handlers: 'list[Handler] | None' = None,
-        job_queue_handlers: 'list[JobQueueHandlers] | None' = None,
+        job_configs: 'list[JobConfig] | None' = None,
         native_states: 'NativeStates | None' = None,
         persistence: 'BasePersistence[UD, CD, BD] | None' = None,
         states: 'States | None' = None,
@@ -83,7 +83,7 @@ class Application:
                 self._register_handlers(*state)
 
         self._register_error_handlers(error_handlers)
-        self._register_job_queue_handlers(job_queue_handlers)
+        self._register_jobs(job_configs)
 
         start_handler = apply_permission_to(self._entry_point.start)
         self._native_application.add_handler(ConversationHandler(
@@ -138,15 +138,15 @@ class Application:
             for error_handler in error_handlers:
                 self._native_application.add_error_handler(error_handler)  # type: ignore[arg-type]
 
-    def _register_job_queue_handlers(
+    def _register_jobs(
         self: 'Self',
-        job_queue_handlers: 'list[JobQueueHandlers] | None' = None,
+        job_configs: 'list[JobConfig] | None' = None,
     ) -> None:
         """Register the specified job queue handlers."""
-        if job_queue_handlers:
+        if job_configs:
             job_queue = self._native_application.job_queue
-            for i, job_queue_handler in enumerate(job_queue_handlers):
-                callback = job_queue_handler.get('callback')
+            for i, job_config in enumerate(job_configs):
+                callback = job_config.get('callback')
                 if callback is None:
                     msg = (
                         f'You must provide the callback function that will be executed by the job '
@@ -154,7 +154,7 @@ class Application:
                     )
                     raise CallbackForJobHasNotBeenProvided(msg)
 
-                job_kwargs = job_queue_handler.get('job_kwargs')
+                job_kwargs = job_config.get('job_kwargs')
                 if not job_kwargs:
                     msg = (
                         f'You must provide the keyword arguments (job_kwargs) for the '
@@ -163,7 +163,7 @@ class Application:
                     raise JobKwargsHaveNotBeenProvided(msg)
 
                 if job_queue:
-                    job_queue.run_custom(**job_queue_handler)
+                    job_queue.run_custom(**job_config)
 
     def _register_handlers(self: 'Self', state: 'State', screens: 'Iterable[type[Screen]]') -> None:
         self._set_default_value_to_native_states(state)

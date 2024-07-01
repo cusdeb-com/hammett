@@ -86,8 +86,8 @@ class Handler(Protocol):
 HandlerAlias = Callable[..., Coroutine[Any, Any, Any]]
 
 
-class JobQueueHandlers(TypedDict):
-    """The class implements the JobQueueHandlers type."""
+class JobConfig(TypedDict):
+    """The class implements the JobConfig type."""
 
     callback: JobCallback[CallbackContext[Any, Any, Any, Any]]
     job_kwargs: JSONDict
