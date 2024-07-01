@@ -53,7 +53,7 @@ class FinalRenderConfig(RenderConfig):
     keyboard: 'Keyboard' = field(default_factory=list)
 
 
-class LatestMsg(TypedDict):
+class LatestMessage(TypedDict):
     """The class represents information about the latest message sent."""
 
     chat_id: int

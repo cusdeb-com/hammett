@@ -11,17 +11,17 @@ if TYPE_CHECKING:
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
 
-    from hammett.core.constants import FinalRenderConfig, LatestMsg
+    from hammett.core.constants import FinalRenderConfig, LatestMessage
 
 LOGGER = logging.getLogger(__name__)
 
 
-def get_latest_msg(
+def get_latest_message(
     context: 'CallbackContext[BT, UD, CD, BD]',
     message: 'Message',
-) -> 'LatestMsg | None':
+) -> 'LatestMessage | None':
     """Return the latest sent message info."""
-    state: LatestMsg | None = None
+    state: LatestMessage | None = None
     try:
         state = context.user_data[LATEST_SENT_MSG_KEY]  # type: ignore[index]
     except KeyError:
@@ -37,7 +37,7 @@ def get_latest_msg(
     return state
 
 
-async def save_latest_msg(
+async def save_latest_message(
     context: 'CallbackContext[BT, UD, CD, BD]',
     config: 'FinalRenderConfig',
     message: 'Message',
@@ -54,7 +54,7 @@ async def save_latest_msg(
         if not context._application.persistence:  # noqa: SLF001
             msg = (
                 "It's not possible to pass data to user_data. "
-                f"To solve the issue either don't use {save_latest_msg.__name__} in jobs "
+                f"To solve the issue either don't use {save_latest_message.__name__} in jobs "
                 f"or configure persistence."
             )
             raise MissingPersistence(msg) from exc
