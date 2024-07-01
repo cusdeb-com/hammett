@@ -124,11 +124,11 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         else:
             return redis_data
 
-    def _decode_data(self: 'Self', data: dict[bytes, bytes]) -> dict[int, 'CD | UD']:
+    def _decode_data(self: 'Self', data: dict[str, bytes]) -> dict[int, 'CD | UD']:
         """Return decoded data."""
         decoded_data = {}
         for key, val in data.items():
-            decoded_data[json.loads(key)] = json.loads(val)
+            decoded_data[int(key)] = json.loads(val)
 
         return decoded_data
 
@@ -136,9 +136,15 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Delete hash type of the data from the database."""
         await self.redis_cli.hdel(key, str(user_id))
 
-    async def _hgetall_data(self: 'Self', key: str) -> dict[bytes, bytes]:
+    async def _hgetall_by_chunks(self: 'Self', key: str) -> dict[str, bytes]:
         """Return hash type of the data from the database."""
-        return await self.redis_cli.hgetall(key)
+        data = {}
+        encoded_keys = await self.redis_cli.hkeys(key)
+        for encoded_key in encoded_keys:
+            decoded_key = encoded_key.decode('utf-8')
+            data.update({decoded_key: cast(bytes, await self.redis_cli.hget(key, decoded_key))})
+
+        return data
 
     async def _hset_data(self: 'Self', key: str, user_id: int, data: 'CD | UD') -> None:
         """Store the data to the database in the hash format under the specified key."""
@@ -244,7 +250,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         or an empty dict otherwise.
         """
         if not self.chat_data:
-            data = await self._hgetall_data(self._CHAT_DATA_KEY)
+            data = await self._hgetall_by_chunks(self._CHAT_DATA_KEY)
             self.chat_data = cast(dict[int, 'CD'], self._decode_data(data))
 
         return self.chat_data
@@ -266,7 +272,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         or an empty dict otherwise.
         """
         if not self.user_data:
-            data = await self._hgetall_data(self._USER_DATA_KEY)
+            data = await self._hgetall_by_chunks(self._USER_DATA_KEY)
             self.user_data = cast(dict[int, 'UD'], self._decode_data(data))
 
         return self.user_data
