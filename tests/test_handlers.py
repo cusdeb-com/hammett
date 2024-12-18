@@ -12,9 +12,9 @@ from hammett.core.constants import DEFAULT_STATE
 from hammett.core.exceptions import CommandNameIsEmpty
 from hammett.core.handlers import (
     _clear_command_name,
-    _get_handler_name,
     _register_handler,
     calc_checksum,
+    get_handler_name,
     get_payload_storage,
     log_unregistered_handler,
     register_button_handler,
@@ -96,7 +96,7 @@ class HandlersTests(BaseTestCase):
         screen = TestScreenWithHandler()
         handler = cast('Handler', screen.handler)
 
-        handler_name = _get_handler_name(handler)
+        handler_name = get_handler_name(handler)
         self.assertEqual('TestScreenWithHandler.handler', handler_name)
 
     def test_getting_payload_storage_when_it_is_initialized(self):
@@ -128,7 +128,7 @@ class HandlersTests(BaseTestCase):
         screen = TestScreenWithStaticHandler()
         handler = cast('Handler', screen.handler)
 
-        handler_name = _get_handler_name(handler)
+        handler_name = get_handler_name(handler)
         self.assertEqual('TestScreenWithStaticHandler.handler', handler_name)
 
     def test_log_unregistered_handler_with_non_callable(self):
@@ -170,7 +170,7 @@ class HandlersTests(BaseTestCase):
         async def handler(_self, _update, _context):  # noqa: RUF029
             return DEFAULT_STATE
 
-        handler_name = _get_handler_name(handler)
+        handler_name = get_handler_name(handler)
         expected_handler_checksum = str(zlib.adler32(handler_name.encode('utf8')))
         self.assertEqual(calc_checksum(handler), expected_handler_checksum)
 
