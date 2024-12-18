@@ -42,7 +42,7 @@ def _clear_command_name(command_name: str) -> str:
     return command_name
 
 
-def _get_handler_name(handler: 'Handler') -> str:
+def get_handler_name(handler: 'Handler') -> str:
     """Return the full name of the specified handler.
 
     Returns:
@@ -108,7 +108,7 @@ def calc_checksum(obj: 'Any') -> str:
 
     """
     if callable(obj):  # in a case of a handler
-        handler_name = _get_handler_name(obj)
+        handler_name = get_handler_name(obj)
         return str(zlib.adler32(handler_name.encode('utf8')))
 
     if isinstance(obj, str):  # in a case of a button caption
@@ -158,7 +158,7 @@ def log_unregistered_handler(obj: 'Any') -> None:
     ):
         LOGGER.warning(
             '%s resembles a handler. Perhaps you forgot to register it.',
-            _get_handler_name(obj),
+            get_handler_name(obj),
         )
 
 
