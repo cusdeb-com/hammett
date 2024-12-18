@@ -1,8 +1,9 @@
 """The module contains the types used throughout the framework."""
 
+import sys
 from collections.abc import Awaitable, Callable, Coroutine, Iterable, Sequence
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, NewType, Protocol, TypedDict, TypeVar
+from typing import TYPE_CHECKING, Any, Literal, NewType, Protocol, TypedDict, TypeVar
 from uuid import UUID
 
 import telegram
@@ -96,3 +97,23 @@ class JobConfig(TypedDict):
 Routes = tuple[tuple[set[State], State]]
 
 Source = str | type[Screen] | Handler | HandlerAlias
+
+if sys.version_info >= (3, 12):
+    HANDLER_ASSIGNMENTS_TYPE = tuple[
+        Literal['__module__'],
+        Literal['__name__'],
+        Literal['__qualname__'],
+        Literal['__doc__'],
+        Literal['__annotations__'],
+        Literal['__type_params__'],
+        str,
+    ]
+else:
+    HANDLER_ASSIGNMENTS_TYPE = tuple[
+        Literal['__module__'],
+        Literal['__name__'],
+        Literal['__qualname__'],
+        Literal['__doc__'],
+        Literal['__annotations__'],
+        str,
+    ]
