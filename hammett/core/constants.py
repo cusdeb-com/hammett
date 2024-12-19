@@ -54,6 +54,15 @@ class FinalRenderConfig(RenderConfig):
     keyboard: 'Keyboard' = field(default_factory=list)
 
 
+class HandlerStats(TypedDict):
+    """The class represents an information about the handler stats."""
+
+    cpu_time: float
+    select_time: float
+    other_io_time: float
+    real_time: float
+
+
 class LatestMessage(TypedDict):
     """The class represents information about the latest message sent."""
 
