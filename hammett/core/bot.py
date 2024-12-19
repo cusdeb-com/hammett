@@ -2,6 +2,7 @@
 
 # ruff: noqa: PLR2004
 
+import asyncio
 import logging
 import sys
 from typing import TYPE_CHECKING, Any
@@ -34,7 +35,7 @@ if TYPE_CHECKING:
 
     from telegram.ext import BasePersistence
     from telegram.ext._applicationbuilder import ApplicationBuilder
-    from telegram.ext._utils.types import BD, CD, UD
+    from telegram.ext._utils.types import BD, BT, CCT, CD, JQ, UD
     from typing_extensions import Self
 
     from hammett.core.mixins import StartMixin
@@ -222,6 +223,13 @@ class Bot:
 
                 setattr(screen, name, apply_permission_to(handler))
                 instance_handler = getattr(screen(), name)
+
+                from hammett.conf import settings
+                from hammett.stopwatch import collect_handler_stats
+
+                if settings.HANDLERS_STOPWATCH:
+                    instance_handler = collect_handler_stats(instance_handler)
+
                 handler_object = self._get_handler_object(
                     instance_handler,
                     handler_type,
@@ -249,9 +257,24 @@ class Bot:
             self._native_states[state] = []
 
     def _setup(self: 'Self') -> None:
-        """Configure logging."""
+        """Configure logging and set event loop policy according to the settings."""
         from hammett.conf import settings
+        from hammett.stopwatch import StopWatchEventLoopPolicy
+
         configure_logging(settings.LOGGING)
+
+        if settings.HANDLERS_STOPWATCH:
+            asyncio.set_event_loop_policy(StopWatchEventLoopPolicy())
+
+    @staticmethod
+    async def post_stop(_self: 'NativeApplication[BT, CCT, UD, CD, BD, JQ]') -> None:
+        """Run after `NativeApplication` stops."""
+        from hammett.conf import settings
+        from hammett.stopwatch import get_stopwatch_stats_processor
+
+        if settings.HANDLERS_STOPWATCH:
+            processor = get_stopwatch_stats_processor()
+            await processor.on_exit()
 
     def provide_application_builder(self: 'Self') -> 'ApplicationBuilder':  # type: ignore[type-arg]
         """Return a native application builder.
@@ -264,6 +287,8 @@ class Bot:
 
         return NativeApplication.builder().read_timeout(
             settings.APPLICATION_BUILDER_READ_TIMEOUT,
+        ).post_stop(
+            self.post_stop,
         ).token(
             settings.TOKEN,
         )
