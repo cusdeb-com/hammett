@@ -1,0 +1,66 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  line-height: 1.5;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f7f7f7;
+}
+
+main {
+  flex: 1;
+}
+
+header {
+  padding: 1rem;
+  background: #b06bc7;
+  color: #e7e5dc;
+}
+
+footer {
+  padding: 1rem;
+  min-height: 50px;
+  background: #763b8c;
+}
+
+footer a {
+  color: #fcce22;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+.container {
+  gap: 1.5rem;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+#stat-table {
+  width: 100%;
+}

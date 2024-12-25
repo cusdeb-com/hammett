@@ -8,7 +8,7 @@ from hammett.core.handlers import get_handler_name
 
 if TYPE_CHECKING:
     from hammett.core.constants import HandlerStats
-    from hammett.types import Handler
+    from hammett.types import Handler, StopwatchStats
 
 
 class BaseStatsProcessor:
@@ -46,7 +46,7 @@ class PrintStatsProcessor(BaseStatsProcessor):
 class JsonStatsProcessor(BaseStatsProcessor):
     """The class collects the stats from all handlers and dumps them into a JSON file."""
 
-    _all_stats: 'dict[str, list[HandlerStats]]' = {}
+    _all_stats: 'StopwatchStats' = {}
 
     async def process(self) -> None:
         """Add handler stats to all stats dict."""

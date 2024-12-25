@@ -14,6 +14,7 @@ from telegram.ext._utils.types import BD, BT, CCT, CD, UD, ConversationKey, JobC
 from telegram.ext.filters import BaseFilter
 
 from hammett.core.button import Button
+from hammett.core.constants import HandlerStats
 from hammett.core.screen import Screen
 
 if TYPE_CHECKING:
@@ -117,3 +118,5 @@ else:
         Literal['__annotations__'],
         str,
     ]
+
+StopwatchStats = dict[str, list[HandlerStats]]

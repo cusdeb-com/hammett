@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hammett.Viz</title>
+
+    <link rel="icon" href="favicon.ico"/>
+    <link href="/static/datatables.min.css" rel="stylesheet">
+    <link href="/static/hammett_viz.css" rel="stylesheet">
+</head>
+<body>
+<main>
+    <header>
+        <h1>Hammett.Viz</h1>
+    </header>
+
+    <section class="container">
+        <table id="stat-table" class="display nowrap">
+            <thead>
+            <tr>
+                <th>Handler's name</th>
+                <th>CPU</th>
+                <th>Select</th>
+                <th>Other IO</th>
+                <th>Real</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{ stat_table }}
+            </tbody>
+        </table>
+    </section>
+</main>
+<footer>
+    <a href="https://github.com/cusdeb-com/hammett">Repo</a>
+</footer>
+<script src="/static/jquery-3.7.1.slim.min.js"></script>
+<script src="/static/datatables.min.js"></script>
+<script>
+  new DataTable(
+    '#stat-table',
+    {
+      scrollX: true,
+      columnDefs: [
+        {targets: [1, 2, 3, 4], searchable: false}
+      ],
+    }
+  );
+</script>
+</body>
+</html>
