@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hammett.Viz</title>
 
-    <link rel="icon" href="favicon.ico"/>
+    <link rel="icon" href="/favicon.ico"/>
     <link href="/static/datatables.min.css" rel="stylesheet">
     <link href="/static/hammett_viz.css" rel="stylesheet">
 </head>
@@ -16,6 +16,10 @@
     </header>
 
     <section class="container">
+        <div class="tabbed-set">
+            {{ platforms }}
+        </div>
+
         <table id="stat-table" class="display nowrap">
             <thead>
             <tr>

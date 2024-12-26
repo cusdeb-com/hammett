@@ -1,14 +1,47 @@
 """The module contains methods for working with handler statistics."""
 
+import json
+import re
 import statistics
-from functools import cached_property
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
+    from pathlib import Path
     from typing import Final
 
     from hammett.types import StopwatchStats
     from hammett.viz.types import AverageStats
+
+
+def detect_stats_files(directory: 'Path') -> 'list[Path]':
+    """Detect files with stats and returns them.
+
+    Returns
+    -------
+        Files with stats.
+
+    """
+    return [
+        stat_file for stat_file in directory.iterdir()
+        if stat_file.is_file() and re.match(r'^handler-stats-\w{32}\.json', stat_file.name)
+    ]
+
+
+def get_platforms(file_paths: 'list[Path]') -> 'dict[str, tuple[str, Path]]':
+    """Return dict with a hash from filename, platform and a file that
+    contains stats for it.
+
+    Returns
+    -------
+        FileNotFoundError: If the template is not loaded.
+
+    """
+    platforms = {}
+    for file_path in file_paths:
+        stat = Stats(file_path).load()
+        platforms.update({stat.filename_hash(): (stat.platform, file_path)})
+
+    return platforms
 
 
 def avg_stats_table_rows(stats: 'AverageStats') -> str:
@@ -33,13 +66,51 @@ def avg_stats_table_rows(stats: 'AverageStats') -> str:
 class Stats:
     """The class contains methods for handling handler statistics."""
 
-    def __init__(self, stats: 'StopwatchStats') -> None:
-        """Save handler statistics."""
-        self.stats: Final[StopwatchStats] = stats
+    def __init__(self, file_path: 'Path') -> None:
+        """Save the path to the handler statistics file."""
+        self.file_path: Final[Path] = file_path
+        self.platform = ''
+        self.stats: StopwatchStats | None = None
 
-    @cached_property
+    def load(self) -> 'Stats':
+        """Load the stats file.
+
+        Returns
+        -------
+            Stats instance.
+
+        """
+        with self.file_path.open('r', encoding='utf-8') as f:
+            stats = json.load(f)
+            self.platform = stats[0]
+            self.stats = stats[1]
+
+        return self
+
+    def filename_hash(self) -> str:
+        """Return hash from filename.
+
+        Returns
+        -------
+            Hash from filename.
+
+        """
+        return cast('str', re.findall(r'\w{32}', self.file_path.name)[0])
+
     def avg_stats(self) -> 'AverageStats':
-        """Return the arithmetic mean for each statistic for each handler."""
+        """Return the arithmetic mean for each statistic for each handler.
+
+        Returns:
+            Arithmetic mean for each statistic for each handler.
+
+        Raises:
+            FileNotFoundError: If the stats file is not loaded.
+
+        """
+        if not self.stats:
+            msg = 'Stats file is not loaded'
+            raise FileNotFoundError(msg)
+
         avg_stats = []
         for handler_name, stats in self.stats.items():
             cpu_stats = []

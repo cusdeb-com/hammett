@@ -6,13 +6,22 @@
   margin: 0;
 }
 
+:root {
+  --bg-color: #f7f7f7;
+  --primary-text-color: #e7e5dc;
+  --primary-bg-color: #b06bc7;
+  --secondary-bg-color: #763b8c;
+  --secondary-text-color: #fcce22;
+  --primary-button-color: white;
+}
+
 body {
   line-height: 1.5;
   min-height: 100vh;
   margin: 0;
   display: flex;
   flex-direction: column;
-  background: #f7f7f7;
+  background: var(--bg-color);
 }
 
 main {
@@ -21,18 +30,18 @@ main {
 
 header {
   padding: 1rem;
-  background: #b06bc7;
-  color: #e7e5dc;
+  background: var(--primary-bg-color);
+  color: var(--primary-text-color);
 }
 
 footer {
   padding: 1rem;
   min-height: 50px;
-  background: #763b8c;
+  background: var(--secondary-bg-color);
 }
 
 footer a {
-  color: #fcce22;
+  color: var(--secondary-text-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -59,6 +68,38 @@ img, picture, video, canvas, svg {
   width: 100%;
   padding-right: 1.5rem;
   padding-left: 1.5rem;
+}
+
+.tabbed-set {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  overflow-x: auto;
+}
+
+a.tab {
+  border-radius: 4px;
+  padding: 2px 6px;
+  text-decoration: none;
+  color: buttontext;
+  background-color: buttonface;
+  border: 1px solid grey;
+}
+
+a.tab:hover {
+  background-color: gray;
+}
+
+a.tab.active {
+  color: var(--primary-button-color);
+  background: var(--primary-bg-color);
+  border: none;
+}
+
+a.tab.active:hover {
+  color: var(--secondary-text-color);
+  background: var(--secondary-bg-color);
 }
 
 #stat-table {

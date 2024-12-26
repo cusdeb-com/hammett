@@ -1,15 +1,15 @@
 """The module contains an entry point to start http server."""
 
 import argparse
-import json
 import sys
 import webbrowser
 from http.server import HTTPServer
 from pathlib import Path
 
 from hammett.viz import constants
+from hammett.viz.color import Style, colorize
 from hammett.viz.http_server import VizRequestHandler, allocate_port
-from hammett.viz.stats import Stats
+from hammett.viz.stats import detect_stats_files, get_platforms
 
 
 def parser_builder() -> 'argparse.ArgumentParser':
@@ -22,7 +22,13 @@ def parser_builder() -> 'argparse.ArgumentParser':
     """
     parser = argparse.ArgumentParser(prog='hammett.viz', usage='%(prog)s [options]')
 
-    parser.add_argument('filepath', help='Stats file, e.g "handler_stats.json"')
+    parser.add_argument(
+        'directory',
+        help=(
+            'directory that contains files '
+            'such as "handler-stats-87181a567d439062fcd6d94cc194a8b7.json"'
+        ),
+    )
     parser.add_argument(
         '-v', '--version', action='version', version=f'%(prog)s {constants.VERSION}',
     )
@@ -53,22 +59,24 @@ def main() -> None:
     parser = parser_builder()
     args = parser.parse_args()
 
-    stat_filepath = Path(args.filepath)
-    if not stat_filepath.exists():
-        parser.error(f"{stat_filepath} doesn't exist")
+    dir_path = Path(args.directory)
+    if not dir_path.exists():
+        parser.error(f"{dir_path} doesn't exist")
 
-    if not stat_filepath.is_file():
-        parser.error(f"{stat_filepath} isn't a file")
+    if not dir_path.is_dir():
+        parser.error(f"{dir_path} isn't a directory")
 
     if not 0 <= args.port <= constants.MAX_PORT_VALUE:
         parser.error(f'{args.port} is out of range')
 
-    with stat_filepath.open('r', encoding='utf-8') as f:
-        try:
-            stats = json.load(f)
-        except json.decoder.JSONDecodeError:
-            parser.error(f'{stat_filepath} is not valid JSON file')
+    stats_files = detect_stats_files(dir_path)
+    if not stats_files:
+        sys.stdout.write(colorize(
+            Style.WARNING,
+            'No files with statistics found in the directory\n',
+        ))
 
+    VizRequestHandler.platforms = get_platforms(stats_files)
     port = args.port if args.port != 0 else allocate_port()
 
     url = f'http://{args.hostname}:{port}/'
@@ -80,10 +88,12 @@ def main() -> None:
         # if new is 2, a new browser page (“tab”) is opened if possible
         browser.open(url, new=2)
 
-    VizRequestHandler.STATS = Stats(stats)
     server = HTTPServer((args.hostname, port), VizRequestHandler)
 
-    sys.stdout.write(f'Hammett.Viz starting on {url}, press Ctrl+C to exit.\n')
+    sys.stdout.write(colorize(
+        Style.SUCCESS,
+        f'Hammett.Viz starting on {url}, press Ctrl+C to exit.\n',
+    ))
     try:
         server.serve_forever()
     except (KeyboardInterrupt, SystemExit):
