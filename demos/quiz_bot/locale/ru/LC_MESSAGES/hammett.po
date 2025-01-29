@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Hammett 1.0.0\n"
+"POT-Creation-Date: 2025-03-05\n"
+"PO-Revision-Date: 2025-03-05\n"
+"Language: ru\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#
+# Screen descriptions
+#
+
+msgid "language_switcher_screen"
+msgstr ""
+"Здесь вы можете выбрать подходящий язык.\n"
+"\n"
+"Выберите язык интерфейса."
+
+msgid "main_menu_screen"
+msgstr ""
+"Добро пожаловать в HammettQuizBot!\n"
+"\n"
+"Здесь вы можете пройти тест на знание языка программирования Python."
+
+msgid "result_screen"
+msgstr ""
+"Вы набрали <b>{correct_answers_num}</b> / <b>{questions_num}</b> баллов!\n"
+"\n"
+"<i>Вы можете пройти тест еще раз.</i>"
+
+#
+# Button captions
+#
+
+msgid "⬅️ Back"
+msgstr "⬅️ Назад"
+
+msgid "🌍 Language"
+msgstr "🌍 Язык"
+
+msgid "🏠 Main Menu"
+msgstr "🏠 Главное меню"
+
+msgid "Next ➡️"
+msgstr "Дальше ➡️"
+
+msgid "❓ Start Quiz"
+msgstr "❓ Начать тест"

@@ -1,0 +1,65 @@
+[
+  {
+    "question": {
+      "en": "Who created Python?",
+      "pt-br": "Quem criou o Python?",
+      "ru": "Кто создал Python?"
+    },
+    "answers": ["Guido van Rossum", "Yukihiro Matsumoto", "Rasmus Lerdorf"],
+    "correct_answer": "Guido van Rossum"
+  },
+  {
+    "question": {
+      "en": "Which of the following are Python frameworks?",
+      "pt-br": "Quais dos seguintes são frameworks Python?",
+      "ru": "Что из перечисленного является Python-фреймворками?"
+    },
+    "answers": ["Django", "FastAPI", "Ruby on Rails"],
+    "correct_answer": ["Django", "FastAPI"]
+  },
+  {
+    "question": {
+      "en": "Who is Hammett, the framework for developing Telegram bots, named after?",
+      "pt-br": "Quem é Hammett, a quem o framework para desenvolvimento de bots do Telegram foi nomeado em homenagem?",
+      "ru": "В честь кого назван фреймворк для разработки Telegram-ботов Hammett?"
+    },
+    "answers": ["Kirk Hammett", "Django Reinhardt"],
+    "correct_answer": "Kirk Hammett"
+  },
+  {
+    "question": {
+      "en": "What is the classic implementation of Python?",
+      "pt-br": "Qual é a implementação clássica do Python?",
+      "ru": "Какая реализация Python является классической?"
+    },
+    "answers": ["CPython", "PyPy", "Jython", "IronPython"],
+    "correct_answer": "CPython"
+  },
+  {
+    "question": {
+      "en": "What method is used to get the length of an object in Python?",
+      "pt-br": "Qual método é usado para obter o comprimento de um objeto em Python?",
+      "ru": "Какой метод используется для получения длины объекта в Python?"
+    },
+    "answers": ["len()", "length()", "size()"],
+    "correct_answer": "len()"
+  },
+  {
+    "question": {
+      "en": "Which of the following data types is immutable in Python?",
+      "pt-br": "Qual dos seguintes tipos de dados é imutável em Python?",
+      "ru": "Какой из следующих типов данных является неизменяемым в Python?"
+    },
+    "answers": ["List", "Dict", "Tuple"],
+    "correct_answer": "Tuple"
+  },
+  {
+    "question": {
+      "en": "What style is considered idiomatic for Python?",
+      "pt-br": "Qual estilo é considerado idiomático para Python?",
+      "ru": "Какой стиль считается идиоматичным для Python?"
+    },
+    "answers": ["EAFP", "LBYL"],
+    "correct_answer": "EAFP"
+  }
+]

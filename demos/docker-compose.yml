@@ -47,6 +47,14 @@ services:
       - valkey
     restart: always
 
+  quiz-bot:
+    build:
+      dockerfile: ./quiz_bot/Dockerfile
+    env_file: ./quiz_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   say-hello-bot:
     build:
       dockerfile: ./say_hello_bot/Dockerfile
