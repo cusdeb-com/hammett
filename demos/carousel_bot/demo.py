@@ -1,0 +1,60 @@
+"""The module is a script for running the bot."""
+
+from hammett.conf import settings
+from hammett.core import Application
+from hammett.core.constants import DEFAULT_STATE
+from hammett.core.mixins import StartMixin
+from hammett.core.persistence import RedisPersistence
+from hammett.widgets import CarouselWidget
+
+MAIN_MENU_SCREEN_FIRST_DESCRIPTION = (
+    'Welcome to HammettCarouselBot!\n'
+    '\n'
+    'This is the first image in the carousel. To see the next one or '
+    'go back to the previous one, use the navigation buttons below 👇'
+)
+
+MAIN_MENU_SCREEN_LAST_DESCRIPTION = (
+    "This is the end of the carousel.\n"
+    "\n"
+    "Don't forget to check out Hammett and the source code of the demo!"
+)
+
+MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION = (
+    'Take part in open source and become a superhero 🕷🕸 in software development!'
+)
+
+
+class MainMenuScreen(CarouselWidget, StartMixin):
+    """The class implements MainMenuScreen."""
+
+    cache_covers = True
+    images = [
+        [settings.MEDIA_ROOT / '01.png', MAIN_MENU_SCREEN_FIRST_DESCRIPTION],
+        [settings.MEDIA_ROOT / '02.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
+        [settings.MEDIA_ROOT / '03.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
+        [settings.MEDIA_ROOT / '04.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
+        [settings.MEDIA_ROOT / '05.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
+        [settings.MEDIA_ROOT / '06.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
+        [settings.MEDIA_ROOT / '07.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
+        [settings.MEDIA_ROOT / '08.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
+        [settings.MEDIA_ROOT / '09.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
+        [settings.MEDIA_ROOT / '10.png', MAIN_MENU_SCREEN_LAST_DESCRIPTION],
+    ]
+
+
+def main():
+    """Run the bot."""
+    app = Application(
+        'HammettCarouselBot',
+        entry_point=MainMenuScreen,
+        persistence=RedisPersistence(),
+        states={
+            DEFAULT_STATE: {MainMenuScreen},
+        },
+    )
+    app.run()
+
+
+if __name__ == '__main__':
+    main()
