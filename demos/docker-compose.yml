@@ -1,4 +1,12 @@
 services:
+  admin-panel-bot:
+    build:
+      dockerfile: ./admin_panel_bot/Dockerfile
+    env_file: ./admin_panel_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   clicker-bot:
     build:
       dockerfile: ./clicker_bot/Dockerfile

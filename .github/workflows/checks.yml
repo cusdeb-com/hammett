@@ -50,6 +50,7 @@ jobs:
 
       - name: Run demos tests
         run: |
+          env HAMMETT_SETTINGS_MODULE=demos.admin_panel_bot.settings python3 demos/admin_panel_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.clicker_bot.settings python3 demos/clicker_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.hide_keyboard_bot.settings python3 demos/hide_keyboard_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.multi_state_bot.settings python3 demos/multi_state_bot/tests.py
