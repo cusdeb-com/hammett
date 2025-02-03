@@ -7,6 +7,14 @@ services:
       - valkey
     restart: always
 
+  carousel-bot:
+    build:
+      dockerfile: ./carousel_bot/Dockerfile
+    env_file: ./carousel_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   clicker-bot:
     build:
       dockerfile: ./clicker_bot/Dockerfile
