@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 from hammett.core import Button
-from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.handlers import register_button_handler
 from hammett.widgets.base import BaseWidget
@@ -59,17 +59,17 @@ class CarouselWidget(BaseWidget):
         self._back_button = Button(
             self.back_caption,
             self._back,
-            source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
+            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
         )
         self._next_button = Button(
             self.next_caption,
             self._next,
-            source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
+            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
         )
         self._disabled_button = Button(
             self.disable_caption,
             self._do_nothing,
-            source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
+            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
         )
         self._infinity_keyboard = [[self._back_button, self._next_button]]
 

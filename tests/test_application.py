@@ -9,7 +9,7 @@ from telegram.ext import CommandHandler
 
 from hammett.core.application import Application
 from hammett.core.button import Button
-from hammett.core.constants import DEFAULT_STATE, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, SourceTypes
 from hammett.core.exceptions import CallbackNotProvided, JobKwargsNotProvided, TokenIsNotSpecified
 from hammett.core.handlers import calc_checksum
 from hammett.core.mixins import RouteMixin
@@ -78,7 +78,7 @@ class TestScreenWithKeyboard(BaseTestScreenWithDescription):
         return [
             [
                 Button('⬅️ Main Menu', TestStartScreen,
-                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
+                       source_type=SourceTypes.MOVE_SOURCE_TYPE),
             ],
         ]
 

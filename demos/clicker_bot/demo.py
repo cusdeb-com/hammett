@@ -1,7 +1,7 @@
 """The module is a script for running the bot."""
 
 from hammett.core import Application, Button
-from hammett.core.constants import DEFAULT_STATE, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, SourceTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.mixins import StartMixin
 from hammett.core.persistence import RedisPersistence
@@ -24,7 +24,7 @@ class ClickerScreen(StartMixin):
             Button(
                 '➕ 1',  # noqa: RUF001
                 self.add_one_click,
-                source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
+                source_type=SourceTypes.HANDLER_SOURCE_TYPE,
             ),
         ]]
 

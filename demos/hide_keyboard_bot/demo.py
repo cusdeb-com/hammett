@@ -1,7 +1,7 @@
 """The module is a script for running the bot."""
 
 from hammett.core import Application, Button, Screen
-from hammett.core.constants import DEFAULT_STATE, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, SourceTypes
 from hammett.core.mixins import StartMixin
 from hammett.core.persistence import RedisPersistence
 
@@ -35,7 +35,7 @@ class NextScreen(BaseScreen):
             Button(
                 '⬅️ Back',
                 StartScreen,
-                source_type=SourcesTypes.JUMP_SOURCE_TYPE,
+                source_type=SourceTypes.JUMP_SOURCE_TYPE,
             ),
         ]]
 
@@ -53,7 +53,7 @@ class StartScreen(BaseScreen, StartMixin):
             Button(
                 'Next screen ➡️',
                 NextScreen,
-                source_type=SourcesTypes.JUMP_SOURCE_TYPE,
+                source_type=SourceTypes.JUMP_SOURCE_TYPE,
             ),
         ]]
 

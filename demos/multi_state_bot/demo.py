@@ -1,7 +1,7 @@
 """The module is a script for running the bot."""
 
 from hammett.core import Application, Button, Screen
-from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.handlers import register_typing_handler
 from hammett.core.mixins import RouteMixin, StartMixin
 from hammett.core.persistence import RedisPersistence
@@ -40,7 +40,7 @@ class AnonymousScreen(StartMixin):
             Button(
                 'Introduce Yourself',
                 IntroductionScreen,
-                source_type=SourcesTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
+                source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
             ),
         ]]
 
@@ -66,7 +66,7 @@ class IntroductionScreen(RouteMixin, Screen):
                 Button(
                     'Change Name',
                     IntroductionScreen,
-                    source_type=SourcesTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
+                    source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
                 ),
             ]],
         ))

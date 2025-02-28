@@ -12,7 +12,7 @@ from hammett.core.constants import (
     DEFAULT_STATE,
     EMPTY_KEYBOARD,
     RenderConfig,
-    SourcesTypes,
+    SourceTypes,
 )
 from hammett.core.exceptions import (
     FailedToGetDataAttributeOfQuery,
@@ -305,7 +305,7 @@ class BaseChoiceWidget(BaseWidget):
                     f'{box} {name}',
                     self._on_choice_click,
                     payload=json.dumps({'code': code, 'name': name}),
-                    source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
+                    source_type=SourceTypes.HANDLER_SOURCE_TYPE,
                 ),
             ])
 

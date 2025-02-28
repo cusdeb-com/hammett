@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, cast
 from telegram import InlineKeyboardButton, WebAppInfo
 
 from hammett.core import handlers
-from hammett.core.constants import SourcesTypes
+from hammett.core.constants import SourceTypes
 from hammett.core.exceptions import ImproperlyConfigured, UnknownSourceType
 from hammett.utils.module_loading import import_string
 
@@ -19,18 +19,18 @@ if TYPE_CHECKING:
     from hammett.types import Handler, Source
 
 _HANDLER_SOURCES_TYPES = (
-    SourcesTypes.HANDLER_SOURCE_TYPE,
-    SourcesTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE,
-    SourcesTypes.JUMP_SOURCE_TYPE,
-    SourcesTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
-    SourcesTypes.MOVE_SOURCE_TYPE,
+    SourceTypes.HANDLER_SOURCE_TYPE,
+    SourceTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE,
+    SourceTypes.JUMP_SOURCE_TYPE,
+    SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
+    SourceTypes.MOVE_SOURCE_TYPE,
 )
 
 _SHORTCUT_SOURCES_TYPES = (
-    SourcesTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE,
-    SourcesTypes.JUMP_SOURCE_TYPE,
-    SourcesTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
-    SourcesTypes.MOVE_SOURCE_TYPE,
+    SourceTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE,
+    SourceTypes.JUMP_SOURCE_TYPE,
+    SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
+    SourceTypes.MOVE_SOURCE_TYPE,
 )
 
 
@@ -44,7 +44,7 @@ class Button:
         caption: str,
         source: 'Source',
         *,
-        source_type: 'SourcesTypes' = SourcesTypes.HANDLER_SOURCE_TYPE,
+        source_type: 'SourceTypes' = SourceTypes.HANDLER_SOURCE_TYPE,
         hiders: 'Hider | None' = None,
         payload: str | None = None,
         chat_id: int | None = None,
@@ -109,11 +109,11 @@ class Button:
         if self.source_type in _SHORTCUT_SOURCES_TYPES:
             screen = cast('type[Screen]', self.source)
             if issubclass(screen, Screen):
-                if self.source_type == SourcesTypes.JUMP_SOURCE_TYPE:
+                if self.source_type == SourceTypes.JUMP_SOURCE_TYPE:
                     self.source_shortcut = cast('Handler', screen().jump)
-                elif self.source_type == SourcesTypes.MOVE_SOURCE_TYPE:
+                elif self.source_type == SourceTypes.MOVE_SOURCE_TYPE:
                     self.source_shortcut = cast('Handler', screen().move)
-                elif self.source_type == SourcesTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE:
+                elif self.source_type == SourceTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE:
                     self.source_shortcut = cast(
                         'Handler', screen().jump_along_route,   # type: ignore[attr-defined]
                     )
@@ -124,15 +124,15 @@ class Button:
             else:
                 msg = (
                     f'The source "{self.source}" must be a subclass of Screen if its '
-                    f'source_type is either SourcesTypes.MOVE_SOURCE_TYPE or '
-                    f'SourcesTypes.JUMP_SOURCE_TYPE'
+                    f'source_type is either SourceTypes.MOVE_SOURCE_TYPE or '
+                    f'SourceTypes.JUMP_SOURCE_TYPE'
                 )
                 raise TypeError(msg)
 
-        if self.source_type == SourcesTypes.HANDLER_SOURCE_TYPE and not callable(self.source):
+        if self.source_type == SourceTypes.HANDLER_SOURCE_TYPE and not callable(self.source):
             msg = (
                 f'The source "{self.source}" must be callable if its '
-                f'source_type is SourcesTypes.HANDLER_SOURCE_TYPE'
+                f'source_type is SourceTypes.HANDLER_SOURCE_TYPE'
             )
             raise TypeError(msg)
 
@@ -221,10 +221,10 @@ class Button:
 
             return InlineKeyboardButton(self.caption, callback_data=data), visibility
 
-        if self.source_type == SourcesTypes.URL_SOURCE_TYPE and isinstance(self.source, str):
+        if self.source_type == SourceTypes.URL_SOURCE_TYPE and isinstance(self.source, str):
             return InlineKeyboardButton(self.caption, url=self.source), visibility
 
-        if self.source_type == SourcesTypes.WEB_APP_SOURCE_TYPE and isinstance(self.source, str):
+        if self.source_type == SourceTypes.WEB_APP_SOURCE_TYPE and isinstance(self.source, str):
             return InlineKeyboardButton(
                 self.caption,
                 web_app=WebAppInfo(url=self.source),

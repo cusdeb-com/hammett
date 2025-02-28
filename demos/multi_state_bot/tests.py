@@ -7,7 +7,7 @@ import unittest
 from datetime import datetime, timezone
 
 from hammett.core import Button
-from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import catch_render_config
 from telegram import Message
@@ -47,7 +47,7 @@ class HammettMultiStateBotTests(BaseTestCase):
             description=ANONYMOUS_SCREEN_DESCRIPTION,
             keyboard=[[
                 Button('Introduce Yourself', IntroductionScreen,
-                       source_type=SourcesTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE),
+                       source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE),
             ]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
@@ -72,7 +72,7 @@ class HammettMultiStateBotTests(BaseTestCase):
             description=INTRODUCTION_SCREEN_WITH_NAME_DESCRIPTION.format(name=_TEST_NAME),
             keyboard=[[
                 Button('Change Name', IntroductionScreen,
-                       source_type=SourcesTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE),
+                       source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE),
             ]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)

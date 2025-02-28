@@ -1,7 +1,7 @@
 """The module contains the tests for the render config which is generated in handlers."""
 
 from hammett.core import Button, Screen
-from hammett.core.constants import RenderConfig, SourcesTypes
+from hammett.core.constants import RenderConfig, SourceTypes
 from hammett.core.hider import ONLY_FOR_ADMIN, Hider
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import catch_render_config, override_settings
@@ -45,7 +45,7 @@ class TestScreenWithSpecifiedHiderInKeyboard(BaseTestScreenWithDescription):
                 _TEST_BUTTON_NAME,
                 _TEST_URL,
                 hiders=Hider(ONLY_FOR_ADMIN),
-                source_type=SourcesTypes.URL_SOURCE_TYPE,
+                source_type=SourceTypes.URL_SOURCE_TYPE,
             ),
         ]]
 
@@ -136,7 +136,7 @@ class HandlersRenderTests(BaseTestCase):
                     _TEST_BUTTON_NAME,
                     _TEST_URL,
                     hiders=Hider(ONLY_FOR_ADMIN),
-                    source_type=SourcesTypes.URL_SOURCE_TYPE,
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
                 ),
             ]],
         ))

@@ -6,7 +6,7 @@ import os
 import unittest
 
 from hammett.core import Button
-from hammett.core.constants import RenderConfig, SourcesTypes
+from hammett.core.constants import RenderConfig, SourceTypes
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import catch_render_config
 
@@ -26,7 +26,7 @@ class HammettClickerBotTests(BaseTestCase):
             description=CLICKER_SCREEN_DESCRIPTION.format(num=0),
             keyboard=[[
                 Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
-                       source_type=SourcesTypes.HANDLER_SOURCE_TYPE),
+                       source_type=SourceTypes.HANDLER_SOURCE_TYPE),
             ]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
@@ -42,7 +42,7 @@ class HammettClickerBotTests(BaseTestCase):
             description=CLICKER_SCREEN_DESCRIPTION.format(num=1),
             keyboard=[[
                 Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
-                       source_type=SourcesTypes.HANDLER_SOURCE_TYPE),
+                       source_type=SourceTypes.HANDLER_SOURCE_TYPE),
             ]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
