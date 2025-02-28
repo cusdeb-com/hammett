@@ -1,7 +1,7 @@
 """The module contains the tests for buttons."""
 
 from hammett.core.button import Button
-from hammett.core.constants import SourcesTypes
+from hammett.core.constants import SourceTypes
 from hammett.core.exceptions import UnknownSourceType
 from hammett.test.base import BaseTestCase
 from tests.base import TestScreen
@@ -24,7 +24,7 @@ class ButtonsTests(BaseTestCase):
             Button(
                 'Test',
                 None,  # is not callable, so it's invalid
-                source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
+                source_type=SourceTypes.HANDLER_SOURCE_TYPE,
             )
 
     async def test_unknown_source_type(self):
@@ -45,5 +45,5 @@ class ButtonsTests(BaseTestCase):
             Button(
                 'Test',
                 AnythingElseButScreen,  # is not a subclass of Screen, so it's invalid
-                source_type=SourcesTypes.MOVE_SOURCE_TYPE,
+                source_type=SourceTypes.MOVE_SOURCE_TYPE,
             )

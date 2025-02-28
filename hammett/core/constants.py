@@ -17,7 +17,7 @@ EMPTY_KEYBOARD: 'Keyboard' = []
 LATEST_SENT_MSG_KEY = 'latest_sent_msg'
 
 
-class SourcesTypes(Enum):
+class SourceTypes(Enum):
     """The class contains the available types of sources."""
 
     HANDLER_SOURCE_TYPE = auto()

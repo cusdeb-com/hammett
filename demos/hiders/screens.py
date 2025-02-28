@@ -4,7 +4,7 @@ import logging
 
 from hammett.conf import settings
 from hammett.core import Button, Screen
-from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourcesTypes
+from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.hider import ONLY_FOR_ADMIN, Hider
 from hammett.core.mixins import StartMixin
@@ -23,7 +23,7 @@ class NotAdminConfirmation(Screen):
             [
                 Button('✅ Yes', self.exclude_user_from_admin_group),
                 Button('⬅️ Main Menu', MainMenu,
-                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
+                       source_type=SourceTypes.MOVE_SOURCE_TYPE),
             ],
         ]
 
@@ -88,16 +88,16 @@ class MainMenu(StartMixin, Screen):
             [
                 Button('🔒 Available only for admins', SecretRoom,
                        hiders=Hider(ONLY_FOR_ADMIN),
-                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
+                       source_type=SourceTypes.MOVE_SOURCE_TYPE),
             ],
             [
                 Button("❌ I'm not an admin!", NotAdminConfirmation,
                        hiders=Hider(ONLY_FOR_ADMIN),
-                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
+                       source_type=SourceTypes.MOVE_SOURCE_TYPE),
             ],
             [
                 Button('🎸 Hammett Home Page', 'https://github.com/cusdeb-com/hammett',
-                       source_type=SourcesTypes.URL_SOURCE_TYPE),
+                       source_type=SourceTypes.URL_SOURCE_TYPE),
             ],
         ]
 
@@ -126,6 +126,6 @@ class SecretRoom(Screen):
         return [
             [
                 Button('⬅️ Main Menu', MainMenu,
-                       source_type=SourcesTypes.MOVE_SOURCE_TYPE),
+                       source_type=SourceTypes.MOVE_SOURCE_TYPE),
             ],
         ]

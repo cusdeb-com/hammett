@@ -6,7 +6,7 @@ import os
 import unittest
 
 from hammett.core import Button
-from hammett.core.constants import RenderConfig, SourcesTypes
+from hammett.core.constants import RenderConfig, SourceTypes
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import catch_render_config
 
@@ -23,7 +23,7 @@ class HammettSimpleJumpBotTests(BaseTestCase):
 
         expected = self.prepare_final_render_config(RenderConfig(
             description=NEXT_SCREEN_DESCRIPTION,
-            keyboard=[[Button('⬅️ Back', StartScreen, source_type=SourcesTypes.MOVE_SOURCE_TYPE)]],
+            keyboard=[[Button('⬅️ Back', StartScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE)]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
@@ -35,7 +35,7 @@ class HammettSimpleJumpBotTests(BaseTestCase):
         expected = self.prepare_final_render_config(RenderConfig(
             as_new_message=True,
             description=START_SCREEN_DESCRIPTION,
-            keyboard=[[Button('Next ➡️', NextScreen, source_type=SourcesTypes.JUMP_SOURCE_TYPE)]],
+            keyboard=[[Button('Next ➡️', NextScreen, source_type=SourceTypes.JUMP_SOURCE_TYPE)]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 

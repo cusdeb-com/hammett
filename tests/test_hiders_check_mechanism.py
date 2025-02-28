@@ -2,7 +2,7 @@
 
 from hammett.conf import settings
 from hammett.core.button import Button
-from hammett.core.constants import SourcesTypes
+from hammett.core.constants import SourceTypes
 from hammett.core.exceptions import HiderIsUnregistered, ImproperlyConfigured
 from hammett.core.hider import (
     ONLY_FOR_ADMIN,
@@ -57,7 +57,7 @@ class HidersCheckerTests(BaseTestCase):
             _TEST_BUTTON_NAME,
             _TEST_URL,
             hiders=Hider(ONLY_FOR_ADMIN),
-            source_type=SourcesTypes.URL_SOURCE_TYPE,
+            source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
         self.assertTrue(visibility)
@@ -67,7 +67,7 @@ class HidersCheckerTests(BaseTestCase):
             _TEST_BUTTON_NAME,
             _TEST_URL,
             hiders=Hider(ONLY_FOR_ADMIN),
-            source_type=SourcesTypes.URL_SOURCE_TYPE,
+            source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
         self.assertFalse(visibility)
@@ -86,7 +86,7 @@ class HidersCheckerTests(BaseTestCase):
             _TEST_BUTTON_NAME,
             _TEST_URL,
             hiders=Hider(_ONLY_FOR_DEVELOPERS),
-            source_type=SourcesTypes.URL_SOURCE_TYPE,
+            source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         with self.assertRaises(HiderIsUnregistered):
             await button.create(self.update, self.context)
@@ -100,7 +100,7 @@ class HidersCheckerTests(BaseTestCase):
                 _TEST_BUTTON_NAME,
                 _TEST_URL,
                 hiders=Hider(ONLY_FOR_ADMIN),
-                source_type=SourcesTypes.URL_SOURCE_TYPE,
+                source_type=SourceTypes.URL_SOURCE_TYPE,
             )
 
     @override_settings(HIDERS_CHECKER='tests.test_hiders_check_mechanism.TestHidersChecker')
@@ -119,7 +119,7 @@ class HidersCheckerTests(BaseTestCase):
             _TEST_BUTTON_NAME,
             _TEST_URL,
             hiders=Hider(ONLY_FOR_ADMIN) | Hider(ONLY_FOR_MODERATORS),
-            source_type=SourcesTypes.URL_SOURCE_TYPE,
+            source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
         self.assertTrue(visibility)
@@ -130,7 +130,7 @@ class HidersCheckerTests(BaseTestCase):
             _TEST_BUTTON_NAME,
             _TEST_URL,
             hiders=Hider(ONLY_FOR_ADMIN) | Hider(ONLY_FOR_MODERATORS),
-            source_type=SourcesTypes.URL_SOURCE_TYPE,
+            source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
         self.assertFalse(visibility)
@@ -145,7 +145,7 @@ class HidersCheckerTests(BaseTestCase):
                 _TEST_BUTTON_NAME,
                 _TEST_URL,
                 hiders=Hider(ONLY_FOR_ADMIN),
-                source_type=SourcesTypes.URL_SOURCE_TYPE,
+                source_type=SourceTypes.URL_SOURCE_TYPE,
             )
 
     @override_settings(HIDERS_CHECKER='test.TestHidersChecker')
@@ -158,7 +158,7 @@ class HidersCheckerTests(BaseTestCase):
                 _TEST_BUTTON_NAME,
                 _TEST_URL,
                 hiders=Hider(ONLY_FOR_ADMIN),
-                source_type=SourcesTypes.URL_SOURCE_TYPE,
+                source_type=SourceTypes.URL_SOURCE_TYPE,
             )
 
     @override_settings(HIDERS_CHECKER='hammett.core.hider.HidersChecker')
@@ -170,7 +170,7 @@ class HidersCheckerTests(BaseTestCase):
             hiders=Hider(ONLY_FOR_ADMIN) |
             Hider(ONLY_FOR_BETA_TESTERS) |
             Hider(ONLY_FOR_MODERATORS),
-            source_type=SourcesTypes.URL_SOURCE_TYPE,
+            source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
         self.assertFalse(visibility)

@@ -6,7 +6,7 @@ import os
 import unittest
 
 from hammett.core import Button
-from hammett.core.constants import RenderConfig, SourcesTypes
+from hammett.core.constants import RenderConfig, SourceTypes
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import catch_render_config
 
@@ -27,7 +27,7 @@ class HammettHideKeyboardBotTests(BaseTestCase):
             description=NEXT_SCREEN_DESCRIPTION,
             keyboard=[[
                 Button('⬅️ Back', StartScreen,
-                       source_type=SourcesTypes.JUMP_SOURCE_TYPE),
+                       source_type=SourceTypes.JUMP_SOURCE_TYPE),
             ]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
@@ -43,7 +43,7 @@ class HammettHideKeyboardBotTests(BaseTestCase):
             description=START_SCREEN_DESCRIPTION,
             keyboard=[[
                 Button('Next screen ➡️', NextScreen,
-                       source_type=SourcesTypes.JUMP_SOURCE_TYPE),
+                       source_type=SourceTypes.JUMP_SOURCE_TYPE),
             ]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
