@@ -81,18 +81,18 @@ class NotAdminConfirmationScreen(Screen):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
-        return [
-            [Button(
+        return [[
+            Button(
                 '✅ Yes',
                 self.exclude_from_admin_group,
                 source_type=SourceTypes.HANDLER_SOURCE_TYPE,
-                hiders=Hider(ONLY_FOR_ADMIN))],
-            [Button(
+                hiders=Hider(ONLY_FOR_ADMIN)),
+            Button(
                 '❌ No',
                 MainMenuScreen,
                 source_type=SourceTypes.MOVE_SOURCE_TYPE,
-                hiders=Hider(ONLY_FOR_ADMIN))],
-        ]
+                hiders=Hider(ONLY_FOR_ADMIN)),
+        ]]
 
     @register_button_handler
     async def exclude_from_admin_group(self, update, context):

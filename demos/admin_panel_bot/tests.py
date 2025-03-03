@@ -66,13 +66,13 @@ class HammettAdminPanelBotTests(BaseTestCase):
 
         expected = self.prepare_final_render_config(RenderConfig(
             description=NOT_ADMIN_CONFIRMATION_SCREEN_DESCRIPTION,
-            keyboard=[
-                [Button('✅ Yes', NotAdminConfirmationScreen().exclude_from_admin_group,
+            keyboard=[[
+                Button('✅ Yes', NotAdminConfirmationScreen().exclude_from_admin_group,
                         source_type=SourceTypes.HANDLER_SOURCE_TYPE,
-                        hiders=Hider(ONLY_FOR_ADMIN))],
-                [Button('❌ No', MainMenuScreen,
-                        source_type=SourceTypes.MOVE_SOURCE_TYPE, hiders=Hider(ONLY_FOR_ADMIN))],
-            ],
+                        hiders=Hider(ONLY_FOR_ADMIN)),
+                Button('❌ No', MainMenuScreen,
+                        source_type=SourceTypes.MOVE_SOURCE_TYPE, hiders=Hider(ONLY_FOR_ADMIN)),
+            ]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
