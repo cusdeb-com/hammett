@@ -55,6 +55,14 @@ services:
       - valkey
     restart: always
 
+  unicorn-bot:
+    build:
+      dockerfile: ./unicorn_bot/Dockerfile
+    env_file: ./unicorn_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   valkey:
     image: valkey/valkey:8.0
     restart: always

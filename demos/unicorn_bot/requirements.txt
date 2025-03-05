@@ -1,0 +1,6 @@
+asgiref==3.8.1
+pillow==11.1.0
+python-dotenv==1.0.0
+redis==5.0.1
+
+git+https://github.com/cusdeb-com/hammett.git@release1#egg=hammett

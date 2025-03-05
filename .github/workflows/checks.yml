@@ -57,6 +57,7 @@ jobs:
           env HAMMETT_SETTINGS_MODULE=demos.paywall_bot.settings TOKEN=test-token python3 demos/paywall_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.say_hello_bot.settings python3 demos/say_hello_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.simple_jump_bot.settings python3 demos/simple_jump_bot/tests.py
+          env HAMMETT_SETTINGS_MODULE=demos.unicorn_bot.settings python3 demos/unicorn_bot/tests.py
 
       - name: Run Hammett tests
         run: |
