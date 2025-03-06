@@ -160,6 +160,10 @@ class MainMenuScreen(BaseScreen, StartMixin):
                 LanguageSwitcherScreen,
                 source_type=SourceTypes.MOVE_SOURCE_TYPE,
             )],
+            [Button(
+                '🎸 Hammett Homepage',
+                'https://github.com/cusdeb-com/hammett',
+                source_type=SourceTypes.URL_SOURCE_TYPE)],
         ]
 
     async def render(self, update, context, *, config=None, **kwargs):

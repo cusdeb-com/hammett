@@ -43,6 +43,8 @@ class HammettQuizBotTests(BaseTestCase):
                     source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
                 [Button(_('🌍 Language'), LanguageSwitcherScreen,
                     source_type=SourceTypes.MOVE_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
             ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
@@ -63,6 +65,8 @@ class HammettQuizBotTests(BaseTestCase):
                     source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
                 [Button(_('🌍 Language', 'pt-br'), LanguageSwitcherScreen,
                     source_type=SourceTypes.MOVE_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
             ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
@@ -83,6 +87,8 @@ class HammettQuizBotTests(BaseTestCase):
                     source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
                 [Button(_('🌍 Language', 'ru'), LanguageSwitcherScreen,
                     source_type=SourceTypes.MOVE_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
             ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
