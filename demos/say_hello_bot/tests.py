@@ -5,7 +5,8 @@
 import os
 import unittest
 
-from hammett.core.constants import RenderConfig
+from hammett.core import Button
+from hammett.core.constants import RenderConfig, SourceTypes
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import catch_render_config
 
@@ -34,6 +35,10 @@ class HammettSayHelloBotTests(BaseTestCase):
         expected = self.prepare_final_render_config(RenderConfig(
             as_new_message=True,
             description=START_SCREEN_DESCRIPTION,
+            keyboard=[[
+                Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE),
+            ]],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
