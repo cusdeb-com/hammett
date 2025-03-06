@@ -1,7 +1,7 @@
 """The module is a script for running the bot."""
 
-from hammett.core import Application, Screen
-from hammett.core.constants import DEFAULT_STATE
+from hammett.core import Application, Button, Screen
+from hammett.core.constants import DEFAULT_STATE, SourceTypes
 from hammett.core.handlers import register_command_handler
 from hammett.core.mixins import StartMixin
 from hammett.core.persistence import RedisPersistence
@@ -38,6 +38,15 @@ class StartScreen(StartMixin):
     """
 
     description = START_SCREEN_DESCRIPTION
+
+    async def add_default_keyboard(self, _update, _context):
+        """Set up the default keyboard for the screen."""
+        return [[
+            Button(
+                '🎸 Hammett Homepage',
+                'https://github.com/cusdeb-com/hammett',
+                source_type=SourceTypes.URL_SOURCE_TYPE),
+        ]]
 
 
 def main():
