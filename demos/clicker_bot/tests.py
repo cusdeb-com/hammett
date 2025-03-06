@@ -24,10 +24,12 @@ class HammettClickerBotTests(BaseTestCase):
         expected = self.prepare_final_render_config(RenderConfig(
             as_new_message=True,
             description=CLICKER_SCREEN_DESCRIPTION.format(num=0),
-            keyboard=[[
-                Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
-                       source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-            ]],
+            keyboard=[
+                [Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
+                       source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
+            ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
@@ -40,10 +42,12 @@ class HammettClickerBotTests(BaseTestCase):
 
         expected = self.prepare_final_render_config(RenderConfig(
             description=CLICKER_SCREEN_DESCRIPTION.format(num=1),
-            keyboard=[[
-                Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
-                       source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-            ]],
+            keyboard=[
+                [Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
+                       source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
+            ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
