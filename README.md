@@ -9,6 +9,20 @@ Hammett is a framework whose main goal is to simplify building *commercial* Tele
     <img src="/logo/1633x1380.png" alt="Hammett" style="max-width: 100%; width: 500px">
 </p>
 
+## Live Demos
+
+* [admin-panel-bot](https://t.me/HammettAdminPanelBot) showcases how to control the visibility of buttons based on the user role (see the demo's [source](demos/admin_panel_bot)).
+* [carousel-bot](https://t.me/HammettCarouselBot) demonstrates how to work with the carousel widget (see the demo's [source](demos/carousel_bot)).
+* [clicker-bot](https://t.me/HammettClickerBot) illustrates how to attach a handler to a button (see the demo's [source](demos/clicker_bot)).
+* [dynamic-keyboard-bot](https://t.me/HammettDynamicKeyboardBot) shows how to create and work with a dynamic keyboard (see the demo's [source](demos/dynamic_keyboard_bot)).
+* [hide-keyboard-bot](https://t.me/HammettHideKeyboardBot) explains how to hide keyboards from previous messages (see the demo's [source](demos/hide_keyboard_bot)).
+* [multi-state-bot](https://t.me/HammettMultiStateBot) showcases how to work with multiple states (see the demo's [source](demos/multi_state_bot)).
+* [paywall-bot](https://t.me/HammettPaywallBot) demonstrates how to manage access to the bot screens by checking specific conditions (see the demo's [source](demos/paywall_bot)).
+* [quiz-bot](https://t.me/HammettQuizBot) showcases the single-choice and multi-choice widgets to tackle various tasks (see the demo's [source](demos/quiz_bot)).
+* [say-hello-bot](https://t.me/HammettSayHelloBot) illustrates how to create a handler for an input command (see the demo's [source](demos/say_hello_bot)).
+* [simple-jump-bot](https://t.me/HammettSimpleJumpBot) demonstrates how to switch between screens (see the demo's [source](demos/simple_jump_bot)).
+
+
 ## Tests
 
 To run the tests use the following command:
