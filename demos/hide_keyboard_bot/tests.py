@@ -41,10 +41,12 @@ class HammettHideKeyboardBotTests(BaseTestCase):
             as_new_message=True,
             hide_keyboard=True,
             description=START_SCREEN_DESCRIPTION,
-            keyboard=[[
-                Button('Next screen ➡️', NextScreen,
-                       source_type=SourceTypes.JUMP_SOURCE_TYPE),
-            ]],
+            keyboard=[
+                [Button('Next screen ➡️', NextScreen,
+                       source_type=SourceTypes.JUMP_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
+            ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
