@@ -21,7 +21,7 @@ def request_dynamic_keyboard(handler):
     """Emulate an API request, pass a payload and return the keyboard."""
     buttons = range(3)  # do some API request
 
-    return [
+    keyboard = [
         [Button(
             f'Button {button_num + 1}',
             handler,
@@ -30,6 +30,13 @@ def request_dynamic_keyboard(handler):
         )]
         for button_num in buttons
     ]
+    keyboard.append([Button(
+        '🎸 Hammett Homepage',
+        'https://github.com/cusdeb-com/hammett',
+        source_type=SourceTypes.URL_SOURCE_TYPE),
+    ])
+
+    return keyboard
 
 
 class MainMenuScreen(StartMixin):
