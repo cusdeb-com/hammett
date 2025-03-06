@@ -53,7 +53,7 @@ class HammettAdminPanelBotTests(BaseTestCase):
             keyboard=[
                 [Button('👑 Admin Panel', AdminPanelScreen, hiders=Hider(ONLY_FOR_ADMIN),
                         source_type=SourceTypes.MOVE_SOURCE_TYPE)],
-                [Button('🎸 Hammett Home Page', 'https://github.com/cusdeb-com/hammett',
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
                         source_type=SourceTypes.URL_SOURCE_TYPE)],
             ],
         ))
