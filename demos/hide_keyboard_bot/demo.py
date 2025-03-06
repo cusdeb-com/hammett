@@ -49,13 +49,17 @@ class StartScreen(BaseScreen, StartMixin):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
-        return [[
-            Button(
+        return [
+            [Button(
                 'Next screen ➡️',
                 NextScreen,
                 source_type=SourceTypes.JUMP_SOURCE_TYPE,
-            ),
-        ]]
+            )],
+            [Button(
+                '🎸 Hammett Homepage',
+                'https://github.com/cusdeb-com/hammett',
+                source_type=SourceTypes.URL_SOURCE_TYPE)],
+        ]
 
 
 def main():
