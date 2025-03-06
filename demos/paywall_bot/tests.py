@@ -59,10 +59,12 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
-                return [[
-                    Button('💸 Fake Refund', self.handle_fake_refund,
-                        source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-                ]]
+                return [
+                    [Button('💸 Fake Refund', self.handle_fake_refund,
+                        source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+                    [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE)],
+                ]
 
             @register_button_handler
             async def handle_fake_refund(self, update, context):
@@ -127,10 +129,12 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
-                return [[
-                    Button('💸 Fake Refund', self.handle_fake_refund,
-                        source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-                ]]
+                return [
+                    [Button('💸 Fake Refund', self.handle_fake_refund,
+                        source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+                    [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE)],
+                ]
 
             @register_button_handler
             async def handle_fake_refund(self, update, context):
@@ -175,10 +179,12 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
         expected = self.prepare_final_render_config(RenderConfig(
             description=MAIN_MENU_SCREEN_DESCRIPTION,
-            keyboard=[[
-                Button('💸 Fake Refund', MainMenuScreen().handle_fake_refund,
-                       source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-            ]],
+            keyboard=[
+                [Button('💸 Fake Refund', MainMenuScreen().handle_fake_refund,
+                       source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
+            ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
@@ -193,10 +199,12 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
-                return [[
-                    Button('💸 Fake Refund', self.handle_fake_refund,
-                           source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-                ]]
+                return [
+                    [Button('💸 Fake Refund', self.handle_fake_refund,
+                           source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+                    [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE)],
+                ]
 
             @register_button_handler
             async def handle_fake_refund(self, update, context):
@@ -249,10 +257,12 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
-                return [[
-                    Button('💸 Fake Refund', self.handle_fake_refund,
-                           source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-                ]]
+                return [
+                    [Button('💸 Fake Refund', self.handle_fake_refund,
+                           source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+                    [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE)],
+                ]
 
             @register_button_handler
             async def handle_fake_refund(self, update, context):
