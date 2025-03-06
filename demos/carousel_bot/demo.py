@@ -1,8 +1,8 @@
 """The module is a script for running the bot."""
 
 from hammett.conf import settings
-from hammett.core import Application
-from hammett.core.constants import DEFAULT_STATE
+from hammett.core import Application, Button
+from hammett.core.constants import DEFAULT_STATE, SourceTypes
 from hammett.core.mixins import StartMixin
 from hammett.core.persistence import RedisPersistence
 from hammett.widgets import CarouselWidget
@@ -41,6 +41,15 @@ class MainMenuScreen(CarouselWidget, StartMixin):
         [settings.MEDIA_ROOT / '09.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
         [settings.MEDIA_ROOT / '10.png', MAIN_MENU_SCREEN_LAST_DESCRIPTION],
     ]
+
+    async def add_extra_keyboard(self, _update, _context):
+        """Return extra keyboard below the widget buttons."""
+        return [[
+            Button(
+                '🎸 Hammett Homepage',
+                'https://github.com/cusdeb-com/hammett',
+                source_type=SourceTypes.URL_SOURCE_TYPE),
+        ]]
 
 
 def main():
