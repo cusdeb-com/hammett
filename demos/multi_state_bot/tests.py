@@ -45,10 +45,12 @@ class HammettMultiStateBotTests(BaseTestCase):
         expected = self.prepare_final_render_config(RenderConfig(
             as_new_message=True,
             description=ANONYMOUS_SCREEN_DESCRIPTION,
-            keyboard=[[
-                Button('Introduce Yourself', IntroductionScreen,
-                       source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE),
-            ]],
+            keyboard=[
+                [Button('Introduce Yourself', IntroductionScreen,
+                       source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
+            ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
@@ -70,10 +72,12 @@ class HammettMultiStateBotTests(BaseTestCase):
         expected = self.prepare_final_render_config(RenderConfig(
             as_new_message=True,
             description=INTRODUCTION_SCREEN_WITH_NAME_DESCRIPTION.format(name=_TEST_NAME),
-            keyboard=[[
-                Button('Change Name', IntroductionScreen,
-                       source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE),
-            ]],
+            keyboard=[
+                [Button('Change Name', IntroductionScreen,
+                       source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
+            ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 

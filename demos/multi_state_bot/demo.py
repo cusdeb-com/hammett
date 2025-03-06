@@ -36,13 +36,17 @@ class AnonymousScreen(StartMixin):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the keyboard for the screen."""
-        return [[
-            Button(
+        return [
+            [Button(
                 'Introduce Yourself',
                 IntroductionScreen,
                 source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
-            ),
-        ]]
+            )],
+            [Button(
+                '🎸 Hammett Homepage',
+                'https://github.com/cusdeb-com/hammett',
+                source_type=SourceTypes.URL_SOURCE_TYPE)],
+        ]
 
 
 class IntroductionScreen(RouteMixin, Screen):
@@ -62,13 +66,17 @@ class IntroductionScreen(RouteMixin, Screen):
         await self.render(update, context, config=RenderConfig(
             as_new_message=True,
             description=INTRODUCTION_SCREEN_WITH_NAME_DESCRIPTION.format(name=update.message.text),
-            keyboard=[[
-                Button(
+            keyboard=[
+                [Button(
                     'Change Name',
                     IntroductionScreen,
                     source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
-                ),
-            ]],
+                )],
+                [Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE)],
+                ],
         ))
         return DEFAULT_STATE
 
