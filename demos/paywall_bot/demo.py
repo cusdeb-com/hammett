@@ -85,12 +85,16 @@ class MainMenuScreen(StartMixin):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the keyboard for the screen."""
-        return [[
-            Button(
+        return [
+            [Button(
                 '💸 Fake Refund',
                 self.handle_fake_refund,
-                source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-        ]]
+                source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+            [Button(
+                '🎸 Hammett Homepage',
+                'https://github.com/cusdeb-com/hammett',
+                source_type=SourceTypes.URL_SOURCE_TYPE)],
+        ]
 
     @register_button_handler
     async def handle_fake_refund(self, update, context):
