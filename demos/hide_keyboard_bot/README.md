@@ -60,6 +60,5 @@ $ python3 tests.py
 To run the demo in a Docker container, first navigate to the `demos/` directory and execute the following commands:
 
 ```bash
-$ docker compose build hide-keyboard-bot
-$ docker compose run hide-keyboard-bot
+$ docker compose up --build -d hide-keyboard-bot
 ```
