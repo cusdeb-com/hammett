@@ -11,7 +11,7 @@ with contextlib.suppress(ImportError):
 MEDIA_ROOT = Path(__file__).resolve().parent / 'media'
 
 REDIS_PERSISTENCE = {
-    'HOST': 'valkey',
+    'HOST': os.getenv('REDIS_PERSISTENCE_HOST', 'valkey'),
     'PORT': 6379,
     'DB': os.getenv('REDIS_PERSISTENCE_DB', '1'),
 }

@@ -8,7 +8,7 @@ with contextlib.suppress(ImportError):
     load_dotenv()
 
 REDIS_PERSISTENCE = {
-    'HOST': 'valkey',
+    'HOST': os.getenv('REDIS_PERSISTENCE_HOST', 'valkey'),
     'PORT': 6379,
     'DB': os.getenv('REDIS_PERSISTENCE_DB', '1'),
 }
