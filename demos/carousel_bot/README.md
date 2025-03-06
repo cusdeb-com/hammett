@@ -60,6 +60,5 @@ $ python3 tests.py
 To run the demo in a Docker container, first navigate to the `demos/` directory and execute the following commands:
 
 ```bash
-$ docker compose build carousel-bot
-$ docker compose run carousel-bot
+$ docker compose up --build -d carousel-bot
 ```

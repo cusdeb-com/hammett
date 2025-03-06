@@ -68,6 +68,5 @@ $ env TOKEN=test-token python3 tests.py
 To run the demo in a Docker container, first navigate to the `demos/` directory and execute the following commands:
 
 ```bash
-$ docker compose build quiz-bot
-$ docker compose run quiz-bot
+$ docker compose up --build -d quiz-bot
 ```

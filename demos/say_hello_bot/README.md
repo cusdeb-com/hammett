@@ -60,6 +60,5 @@ $ python3 tests.py
 To run the demo in a Docker container, first navigate to the `demos/` directory and execute the following commands:
 
 ```bash
-$ docker compose build say-hello-bot
-$ docker compose run say-hello-bot
+$ docker compose up --build -d say-hello-bot
 ```
