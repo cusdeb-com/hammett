@@ -27,6 +27,9 @@ class HammettClickerBotTests(BaseTestCase):
             keyboard=[
                 [Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
                        source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+                [Button('📄 Source Code',
+                        'https://github.com/cusdeb-com/hammett/tree/main/demos/clicker_bot',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
                 [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
                         source_type=SourceTypes.URL_SOURCE_TYPE)],
             ],
@@ -45,6 +48,9 @@ class HammettClickerBotTests(BaseTestCase):
             keyboard=[
                 [Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
                        source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+                [Button('📄 Source Code',
+                        'https://github.com/cusdeb-com/hammett/tree/main/demos/clicker_bot',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
                 [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
                         source_type=SourceTypes.URL_SOURCE_TYPE)],
             ],
