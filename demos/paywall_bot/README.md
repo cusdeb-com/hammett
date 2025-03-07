@@ -2,6 +2,8 @@
 
 This demo showcases the `Permisson` mechanism provided by Hammett. It allows you to manage access to the bot screens by checking certain conditions. Check out the documentation for more details.
 
+See the live demo [here](https://t.me/HammettPaywallBot).
+
 ## Table of Contents:
 
 - [Installation](#installation)

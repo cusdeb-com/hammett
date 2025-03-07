@@ -2,6 +2,8 @@
 
 This demo showcases `CarouselWidget` provided by Hammett. It allows you to create screens featuring multiple images. The demo also demonstrates how to manage the bot's assets using `MEDIA_ROOT`. Check out the documentation for more details.
 
+See the live demo [here](https://t.me/HammettCarouselBot).
+
 ## Table of Contents:
 
 - [Installation](#installation)
