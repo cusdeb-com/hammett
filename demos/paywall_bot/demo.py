@@ -91,6 +91,10 @@ class MainMenuScreen(StartMixin):
                 self.handle_fake_refund,
                 source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
             [Button(
+                '📄 Source Code',
+                'https://github.com/cusdeb-com/hammett/tree/main/demos/paywall_bot',
+                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [Button(
                 '🎸 Hammett Homepage',
                 'https://github.com/cusdeb-com/hammett',
                 source_type=SourceTypes.URL_SOURCE_TYPE)],
