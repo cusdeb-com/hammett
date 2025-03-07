@@ -37,6 +37,10 @@ class HammettSimpleJumpBotTests(BaseTestCase):
             description=START_SCREEN_DESCRIPTION,
             keyboard=[
                 [Button('Next ➡️', NextScreen, source_type=SourceTypes.JUMP_SOURCE_TYPE)],
+
+                [Button('📄 Source Code',
+                        'https://github.com/cusdeb-com/hammett/tree/main/demos/simple_jump_bot',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
                 [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
                         source_type=SourceTypes.URL_SOURCE_TYPE)],
             ],
