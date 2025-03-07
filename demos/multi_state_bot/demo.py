@@ -43,6 +43,10 @@ class AnonymousScreen(StartMixin):
                 source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
             )],
             [Button(
+                '📄 Source Code',
+                'https://github.com/cusdeb-com/hammett/tree/main/demos/multi_state_bot',
+                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [Button(
                 '🎸 Hammett Homepage',
                 'https://github.com/cusdeb-com/hammett',
                 source_type=SourceTypes.URL_SOURCE_TYPE)],
@@ -72,6 +76,10 @@ class IntroductionScreen(RouteMixin, Screen):
                     IntroductionScreen,
                     source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
                 )],
+                [Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/multi_state_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE)],
                 [Button(
                     '🎸 Hammett Homepage',
                     'https://github.com/cusdeb-com/hammett',
