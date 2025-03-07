@@ -35,10 +35,13 @@ class HammettSayHelloBotTests(BaseTestCase):
         expected = self.prepare_final_render_config(RenderConfig(
             as_new_message=True,
             description=START_SCREEN_DESCRIPTION,
-            keyboard=[[
-                Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                    source_type=SourceTypes.URL_SOURCE_TYPE),
-            ]],
+            keyboard=[
+                [Button('📄 Source Code',
+                        'https://github.com/cusdeb-com/hammett/tree/main/demos/say_hello_bot',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
+                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE)],
+            ],
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
