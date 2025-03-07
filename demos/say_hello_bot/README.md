@@ -2,6 +2,8 @@
 
 This demo showcases the `register_command_handler` decorator provided by Hammett. It allows you to attach handlers to <b>input commands</b>. Check out the documentation for more details.
 
+See the live demo [here](https://t.me/HammettSayHelloBot).
+
 ## Table of Contents:
 
 - [Installation](#installation)

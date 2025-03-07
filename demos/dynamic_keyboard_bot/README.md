@@ -2,6 +2,8 @@
 
 This demo showcases the `payload` mechanism provided by Hammett. This mechanism is key to dynamically creating keyboards based on, for example, API calls to external resources. Check out the documentation for more details.
 
+See the live demo [here](https://t.me/HammettDynamicKeyboardBot).
+
 ## Table of Contents:
 
 - [Installation](#installation)
