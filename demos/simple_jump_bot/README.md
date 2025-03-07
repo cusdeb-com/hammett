@@ -59,7 +59,7 @@ $ python3 tests.py
 
 ## Docker
 
-To run the demo in a Docker container, first navigate to the `demos/` directory and execute the following commands:
+To run the demo in a Docker container, first navigate to the `demos/` directory and execute the following command:
 
 ```bash
 $ docker compose up --build -d simple-jump-bot
