@@ -61,6 +61,10 @@ class MainMenuScreen(StartMixin, Screen):
                 hiders=Hider(ONLY_FOR_ADMIN),
                 source_type=SourceTypes.MOVE_SOURCE_TYPE)],
             [Button(
+                '📄 Source Code',
+                'https://github.com/cusdeb-com/hammett/tree/main/demos/admin_panel_bot',
+                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [Button(
                 '🎸 Hammett Homepage',
                 'https://github.com/cusdeb-com/hammett',
                 source_type=SourceTypes.URL_SOURCE_TYPE)],
