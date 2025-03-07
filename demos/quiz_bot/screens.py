@@ -161,6 +161,10 @@ class MainMenuScreen(BaseScreen, StartMixin):
                 source_type=SourceTypes.MOVE_SOURCE_TYPE,
             )],
             [Button(
+                _('📄 Source Code', language_code),
+                'https://github.com/cusdeb-com/hammett/tree/main/demos/quiz_bot',
+                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [Button(
                 '🎸 Hammett Homepage',
                 'https://github.com/cusdeb-com/hammett',
                 source_type=SourceTypes.URL_SOURCE_TYPE)],

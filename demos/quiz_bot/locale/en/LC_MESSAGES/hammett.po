@@ -44,5 +44,8 @@ msgstr "🏠 Main Menu"
 msgid "Next ➡️"
 msgstr "Next ➡️"
 
+msgid "📄 Source Code"
+msgstr "📄 Source Code"
+
 msgid "❓ Start Quiz"
 msgstr "❓ Start Quiz"

@@ -44,5 +44,8 @@ msgstr "🏠 Главное меню"
 msgid "Next ➡️"
 msgstr "Дальше ➡️"
 
+msgid "📄 Source Code"
+msgstr "📄 Исходный код"
+
 msgid "❓ Start Quiz"
 msgstr "❓ Начать тест"
