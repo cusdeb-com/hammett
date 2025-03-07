@@ -44,6 +44,9 @@ class HammettHideKeyboardBotTests(BaseTestCase):
             keyboard=[
                 [Button('Next screen ➡️', NextScreen,
                        source_type=SourceTypes.JUMP_SOURCE_TYPE)],
+                [Button('📄 Source Code',
+                        'https://github.com/cusdeb-com/hammett/tree/main/demos/hide_keyboard_bot',
+                        source_type=SourceTypes.URL_SOURCE_TYPE)],
                 [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
                         source_type=SourceTypes.URL_SOURCE_TYPE)],
             ],
