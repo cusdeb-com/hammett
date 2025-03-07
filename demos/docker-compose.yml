@@ -63,6 +63,14 @@ services:
       - valkey
     restart: always
 
+  reminder-bot:
+    build:
+      dockerfile: ./reminder_bot/Dockerfile
+    env_file: ./reminder_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   say-hello-bot:
     build:
       dockerfile: ./say_hello_bot/Dockerfile
