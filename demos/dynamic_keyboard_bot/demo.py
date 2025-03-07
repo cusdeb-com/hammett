@@ -30,10 +30,15 @@ def request_dynamic_keyboard(handler):
         )]
         for button_num in buttons
     ]
-    keyboard.append([Button(
-        '🎸 Hammett Homepage',
-        'https://github.com/cusdeb-com/hammett',
-        source_type=SourceTypes.URL_SOURCE_TYPE),
+    keyboard.extend([
+        [Button(
+            '📄 Source Code',
+            'https://github.com/cusdeb-com/hammett/tree/main/demos/dynamic_keyboard_bot',
+            source_type=SourceTypes.URL_SOURCE_TYPE)],
+        [Button(
+            '🎸 Hammett Homepage',
+            'https://github.com/cusdeb-com/hammett',
+            source_type=SourceTypes.URL_SOURCE_TYPE)],
     ])
 
     return keyboard
