@@ -6,3 +6,7 @@ __pycache__
 .env*
 .coverage
 *.mo
+
+build/
+dist/
+*.egg-info
