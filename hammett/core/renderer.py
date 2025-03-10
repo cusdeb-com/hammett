@@ -17,13 +17,12 @@ from hammett.core.exceptions import ScreenDocumentDataIsEmpty
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
     from os import PathLike
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Message, Update
     from telegram._utils.types import FileInput
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
     from hammett.core.constants import LatestMessage
     from hammett.types import Document, Keyboard

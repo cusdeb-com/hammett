@@ -30,11 +30,11 @@ from hammett.utils.log import configure_logging
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from typing import Self
 
     from telegram.ext import BasePersistence
     from telegram.ext._applicationbuilder import ApplicationBuilder
     from telegram.ext._utils.types import BD, CD, UD
-    from typing_extensions import Self
 
     from hammett.core.mixins import StartMixin
     from hammett.core.screen import Screen

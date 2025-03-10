@@ -6,12 +6,11 @@ from hammett.core import Screen
 from hammett.core.exceptions import ScreenRouteIsEmpty
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
     from hammett.types import Routes, State
 

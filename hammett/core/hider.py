@@ -7,12 +7,11 @@ from hammett.core.exceptions import HiderIsUnregistered
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
 (
     ONLY_FOR_ADMIN,

@@ -47,8 +47,9 @@ from hammett.conf import settings
 from hammett.core.constants import FinalRenderConfig, RenderConfig
 
 if TYPE_CHECKING:
+    from typing import Self
+
     from telegram._utils.types import JSONDict, ODVInput
-    from typing_extensions import Self
 
 
 class TestBot(Bot):

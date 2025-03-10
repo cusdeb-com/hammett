@@ -43,9 +43,7 @@ from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.hider import HidersChecker
 
 if TYPE_CHECKING:
-    from typing import Any
-
-    from typing_extensions import Self
+    from typing import Any, Self
 
     from hammett.types import Func
 

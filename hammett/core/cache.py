@@ -11,8 +11,7 @@ from hammett.core.exceptions import ImproperlyConfigured
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-
-    from typing_extensions import Self
+    from typing import Self
 
 CACHE_REDIS_CLI: 'redis.Redis[Any]' = redis.Redis(
     **{key.lower(): val for key, val in settings.REDIS_CACHE.items()},
