@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hammett"
+version = "1.0.0"
+requires-python = ">= 3.10"
+
+dependencies = [
+    "aiofiles<=23.1.0",
+    "python-telegram-bot[job-queue,webhooks]==22.5",
+    "jinja2==3.1.6",
+    "python-dateutil~=2.8.1",
+]
+
+authors = [
+    {name = "Evgeny Golyshev", email = "eugulixes@gmail.com"},
+    {name = "Dmitriy Ivanko", email = "tmwsls12@gmail.com"},
+    {name = "Polina Migel", email = "polinamigel@gmail.com"},
+]
+
+maintainers = [
+    {name = "Evgeny Golyshev", email = "eugulixes@gmail.com"},
+    {name = "Dmitriy Ivanko", email = "tmwsls12@gmail.com"},
+    {name = "Polina Migel", email = "polinamigel@gmail.com"},
+]
+
+description = "The framework for rapid development of Telegram bots with a clean and pragmatic design."
+
+readme = "README.md"
+
+license = "Apache-2.0"
+
+license-files = ["LICENSE"]
+
+keywords = ["hammett", "telegram", "bot"]
+
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Framework :: Hammett',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.14',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Topic :: Communications :: Chat',
+]
+
+[project.urls]
+Repository = "https://github.com/cusdeb-com/hammett"
+
+[tool.setuptools.packages.find]
+exclude = ["demos*", "demos", "tests*", "tests.*", "tests", "dist", "requirements.txt"]
+
+[dependency-groups]
+dev = [
+    "asgiref==3.7.2",
+    "coverage==7.3.2",
+    "fakeredis==2.31.3",
+    "mypy>=1.19.1",
+    "pypandoc==1.5",
+    "ruff>=0.14.11",
+    "types-aiofiles>=25.1.0.20251011",
+    "types-python-dateutil>=2.9.0.20251115",
+    "types-redis>=4.6.0.20241004",
+    "typing-extensions>=4.15.0",
+]
