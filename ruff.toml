@@ -24,6 +24,7 @@ ignore = [
     "RUF012",  # mutable-class-default
     "S301",  # 	suspicious-pickle-usage
     "S403",  # 	suspicious-pickle-import
+    "UP017",  # datetime-timezone-utc
 ]
 
 [lint.flake8-quotes]
