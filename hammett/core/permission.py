@@ -95,7 +95,7 @@ class Permission(Screen):
             **kwargs: 'Any',
         ) -> 'Any':
             if asyncio.iscoroutinefunction(self.has_permission):
-                permitted = await self.has_permission(update, context)
+                permitted = await self.has_permission(update, context)  # type: ignore[arg-type]
             else:
                 permitted = self.has_permission(update, context)
 
