@@ -92,7 +92,7 @@ class VizRequestHandler(SimpleHTTPRequestHandler):
         f = self.send_head()
         if f:
             try:
-                self.copyfile(f, self.wfile)  # type: ignore[misc]
+                self.copyfile(f, self.wfile)
             finally:
                 f.close()
 
@@ -110,7 +110,7 @@ class VizRequestHandler(SimpleHTTPRequestHandler):
             stat_table=stat_table,
             platforms=self._render_platforms(),
         )
-        self.copyfile(BytesIO(template), self.wfile)  # type: ignore[misc]
+        self.copyfile(BytesIO(template), self.wfile)
 
     def do_GET(self) -> None:
         """Handle GET requests to the web server."""
