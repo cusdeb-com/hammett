@@ -110,7 +110,7 @@ class Screen:
         final_config.document = final_config.document or await self.get_document(update, context)
         if (
             not final_config.description and not final_config.document and
-            not final_config.attachments
+            not final_config.attachments and not final_config.cover
         ):
             msg = f'The description of {self.__class__.__name__} is empty'
             raise ScreenDescriptionIsEmpty(msg)
