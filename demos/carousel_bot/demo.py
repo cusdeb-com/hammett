@@ -25,8 +25,8 @@ MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION = (
 )
 
 
-class MainMenuScreen(CarouselWidget, StartMixin):
-    """The class implements MainMenuScreen."""
+class Gallery(CarouselWidget, StartMixin):
+    """The class implements the gallery screen."""
 
     cache_covers = True
     images = [
@@ -60,10 +60,10 @@ def main():
     """Run the bot."""
     bot = Bot(
         'HammettCarouselBot',
-        entry_point=MainMenuScreen,
+        entry_point=Gallery,
         persistence=RedisPersistence(),
         states={
-            DEFAULT_STATE: {MainMenuScreen},
+            DEFAULT_STATE: {Gallery},
         },
     )
     bot.run()
