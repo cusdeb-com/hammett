@@ -22,7 +22,7 @@ from tests.base import (
     BaseTestScreenWithDescription,
     TestScreen,
     TestStartScreen,
-    get_application,
+    get_bot,
 )
 
 _NEW_STATE = '1'
@@ -91,7 +91,7 @@ class ApplicationTests(BaseTestCase):
         """Test the case when an application is initialized with
         an overriden LOGGING setting.
         """
-        get_application()
+        get_bot()
         self.assertEqual(
             logging.root.manager.loggerDict['hammett_test'].getEffectiveLevel(),
             logging.INFO,
@@ -110,7 +110,7 @@ class ApplicationTests(BaseTestCase):
 
     def test_application_initialization_without_persistence_specified(self):
         """Test an application initialization without a persistence specified."""
-        application = get_application()
+        application = get_bot()
         self.assertIsNone(application._native_application.persistence)
 
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_TIMED_OUT': True}, TOKEN='secret-token')
@@ -131,7 +131,7 @@ class ApplicationTests(BaseTestCase):
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_TIMED_OUT': True}, TOKEN='secret-token')
     def test_registering_default_error_handler_only(self):
         """Test registering `default_error_handler` only."""
-        application = get_application()
+        application = get_bot()
         registered_error_handler = next(iter(application._native_application.error_handlers))
 
         self.assertEqual(registered_error_handler, default_error_handler)
@@ -160,7 +160,7 @@ class ApplicationTests(BaseTestCase):
 
     def test_successful_application_initialization(self):
         """Test the case when an application is initialized successfully."""
-        application = get_application([TestScreenWithKeyboard])
+        application = get_bot([TestScreenWithKeyboard])
 
         handlers = application._native_application.handlers[0][0]
         pattern = calc_checksum('TestScreenWithKeyboard.move')
@@ -221,4 +221,4 @@ class ApplicationTests(BaseTestCase):
         because of an empty token.
         """
         with self.assertRaises(TokenIsNotSpecified):
-            get_application()
+            get_bot()

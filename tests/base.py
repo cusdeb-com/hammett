@@ -106,8 +106,8 @@ class TestStartScreen(BaseTestScreenWithDescription, StartMixin):
     """The class implements a start screen for the tests."""
 
 
-def get_application(screens=None):
-    """Return an initialized application."""
+def get_bot(screens=None):
+    """Return an initialized bot."""
     screens = [TestScreen] if screens is None else screens
 
     return Bot(
