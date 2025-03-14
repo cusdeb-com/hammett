@@ -1,6 +1,6 @@
 """The module is a script for running the bot."""
 
-from hammett.core import Application, Button
+from hammett.core import Bot, Button
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.mixins import StartMixin
@@ -66,7 +66,7 @@ class MainMenuScreen(StartMixin):
 
 def main():
     """Run the bot."""
-    app = Application(
+    app = Bot(
         'HammettDynamicKeyboard',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),

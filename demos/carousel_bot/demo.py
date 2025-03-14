@@ -1,7 +1,7 @@
 """The module is a script for running the bot."""
 
 from hammett.conf import settings
-from hammett.core import Application, Button
+from hammett.core import Bot, Button
 from hammett.core.constants import DEFAULT_STATE, SourceTypes
 from hammett.core.mixins import StartMixin
 from hammett.core.persistence import RedisPersistence
@@ -58,7 +58,7 @@ class MainMenuScreen(CarouselWidget, StartMixin):
 
 def main():
     """Run the bot."""
-    app = Application(
+    app = Bot(
         'HammettCarouselBot',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),

@@ -6,7 +6,7 @@ from abc import ABC
 from telegram import Chat, Message
 from telegram.constants import ChatType
 
-from hammett.core import Application
+from hammett.core import Bot
 from hammett.core.constants import DEFAULT_STATE
 from hammett.core.handlers import register_button_handler
 from hammett.core.mixins import StartMixin
@@ -110,7 +110,7 @@ def get_application(screens=None):
     """Return an initialized application."""
     screens = [TestScreen] if screens is None else screens
 
-    return Application(
+    return Bot(
         APPLICATION_TEST_NAME,
         entry_point=TestStartScreen,
         states={

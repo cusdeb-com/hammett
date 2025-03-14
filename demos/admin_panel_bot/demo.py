@@ -2,7 +2,7 @@
 
 # ruff: noqa: I001
 
-from hammett.core import Application
+from hammett.core import Bot
 from hammett.core.constants import DEFAULT_STATE
 from hammett.core.persistence import RedisPersistence
 
@@ -11,7 +11,7 @@ from screens import AdminPanelScreen, MainMenuScreen, NotAdminConfirmationScreen
 
 def main():
     """Run the bot."""
-    app = Application(
+    app = Bot(
         'HammettAdminPanelBot',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),

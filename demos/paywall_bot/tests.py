@@ -11,7 +11,7 @@ import os
 import unittest
 
 from hammett.conf import settings
-from hammett.core import Application, Button, Screen
+from hammett.core import Bot, Button, Screen
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.mixins import StartMixin
@@ -32,7 +32,7 @@ from permissions import PaywallPermission
 
 def _get_application(entry_point, *screens):
     """Return an application for testing purposes."""
-    return Application(
+    return Bot(
         'TestHammettPaywallBot',
         entry_point=entry_point,
         states={
