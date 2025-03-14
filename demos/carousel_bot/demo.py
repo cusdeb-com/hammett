@@ -58,7 +58,7 @@ class MainMenuScreen(CarouselWidget, StartMixin):
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettCarouselBot',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),
@@ -66,7 +66,7 @@ def main():
             DEFAULT_STATE: {MainMenuScreen},
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':

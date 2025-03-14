@@ -91,7 +91,7 @@ class IntroductionScreen(RouteMixin, Screen):
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettMultiStateBot',
         entry_point=AnonymousScreen,
         persistence=RedisPersistence(),
@@ -100,7 +100,7 @@ def main():
             TYPE_NAME_STATE: {IntroductionScreen},
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':

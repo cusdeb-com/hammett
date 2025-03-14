@@ -135,7 +135,7 @@ class PaymentScreen(Screen):
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettPaywallBot',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),
@@ -143,7 +143,7 @@ def main():
             DEFAULT_STATE: {FakePaymentScreen, MainMenuScreen, PaymentScreen},
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':

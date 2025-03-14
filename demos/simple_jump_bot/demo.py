@@ -63,7 +63,7 @@ class StartScreen(StartMixin):
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettSimpleJumpBot',
         entry_point=StartScreen,
         persistence=RedisPersistence(),
@@ -71,7 +71,7 @@ def main():
             DEFAULT_STATE: {NextScreen, StartScreen},
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':

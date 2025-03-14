@@ -68,7 +68,7 @@ class StartScreen(BaseScreen, StartMixin):
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettHideKeyboardBot',
         entry_point=StartScreen,
         persistence=RedisPersistence(),
@@ -76,7 +76,7 @@ def main():
             DEFAULT_STATE: {NextScreen, StartScreen},
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':
