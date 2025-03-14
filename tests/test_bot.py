@@ -83,8 +83,8 @@ class TestScreenWithKeyboard(BaseTestScreenWithDescription):
         ]
 
 
-class ApplicationTests(BaseTestCase):
-    """The class implements the tests for the application."""
+class BotTests(BaseTestCase):
+    """The class implements the tests for the bot."""
 
     @override_settings(LOGGING=_TEST_LOGGING, TOKEN='secret-token')
     def test_application_initialization_with_logging_setup(self):
