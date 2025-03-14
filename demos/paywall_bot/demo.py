@@ -3,7 +3,7 @@
 # ruff: noqa: I001
 
 from hammett.conf import settings
-from hammett.core import Application, Button, Screen
+from hammett.core import Bot, Button, Screen
 from hammett.core.constants import DEFAULT_STATE, SourceTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.mixins import StartMixin
@@ -135,7 +135,7 @@ class PaymentScreen(Screen):
 
 def main():
     """Run the bot."""
-    app = Application(
+    app = Bot(
         'HammettPaywallBot',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),

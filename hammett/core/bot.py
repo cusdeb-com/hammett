@@ -1,4 +1,4 @@
-"""The module contains the implementation of the high-level application class."""
+"""The module contains the implementation of the high-level Bot class."""
 
 # ruff: noqa: PLR2004
 
@@ -40,12 +40,12 @@ if TYPE_CHECKING:
     from hammett.core.screen import Screen
     from hammett.types import Handler, HandlerAlias, NativeStates, State, States
 
-__all__ = ('Application', )
+__all__ = ('Bot', )
 
 logger = logging.getLogger(__name__)
 
 
-class Application:
+class Bot:
     """The class is a wrapper for the native Application class.
     The wrapping solves the following tasks:
     - hiding low-level technical details of python-telegram-bot from developers;
@@ -64,7 +64,7 @@ class Application:
         persistence: 'BasePersistence[UD, CD, BD] | None' = None,
         states: 'States | None' = None,
     ) -> None:
-        """Initialize an application object.
+        """Initialize a bot object.
 
         Raises
         ------
@@ -273,7 +273,7 @@ class Application:
         )
 
     def run(self: 'Self') -> None:
-        """Run the application."""
+        """Run the bot."""
         from hammett.conf import settings
 
         if ((
@@ -285,8 +285,8 @@ class Application:
             logger.warning(
                 "It's recommended to avoid using the following versions of Python: "
                 "3.11.5, 3.11.6, and 3.12.0. The reason for this recommendation is that "
-                "these versions raise a `RuntimeError` upon application termination, "
-                "which may lead to an improper shutdown process.",
+                "these versions raise a `RuntimeError` upon bot termination, which may "
+                "lead to an improper shutdown process.",
             )
 
         if settings.USE_WEBHOOK:

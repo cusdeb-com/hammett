@@ -7,7 +7,7 @@ import re
 
 from telegram.ext import CommandHandler
 
-from hammett.core.bot import Application
+from hammett.core.bot import Bot
 from hammett.core.button import Button
 from hammett.core.constants import DEFAULT_STATE, SourceTypes
 from hammett.core.exceptions import CallbackNotProvided, JobKwargsNotProvided, TokenIsNotSpecified
@@ -99,7 +99,7 @@ class ApplicationTests(BaseTestCase):
 
     def test_application_initialization_with_persistence_specified(self):
         """Test an application initialization with a persistence specified."""
-        application = Application(
+        application = Bot(
             APPLICATION_TEST_NAME,
             entry_point=TestStartScreen,
             persistence=RedisPersistence(),
@@ -118,7 +118,7 @@ class ApplicationTests(BaseTestCase):
         """Test registering `default_error_handler` along with extra one,
         including the registering order.
         """
-        application = Application(
+        application = Bot(
             APPLICATION_TEST_NAME,
             entry_point=TestStartScreen,
             error_handlers=[_test_error_handler],
@@ -139,7 +139,7 @@ class ApplicationTests(BaseTestCase):
     def test_registering_job_without_callback_specified(self):
         """Test registering a job without `callback` key specified."""
         with self.assertRaises(CallbackNotProvided):
-            Application(
+            Bot(
                 APPLICATION_TEST_NAME,
                 entry_point=TestStartScreen,
                 job_configs=[{
@@ -150,7 +150,7 @@ class ApplicationTests(BaseTestCase):
     def test_registering_job_without_job_kwargs_specified(self):
         """Test registering a job without `job_kwargs` key specified."""
         with self.assertRaises(JobKwargsNotProvided):
-            Application(
+            Bot(
                 APPLICATION_TEST_NAME,
                 entry_point=TestStartScreen,
                 job_configs=[{
@@ -176,7 +176,7 @@ class ApplicationTests(BaseTestCase):
 
     def test_successful_registering_error_handler(self):
         """Test successful registering of `error_handler`."""
-        application = Application(
+        application = Bot(
             APPLICATION_TEST_NAME,
             entry_point=TestStartScreen,
             error_handlers=[_test_error_handler],
@@ -187,7 +187,7 @@ class ApplicationTests(BaseTestCase):
 
     def test_successful_registering_job(self):
         """Test successful registering of a job."""
-        application = Application(
+        application = Bot(
             APPLICATION_TEST_NAME,
             entry_point=TestStartScreen,
             job_configs=[{
@@ -200,7 +200,7 @@ class ApplicationTests(BaseTestCase):
 
     def test_registering_route_handlers(self):
         """Test registering route handlers."""
-        application = Application(
+        application = Bot(
             APPLICATION_TEST_NAME,
             entry_point=TestStartScreen,
             states={

@@ -1,6 +1,6 @@
 """The module is a script for running the bot."""
 
-from hammett.core import Application, Button, Screen
+from hammett.core import Bot, Button, Screen
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.handlers import register_typing_handler
 from hammett.core.mixins import RouteMixin, StartMixin
@@ -91,7 +91,7 @@ class IntroductionScreen(RouteMixin, Screen):
 
 def main():
     """Run the bot."""
-    app = Application(
+    app = Bot(
         'HammettMultiStateBot',
         entry_point=AnonymousScreen,
         persistence=RedisPersistence(),
