@@ -5,7 +5,7 @@
 import os
 import unittest
 
-from tests.test_application import ApplicationTests
+from tests.test_bot import ApplicationTests
 from tests.test_buttons import ButtonsTests
 from tests.test_handers_render import HandlersRenderTests
 from tests.test_handlers import HandlersTests
