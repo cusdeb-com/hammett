@@ -30,8 +30,8 @@ from demo import (
 from permissions import PaywallPermission
 
 
-def _get_application(entry_point, *screens):
-    """Return an application for testing purposes."""
+def _get_bot(entry_point, *screens):
+    """Return a bot for testing purposes."""
     return Bot(
         'TestHammettPaywallBot',
         entry_point=entry_point,
@@ -104,9 +104,9 @@ class HammettPaywallBotBotTests(BaseTestCase):
                 """Switch to the screen re-rendering the previous message."""
                 return await FakePaymentScreen().move(update, context, **kwargs)
 
-        # The application needs to be initialized for
-        # the permissions to be applied to the screens.
-        _get_application(TestMainMenuScreen, TestFakePaymentScreen)
+        # The bot needs to be initialized for the permissions
+        # to be applied to the screens.
+        _get_bot(TestMainMenuScreen, TestFakePaymentScreen)
 
         await TestFakePaymentScreen().move(self.update, self.context)
 
@@ -177,9 +177,9 @@ class HammettPaywallBotBotTests(BaseTestCase):
                 """Switch to the screen re-rendering the previous message."""
                 return await FakePaymentScreen().move(update, context, **kwargs)
 
-        # The application needs to be initialized for
-        # the permissions to be applied to the screens.
-        _get_application(TestMainMenuScreen, TestFakePaymentScreen)
+        # The bot needs to be initialized for the permissions
+        # to be applied to the screens.
+        _get_bot(TestMainMenuScreen, TestFakePaymentScreen)
 
         await TestFakePaymentScreen().handle_fake_payment(self.update, self.context)
 
@@ -242,9 +242,9 @@ class HammettPaywallBotBotTests(BaseTestCase):
                 """Switch to the screen re-rendering the previous message."""
                 return await PaymentScreen().move(update, context, **kwargs)
 
-        # The application needs to be initialized for
-        # the permissions to be applied to the screens.
-        _get_application(TestMainMenuScreen, TestPaymentScreen)
+        # The bot needs to be initialized for the permissions
+        # to be applied to the screens.
+        _get_bot(TestMainMenuScreen, TestPaymentScreen)
 
         await TestMainMenuScreen().start(self.update, self.context)
 
@@ -303,9 +303,9 @@ class HammettPaywallBotBotTests(BaseTestCase):
                 """Switch to the screen re-rendering the previous message."""
                 return await PaymentScreen().move(update, context, **kwargs)
 
-        # The application needs to be initialized for
-        # the permissions to be applied to the screens.
-        _get_application(TestMainMenuScreen, TestPaymentScreen)
+        # The bot needs to be initialized for the permissions
+        # to be applied to the screens.
+        _get_bot(TestMainMenuScreen, TestPaymentScreen)
 
         await TestPaymentScreen().move(self.update, self.context)
 
