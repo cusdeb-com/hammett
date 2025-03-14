@@ -17,7 +17,7 @@ from screens import (
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettQuizBot',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),
@@ -31,7 +31,7 @@ def main():
             },
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':

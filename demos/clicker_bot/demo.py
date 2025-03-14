@@ -55,7 +55,7 @@ class ClickerScreen(StartMixin):
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettClickerBot',
         entry_point=ClickerScreen,
         persistence=RedisPersistence(),
@@ -63,7 +63,7 @@ def main():
             DEFAULT_STATE: {ClickerScreen},
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':

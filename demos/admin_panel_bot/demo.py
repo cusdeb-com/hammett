@@ -11,7 +11,7 @@ from screens import AdminPanelScreen, MainMenuScreen, NotAdminConfirmationScreen
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettAdminPanelBot',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),
@@ -19,7 +19,7 @@ def main():
             DEFAULT_STATE: {AdminPanelScreen, MainMenuScreen, NotAdminConfirmationScreen},
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':

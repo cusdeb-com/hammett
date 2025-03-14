@@ -11,7 +11,7 @@ from screens import MainMenuScreen, ReminderScreen, SettingReminderScreen
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettReminderBot',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),
@@ -19,7 +19,7 @@ def main():
             DEFAULT_STATE: {MainMenuScreen, ReminderScreen, SettingReminderScreen},
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':

@@ -66,7 +66,7 @@ class MainMenuScreen(StartMixin):
 
 def main():
     """Run the bot."""
-    app = Bot(
+    bot = Bot(
         'HammettDynamicKeyboard',
         entry_point=MainMenuScreen,
         persistence=RedisPersistence(),
@@ -74,7 +74,7 @@ def main():
             DEFAULT_STATE: {MainMenuScreen},
         },
     )
-    app.run()
+    bot.run()
 
 
 if __name__ == '__main__':
