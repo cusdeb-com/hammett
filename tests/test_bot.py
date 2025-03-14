@@ -1,4 +1,4 @@
-"""The module contains the tests for the application."""
+"""The module contains the tests for the bot."""
 
 # ruff: noqa: RUF029, S106, SLF001
 
@@ -71,7 +71,7 @@ class TestRouteScreen(RouteMixin):
 
 
 class TestScreenWithKeyboard(BaseTestScreenWithDescription):
-    """The class implements the screen to test starting an application."""
+    """The class implements the screen to test starting a bot."""
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the keyboard for the screen."""
@@ -87,8 +87,8 @@ class BotTests(BaseTestCase):
     """The class implements the tests for the bot."""
 
     @override_settings(LOGGING=_TEST_LOGGING, TOKEN='secret-token')
-    def test_application_initialization_with_logging_setup(self):
-        """Test the case when an application is initialized with
+    def test_bot_initialization_with_logging_setup(self):
+        """Test the case when a bot is initialized with
         an overriden LOGGING setting.
         """
         get_bot()
@@ -97,42 +97,42 @@ class BotTests(BaseTestCase):
             logging.INFO,
         )
 
-    def test_application_initialization_with_persistence_specified(self):
-        """Test an application initialization with a persistence specified."""
-        application = Bot(
+    def test_bot_initialization_with_persistence_specified(self):
+        """Test a bot initialization with a persistence specified."""
+        bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
             persistence=RedisPersistence(),
         )
 
-        self.assertIsNotNone(application._native_application.persistence)
-        self.assertIsInstance(application._native_application.persistence, RedisPersistence)
+        self.assertIsNotNone(bot._native_application.persistence)
+        self.assertIsInstance(bot._native_application.persistence, RedisPersistence)
 
-    def test_application_initialization_without_persistence_specified(self):
-        """Test an application initialization without a persistence specified."""
-        application = get_bot()
-        self.assertIsNone(application._native_application.persistence)
+    def test_bot_initialization_without_persistence_specified(self):
+        """Test a bot initialization without a persistence specified."""
+        bot = get_bot()
+        self.assertIsNone(bot._native_application.persistence)
 
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_TIMED_OUT': True}, TOKEN='secret-token')
     def test_registering_default_error_handler_along_with_extra_one(self):
         """Test registering `default_error_handler` along with extra one,
         including the registering order.
         """
-        application = Bot(
+        bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
             error_handlers=[_test_error_handler],
         )
 
-        registered_error_handlers = list(application._native_application.error_handlers)
+        registered_error_handlers = list(bot._native_application.error_handlers)
         self.assertEqual(registered_error_handlers[0], _test_error_handler)
         self.assertEqual(registered_error_handlers[1], default_error_handler)
 
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_TIMED_OUT': True}, TOKEN='secret-token')
     def test_registering_default_error_handler_only(self):
         """Test registering `default_error_handler` only."""
-        application = get_bot()
-        registered_error_handler = next(iter(application._native_application.error_handlers))
+        bot = get_bot()
+        registered_error_handler = next(iter(bot._native_application.error_handlers))
 
         self.assertEqual(registered_error_handler, default_error_handler)
 
@@ -158,11 +158,11 @@ class BotTests(BaseTestCase):
                 }],
             )
 
-    def test_successful_application_initialization(self):
-        """Test the case when an application is initialized successfully."""
-        application = get_bot([TestScreenWithKeyboard])
+    def test_successful_bot_initialization(self):
+        """Test the case when a bot is initialized successfully."""
+        bot = get_bot([TestScreenWithKeyboard])
 
-        handlers = application._native_application.handlers[0][0]
+        handlers = bot._native_application.handlers[0][0]
         pattern = calc_checksum('TestScreenWithKeyboard.move')
 
         self.assertIsInstance(handlers.entry_points[0], CommandHandler)
@@ -176,18 +176,18 @@ class BotTests(BaseTestCase):
 
     def test_successful_registering_error_handler(self):
         """Test successful registering of `error_handler`."""
-        application = Bot(
+        bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
             error_handlers=[_test_error_handler],
         )
 
-        registered_error_handler = next(iter(application._native_application.error_handlers))
+        registered_error_handler = next(iter(bot._native_application.error_handlers))
         self.assertEqual(registered_error_handler, _test_error_handler)
 
     def test_successful_registering_job(self):
         """Test successful registering of a job."""
-        application = Bot(
+        bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
             job_configs=[{
@@ -195,12 +195,12 @@ class BotTests(BaseTestCase):
                 'job_kwargs': {'trigger': 'interval'},
             }],
         )
-        registered_job = application._native_application.job_queue.jobs()[0].callback
+        registered_job = bot._native_application.job_queue.jobs()[0].callback
         self.assertEqual(registered_job, _test_job)
 
     def test_registering_route_handlers(self):
         """Test registering route handlers."""
-        application = Bot(
+        bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
             states={
@@ -209,15 +209,15 @@ class BotTests(BaseTestCase):
             },
         )
 
-        jump_along_route_callback = application._native_states[DEFAULT_STATE][2].callback
+        jump_along_route_callback = bot._native_states[DEFAULT_STATE][2].callback
         self.assertEqual(jump_along_route_callback, TestRouteScreen().jump_along_route)
 
-        move_along_route_callback = application._native_states[DEFAULT_STATE][3].callback
+        move_along_route_callback = bot._native_states[DEFAULT_STATE][3].callback
         self.assertEqual(move_along_route_callback, TestRouteScreen().move_along_route)
 
     @override_settings(TOKEN='')
-    def test_unsuccessful_application_initialization_with_empty_token(self):
-        """Test the case when an application is initialized unsuccessfully
+    def test_unsuccessful_bot_initialization_with_empty_token(self):
+        """Test the case when a bot is initialized unsuccessfully
         because of an empty token.
         """
         with self.assertRaises(TokenIsNotSpecified):
