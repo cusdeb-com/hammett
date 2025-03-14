@@ -14,7 +14,7 @@ from hammett.core.permission import Permission
 from hammett.core.renderer import Renderer
 from hammett.core.screen import Screen
 
-APPLICATION_TEST_NAME = 'test'
+BOT_TEST_NAME = 'test'
 
 CHAT_ID = 1
 
@@ -111,7 +111,7 @@ def get_bot(screens=None):
     screens = [TestScreen] if screens is None else screens
 
     return Bot(
-        APPLICATION_TEST_NAME,
+        BOT_TEST_NAME,
         entry_point=TestStartScreen,
         states={
             DEFAULT_STATE: screens,
