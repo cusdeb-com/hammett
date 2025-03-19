@@ -9,21 +9,6 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-def render(template: str, context: dict[str, str]) -> str:
-    """Return a description after formatting it using passed tags.
-
-    Returns
-    -------
-        Formatted description.
-
-    """
-    description = template
-    for key, val in context.items():
-        description = description.replace(f'{{{key}}}', str(val))
-
-    return description
-
-
 def render_template_from_string(template: str, data: dict[str, 'Any'] | None = None) -> str:
     """Return a description after formatting it using passed data.
 
