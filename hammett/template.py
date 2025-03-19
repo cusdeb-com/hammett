@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-def render_template_from_string(template: str, data: dict[str, 'Any'] | None = None) -> str:
+def render_template_from_string(template: str, context: dict[str, 'Any'] | None = None) -> str:
     """Return a description after formatting it using passed data.
 
     Returns
@@ -22,5 +22,5 @@ def render_template_from_string(template: str, data: dict[str, 'Any'] | None = N
     ).from_string(
         html.unescape(template),
     ).render(
-        **({} if data is None else data),
+        **({} if context is None else context),
     )
