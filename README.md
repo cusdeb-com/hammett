@@ -23,6 +23,9 @@ Hammett is a framework whose main goal is to simplify building *commercial* Tele
 * [say-hello-bot](https://t.me/HammettSayHelloBot) illustrates how to create a handler for an input command (see the demo's [source](demos/say_hello_bot)).
 * [simple-jump-bot](https://t.me/HammettSimpleJumpBot) demonstrates how to switch between screens (see the demo's [source](demos/simple_jump_bot)).
 
+## Real-World Examples
+
+To assess the capabilities of Hammett, you can take a look at some real-world examples. One such example is [TutorInTechBot](https://t.me/TutorInTechBot?start=hammettdoc), which is a library of open-licensed books on Information Technology available in both Russian and English.
 
 ## Tests
 
