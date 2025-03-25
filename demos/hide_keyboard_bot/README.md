@@ -1,6 +1,6 @@
 # HammettHideKeyboardBot
 
-This demo showcases the `hide_keyboard` feature provided by Hammett. It allows you to hide the keyboards from previous messages to keep the chat history neat. Check out the documentation for more details.
+This demo showcases the `hide_keyboard` feature provided by Hammett. It allows you to hide the keyboards from previous messages to keep the chat history neat. Check out the [documentation](https://cusdeb-com.github.io/hammett) for more details.
 
 See the live demo [here](https://t.me/HammettHideKeyboardBot).
 

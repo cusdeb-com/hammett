@@ -1,6 +1,6 @@
 # HammettQuizBot
 
-This demo showcases the `SingleChoiceWidget` and `MultiChoiceWidget` widgets to tackle various tasks. It demonstrates how they can be used to create a quiz with options for selecting one or multiple correct answers. Additionally, the bot illustrates how to use the `.po` files to create multilingual interfaces. Check out the documentation for more details.
+This demo showcases the `SingleChoiceWidget` and `MultiChoiceWidget` widgets to tackle various tasks. It demonstrates how they can be used to create a quiz with options for selecting one or multiple correct answers. Additionally, the bot illustrates how to use the `.po` files to create multilingual interfaces. Check out the [documentation](https://cusdeb-com.github.io/hammett) for more details.
 
 See the live demo [here](https://t.me/HammettQuizBot).
 

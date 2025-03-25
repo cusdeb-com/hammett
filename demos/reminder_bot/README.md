@@ -1,6 +1,6 @@
 # HammettReminderBot
 
-This demo showcases the `Jobs` mechanism provided by Hammett. It allows you to send users delayed notifications. Check out the documentation for more details.
+This demo showcases the `Jobs` mechanism provided by Hammett. It allows you to send users delayed notifications. Check out the [documentation](https://cusdeb-com.github.io/hammett) for more details.
 
 See the live demo [here](https://t.me/HammettReminderBot).
 
