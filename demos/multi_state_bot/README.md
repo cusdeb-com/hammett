@@ -1,6 +1,6 @@
 # HammettMultiStateBot
 
-This demo showcases the `move_along_route` feature provided by Hammett. `move_along_route` allows you to navigate between different states while re-rendering the same message. Check out the documentation for more details.
+This demo showcases the `move_along_route` feature provided by Hammett. `move_along_route` allows you to navigate between different states while re-rendering the same message. Check out the [documentation](https://cusdeb-com.github.io/hammett) for more details.
 
 See the live demo [here](https://t.me/HammettMultiStateBot).
 

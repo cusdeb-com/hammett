@@ -1,6 +1,6 @@
 # HammettAdminPanelBot
 
-This demo showcases the `Hider` feature provided by Hammett. `Hiders` allows you to control the visibility of the buttons according to the user role. Check out the documentation for more details.
+This demo showcases the `Hider` feature provided by Hammett. `Hiders` allows you to control the visibility of the buttons according to the user role. Check out the [documentation](https://cusdeb-com.github.io/hammett) for more details.
 
 See the live demo [here](https://t.me/HammettAdminPanelBot).
 

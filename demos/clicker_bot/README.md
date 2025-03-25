@@ -1,6 +1,6 @@
 # HammettClickerBot
 
-This demo showcases the `register_button_handler` decorator provided by Hammett. It allows you to attach handlers to <b>buttons</b>. Check out the documentation for more details.
+This demo showcases the `register_button_handler` decorator provided by Hammett. It allows you to attach handlers to <b>buttons</b>. Check out the [documentation](https://cusdeb-com.github.io/hammett) for more details.
 
 See the live demo [here](https://t.me/HammettClickerBot).
 
