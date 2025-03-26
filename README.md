@@ -9,6 +9,10 @@ Hammett is a framework whose main goal is to simplify building *commercial* Tele
     <img src="/logo/1633x1380.png" alt="Hammett" style="max-width: 100%; width: 500px">
 </p>
 
+## Documentation
+
+Here's the **Getting Started** guide, available in both 🇬🇧 [English](https://cusdeb-com.github.io/hammett/getting-started/) and 🇷🇺 [Russian](https://cusdeb-com.github.io/hammett/ru/getting-started/). When you've finished it, don't forget to check out the [Introduction to Bot Development](https://cusdeb-com.github.io/hammett/introduction_to_bot_development/three-pillars/).
+
 ## Live Demos
 
 * [admin-panel-bot](https://t.me/HammettAdminPanelBot) showcases how to control the visibility of buttons based on the user role (see the demo's [source](demos/admin_panel_bot)).
