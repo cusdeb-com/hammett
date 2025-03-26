@@ -1,6 +1,6 @@
 # Hammett
 
-Hammett is a framework whose main goal is to simplify building *commercial* Telegram bots with clear code and a good architecture. By commercial bots are meant such bots that require the support of
+Hammett is a framework whose main goal is to simplify building _commercial_ Telegram bots with clear code and a good architecture. By commercial bots are meant such bots that require the support of
 
 - several roles of users (admin, beta testers, moderators, etc.) to manage the visibility of some parts of the user interface;
 - the permissions mechanism to implement a **maintenance mode**, **paywall**, etc.
