@@ -306,7 +306,7 @@ class Renderer:
             if (
                 config.cover
                 and config.cache_covers
-                and send_object.photo
+                and getattr(send_object, 'photo', None)
                 and not self._is_url(config.cover)
             ):
                 photo_size_object = send_object.photo[-1]
