@@ -278,6 +278,8 @@ class Renderer:
             Rendered object of `Message` type.
 
         """
+        from hammett.conf import settings
+
         send: Callable[..., Awaitable[Any]] | None = None
         method_kwargs: Any = {}
         if config.as_new_message:
@@ -295,6 +297,8 @@ class Renderer:
                     update,
                     context,
                 )
+
+            method_kwargs['read_timeout'] = settings.SEND_METHODS_READ_TIMEOUT
 
             send_object = await send(**method_kwargs)
 
