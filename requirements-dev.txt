@@ -5,6 +5,7 @@ mypy
 pypandoc==1.5
 ruff
 types-aiofiles
+types-python-dateutil
 types-redis
 typing_extensions
 
