@@ -7,6 +7,14 @@ services:
       - valkey
     restart: always
 
+  calendar-bot:
+    build:
+      dockerfile: ./calendar_bot/Dockerfile
+    env_file: ./calendar_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   carousel-bot:
     build:
       dockerfile: ./carousel_bot/Dockerfile
