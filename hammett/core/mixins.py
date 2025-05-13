@@ -1,7 +1,8 @@
 """The module contains mixins."""
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
+from hammett.conf import settings
 from hammett.core import Screen
 from hammett.core.exceptions import ImproperlyConfigured, ScreenRouteIsEmpty
 
@@ -14,6 +15,43 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.types import Routes, State
+
+
+class I18NMixin(Screen):
+    """The mixin used for screens that support translation into multiple languages."""
+
+    async def get_language_code(
+        self: 'Self',
+        _update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
+    ) -> str:
+        """Return the language code.
+
+        Returns
+        -------
+            Current language code.
+
+        """
+        if context.user_data:
+            user_data = cast('dict[str, Any]', context.user_data)
+            language_code = user_data.get('language_code', settings.LANGUAGE_CODE)
+        else:
+            language_code = settings.LANGUAGE_CODE
+
+        return cast('str', language_code)
+
+    async def set_language_code(
+        self: 'Self',
+        _update: 'Update | None',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        language_code: str,
+        **_kwargs: 'Any',
+    ) -> None:
+        """Set the language code."""
+        if context.user_data:
+            user_data = cast('dict[str, Any]', context.user_data)
+            user_data['language_code'] = language_code
 
 
 class RouteMixin(Screen):
