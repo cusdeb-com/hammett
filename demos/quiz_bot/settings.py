@@ -10,7 +10,9 @@ with contextlib.suppress(ImportError):
 
 BASE_DIR = Path(__file__).resolve().parent
 
-LOCALE_PATHS = BASE_DIR / 'locale'
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 REDIS_PERSISTENCE = {
     'HOST': os.getenv('REDIS_PERSISTENCE_HOST', 'valkey'),
