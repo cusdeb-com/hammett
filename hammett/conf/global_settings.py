@@ -25,7 +25,7 @@ HTML_PARSE_MODE = True
 
 LANGUAGE_CODE = 'en'
 
-LOCALE_PATH = ''
+LOCALE_PATHS = ''
 
 LOGGING: dict[str, 'Any'] = {}
 

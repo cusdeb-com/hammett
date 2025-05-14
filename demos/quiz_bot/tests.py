@@ -24,7 +24,7 @@ class HammettQuizBotTests(BaseTestCase):
     def setUp(self):
         """Initialize questions from the file for testing."""
         gettext.textdomain(settings.DOMAIN)
-        gettext.bindtextdomain(settings.DOMAIN, settings.LOCALE_PATH)
+        gettext.bindtextdomain(settings.DOMAIN, settings.LOCALE_PATHS)
 
         with Path.open(settings.BASE_DIR / 'questions.json') as file:
             self.questions = json.loads(file.read())

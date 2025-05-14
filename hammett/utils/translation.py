@@ -67,12 +67,12 @@ def gettext(caption: str, language: str = '') -> str:
 
     Raises
     ------
-        LocalePathIsNotSpecified: If the `LOCALE_PATH` attribute of settings is not specified.
+        LocalePathIsNotSpecified: If the `LOCALE_PATHS` attribute of settings is not specified.
 
     """
     from hammett.conf import settings
 
-    if not settings.LOCALE_PATH:
+    if not settings.LOCALE_PATHS:
         raise LocalePathIsNotSpecified
 
     if not language:
@@ -97,8 +97,8 @@ class HammettTranslation(native_gettext.GNUTranslations):
         if self._domain == 'hammett':
             self._init_translation_catalog(language)
 
-        if settings.LOCALE_PATH:
-            for localedir in settings.LOCALE_PATH:
+        if settings.LOCALE_PATHS:
+            for localedir in settings.LOCALE_PATHS:
                 self.merge(self._get_translation(language, localedir))
 
         self._add_fallback()
