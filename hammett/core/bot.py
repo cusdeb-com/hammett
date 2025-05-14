@@ -27,6 +27,7 @@ from hammett.core.permission import apply_permission_to
 from hammett.error_handler import default_error_handler
 from hammett.types import HandlerAlias, HandlerType, JobConfig
 from hammett.utils.log import configure_logging
+from hammett.utils.translation import HammettTranslation
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -288,6 +289,8 @@ class Bot:
                 "these versions raise a `RuntimeError` upon bot termination, which may "
                 "lead to an improper shutdown process.",
             )
+
+        HammettTranslation(settings.LANGUAGE_CODE)
 
         if settings.USE_WEBHOOK:
             self._native_application.run_webhook(
