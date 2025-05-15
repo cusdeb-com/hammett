@@ -35,7 +35,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
+    from collections.abc import Callable, Generator
 
     from typing_extensions import Self
 
@@ -71,6 +71,21 @@ def gettext(caption: str, language: str = '') -> str:
     return _get_translation(language).gettext(caption)
 
 
+def ngettext(singular: str, plural: str, num: int, language: str = '') -> str:
+    """Return the translated singular or plural form based on the language and number.
+
+    Returns
+    -------
+        Translated singular or plural form.
+
+    """
+    if not language:
+        from hammett.conf import settings
+        language = settings.LANGUAGE_CODE
+
+    return _get_translation(language).ngettext(singular, plural, num)
+
+
 class HammettTranslation(native_gettext.GNUTranslations):
     """The class implements an interface for managing translations."""
 
@@ -83,6 +98,7 @@ class HammettTranslation(native_gettext.GNUTranslations):
         self._catalog: _TranslationCatalog | dict[str, str] = {}
         self._domain = settings.DOMAIN
         self._language = language
+        self.plural = lambda n: int(n != 1)
 
         if self._domain == 'hammett':
             self._init_translation_catalog(language)
@@ -143,11 +159,30 @@ class HammettTranslation(native_gettext.GNUTranslations):
         if isinstance(self._catalog, _TranslationCatalog):
             self._catalog.update(other)
         else:
+            self.plural = other.plural  # type: ignore[attr-defined]
             self._info = other._info.copy()  # type: ignore[attr-defined]
             self._catalog = _TranslationCatalog(other)
 
         if other._fallback:  # type: ignore[attr-defined]
             self.add_fallback(other._fallback)  # type: ignore[attr-defined]
+
+    def ngettext(self: 'Self', msgid1: str, msgid2: str, num: int) -> str:
+        """Return translated text according to the language and the counting number.
+
+        Returns
+        -------
+            Translated text according to the language and the counting number.
+
+        """
+        message = msgid1 if num == 1 else msgid2
+        try:
+            if isinstance(self._catalog, _TranslationCatalog):
+                message = self._catalog.plural(msgid1, num)
+        except KeyError:
+            if getattr(self, '_fallback', None):
+                return cast('str', self._fallback.ngettext(msgid1, msgid2, num))  # type: ignore[attr-defined]
+
+        return message
 
 
 class _TranslationCatalog:
@@ -162,6 +197,9 @@ class _TranslationCatalog:
         """Initialize a translation catalog object."""
         self._catalogs: list[dict[str, str] | dict[tuple[str, int], str]] = (
             [{}] if translations is None else [translations._catalog.copy()]  # type: ignore[attr-defined]
+        )
+        self._plurals: list[Callable[[int], int]] = (
+            [lambda n: int(n != 1)] if translations is None else [translations.plural]  # type: ignore[attr-defined]
         )
 
     def __contains__(self, key: str | tuple[str, int]) -> bool:
@@ -245,6 +283,26 @@ class _TranslationCatalog:
         for catalog in self._catalogs:
             yield from catalog.keys()
 
+    def plural(self: 'Self', msgid: str, num: int) -> str:
+        """Return a message based on the msgid and number.
+
+        Returns
+        -------
+            Message based on the msgid and number.
+
+        Raises
+        ------
+            KeyError: If the message hasn't been found.
+
+        """
+        for catalog, plural in zip(self._catalogs, self._plurals, strict=False):
+            message = cast('dict[tuple[str, int], str]', catalog).get((msgid, plural(num)))
+            if message is not None:
+                return message
+
+        raise KeyError
+
     def update(self: 'Self', translation: 'native_gettext.GNUTranslations') -> None:
         """Add a new translation catalog to the existing list."""
         self._catalogs.insert(0, translation._catalog.copy())  # type: ignore[attr-defined]
+        self._plurals.insert(0, translation.plural)  # type: ignore[attr-defined]
