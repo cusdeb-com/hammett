@@ -19,10 +19,6 @@ class JobKwargsNotProvided(Exception):
     """Raised when `job_kwargs` for a job has not been provided."""
 
 
-class LocalePathIsNotSpecified(Exception):
-    """Raised when the locale path is not specified."""
-
-
 class ImproperlyConfigured(Exception):
     """Raised when Hammett is somehow improperly configured."""
 
