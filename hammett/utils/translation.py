@@ -34,8 +34,6 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from hammett.core.exceptions import LocalePathIsNotSpecified
-
 if TYPE_CHECKING:
     from collections.abc import Generator
 
@@ -65,17 +63,9 @@ def gettext(caption: str, language: str = '') -> str:
     -------
         Translated text by its caption.
 
-    Raises
-    ------
-        LocalePathIsNotSpecified: If the `LOCALE_PATHS` attribute of settings is not specified.
-
     """
-    from hammett.conf import settings
-
-    if not settings.LOCALE_PATHS:
-        raise LocalePathIsNotSpecified
-
     if not language:
+        from hammett.conf import settings
         language = settings.LANGUAGE_CODE
 
     return _get_translation(language).gettext(caption)
