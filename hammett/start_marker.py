@@ -3,6 +3,8 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from collections.abc import ItemsView, KeysView, ValuesView
+
     from typing_extensions import Self
 
 
@@ -37,3 +39,33 @@ class StartMarker:
             keys = parts[::2]
             values = parts[1::2]
             self._result = dict(zip(keys, values, strict=False))
+
+    def items(self: 'Self') -> 'ItemsView[str, str]':
+        """Return a dictionary with start markers as items.
+
+        Returns
+        -------
+            Items of the dictionary with start markers.
+
+        """
+        return self._result.items()
+
+    def keys(self: 'Self') -> 'KeysView[str]':
+        """Return a dictionary with start-markers as keys.
+
+        Returns
+        -------
+            Keys of the dictionary with start markers.
+
+        """
+        return self._result.keys()
+
+    def values(self: 'Self') -> 'ValuesView[str]':
+        """Return a dictionary with start-markers as values.
+
+        Returns
+        -------
+            Values of the dictionary with start markers.
+
+        """
+        return self._result.values()
