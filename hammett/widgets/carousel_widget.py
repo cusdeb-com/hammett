@@ -6,7 +6,7 @@ from hammett.core import Button
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.handlers import register_button_handler
-from hammett.widgets.base import BaseWidget
+from hammett.widgets.base import BaseStateWidget
 
 if TYPE_CHECKING:
     from typing import Any
@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 _END_POSITION, _START_POSITION = -1, 0
 
 
-class CarouselWidget(BaseWidget):
+class CarouselWidget(BaseStateWidget):
     """Implements the display of a carousel widget with control buttons
     for a list of images.
     """
