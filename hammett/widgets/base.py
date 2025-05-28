@@ -41,7 +41,25 @@ if TYPE_CHECKING:
     from hammett.widgets.types import Choice, Choices, InitializedChoices
 
 
-class BaseStateWidget(Screen):
+class BaseWidget(Screen):
+    """The class implements the base interface for widgets from the library."""
+
+    async def add_extra_keyboard(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'Keyboard':
+        """Add an extra keyboard below the widget buttons.
+
+        Returns
+        -------
+            Extra keyboard below the widget buttons.
+
+        """
+        return EMPTY_KEYBOARD
+
+
+class BaseStateWidget(BaseWidget):
     """The class implements a base interface for stateful widgets."""
 
     async def _post_render(
@@ -194,20 +212,6 @@ class BaseStateWidget(Screen):
                 state_key: state_value,
             })
             context.user_data[current_state_key] = current_state  # type: ignore[index]
-
-    async def add_extra_keyboard(
-        self: 'Self',
-        _update: 'Update | None',
-        _context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'Keyboard':
-        """Add an extra keyboard below the widget buttons.
-
-        Returns
-        -------
-            Extra keyboard below the widget buttons.
-
-        """
-        return EMPTY_KEYBOARD
 
 
 class BaseChoiceWidget(BaseStateWidget):

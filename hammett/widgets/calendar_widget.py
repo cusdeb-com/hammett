@@ -14,7 +14,7 @@ from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.mixins import I18NMixin
 from hammett.utils.translation import gettext as _
-from hammett.widgets.base import BaseStateWidget
+from hammett.widgets.base import BaseWidget
 
 if TYPE_CHECKING:
     from typing import Any
@@ -83,7 +83,7 @@ def _get_right_boundary(date_: 'date', unit: 'CalendarUnit') -> 'date':
     return date_  # for CalendarUnit.DAY
 
 
-class CalendarWidget(BaseStateWidget, I18NMixin):
+class CalendarWidget(BaseWidget, I18NMixin):
     """The class implements the calendar widget."""
 
     current_date: 'date | None' = None
