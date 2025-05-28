@@ -41,8 +41,8 @@ if TYPE_CHECKING:
     from hammett.widgets.types import Choice, Choices, InitializedChoices
 
 
-class BaseWidget(Screen):
-    """The class implements the base interface for widgets from the library."""
+class BaseStateWidget(Screen):
+    """The class implements a base interface for stateful widgets."""
 
     async def _post_render(
         self: 'Self',
@@ -210,7 +210,7 @@ class BaseWidget(Screen):
         return EMPTY_KEYBOARD
 
 
-class BaseChoiceWidget(BaseWidget):
+class BaseChoiceWidget(BaseStateWidget):
     """The class implements the base interface for the choice widgets."""
 
     choices: 'Choices' = ()
