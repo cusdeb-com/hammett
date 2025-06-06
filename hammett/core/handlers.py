@@ -3,7 +3,6 @@
 import inspect
 import logging
 import zlib
-from contextlib import suppress
 from functools import wraps
 from typing import TYPE_CHECKING, Any, cast
 
@@ -158,11 +157,7 @@ def log_unregistered_handler(obj: 'Any') -> None:
         return
 
     params = set(signature.parameters.keys())
-    with suppress(KeyError):  # remove optional parameters from the list
-        params.remove('args')
-        params.remove('kwargs')
-        params.remove('self')
-
+    params.difference_update({'self', 'args', 'kwargs'})  # remove optional parameters
     if (
         len(params) == len(mandatory_params) and
         params.intersection(mandatory_params) == mandatory_params and
