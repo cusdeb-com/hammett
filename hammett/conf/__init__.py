@@ -159,7 +159,7 @@ class LazyObject:
 
     # Pretend to be the wrapped class.
     __class__ = property(
-        new_method_proxy(operator.attrgetter('__class__')),  # type: ignore[assignment]
+        new_method_proxy(operator.attrgetter('__class__')),
     )
     __eq__ = new_method_proxy(operator.eq)
     __lt__ = new_method_proxy(operator.lt)
