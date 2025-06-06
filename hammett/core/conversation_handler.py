@@ -153,11 +153,10 @@ class ConversationHandler(NativeConversationHandler['Any']):
                 handler_name = f'{handler.callback.__qualname__}'
 
             if current_state != new_state:
-                msg = (
-                    f'Switched to `{new_state}` state from '
-                    f'`{current_state}` state via `{handler_name}` handler.'
+                LOGGER.debug(
+                    'Switched to `%s` state from `%s` state via `%s` handler.',
+                    new_state, current_state, handler_name,
                 )
-                LOGGER.debug(msg)
 
         if raise_dp_handler_stop:
             # Don't pass the new state here. If we're in a nested conversation, the parent is
