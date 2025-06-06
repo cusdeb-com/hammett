@@ -37,9 +37,8 @@ class RouteMixin(Screen):
             msg = f'The route of {self.__class__.__name__} is empty'
             raise ScreenRouteIsEmpty(msg)
 
-    async def get_return_state_from_routes(
+    def get_return_state_from_routes(
         self: 'Self',
-        update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'State':
         """Return the first found state in the routes.
@@ -50,7 +49,7 @@ class RouteMixin(Screen):
             attribute of the mixin.
 
         """
-        current_state = await self.get_current_state(update, context)
+        current_state = self.get_current_state(context)
 
         if self.routes:
             for route in self.routes:
@@ -78,7 +77,7 @@ class RouteMixin(Screen):
         config.as_new_message = True
 
         await self.render(update, context, config=config)
-        return await self.get_return_state_from_routes(update, context)
+        return self.get_return_state_from_routes(context)
 
     async def move_along_route(
         self: 'Self',
@@ -97,7 +96,7 @@ class RouteMixin(Screen):
         config = await self.get_config(update, context, **kwargs)
 
         await self.render(update, context, config=config)
-        return await self.get_return_state_from_routes(update, context)
+        return self.get_return_state_from_routes(context)
 
 
 class StartMixin(Screen):

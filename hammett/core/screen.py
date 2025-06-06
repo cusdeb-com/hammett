@@ -226,11 +226,8 @@ class Screen:
         """
         return self.cover
 
-    async def get_current_state(
-        self: 'Self',
-        _update: 'Update | None',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'State':
+    @staticmethod
+    def get_current_state(context: 'CallbackContext[BT, UD, CD, BD]') -> 'State':
         """Return the current state.
 
         Returns
