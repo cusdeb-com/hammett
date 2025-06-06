@@ -13,6 +13,7 @@ from hammett.core.mixins import StartMixin
 from hammett.core.permission import Permission
 from hammett.core.renderer import Renderer
 from hammett.core.screen import Screen
+from hammett.types import State
 
 BOT_TEST_NAME = 'test'
 
@@ -20,7 +21,7 @@ CHAT_ID = 1
 
 MESSAGE_ID = 1
 
-PERMISSION_DENIED_STATE = '1'
+PERMISSION_DENIED_STATE = State('1')
 
 PERMISSIONS_ORDER = []
 

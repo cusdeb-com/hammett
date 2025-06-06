@@ -11,15 +11,16 @@ from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.persistence import RedisPersistence, _Encoder
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import override_settings
+from hammett.types import State
 from tests.base import CHAT_ID, USER_ID
 
 _BOT_NAME = 'test'
 
 _DATA = {'key1': 'value1', 'key2': 'value2'}
 
-_NEW_STATE = 'new_state'
+_NEW_STATE = State('new_state')
 
-_TEST_KEY = 'test_key'
+_TEST_KEY = State('test_key')
 
 
 class PersistenceTests(BaseTestCase):

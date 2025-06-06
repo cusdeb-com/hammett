@@ -17,6 +17,7 @@ from hammett.core.persistence import RedisPersistence
 from hammett.error_handler import default_error_handler
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import override_settings
+from hammett.types import State
 from tests.base import (
     BOT_TEST_NAME,
     BaseTestScreenWithDescription,
@@ -25,7 +26,7 @@ from tests.base import (
     get_bot,
 )
 
-_NEW_STATE = '1'
+_NEW_STATE = State('1')
 
 _TEST_LOGGING = {
     'version': 1,
