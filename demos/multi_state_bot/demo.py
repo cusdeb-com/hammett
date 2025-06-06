@@ -5,6 +5,7 @@ from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.handlers import register_typing_handler
 from hammett.core.mixins import RouteMixin, StartMixin
 from hammett.core.persistence import RedisPersistence
+from hammett.types import State
 
 ANONYMOUS_SCREEN_DESCRIPTION = (
     'Hello, <b>Anonymous</b>!\n'
@@ -24,7 +25,7 @@ INTRODUCTION_SCREEN_WITHOUT_NAME_DESCRIPTION = (
     "<i>The bot is now switched to the <b>TYPE_NAME</b> state</i>."
 )
 
-TYPE_NAME_STATE = 'type_name_state'
+TYPE_NAME_STATE = State('type_name_state')
 
 
 class AnonymousScreen(StartMixin):
