@@ -35,7 +35,7 @@ class RouteMixin(Screen):
         super().__init__()
 
         if self.routes is None:
-            msg = f'The route of {self.__class__.__name__} is empty'
+            msg = f'The `routes` attribute of {self.__class__.__name__} is empty'
             raise ScreenRouteIsEmpty(msg)
 
         if not all(isinstance(item, tuple) for item in self.routes):
