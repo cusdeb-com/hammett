@@ -26,7 +26,7 @@ _HANDLER_SOURCE_TYPES = (
     SourceTypes.MOVE_SOURCE_TYPE,
 )
 
-_SHORTCUT_SOURCES_TYPES = (
+_SHORTCUT_SOURCE_TYPES = (
     SourceTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE,
     SourceTypes.JUMP_SOURCE_TYPE,
     SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
@@ -103,7 +103,7 @@ class Button:
         """
         from hammett.core.screen import Screen
 
-        if self.source_type in _SHORTCUT_SOURCES_TYPES:
+        if self.source_type in _SHORTCUT_SOURCE_TYPES:
             screen = cast('type[Screen]', self.source)
             if issubclass(screen, Screen):
                 if self.source_type == SourceTypes.JUMP_SOURCE_TYPE:
@@ -197,7 +197,7 @@ class Button:
         visibility = await self._specify_visibility(update, context)
 
         if self.source_type in _HANDLER_SOURCE_TYPES:
-            if self.source_type in _SHORTCUT_SOURCES_TYPES and self.source_shortcut:
+            if self.source_type in _SHORTCUT_SOURCE_TYPES and self.source_shortcut:
                 source = self.source_shortcut
             else:
                 source = cast('Handler', self.source)
