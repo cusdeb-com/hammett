@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from hammett.core.hider import Hider, HidersChecker
     from hammett.types.core import Handler, Source
 
-_HANDLER_SOURCES_TYPES = (
+_HANDLER_SOURCE_TYPES = (
     SourceTypes.HANDLER_SOURCE_TYPE,
     SourceTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE,
     SourceTypes.JUMP_SOURCE_TYPE,
@@ -196,7 +196,7 @@ class Button:
         """
         visibility = await self._specify_visibility(update, context)
 
-        if self.source_type in _HANDLER_SOURCES_TYPES:
+        if self.source_type in _HANDLER_SOURCE_TYPES:
             if self.source_type in _SHORTCUT_SOURCES_TYPES and self.source_shortcut:
                 source = self.source_shortcut
             else:
