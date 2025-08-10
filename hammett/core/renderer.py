@@ -195,7 +195,16 @@ class Renderer:
 
         cover = config.cover
         send: Callable[..., Awaitable[Any]]
-        if cover:
+        if config.document:
+            input_media_document = self._create_input_media_document(
+                config.document,
+                config.description,
+            )
+            kwargs['caption'] = input_media_document.caption
+            kwargs['document'] = input_media_document.media
+
+            send = context.bot.send_document
+        elif cover:
             if self._is_url(cover) and config.cache_covers:
                 cover = f'{cover}?{uuid4()}'
             elif config.cache_covers:
@@ -206,15 +215,6 @@ class Renderer:
             kwargs['photo'] = cover
 
             send = context.bot.send_photo
-        elif config.document:
-            input_media_document = self._create_input_media_document(
-                config.document,
-                config.description,
-            )
-            kwargs['caption'] = input_media_document.caption
-            kwargs['document'] = input_media_document.media
-
-            send = context.bot.send_document
         elif config.attachments:
             kwargs['media'] = config.attachments
 
