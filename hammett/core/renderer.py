@@ -8,7 +8,6 @@ from uuid import uuid4
 import aiofiles
 from telegram import InlineKeyboardMarkup, InputMediaDocument, InputMediaPhoto, PhotoSize
 from telegram._utils.defaultvalue import DEFAULT_NONE
-from telegram.constants import ParseMode
 from telegram.error import BadRequest
 
 from hammett.core.constants import EMPTY_KEYBOARD, FinalRenderConfig
@@ -25,7 +24,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.core.constants import LatestMessage
+    from hammett.core.constants import LatestMessage, ParseMode
     from hammett.types.core import Document, Keyboard
 
 
@@ -34,9 +33,9 @@ class Renderer:
 
     _cached_covers: 'dict[str | PathLike[str], str]' = {}
 
-    def __init__(self: 'Self', html_parse_mode: 'ParseMode') -> None:
+    def __init__(self: 'Self', html_parse_mode: 'ParseMode | None') -> None:
         """Initialize a renderer object."""
-        self.html_parse_mode = html_parse_mode
+        self.html_parse_mode = DEFAULT_NONE if html_parse_mode is None else html_parse_mode.value
 
     #
     # Private methods
@@ -67,7 +66,7 @@ class Renderer:
         if not document_kwargs.get('caption'):
             document_kwargs['caption'] = description
 
-        document_kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
+        document_kwargs['parse_mode'] = self.html_parse_mode
 
         return InputMediaDocument(media, **document_kwargs)
 
@@ -82,11 +81,7 @@ class Renderer:
             Object of the `InputMediaPhoto` type with passed attributes.
 
         """
-        return InputMediaPhoto(
-            caption=caption,
-            media=media,
-            parse_mode=ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
-        )
+        return InputMediaPhoto(caption=caption, media=media, parse_mode=self.html_parse_mode)
 
     @staticmethod
     async def _create_markup_keyboard(
@@ -134,7 +129,7 @@ class Renderer:
 
             send = context.bot.edit_message_media
         else:
-            kwargs['parse_mode'] = ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE
+            kwargs['parse_mode'] = self.html_parse_mode
             kwargs['text'] = config.description
 
             send = context.bot.edit_message_text
@@ -195,7 +190,7 @@ class Renderer:
         """
         kwargs: Any = {
             'chat_id': config.chat_id,
-            'parse_mode': ParseMode.HTML if self.html_parse_mode else DEFAULT_NONE,
+            'parse_mode': self.html_parse_mode,
         }
 
         cover = config.cover

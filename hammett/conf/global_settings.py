@@ -21,8 +21,6 @@ ERROR_HANDLER_CONF = {
 
 HIDERS_CHECKER = ''
 
-HTML_PARSE_MODE = True
-
 LANGUAGE_CODE = 'en'
 
 LOCALE_PATHS: list[str] = []

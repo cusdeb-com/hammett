@@ -6,10 +6,14 @@ import logging
 from dataclasses import asdict
 from typing import TYPE_CHECKING, cast
 
-from telegram._utils.defaultvalue import DEFAULT_NONE
-
 from hammett.core import handlers
-from hammett.core.constants import DEFAULT_STATE, EMPTY_KEYBOARD, FinalRenderConfig, RenderConfig
+from hammett.core.constants import (
+    DEFAULT_STATE,
+    EMPTY_KEYBOARD,
+    FinalRenderConfig,
+    ParseMode,
+    RenderConfig,
+)
 from hammett.core.exceptions import (
     FailedToGetDataAttributeOfQuery,
     PayloadIsEmpty,
@@ -24,8 +28,6 @@ if TYPE_CHECKING:
     from typing import Any
 
     from telegram import Message, Update
-    from telegram._utils.defaultvalue import DefaultValue
-    from telegram.constants import ParseMode
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
@@ -42,7 +44,7 @@ class Screen:
     cover: 'str | PathLike[str]' = ''
     description: str = ''
     document: 'Document | None' = None
-    html_parse_mode: 'ParseMode | DefaultValue[None]' = DEFAULT_NONE
+    html_parse_mode: 'ParseMode | None' = ParseMode.HTML
     hide_keyboard: bool = False
     renderer_class = Renderer
 
@@ -52,12 +54,7 @@ class Screen:
     def __init__(self: 'Self') -> None:
         """Initialize a screen object."""
         if not self._initialized:
-            if self.html_parse_mode is DEFAULT_NONE:
-                from hammett.conf import settings
-                self.html_parse_mode = settings.HTML_PARSE_MODE
-
-            self.renderer = Renderer(self.html_parse_mode)  # type: ignore[arg-type]
-
+            self.renderer = Renderer(self.html_parse_mode)
             self._initialized = True
 
     def __new__(cls: type['Screen'], *args: 'Any', **kwargs: 'Any') -> 'Screen':

@@ -60,3 +60,10 @@ class LatestMessage(TypedDict):
     chat_id: int
     message_id: int
     hide_keyboard: bool
+
+
+class ParseMode(str, Enum):
+    """The class contains the available types of parse modes to use for text formatting."""
+
+    HTML = 'HTML'
+    MARKDOWN = 'MarkdownV2'
