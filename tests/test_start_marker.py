@@ -83,6 +83,29 @@ class StartMarkerTests(BaseTestCase):
         self.assertSetEqual(set(start_marker.keys()), {'source', 'book', 'extra'})
         self.assertSetEqual(set(start_marker.values()), {_SOURCE, _BOOK_ID, _EXTRA_VALUE})
 
+    def test_pop_existing_key_removes_and_returns_value(self):
+        """Test popping an existing key removes it and returns its value."""
+        start_marker = StartMarker(f'/start source={_SOURCE}=book={_BOOK_ID}=extra={_EXTRA_VALUE}')
+
+        value = start_marker.pop('book')
+        self.assertEqual(value, _BOOK_ID)
+        with self.assertRaises(KeyError):
+            _ = start_marker['book']
+
+    def test_pop_missing_key_raises_when_no_default(self):
+        """Test popping a missing key raises KeyError when default is not provided."""
+        start_marker = StartMarker(f'/start source={_SOURCE}')
+
+        with self.assertRaises(KeyError):
+            start_marker.pop('book')
+
+    def test_pop_missing_key_returns_default_when_provided(self):
+        """Test popping a missing key returns the provided default value."""
+        start_marker = StartMarker(f'/start source={_SOURCE}')
+
+        value = start_marker.pop('book', default='inbio')
+        self.assertEqual(value, 'inbio')
+
     def test_trimming_leading_and_trailing_equals(self):
         """Test the case when leading and trailing '=' are ignored."""
         start_marker = StartMarker(f'/start =book={_BOOK_ID}=')
