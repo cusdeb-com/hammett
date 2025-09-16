@@ -60,6 +60,27 @@ class StartMarker:
         """
         return self._result.keys()
 
+    def pop(self: 'Self', key: str, default: str | None = None) -> str:
+        """Remove specified key and return the corresponding value.
+
+        Returns
+        -------
+            Element by a passed key.
+
+        Raises
+        ------
+            KeyError: If the key is not found and default value is not given
+            raise a KeyError.
+
+        """
+        try:
+            return self._result.pop(key)
+        except KeyError:
+            if default is None:
+                raise
+
+            return default
+
     def values(self: 'Self') -> 'ValuesView[str]':
         """Return a dictionary with start-markers as values.
 
