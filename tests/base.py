@@ -9,7 +9,7 @@ from telegram.constants import ChatType
 from hammett.core import Bot
 from hammett.core.constants import DEFAULT_STATE
 from hammett.core.handlers import register_button_handler
-from hammett.core.mixins import StartMixin
+from hammett.core.mixins import RouteMixin, StartMixin
 from hammett.core.permission import Permission
 from hammett.core.renderer import Renderer
 from hammett.core.screen import Screen
@@ -24,6 +24,8 @@ MESSAGE_ID = 1
 PERMISSION_DENIED_STATE = State('1')
 
 PERMISSIONS_ORDER = []
+
+TEST_STATE = State('test_state')
 
 USER_ID = 1
 
@@ -101,6 +103,14 @@ class TestRenderer(Renderer):
 
 class TestScreen(BaseTestScreenWithDescription):
     """The class implements a screen for the tests."""
+
+
+class TestRouteScreen(BaseTestScreenWithDescription, RouteMixin):
+    """The class implements a screen for the tests related to routes."""
+
+    routes = (
+        ({DEFAULT_STATE}, TEST_STATE),
+    )
 
 
 class TestStartScreen(BaseTestScreenWithDescription, StartMixin):
