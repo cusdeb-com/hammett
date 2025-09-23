@@ -7,6 +7,7 @@ import unittest
 
 from tests.test_bot import BotTests
 from tests.test_buttons import ButtonsTests
+from tests.test_error_handler import ErrorHandlerTests
 from tests.test_handers_render import HandlersRenderTests
 from tests.test_handlers import HandlersTests
 from tests.test_hiders_check_mechanism import HidersCheckerTests
