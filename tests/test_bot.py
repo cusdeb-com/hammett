@@ -1,23 +1,31 @@
 """The module contains the tests for the bot."""
 
-# ruff: noqa: RUF029, S106, SLF001
+# ruff: noqa: RUF029, S106, PT019, SLF001
 
 import logging
 import re
+from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
 
-from telegram.ext import CommandHandler
+from telegram import Update
+from telegram.ext import CallbackQueryHandler, CommandHandler, MessageHandler, filters
 
 from hammett.core.bot import Bot
 from hammett.core.button import Button
 from hammett.core.constants import DEFAULT_STATE, SourceTypes
-from hammett.core.exceptions import CallbackNotProvided, JobKwargsNotProvided, TokenIsNotSpecified
+from hammett.core.exceptions import (
+    CallbackNotProvided,
+    JobKwargsNotProvided,
+    TokenIsNotSpecified,
+    UnknownHandlerType,
+)
 from hammett.core.handlers import calc_checksum
 from hammett.core.mixins import RouteMixin
 from hammett.core.persistence import RedisPersistence
 from hammett.error_handler import default_error_handler
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import override_settings
-from hammett.types import State
+from hammett.types import HandlerType, State
 from tests.base import (
     BOT_TEST_NAME,
     BaseTestScreenWithDescription,
@@ -84,19 +92,8 @@ class TestScreenWithKeyboard(BaseTestScreenWithDescription):
         ]
 
 
-class BotTests(BaseTestCase):
+class BotTests(BaseTestCase):  # noqa: PLR0904
     """The class implements the tests for the bot."""
-
-    @override_settings(LOGGING=_TEST_LOGGING, TOKEN='secret-token')
-    def test_bot_initialization_with_logging_setup(self):
-        """Test the case when a bot is initialized with
-        an overriden LOGGING setting.
-        """
-        get_bot()
-        self.assertEqual(
-            logging.root.manager.loggerDict['hammett_test'].getEffectiveLevel(),
-            logging.INFO,
-        )
 
     def test_bot_initialization_with_persistence_specified(self):
         """Test a bot initialization with a persistence specified."""
@@ -109,10 +106,105 @@ class BotTests(BaseTestCase):
         self.assertIsNotNone(bot._native_application.persistence)
         self.assertIsInstance(bot._native_application.persistence, RedisPersistence)
 
+    @override_settings(LOGGING=_TEST_LOGGING, TOKEN='secret-token')
+    def test_bot_initialization_with_logging_setup(self):
+        """Test the case when a bot is initialized with
+        an overriden LOGGING setting.
+        """
+        get_bot()
+        self.assertEqual(
+            logging.root.manager.loggerDict['hammett_test'].getEffectiveLevel(),
+            logging.INFO,
+        )
+
     def test_bot_initialization_without_persistence_specified(self):
         """Test a bot initialization without a persistence specified."""
         bot = get_bot()
         self.assertIsNone(bot._native_application.persistence)
+
+    def test_creating_button_handler(self):
+        """Test creating CallbackQueryHandler for the button handler type."""
+        mock_handler = MagicMock()
+        mock_handler.__qualname__ = 'mock_handler'
+        mock_possible_handler = MagicMock()
+
+        handler_object = Bot._get_handler_object(
+            mock_handler,
+            HandlerType.BUTTON_HANDLER,
+            mock_possible_handler,
+        )
+
+        self.assertIsInstance(handler_object, CallbackQueryHandler)
+        self.assertEqual(handler_object.callback, mock_handler)
+        self.assertEqual(handler_object.pattern.pattern, calc_checksum(mock_handler))
+
+    def test_creating_command_handler(self):
+        """Test creating MessageHandler for the command handler type."""
+        mock_handler = MagicMock()
+        mock_possible_handler = MagicMock()
+        mock_possible_handler.command_name = 'start'
+
+        handler_object = Bot._get_handler_object(
+            mock_handler,
+            HandlerType.COMMAND_HANDLER,
+            mock_possible_handler,
+        )
+
+        self.assertIsInstance(handler_object, MessageHandler)
+        self.assertEqual(handler_object.callback, mock_handler)
+
+    def test_creating_input_handler(self):
+        """Test creating MessageHandler for the input handler type."""
+        mock_handler = MagicMock()
+        mock_possible_handler = MagicMock()
+        mock_possible_handler.filters = filters.TEXT
+
+        handler_object = Bot._get_handler_object(
+            mock_handler,
+            HandlerType.INPUT_HANDLER,
+            mock_possible_handler,
+        )
+
+        self.assertIsInstance(handler_object, MessageHandler)
+        self.assertEqual(handler_object.callback, mock_handler)
+        self.assertIs(handler_object.filters, filters.TEXT)
+
+    def test_creating_typing_handler(self):
+        """Test creating MessageHandler for the typing handler type."""
+        mock_handler = MagicMock()
+        mock_possible_handler = MagicMock()
+
+        handler_object = Bot._get_handler_object(
+            mock_handler,
+            HandlerType.TYPING_HANDLER,
+            mock_possible_handler,
+        )
+
+        self.assertIsInstance(handler_object, MessageHandler)
+        self.assertEqual(handler_object.callback, mock_handler)
+        self.assertEqual(handler_object.filters.name, (filters.TEXT & (~filters.COMMAND)).name)
+
+    def test_registering_job_without_callback_specified(self):
+        """Test registering a job without `callback` key specified."""
+        with self.assertRaises(CallbackNotProvided):
+            Bot(
+                BOT_TEST_NAME,
+                entry_point=TestStartScreen,
+                job_configs=[{
+                    'job_kwargs': {'trigger': 'interval'},
+                }],
+            )
+
+    def test_registering_job_without_job_kwargs_specified(self):
+        """Test registering a job without `job_kwargs` key specified."""
+        with self.assertRaises(JobKwargsNotProvided):
+            Bot(
+                BOT_TEST_NAME,
+                entry_point=TestStartScreen,
+                job_configs=[{
+                    'callback': _test_job,
+                }],
+            )
 
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_TIMED_OUT': True}, TOKEN='secret-token')
     def test_registering_default_error_handler_along_with_extra_one(self):
@@ -137,27 +229,100 @@ class BotTests(BaseTestCase):
 
         self.assertEqual(registered_error_handler, default_error_handler)
 
-    def test_registering_job_without_callback_specified(self):
-        """Test registering a job without `callback` key specified."""
-        with self.assertRaises(CallbackNotProvided):
-            Bot(
-                BOT_TEST_NAME,
-                entry_point=TestStartScreen,
-                job_configs=[{
-                    'job_kwargs': {'trigger': 'interval'},
-                }],
-            )
+    def test_registering_route_handlers(self):
+        """Test registering route handlers."""
+        bot = Bot(
+            BOT_TEST_NAME,
+            entry_point=TestStartScreen,
+            states={
+                DEFAULT_STATE: {TestScreen},
+                _NEW_STATE: {TestRouteScreen},
+            },
+        )
 
-    def test_registering_job_without_job_kwargs_specified(self):
-        """Test registering a job without `job_kwargs` key specified."""
-        with self.assertRaises(JobKwargsNotProvided):
-            Bot(
-                BOT_TEST_NAME,
-                entry_point=TestStartScreen,
-                job_configs=[{
-                    'callback': _test_job,
-                }],
+        jump_along_route_callback = bot._native_states[DEFAULT_STATE][2].callback
+        self.assertEqual(jump_along_route_callback, TestRouteScreen().jump_along_route)
+
+        move_along_route_callback = bot._native_states[DEFAULT_STATE][3].callback
+        self.assertEqual(move_along_route_callback, TestRouteScreen().move_along_route)
+
+    @patch('hammett.core.bot.HammettTranslation')
+    def test_run_with_polling_mode(self, _mock_translation):
+        """Test running bot in polling mode when USE_WEBHOOK is False."""
+        bot = get_bot()
+        with (
+            patch.object(bot, '_native_application') as mock_native_application,
+            patch.object(mock_native_application, 'run_polling') as mock_run_polling,
+        ):
+            bot.run()
+
+            mock_run_polling.assert_called_once_with(allowed_updates=Update.ALL_TYPES)
+
+    @override_settings(
+        TOKEN='secret-token',
+        USE_WEBHOOK=True,
+        WEBHOOK_URL='https://test.com/webhook',
+        WEBHOOK_URL_PATH='/webhook',
+    )
+    @patch('hammett.core.bot.HammettTranslation')
+    def test_run_with_webhook_mode(self, _mock_translation):
+        """Test running bot in webhook mode when USE_WEBHOOK is True."""
+        bot = get_bot()
+        with (
+            patch.object(bot, '_native_application') as mock_native_application,
+            patch.object(mock_native_application, 'run_webhook') as mock_run_webhook,
+        ):
+            bot.run()
+
+            mock_run_webhook.assert_called_once()
+            call_kwargs = mock_run_webhook.call_args.kwargs
+            self.assertEqual(call_kwargs['listen'], '127.0.0.1')
+            self.assertEqual(call_kwargs['port'], 80)
+            self.assertEqual(call_kwargs['url_path'], '/webhook')
+            self.assertEqual(call_kwargs['webhook_url'], 'https://test.com/webhook')
+            self.assertIn('allowed_updates', call_kwargs)
+
+    @override_settings(TOKEN='secret-token')
+    @patch('hammett.core.bot.HammettTranslation')
+    def test_run_with_python_version_warning(self, _mock_translation):
+        """Test that no warning is logged for safe Python versions."""
+        bot = get_bot()
+
+        mock_version = SimpleNamespace()
+        mock_version.minor = 11
+        mock_version.micro = 5  # unsafe version
+
+        with (
+            patch('sys.version_info', mock_version),
+            patch.object(bot, '_native_application', MagicMock()),
+            self.assertLogs('hammett.core.bot', level='WARNING') as log,
+        ):
+            bot.run()
+
+            self.assertEqual(len(log.records), 1)
+            self.assertIn(
+                "It's recommended to avoid using the following versions of Python",
+                log.records[0].message,
             )
+            self.assertIn('3.11.5, 3.11.6, and 3.12.0', log.records[0].message)
+
+    @override_settings(TOKEN='secret-token')
+    @patch('hammett.core.bot.HammettTranslation')
+    def test_run_without_python_version_warning(self, _mock_translation):
+        """Test that no warning is logged for safe Python versions."""
+        bot = get_bot()
+
+        mock_version = SimpleNamespace()
+        mock_version.minor = 11
+        mock_version.micro = 7  # safe version
+
+        with (
+            patch('sys.version_info', mock_version),
+            patch.object(bot, '_native_application', MagicMock()),
+        ):
+            logger = logging.getLogger('hammett.core.bot')
+            with self.assertNoLogs(logger, level='WARNING'):
+                bot.run()
 
     def test_successful_bot_initialization(self):
         """Test the case when a bot is initialized successfully."""
@@ -199,23 +364,6 @@ class BotTests(BaseTestCase):
         registered_job = bot._native_application.job_queue.jobs()[0].callback
         self.assertEqual(registered_job, _test_job)
 
-    def test_registering_route_handlers(self):
-        """Test registering route handlers."""
-        bot = Bot(
-            BOT_TEST_NAME,
-            entry_point=TestStartScreen,
-            states={
-                DEFAULT_STATE: {TestScreen},
-                _NEW_STATE: {TestRouteScreen},
-            },
-        )
-
-        jump_along_route_callback = bot._native_states[DEFAULT_STATE][2].callback
-        self.assertEqual(jump_along_route_callback, TestRouteScreen().jump_along_route)
-
-        move_along_route_callback = bot._native_states[DEFAULT_STATE][3].callback
-        self.assertEqual(move_along_route_callback, TestRouteScreen().move_along_route)
-
     @override_settings(TOKEN='')
     def test_unsuccessful_bot_initialization_with_empty_token(self):
         """Test the case when a bot is initialized unsuccessfully
@@ -223,3 +371,15 @@ class BotTests(BaseTestCase):
         """
         with self.assertRaises(TokenIsNotSpecified):
             get_bot()
+
+    def test_unknown_handler_type_raises_exception(self):
+        """Test that an unknown handler type raises UnknownHandlerType exception."""
+        mock_handler = MagicMock()
+        mock_possible_handler = MagicMock()
+
+        with self.assertRaises(UnknownHandlerType):
+            Bot._get_handler_object(
+                mock_handler,
+                'unknown_type',
+                mock_possible_handler,
+            )
