@@ -50,7 +50,7 @@ class Hider:
             Object hash.
 
         """
-        return hash((self.hider, self.hiders_set))
+        return hash((self.hider, frozenset(self.hiders_set)))
 
     def __or__(self: 'Self', other: 'Hider') -> 'Self':
         """Perform `or` operation.
