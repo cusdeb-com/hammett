@@ -14,7 +14,7 @@ from tests.test_hiders_check_mechanism import HidersCheckerTests
 from tests.test_mixins import I18NMixinTests, RouteMixinTests, StartMixinTests
 from tests.test_permissions_mechanism import PermissionsTests
 from tests.test_persistence import PersistenceTests
-from tests.test_screens import ScreenTests
+from tests.test_screens import ScreenTests, ScreenTestsWithoutUpdate
 from tests.test_start_marker import StartMarkerTests
 from tests.test_widgets.test_calendar import CalendarWidgetTests
 from tests.test_widgets.test_carousel import CarouselWidgetTests
