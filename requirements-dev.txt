@@ -1,6 +1,6 @@
 asgiref==3.7.2
 coverage==7.3.2
-fakeredis==2.23.2
+fakeredis==2.31.3
 mypy
 pypandoc==1.5
 ruff
