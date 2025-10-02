@@ -10,14 +10,6 @@ from hammett.core.exceptions import UnknownSourceType
 from hammett.test.base import BaseTestCase
 from tests.base import TestRouteScreen, TestScreen
 
-_TEST_PAYLOAD = 'test payload'
-
-_UNKNOWN_SOURCE_TYPE = 100
-
-
-class AnythingElseButScreen:
-    """A dummy class used for the testing purposes."""
-
 
 class ButtonsTests(BaseTestCase):
     """The class implements the tests for buttons."""
@@ -153,11 +145,12 @@ class ButtonsTests(BaseTestCase):
 
     async def test_unknown_source_type(self):
         """Test the case when an unknown source type passed."""
+        unknown_source_type = 100
         with self.assertRaises(UnknownSourceType):
             button = Button(
                 'Test',
                 TestScreen,
-                source_type=_UNKNOWN_SOURCE_TYPE,
+                source_type=unknown_source_type,
             )
             await button.create(self.update, self.context)
 
@@ -165,6 +158,10 @@ class ButtonsTests(BaseTestCase):
         """Test the case when the source type is `MOVE_SOURCE_TYPE` but
         the source isn't a subclass of Screen.
         """
+
+        class AnythingElseButScreen:
+            """A dummy class used for the testing purposes."""
+
         with self.assertRaises(TypeError):
             Button(
                 'Test',
