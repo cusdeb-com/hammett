@@ -289,3 +289,5 @@ class ScreenTestsWithoutUpdate(BaseTestCase):
                 **_DATA,
             },
         })
+
+        await self.context._application.persistence.redis_cli.aclose()
