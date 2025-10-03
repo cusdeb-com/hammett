@@ -18,7 +18,7 @@ from tests.test_renderer import RendererTests
 from tests.test_screens import ScreenTests, ScreenTestsWithoutUpdate
 from tests.test_start_marker import StartMarkerTests
 from tests.test_widgets.test_calendar import CalendarWidgetTests
-from tests.test_widgets.test_carousel import CarouselWidgetTests
+from tests.test_widgets.test_carousel import CarouselWidgetTests, CarouselWidgetWithoutUpdateTests
 from tests.utils.test_misc import UtilsMiscTests
 from tests.utils.test_module_loading import UtilsModuleLoadingTests
 from tests.utils.test_render_config import (
