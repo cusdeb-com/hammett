@@ -27,7 +27,7 @@ from tests.utils.test_translation import (
     UtilsTranslationCatalogTests,
     UtilsTranslationTests,
 )
-from tests.widgets.test_base import BaseChoiceWidgetTests
+from tests.widgets.test_base import BaseChoiceWidgetTests, BaseStateWidgetTests
 from tests.widgets.test_calendar import CalendarWidgetTests
 from tests.widgets.test_carousel import CarouselWidgetTests, CarouselWidgetWithoutUpdateTests
 from tests.widgets.test_multi_choice import MultiChoiceWidgetTests
