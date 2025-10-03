@@ -8,10 +8,11 @@ from unittest.mock import patch
 from hammett.core.constants import FinalRenderConfig
 from hammett.core.exceptions import FailedToGetDataAttributeOfQuery, PayloadIsEmpty
 from hammett.test.base import BaseTestCase
-from hammett.widgets.base import BaseChoiceWidget
+from hammett.widgets.base import BaseChoiceWidget, BaseStateWidget
 from hammett.widgets.exceptions import (
     ChoiceEmojisAreUndefined,
     ChoicesFormatIsInvalid,
+    FailedToGetStateKey,
     NoChoicesSpecified,
 )
 from tests.base import BaseTestScreenWithDescription
@@ -44,6 +45,77 @@ class TestBaseChoiceWidget(
     async def _initialize_choices(self, _update, _context, choices, **_kwargs):
         """Initialize choices."""
         return tuple((False, code, name) for code, name in choices)
+
+
+class TestStateWidget(BaseStateWidget):
+    """The class implements a concrete subclass for testing BaseStateWidget behavior."""
+
+
+class BaseStateWidgetTests(BaseTestCase):
+    """The class implements tests for BaseStateWidget internals."""
+
+    async def test_get_state_key_raises_when_message_is_missing(self):
+        """Test _get_state_key raises FailedToGetStateKey when callback query has no message."""
+        widget = TestStateWidget()
+        with (
+            patch('hammett.widgets.base.get_callback_query', return_value=SimpleNamespace()),
+            self.assertRaises(FailedToGetStateKey),
+        ):
+            await widget._get_state_key(self.update)
+
+    async def test_get_state_key_returns_correct_key(self):
+        """Test _get_state_key returns the correct state key."""
+        widget = TestStateWidget()
+        state_key = await widget._get_state_key(
+            chat_id=self.chat.id,
+            message_id=self.message.message_id,
+        )
+        self.assertEqual(
+            f'{widget.__class__.__name__}_{self.chat.id}_{self.message.message_id}',
+            state_key,
+        )
+
+    async def test_get_state_value_returns_none_when_failed_to_get_state_key(self):
+        """Test get_state_value returns None if _get_state_key raises FailedToGetStateKey."""
+        self.context.user_data.update({1: 1})
+
+        widget = TestStateWidget()
+        with patch(
+            'hammett.widgets.base.BaseStateWidget._get_state_key',
+            side_effect=FailedToGetStateKey,
+        ):
+            actual = await widget.get_state_value(self.update, self.context, 'choices')
+            self.assertIsNone(actual)
+
+    async def test_initialized_state_not_implemented_raises(self):
+        """Test that _initialized_state raises NotImplementedError by default."""
+        widget = TestStateWidget()
+        with self.assertRaises(NotImplementedError):
+            await widget._initialized_state(
+                self.update,
+                self.context,
+                self.message,
+                FinalRenderConfig(),
+            )
+
+    async def test_set_and_get_state_value_roundtrip(self):
+        """Test that set_state_value stores the value and get_state_value retrieves it."""
+        self.context.user_data.update({1: 1})
+
+        widget = TestStateWidget()
+        with patch(
+            'hammett.widgets.base.get_callback_query',
+            return_value=SimpleNamespace(message=self.message),
+        ):
+            await widget.set_state_value(self.update, self.context, 'foo', 'bar')
+            actual = await widget.get_state_value(self.update, self.context, 'foo')
+            self.assertEqual(actual, 'bar')
+
+    async def test_set_return_none_when_user_data_is_empty(self):
+        """Test that set_state_value returns None when user_data is empty."""
+        widget = TestStateWidget()
+        actual = await widget.set_state_value(self.update, self.context, 'foo', 'bar')
+        self.assertIsNone(actual)
 
 
 class BaseChoiceWidgetTests(BaseTestCase):
