@@ -29,6 +29,7 @@ from tests.utils.test_translation import (
 )
 from tests.widgets.test_calendar import CalendarWidgetTests
 from tests.widgets.test_carousel import CarouselWidgetTests, CarouselWidgetWithoutUpdateTests
+from tests.widgets.test_single_choice import SingleChoiceWidgetTests
 
 if __name__ == '__main__':
     os.environ.setdefault('HAMMETT_SETTINGS_MODULE', 'tests.settings')
