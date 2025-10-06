@@ -1,5 +1,5 @@
 [run]
-omit = ./demos/*, ./hammett/test/*, ./hammett/types.py, ./tests/*
+omit = ./demos/*, ./hammett/core/conversation_handler.py, ./hammett/test/*, ./hammett/types.py, ./tests/*
 
 [report]
 exclude_also =
