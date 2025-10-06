@@ -18,6 +18,7 @@ from tests.test_screens import ScreenTests, ScreenTestsWithoutUpdate
 from tests.test_start_marker import StartMarkerTests
 from tests.test_widgets.test_calendar import CalendarWidgetTests
 from tests.test_widgets.test_carousel import CarouselWidgetTests
+from tests.utils.test_misc import UtilsMiscTests
 
 if __name__ == '__main__':
     os.environ.setdefault('HAMMETT_SETTINGS_MODULE', 'tests.settings')
