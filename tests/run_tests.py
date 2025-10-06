@@ -24,6 +24,10 @@ from tests.utils.test_render_config import (
     UtilsRenderConfigTests,
     UtilsRenderConfigTestsWithoutUpdate,
 )
+from tests.utils.test_translation import (
+    UtilsTranslationCatalogTests,
+    UtilsTranslationTests,
+)
 
 if __name__ == '__main__':
     os.environ.setdefault('HAMMETT_SETTINGS_MODULE', 'tests.settings')
