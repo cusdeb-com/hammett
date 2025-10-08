@@ -32,6 +32,8 @@ from tests.widgets.test_calendar import CalendarWidgetTests
 from tests.widgets.test_carousel import CarouselWidgetTests, CarouselWidgetWithoutUpdateTests
 from tests.widgets.test_multi_choice import (
     BaseChoiceWidgetTestsUsingMultiChoiceWidget,
+    BaseStateWidgetTestsUsingMultiChoiceWidget,
+    BaseStateWidgetTestsUsingMultiChoiceWidgetWithoutUpdate,
     MultiChoiceWidgetTests,
 )
 from tests.widgets.test_single_choice import (
