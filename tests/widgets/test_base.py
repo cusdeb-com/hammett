@@ -5,10 +5,10 @@
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from hammett.core.constants import FinalRenderConfig
+from hammett.core.constants import EMPTY_KEYBOARD, FinalRenderConfig
 from hammett.core.exceptions import FailedToGetDataAttributeOfQuery, PayloadIsEmpty
 from hammett.test.base import BaseTestCase
-from hammett.widgets.base import BaseChoiceWidget, BaseStateWidget
+from hammett.widgets.base import BaseChoiceWidget, BaseStateWidget, BaseWidget
 from hammett.widgets.exceptions import (
     ChoiceEmojisAreUndefined,
     ChoicesFormatIsInvalid,
@@ -282,3 +282,17 @@ class BaseChoiceWidgetTests(BaseTestCase):
         """Test that BaseChoiceWidget raises an error if switch is not implemented."""
         with self.assertRaises(NotImplementedError):
             await TestBaseChoiceWidget().switch(self.update, self.context, ('a', 'Option A'))
+
+
+class BaseWidgetTests(BaseTestCase):
+    """The class implements the tests for BaseWidget."""
+
+    async def test_add_extra_keyboard_returns_empty_keyboard(self):
+        """Test that add_extra_keyboard returns an empty keyboard."""
+
+        class TestBaseWidget(BaseWidget):
+            """The class implements a concrete subclass for testing BaseWidget behavior."""
+
+        widget = TestBaseWidget()
+        keyboard = await widget.add_extra_keyboard(self.update, self.context)
+        self.assertEqual(keyboard, EMPTY_KEYBOARD)
