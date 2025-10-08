@@ -2,6 +2,7 @@
 
 # ruff: noqa: SLF001
 
+import json
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -173,3 +174,55 @@ class MultiChoiceWidgetTests(BaseTestCase):
                     (False, 'c', 'Option C'),
                 ),
             )
+
+
+class BaseChoiceWidgetTestsUsingMultiChoiceWidget(BaseTestCase):
+    """The class implements the tests for BaseChoiceWidget using MultiChoiceWidget."""
+
+    @catch_render_config()
+    async def test_multi_choice_widget_render_after_calling_on_choice_click_handler(self, actual):
+        """Test calling the _on_choice_click handler to get the final render config."""
+        callback_query = SimpleNamespace(data='key', message=self.message)
+        payload_storage = [
+            {'key': json.dumps({'code': 'a', 'name': 'Option A'})},
+            {'key': json.dumps({'code': 'b', 'name': 'Option B'})},
+        ]
+        with (
+            patch('hammett.widgets.base.get_callback_query', return_value=callback_query),
+            patch('hammett.widgets.base.get_payload_storage', side_effect=payload_storage),
+        ):
+            widget = TestMultiChoiceWidget()
+            await widget.move(self.update, self.context)  # initialize state
+            await widget._on_choice_click(self.update, self.context)  # choose Option A
+
+            choices = (
+                (True, 'a', 'Option A'),
+                (False, 'b', 'Option B'),
+                (False, 'c', 'Option C'),
+            )
+            expected = self.prepare_final_render_config(RenderConfig(
+                description=widget.description,
+                keyboard=await widget._build_keyboard(
+                    self.update,
+                    self.context,
+                    choices,
+                ),
+            ))
+            self.assertEqual(actual.final_render_config, expected)
+
+            await widget._on_choice_click(self.update, self.context)  # choose Option B
+
+            choices = (
+                (True, 'a', 'Option A'),
+                (True, 'b', 'Option B'),
+                (False, 'c', 'Option C'),
+            )
+            expected = self.prepare_final_render_config(RenderConfig(
+                description=widget.description,
+                keyboard=await widget._build_keyboard(
+                    self.update,
+                    self.context,
+                    choices,
+                ),
+            ))
+            self.assertEqual(actual.final_render_config, expected)

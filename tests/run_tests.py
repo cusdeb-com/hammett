@@ -30,8 +30,14 @@ from tests.utils.test_translation import (
 from tests.widgets.test_base import BaseChoiceWidgetTests, BaseStateWidgetTests, BaseWidgetTests
 from tests.widgets.test_calendar import CalendarWidgetTests
 from tests.widgets.test_carousel import CarouselWidgetTests, CarouselWidgetWithoutUpdateTests
-from tests.widgets.test_multi_choice import MultiChoiceWidgetTests
-from tests.widgets.test_single_choice import SingleChoiceWidgetTests
+from tests.widgets.test_multi_choice import (
+    BaseChoiceWidgetTestsUsingMultiChoiceWidget,
+    MultiChoiceWidgetTests,
+)
+from tests.widgets.test_single_choice import (
+    BaseChoiceWidgetTestsUsingSingleChoiceWidget,
+    SingleChoiceWidgetTests,
+)
 
 if __name__ == '__main__':
     os.environ.setdefault('HAMMETT_SETTINGS_MODULE', 'tests.settings')
