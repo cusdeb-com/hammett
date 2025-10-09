@@ -18,6 +18,7 @@ from tests.test_persistence import PersistenceTests
 from tests.test_renderer import RendererTests
 from tests.test_screens import ScreenTests, ScreenTestsWithoutUpdate
 from tests.test_start_marker import StartMarkerTests
+from tests.test_template import TemplateTests
 from tests.utils.test_misc import UtilsMiscTests
 from tests.utils.test_module_loading import UtilsModuleLoadingTests
 from tests.utils.test_render_config import (
