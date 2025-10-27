@@ -1,0 +1,7 @@
+```python
+ERROR_HANDLER_CONF = {
+    'IGNORE_QUERY_IS_TOO_OLD': True,
+    'IGNORE_TIMED_OUT': True,
+    'IGNORE_UPDATE_MASSAGE_FAIL': True,
+}
+```

@@ -29,6 +29,16 @@ jobs:
 
       - name: Run mypy
         run: mypy --strict .
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run prettier
+        run: yarn lint
+
   tests:
     name: Run tests with Python ${{ matrix.python-version }}
 

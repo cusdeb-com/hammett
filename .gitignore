@@ -2,7 +2,9 @@
 .mypy_cache
 .ruff_cache
 __pycache__
+node_modules
 *.swp
 .env*
 .coverage
 *.mo
+site/

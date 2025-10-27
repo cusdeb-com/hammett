@@ -1,0 +1,3 @@
+# Logging
+
+::: hammett.utils.log

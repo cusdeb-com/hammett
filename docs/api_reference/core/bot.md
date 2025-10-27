@@ -1,0 +1,3 @@
+# Bot
+
+::: hammett.core.bot
