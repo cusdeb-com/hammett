@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>None./</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="None"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/"/>
+    </url>
+    <url>
+        <loc>Nonedemos/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonedemos/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/demos/"/>
+    </url>
+    <url>
+        <loc>Nonegetting-started/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonegetting-started/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/getting-started/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/error_handler/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/error_handler/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/error_handler/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/start_marker/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/start_marker/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/start_marker/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/template/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/template/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/template/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/types/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/types/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/types/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/conf/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/conf/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/conf/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/conf/global_settings/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/conf/global_settings/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/conf/global_settings/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/bot/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/bot/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/bot/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/button/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/button/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/button/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/cache/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/cache/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/cache/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/constants/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/constants/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/constants/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/conversation_handler/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/conversation_handler/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/conversation_handler/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/exceptions/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/exceptions/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/exceptions/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/handlers/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/handlers/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/handlers/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/hider/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/hider/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/hider/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/mixins/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/mixins/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/mixins/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/permission/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/permission/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/permission/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/persistence/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/persistence/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/persistence/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/renderer/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/renderer/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/renderer/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/core/screen/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/screen/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/screen/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/test/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/test/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/test/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/test/base/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/test/base/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/test/base/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/test/utils/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/test/utils/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/test/utils/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/utils/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/utils/autodiscovery/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/autodiscovery/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/autodiscovery/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/utils/log/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/log/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/log/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/utils/misc/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/misc/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/misc/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/utils/module_loading/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/module_loading/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/module_loading/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/utils/render_config/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/render_config/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/render_config/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/utils/translation/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/translation/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/translation/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/widgets/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/widgets/base/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/base/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/base/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/widgets/calendar_widget/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/calendar_widget/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/calendar_widget/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/widgets/carousel_widget/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/carousel_widget/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/carousel_widget/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/widgets/exceptions/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/exceptions/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/exceptions/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/widgets/multi_choice_widget/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/multi_choice_widget/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/multi_choice_widget/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/widgets/single_choice_widget/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/single_choice_widget/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/single_choice_widget/"/>
+    </url>
+    <url>
+        <loc>Noneapi_reference/widgets/types/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/types/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/types/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/advanced/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/advanced/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/advanced/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/assemble-and-run-bot/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/assemble-and-run-bot/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/assemble-and-run-bot/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/best-practices/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/best-practices/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/best-practices/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/error-handlers/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/error-handlers/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/error-handlers/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/hider-mechanism/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/hider-mechanism/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/hider-mechanism/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/permission-mechanism/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/permission-mechanism/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/permission-mechanism/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/screens/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/screens/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/screens/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/settings/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/settings/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/settings/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/states/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/states/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/states/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/testing/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/testing/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/testing/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/three-pillars/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/three-pillars/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/three-pillars/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/translation/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/translation/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/translation/"/>
+    </url>
+    <url>
+        <loc>Noneintroduction_to_bot_development/widgets/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/widgets/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/widgets/"/>
+    </url>
+    <url>
+        <loc>Noneru/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="None"/>
+    </url>
+    <url>
+        <loc>Noneru/demos/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/demos/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonedemos/"/>
+    </url>
+    <url>
+        <loc>Noneru/getting-started/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonegetting-started/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/error_handler/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/error_handler/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/error_handler/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/start_marker/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/start_marker/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/start_marker/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/template/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/template/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/template/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/types/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/types/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/types/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/conf/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/conf/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/conf/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/conf/global_settings/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/conf/global_settings/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/conf/global_settings/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/bot/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/bot/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/bot/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/button/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/button/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/button/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/cache/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/cache/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/cache/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/constants/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/constants/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/constants/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/conversation_handler/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/conversation_handler/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/conversation_handler/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/exceptions/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/exceptions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/exceptions/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/handlers/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/handlers/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/handlers/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/hider/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/hider/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/hider/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/mixins/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/mixins/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/mixins/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/permission/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/permission/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/permission/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/persistence/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/persistence/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/persistence/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/renderer/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/renderer/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/renderer/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/core/screen/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/core/screen/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/core/screen/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/test/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/test/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/test/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/test/base/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/test/base/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/test/base/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/test/utils/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/test/utils/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/test/utils/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/utils/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/utils/autodiscovery/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/autodiscovery/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/autodiscovery/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/utils/log/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/log/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/log/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/utils/misc/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/misc/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/misc/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/utils/module_loading/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/module_loading/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/module_loading/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/utils/render_config/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/render_config/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/render_config/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/utils/translation/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/utils/translation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/utils/translation/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/widgets/__init__/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/__init__/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/__init__/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/widgets/base/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/base/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/base/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/widgets/calendar_widget/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/calendar_widget/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/calendar_widget/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/widgets/carousel_widget/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/carousel_widget/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/carousel_widget/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/widgets/exceptions/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/exceptions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/exceptions/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/widgets/multi_choice_widget/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/multi_choice_widget/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/multi_choice_widget/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/widgets/single_choice_widget/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/single_choice_widget/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/single_choice_widget/"/>
+    </url>
+    <url>
+        <loc>Noneru/api_reference/widgets/types/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api_reference/widgets/types/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneapi_reference/widgets/types/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/advanced/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/advanced/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/advanced/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/assemble-and-run-bot/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/assemble-and-run-bot/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/assemble-and-run-bot/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/best-practices/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/best-practices/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/best-practices/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/error-handlers/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/error-handlers/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/error-handlers/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/hider-mechanism/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/hider-mechanism/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/hider-mechanism/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/permission-mechanism/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/permission-mechanism/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/permission-mechanism/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/screens/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/screens/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/screens/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/settings/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/settings/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/settings/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/states/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/states/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/states/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/testing/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/testing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/testing/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/three-pillars/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/three-pillars/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/three-pillars/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/translation/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/translation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/translation/"/>
+    </url>
+    <url>
+        <loc>Noneru/introduction_to_bot_development/widgets/</loc>
+        <lastmod>2025-10-27</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/introduction_to_bot_development/widgets/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneintroduction_to_bot_development/widgets/"/>
+    </url>
+</urlset>

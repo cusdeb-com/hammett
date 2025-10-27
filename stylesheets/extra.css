@@ -1,0 +1,5 @@
+:root > * {
+  --md-primary-fg-color: #c38ed1;
+  --md-primary-fg-color--light: #c38ed1;
+  --md-primary-fg-color--dark: #c38ed1;
+}
