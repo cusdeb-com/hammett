@@ -39,6 +39,14 @@ services:
       - valkey
     restart: always
 
+  error-handler-bot:
+    build:
+      dockerfile: ./error_handler_bot/Dockerfile
+    env_file: ./error_handler_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   hide-keyboard-bot:
     build:
       dockerfile: ./hide_keyboard_bot/Dockerfile
