@@ -178,9 +178,9 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         return data
 
-    async def _hset_data(self: 'Self', key: str, user_id: int, data: 'CD | UD') -> None:
+    async def _hset_data(self: 'Self', key: str, field: int, data: 'CD | UD') -> None:
         """Store the data to the database in the hash format under the specified key."""
-        await self.redis_cli.hset(key, str(user_id), json.dumps(data, cls=_Encoder))
+        await self.redis_cli.hset(key, str(field), json.dumps(data, cls=_Encoder))
 
     async def _hsetall_data(
         self: 'Self',
