@@ -45,8 +45,7 @@ _translations = {}
 def _get_translation(language: str) -> 'HammettTranslation':
     """Return a translation object based on the language.
 
-    Returns
-    -------
+    Returns:
         Translation object.
 
     """
@@ -59,8 +58,7 @@ def _get_translation(language: str) -> 'HammettTranslation':
 def gettext(caption: str, language: str = '') -> str:
     """Return translated text by its caption.
 
-    Returns
-    -------
+    Returns:
         Translated text by its caption.
 
     """
@@ -74,8 +72,7 @@ def gettext(caption: str, language: str = '') -> str:
 def ngettext(singular: str, plural: str, num: int, language: str = '') -> str:
     """Return the translated singular or plural form based on the language and number.
 
-    Returns
-    -------
+    Returns:
         Translated singular or plural form.
 
     """
@@ -136,8 +133,7 @@ class HammettTranslation(native_gettext.GNUTranslations):
     ) -> 'native_gettext.GNUTranslations':
         """Create and return a translation object.
 
-        Returns
-        -------
+        Returns:
             Created translation object.
 
         """
@@ -169,8 +165,7 @@ class HammettTranslation(native_gettext.GNUTranslations):
     def ngettext(self: 'Self', msgid1: str, msgid2: str, num: int) -> str:
         """Return translated text according to the language and the counting number.
 
-        Returns
-        -------
+        Returns:
             Translated text according to the language and the counting number.
 
         """
@@ -205,8 +200,7 @@ class _TranslationCatalog:
     def __contains__(self, key: str | tuple[str, int]) -> bool:
         """Check whether the key exists.
 
-        Returns
-        -------
+        Returns:
             The result of checking whether the key exists.
 
         """
@@ -241,8 +235,7 @@ class _TranslationCatalog:
     def get(self: 'Self', key: tuple[str, int] | str, default: str | None = None) -> str | None:
         """Return the value of the key.
 
-        Returns
-        -------
+        Returns:
             Value of the key.
 
         """
@@ -262,8 +255,7 @@ class _TranslationCatalog:
     ) -> 'Generator[tuple[str, str] | tuple[tuple[str, int], str], None, None]':
         """Yield the items.
 
-        Yields
-        ------
+        Yields:
             Items.
 
         """
@@ -273,8 +265,7 @@ class _TranslationCatalog:
     def keys(self: 'Self') -> 'Generator[str | tuple[str, int], None, None]':
         """Yield the keys.
 
-        Yields
-        ------
+        Yields:
             Keys.
 
         """

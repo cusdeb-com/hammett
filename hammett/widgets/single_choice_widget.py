@@ -35,8 +35,7 @@ class SingleChoiceWidget(BaseChoiceWidget):
     ) -> 'InitializedChoices':
         """Initialize choices.
 
-        Returns
-        -------
+        Returns:
             Initialized choices.
 
         """
@@ -65,8 +64,7 @@ class SingleChoiceWidget(BaseChoiceWidget):
     ) -> str | None:
         """Return the `initial_value` attribute of the widget.
 
-        Returns
-        -------
+        Returns:
             `Initial_value` attribute of the widget.
 
         """
@@ -80,8 +78,7 @@ class SingleChoiceWidget(BaseChoiceWidget):
     ) -> 'InitializedChoices':
         """Switch the widget from one state to another.
 
-        Returns
-        -------
+        Returns:
             New state of the widget after switching it.
 
         """

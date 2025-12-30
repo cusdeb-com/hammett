@@ -12,8 +12,7 @@ if TYPE_CHECKING:
 def render_template_from_string(template: str, context: dict[str, 'Any'] | None = None) -> str:
     """Return a description after formatting it using passed data.
 
-    Returns
-    -------
+    Returns:
         Formatted description with passed data.
 
     """

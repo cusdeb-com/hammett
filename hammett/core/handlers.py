@@ -45,8 +45,7 @@ def _clear_command_name(command_name: str) -> str:
 def _get_handler_name(handler: 'Handler') -> str:
     """Return the full name of the specified handler.
 
-    Returns
-    -------
+    Returns:
         Full name of the specified handler.
 
     """
@@ -62,8 +61,7 @@ def _register_handler(
 ) -> 'Callable[[str], Callable[[HandlerAlias], Handler]]':
     """Set the specified attribute of the decorated handler.
 
-    Returns
-    -------
+    Returns:
         Wrapped handler.
 
     """
@@ -122,8 +120,7 @@ def calc_checksum(obj: 'Any') -> str:
 def get_payload_storage(context: 'CallbackContext[BT, UD, CD, BD]') -> 'PayloadStorage':
     """Return the payload storage.
 
-    Returns
-    -------
+    Returns:
         Payload storage.
 
     """

@@ -19,8 +19,7 @@ def get_latest_message(
 ) -> 'LatestMessage | None':
     """Return the latest sent message info.
 
-    Returns
-    -------
+    Returns:
         Latest sent message info.
 
     """

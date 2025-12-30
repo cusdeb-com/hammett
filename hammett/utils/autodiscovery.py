@@ -22,8 +22,7 @@ def _autodiscover_screens_in_module(
     """Look through the specified module for subclasses of the Screen class.
     The function skips the Permission subclasses and Screen itself.
 
-    Returns
-    -------
+    Returns:
         Set of the subclasses of the Screen class.
 
     """
@@ -48,8 +47,7 @@ def autodiscover_screens(
     """Automatically discover screens (i.e., subclasses of the Screen class),
     looking them in the specified package.
 
-    Returns
-    -------
+    Returns:
         Set of the screens.
 
     """

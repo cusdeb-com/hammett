@@ -57,8 +57,7 @@ _HAMMETT_SETTINGS_MODULE = 'HAMMETT_SETTINGS_MODULE'
 def new_method_proxy(func: 'Func') -> 'Any':
     """Route functions to the _wrapped object.
 
-    Returns
-    -------
+    Returns:
         Wrapped passed functions.
 
     """
@@ -83,8 +82,7 @@ class GlobalSettings:
     def __getattr__(self: 'Self', name: str) -> 'Any':
         """Return the value of a global setting.
 
-        Returns
-        -------
+        Returns:
             Value of a global setting.
 
         """
@@ -93,8 +91,7 @@ class GlobalSettings:
     def __repr__(self: 'Self') -> str:
         """Return a system representation of a global setting.
 
-        Returns
-        -------
+        Returns:
             System representation of a global setting.
 
         """
@@ -207,8 +204,7 @@ class LazySettings(LazyObject):
     def __repr__(self: 'Self') -> str:
         """Return a system representation of a lazy setting.
 
-        Returns
-        -------
+        Returns:
             System representation of a lazy setting.
 
         """
@@ -223,8 +219,7 @@ class LazySettings(LazyObject):
     def __getattr__(self: 'Self', name: str) -> 'Any':
         """Return the value of a setting and cache it in self.__dict__.
 
-        Returns
-        -------
+        Returns:
             Value of a setting.
 
         """
@@ -303,8 +298,7 @@ class Settings:
     def _is_overridden(self: 'Self', setting: str) -> bool:
         """Check if the specified setting is overriden.
 
-        Returns
-        -------
+        Returns:
             Result of checking the override of a setting.
 
         """
@@ -313,8 +307,7 @@ class Settings:
     def __repr__(self: 'Self') -> str:
         """Return a system representation of a setting.
 
-        Returns
-        -------
+        Returns:
             System representation of a setting.
 
         """

@@ -256,8 +256,7 @@ class Bot:
     def provide_application_builder(self: 'Self') -> 'ApplicationBuilder':  # type: ignore[type-arg]
         """Return a native application builder.
 
-        Returns
-        -------
+        Returns:
             Native application builder.
 
         """

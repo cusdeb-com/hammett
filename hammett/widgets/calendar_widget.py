@@ -38,8 +38,7 @@ class CalendarUnit(str, Enum):
 def _arrange_buttons_into_rows(buttons: 'list[Button]', row_size: int) -> 'Keyboard':
     """Arrange the buttons into rows based on the row size.
 
-    Returns
-    -------
+    Returns:
         Arranged buttons into rows.
 
     """
@@ -52,8 +51,7 @@ def _arrange_buttons_into_rows(buttons: 'list[Button]', row_size: int) -> 'Keybo
 def _get_left_boundary(date_: 'date', unit: 'CalendarUnit') -> 'date':
     """Return the earliest date in the calendar unit.
 
-    Returns
-    -------
+    Returns:
         The earliest date in the calendar unit.
 
     """
@@ -69,8 +67,7 @@ def _get_left_boundary(date_: 'date', unit: 'CalendarUnit') -> 'date':
 def _get_right_boundary(date_: 'date', unit: 'CalendarUnit') -> 'date':
     """Return the latest date in the calendar unit.
 
-    Returns
-    -------
+    Returns:
         The latest date in the calendar unit.
 
     """
@@ -116,8 +113,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'Keyboard':
         """Build the day selection keyboard.
 
-        Returns
-        -------
+        Returns:
             Day selection keyboard.
 
         """
@@ -168,8 +164,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'Keyboard':
         """Build the month selection keyboard.
 
-        Returns
-        -------
+        Returns:
             Month selection keyboard.
 
         """
@@ -214,8 +209,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'tuple[Keyboard, str]':
         """Return a keyboard based on the calendar unit.
 
-        Returns
-        -------
+        Returns:
             Keyboard layout corresponding to the specified calendar unit,
             and the unit itself.
 
@@ -244,8 +238,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'Keyboard':
         """Build a keyboard with navigation buttons.
 
-        Returns
-        -------
+        Returns:
             Keyboard with navigation buttons.
 
         """
@@ -307,8 +300,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'Keyboard':
         """Build the year selection keyboard.
 
-        Returns
-        -------
+        Returns:
             Year selection keyboard.
 
         """
@@ -349,8 +341,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     def _date_to_list(date_: 'date') -> list[str]:
         """Return the date as a list.
 
-        Returns
-        -------
+        Returns:
             Date as a list.
 
         """
@@ -364,8 +355,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'State':
         """Invoke by a disabled button.
 
-        Returns
-        -------
+        Returns:
             State after clicking on a disabled button.
 
         """
@@ -379,8 +369,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'list[tuple[date | None, str]]':
         """Return a list of dates starting from the given date.
 
-        Returns
-        -------
+        Returns:
             List of dates with their captions, starting from the specified date.
 
         """
@@ -406,8 +395,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> str:
         """Return a description based on the calendar unit.
 
-        Returns
-        -------
+        Returns:
             Description for the calendar widget, based on the specified unit.
 
         """
@@ -428,8 +416,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'Button':
         """Return a button built from the provided data.
 
-        Returns
-        -------
+        Returns:
             Button.
 
         """
@@ -449,8 +436,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'list[date | None]':
         """Return the list of dates from the starting date.
 
-        Returns
-        -------
+        Returns:
             List of dates from the starting date.
 
         """
@@ -481,8 +467,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'State':
         """Initialize the widget.
 
-        Returns
-        -------
+        Returns:
             State after widget initialization.
 
         """
@@ -506,8 +491,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'State':
         """Invoke when a month or year button is clicked.
 
-        Returns
-        -------
+        Returns:
             State after clicking a month or year button.
 
         """
@@ -535,8 +519,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'State':
         """Invoke when a navigation button is clicked.
 
-        Returns
-        -------
+        Returns:
             State after clicking a navigation button.
 
         """
@@ -567,8 +550,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> str:
         """Return the widget description for the selected date.
 
-        Returns
-        -------
+        Returns:
             Description of the widget with the selected date.
 
         """
@@ -586,8 +568,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'date':
         """Return the `current_date` attribute of the widget.
 
-        Returns
-        -------
+        Returns:
             `current_date` attribute of the widget.
 
         """
@@ -603,8 +584,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'list[tuple[date | None, str]]':
         """Return the list of dates with their captions.
 
-        Returns
-        -------
+        Returns:
             List of dates with their captions.
 
         """
@@ -618,8 +598,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> str:
         """Return the `day_description` attribute of the widget.
 
-        Returns
-        -------
+        Returns:
             `day_description` attribute of the widget.
 
         """
@@ -632,8 +611,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'CalendarUnit':
         """Return the `initial_unit` attribute of the widget.
 
-        Returns
-        -------
+        Returns:
             `initial_unit` attribute of the widget.
 
         """
@@ -647,8 +625,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> str:
         """Return the `month_description` attribute of the widget.
 
-        Returns
-        -------
+        Returns:
             `month_description` attribute of the widget.
 
         """
@@ -658,8 +635,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     def get_month_name(month: int, language_code: str) -> str:
         """Return the translated abbreviation of the specified month.
 
-        Returns
-        -------
+        Returns:
             Translated  abbreviation of the month.
 
         """
@@ -673,8 +649,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> str:
         """Return the `year_description` attribute of the widget.
 
-        Returns
-        -------
+        Returns:
             `year_description` attribute of the widget.
 
         """
@@ -687,8 +662,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'date':
         """Return the latest date that can be selected in the calendar.
 
-        Returns
-        -------
+        Returns:
             The latest date that can be selected in the calendar.
 
         """
@@ -701,8 +675,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'date':
         """Return the earliest date that can be selected in the calendar.
 
-        Returns
-        -------
+        Returns:
             The earliest date that can be selected in the calendar.
 
         """
@@ -716,8 +689,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'State':
         """Handle the case when the widget is sent as a new message.
 
-        Returns
-        -------
+        Returns:
             State after jumping to the widget.
 
         """
@@ -731,8 +703,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'State':
         """Handle the case when the widget re-renders the previous message.
 
-        Returns
-        -------
+        Returns:
             State after moving to the widget.
 
         """
@@ -747,8 +718,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
         """Handle widget behavior after a day has been selected, i.e. when
         date selection is fully complete.
 
-        Returns
-        -------
+        Returns:
             State after selecting the day.
 
         """
@@ -770,8 +740,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
     ) -> 'State':
         """Handle the case when the widget is used as a notification.
 
-        Returns
-        -------
+        Returns:
             State after sending the widget.
 
         """

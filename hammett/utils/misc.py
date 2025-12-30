@@ -9,8 +9,7 @@ if TYPE_CHECKING:
 async def get_callback_query(update: 'Update') -> 'CallbackQuery | None':
     """Get CallbackQuery from Update.
 
-    Returns
-    -------
+    Returns:
         CallbackQuery from Update.
 
     """

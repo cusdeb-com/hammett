@@ -67,8 +67,7 @@ class Button:
     def __eq__(self, other: object) -> bool:
         """Compare two Button objects.
 
-        Returns
-        -------
+        Returns:
             Result of comparing two Button objects.
 
         """
@@ -87,8 +86,7 @@ class Button:
     def __hash__(self) -> int:
         """Return the object hash.
 
-        Returns
-        -------
+        Returns:
             Object hash.
 
         """
@@ -142,8 +140,7 @@ class Button:
     ) -> int | None:
         """Obtain the user ID from either an Update object or a CallbackContext object.
 
-        Returns
-        -------
+        Returns:
             ID of the user.
 
         """

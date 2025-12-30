@@ -63,8 +63,7 @@ class Screen:
     def __new__(cls: type['Screen'], *args: 'Any', **kwargs: 'Any') -> 'Screen':
         """Implement the singleton pattern.
 
-        Returns
-        -------
+        Returns:
             Instance of the screen.
 
         """
@@ -174,8 +173,7 @@ class Screen:
     ) -> 'Keyboard':
         """Set up the default keyboard for the screen.
 
-        Returns
-        -------
+        Returns:
             Keyboard for the screen.
 
         """
@@ -188,8 +186,7 @@ class Screen:
     ) -> bool:
         """Return the `cache_covers` attribute of the screen.
 
-        Returns
-        -------
+        Returns:
             `Cache_covers` attribute of the screen.
 
         """
@@ -203,8 +200,7 @@ class Screen:
     ) -> 'RenderConfig':
         """Return the Screen's config.
 
-        Returns
-        -------
+        Returns:
             Screen's config.
 
         """
@@ -217,8 +213,7 @@ class Screen:
     ) -> 'str | PathLike[str]':
         """Return the `cover` attribute of the screen.
 
-        Returns
-        -------
+        Returns:
             `Cover` attribute of the screen.
 
         """
@@ -228,8 +223,7 @@ class Screen:
     def get_current_state(context: 'CallbackContext[BT, UD, CD, BD]') -> 'State':
         """Return the current state.
 
-        Returns
-        -------
+        Returns:
             Current state.
 
         """
@@ -242,8 +236,7 @@ class Screen:
     ) -> str:
         """Return the `description` attribute of the screen.
 
-        Returns
-        -------
+        Returns:
             `Description` attribute of the screen.
 
         """
@@ -256,8 +249,7 @@ class Screen:
     ) -> 'Document | None':
         """Return the `document` attribute of the screen.
 
-        Returns
-        -------
+        Returns:
             `Document` attribute of the screen.
 
         """
@@ -270,8 +262,7 @@ class Screen:
     ) -> bool:
         """Return the `hide_keyboard` attribute of the screen.
 
-        Returns
-        -------
+        Returns:
             `Hide_keyboard` attribute of the screen.
 
         """
@@ -334,8 +325,7 @@ class Screen:
     ) -> 'State':
         """Switch to the screen sending it as a new message.
 
-        Returns
-        -------
+        Returns:
             State after jumping to the screen.
 
         """
@@ -353,8 +343,7 @@ class Screen:
     ) -> 'State':
         """Switch to the screen re-rendering the previous message.
 
-        Returns
-        -------
+        Returns:
             State after moving to the screen.
 
         """
@@ -372,8 +361,7 @@ class Screen:
     ) -> 'State':
         """Send the screen to the specified chat.
 
-        Returns
-        -------
+        Returns:
             State after sending the screen.
 
         """

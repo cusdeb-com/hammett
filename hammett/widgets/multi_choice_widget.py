@@ -36,8 +36,7 @@ class MultiChoiceWidget(BaseChoiceWidget):
     ) -> 'InitializedChoices':
         """Initialize choices.
 
-        Returns
-        -------
+        Returns:
             Initialized choices.
 
         """
@@ -66,8 +65,7 @@ class MultiChoiceWidget(BaseChoiceWidget):
     ) -> 'Sequence[str] | None':
         """Return the `initial_values` attribute of the widget.
 
-        Returns
-        -------
+        Returns:
             `Initial_value` attribute of the widget.
 
         """
@@ -81,8 +79,7 @@ class MultiChoiceWidget(BaseChoiceWidget):
     ) -> 'InitializedChoices':
         """Switch the widget from one state to another.
 
-        Returns
-        -------
+        Returns:
             New state of the widget after switching it.
 
         """
