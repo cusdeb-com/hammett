@@ -136,8 +136,7 @@ class LazyObject:
     def __delattr__(self: 'Self', name: str) -> None:
         """Delete a lazy object.
 
-        Raises
-        ------
+        Raises:
             TypeError: If the name of the provided object to be deleted is '_wrapped'.
 
         """
@@ -187,8 +186,7 @@ class LazySettings(LazyObject):
         environment variable. This is used the first time settings are needed,
         if the user hasn't configured settings manually.
 
-        Raises
-        ------
+        Raises:
             ImproperlyConfigured: If the `HAMMETT_SETTINGS_MODULE` environment variable
             is not specified.
 
@@ -284,8 +282,7 @@ class Settings:
     def _check(self: 'Self') -> None:
         """Check the settings for gross errors.
 
-        Raises
-        ------
+        Raises:
             ImproperlyConfigured: If the registered `HIDERS_CHECKER_CLASS` is not a subclass of
             `HiderChecker`.
             ImproperlyConfigured: If the `PERMISSIONS` setting is neither a list nor a tuple.

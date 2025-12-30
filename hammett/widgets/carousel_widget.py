@@ -36,8 +36,7 @@ class CarouselWidget(BaseStateWidget):
     def __init__(self: 'Self') -> None:
         """Initialize a carousel widget object.
 
-        Raises
-        ------
+        Raises:
             ImproperlyConfigured: If the `images` attribute has the wrong type.
             ImproperlyConfigured: If the `back_caption`, `next_caption`, and `disable_caption`
             attributes are not specified.

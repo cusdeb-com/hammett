@@ -67,8 +67,7 @@ class Bot:
     ) -> None:
         """Initialize a bot object.
 
-        Raises
-        ------
+        Raises:
             TokenIsNotSpecified: If the `TOKEN` attribute in the settings is not specified.
 
         """
@@ -115,12 +114,10 @@ class Bot:
     ) -> CallbackQueryHandler[Any, Any] | MessageHandler[Any, Any]:
         """Return the handler object depending on its type.
 
-        Returns
-        -------
+        Returns:
             Handler object.
 
-        Raises
-        ------
+        Raises:
             UnknownHandlerType: If the handler type is unknown.
 
         """
@@ -175,8 +172,7 @@ class Bot:
     ) -> None:
         """Register the specified job queue handlers.
 
-        Raises
-        ------
+        Raises:
             CallbackNotProvided: If `callback` of `JobConfig` is not provided.
             JobKwargsNotProvided: If `job_kwargs` of `JobConfig` is not provided.
 

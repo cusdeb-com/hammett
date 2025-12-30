@@ -85,12 +85,10 @@ class Screen:
     ) -> 'FinalRenderConfig':
         """Finalize an object of RenderConfig returning an object of FinalRenderConfig.
 
-        Returns
-        -------
+        Returns:
             Finalized object of RenderConfig.
 
-        Raises
-        ------
+        Raises:
             ScreenDescriptionIsEmpty: If the `description` attribute of the screen is empty.
 
         """
@@ -286,12 +284,10 @@ class Screen:
     ) -> str:
         """Return the payload passed through the pressed button.
 
-        Returns
-        -------
+        Returns:
             Payload of the button.
 
-        Raises
-        ------
+        Raises:
             FailedToGetDataAttributeOfQuery: If the query object does not have any data.
             PayloadIsEmpty: If the attempt to retrieve the payload fails.
 

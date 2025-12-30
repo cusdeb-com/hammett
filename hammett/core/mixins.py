@@ -64,8 +64,7 @@ class RouteMixin(Screen):
     def __init__(self: 'Self') -> None:
         """Initialize a route mixin object.
 
-        Raises
-        ------
+        Raises:
             ScreenRouteIsEmpty: If the `routes` attribute of the mixin is empty.
             ImproperlyConfigured: If the `routes` attribute of the mixin is not a tuple with tuples.
 

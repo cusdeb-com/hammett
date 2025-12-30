@@ -99,8 +99,7 @@ class Button:
     def _check_source(self: 'Self') -> None:
         """Check if the source is valid.
 
-        Raises
-        ------
+        Raises:
             TypeError: If the source of the button is invalid.
 
         """
@@ -191,12 +190,10 @@ class Button:
     ) -> tuple[InlineKeyboardButton, bool]:
         """Create the button.
 
-        Returns
-        -------
+        Returns:
             Object of the `InlineKeyboardButton` type.
 
-        Raises
-        ------
+        Raises:
             UnknownSourceType: If the source type of the button is unknown.
 
         """

@@ -63,12 +63,10 @@ class StartMarker:
     def pop(self: 'Self', key: str, default: str | None = None) -> str:
         """Remove specified key and return the corresponding value.
 
-        Returns
-        -------
+        Returns:
             Element by a passed key.
 
-        Raises
-        ------
+        Raises:
             KeyError: If the key is not found and default value is not given
             raise a KeyError.
 

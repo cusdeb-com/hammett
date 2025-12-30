@@ -40,12 +40,10 @@ def import_string(dotted_path: str) -> type['Any']:
     designated by the last name in the path.
     Raise `ImportError` if the import failed.
 
-    Returns
-    -------
+    Returns:
         Object getting by passed dotted path.
 
-    Raises
-    ------
+    Raises:
         ImportError: If the provided dotted path does not look like a module path.
         ImportError: If the module does not define the specified attribute/class.
 

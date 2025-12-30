@@ -64,8 +64,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     ) -> None:
         """Initialize a redis persistence object.
 
-        Raises
-        ------
+        Raises:
             ImproperlyConfigured: If the `DB` setting of `RedisPersistence` is empty.
 
         """

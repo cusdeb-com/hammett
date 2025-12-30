@@ -118,12 +118,10 @@ class TestContextDecorator:
     def __call__(self: 'Self', decorated: 'Func') -> 'Callable[..., Any] | Awaitable[Any]':
         """Wrap the specified coroutine or function, and invoke the decorator.
 
-        Returns
-        -------
+        Returns:
             Wrapped specified coroutine or function.
 
-        Raises
-        ------
+        Raises:
             TypeError: If the provided type of object is not callable.
 
         """
