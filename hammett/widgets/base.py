@@ -72,8 +72,7 @@ class BaseStateWidget(BaseWidget):
     ) -> None:
         """Save to user_data initialized state after screen rendering if it's new message.
 
-        Raises
-        ------
+        Raises:
             MissingPersistence: If the widgets are used in jobs with no specified persistence.
 
         """
@@ -139,12 +138,10 @@ class BaseStateWidget(BaseWidget):
     ) -> str:
         """Return a widget state key.
 
-        Returns
-        -------
+        Returns:
             Widget state key.
 
-        Raises
-        ------
+        Raises:
             FailedToGetStateKey: If the query object does not have any message.
 
         """
@@ -224,8 +221,7 @@ class BaseChoiceWidget(BaseStateWidget):
     def __init__(self: 'Self') -> None:
         """Initialize a base choice widget object.
 
-        Raises
-        ------
+        Raises:
             ChoiceEmojisAreUndefined: If the `chosen_emoji` or `unchosen_emoji` attributes
             are not specified.
 
@@ -278,12 +274,10 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'Keyboard':
         """Build the keyboard based on the specified choices.
 
-        Returns
-        -------
+        Returns:
             Keyboard for the widget.
 
-        Raises
-        ------
+        Raises:
             ChoicesFormatIsInvalid: If the type of the `choices` attribute is not correct.
             NoChoicesSpecified: If the `choices` attribute is not specified.
 
@@ -447,12 +441,10 @@ class BaseChoiceWidget(BaseStateWidget):
         saved as all the choice buttons have the same payload though
         bot's running and popping of it leads to incorrect behaviour.
 
-        Returns
-        -------
+        Returns:
             Payload of the button.
 
-        Raises
-        ------
+        Raises:
             FailedToGetDataAttributeOfQuery: If the query object does not have any data.
             PayloadIsEmpty: If the attempt to retrieve the payload fails.
 

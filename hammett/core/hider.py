@@ -144,12 +144,10 @@ class HidersChecker:
         returns True if any of the checks is True.
         The method is invoked under the hood, so you should not run it directly.
 
-        Returns
-        -------
+        Returns:
             True if any of the HiderChecker checks are True.
 
-        Raises
-        ------
+        Raises:
             HiderIsUnregistered: If the implemented hider is not registered.
 
         """

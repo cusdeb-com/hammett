@@ -59,12 +59,10 @@ class ConversationHandler(NativeConversationHandler['Any']):
     ) -> object | None:
         """Send the update to the callback for the current state and BaseHandler.
 
-        Returns
-        -------
+        Returns:
             Object or None.
 
-        Raises
-        ------
+        Raises:
             ApplicationHandlerStop: If it's necessary to prevent the execution of any other handler
             (even in different groups).
 

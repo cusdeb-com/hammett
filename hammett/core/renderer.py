@@ -49,12 +49,10 @@ class Renderer:
     ) -> InputMediaDocument:
         """Create an object that represents a document to be sent.
 
-        Returns
-        -------
+        Returns:
             Object of the `InputMediaDocument` type with passed attributes.
 
-        Raises
-        ------
+        Raises:
             ScreenDocumentDataIsEmpty: If the `media` attribute of the `Document`
             type object is empty.
 

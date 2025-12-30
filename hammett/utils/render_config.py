@@ -47,8 +47,7 @@ async def save_latest_message(
 ) -> None:
     """Save the latest message info.
 
-    Raises
-    ------
+    Raises:
         MissingPersistence: If the attempt to save the latest message information fails because
         the message was sent via a job.
 

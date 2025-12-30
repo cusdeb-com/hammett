@@ -215,12 +215,10 @@ class _TranslationCatalog:
     def __getitem__(self: 'Self', key: str | tuple[str, int]) -> str:
         """Return the first found value of the key.
 
-        Returns
-        -------
+        Returns:
             Found value of the key.
 
-        Raises
-        ------
+        Raises:
             KeyError: If the key hasn't been found.
 
         """
@@ -286,12 +284,10 @@ class _TranslationCatalog:
     def plural(self: 'Self', msgid: str, num: int) -> str:
         """Return a message based on the msgid and number.
 
-        Returns
-        -------
+        Returns:
             Message based on the msgid and number.
 
-        Raises
-        ------
+        Raises:
             KeyError: If the message hasn't been found.
 
         """

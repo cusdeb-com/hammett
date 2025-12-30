@@ -26,12 +26,10 @@ def _clear_command_name(command_name: str) -> str:
 
     Raise `CommandNameIsEmpty` if the name either is empty or consists only of '/'.
 
-    Returns
-    -------
+    Returns:
         Cleared command name.
 
-    Raises
-    ------
+    Raises:
         CommandNameIsEmpty: If the provided command name is empty.
 
     """
@@ -104,12 +102,10 @@ def _register_handler(
 def calc_checksum(obj: 'Any') -> str:
     """Calculate a checksum of the specified object.
 
-    Returns
-    -------
+    Returns:
         Calculated checksum of the specified object.
 
-    Raises
-    ------
+    Raises:
         TypeError: If the provided object is neither a handler nor a button caption.
 
     """
