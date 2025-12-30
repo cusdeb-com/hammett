@@ -16,9 +16,6 @@ except ImportError:
     LONG_DESCRIPTION = DESCRIPTION
 
 
-with Path('requirements.txt').open(encoding='utf-8') as outfile:
-    requirements = outfile.read().splitlines()
-
 setup(
     name='hammett',
     version='1.0.0',
@@ -33,7 +30,7 @@ setup(
     packages=find_packages(exclude=('demos.*', 'demos', 'tests.*', 'tests')),
     include_package_data=True,
     data_files=[('', ['requirements.txt'])],
-    install_requires=requirements,
+    install_requires=Path('requirements.txt').read_text(encoding='utf-8').splitlines(),
     python_requires='>=3.10',
     keywords='python telegram bot api',
     project_urls={
