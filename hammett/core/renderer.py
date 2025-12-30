@@ -78,8 +78,7 @@ class Renderer:
     ) -> InputMediaPhoto:
         """Create an object that represents a photo to be sent.
 
-        Returns
-        -------
+        Returns:
             Object of the `InputMediaPhoto` type with passed attributes.
 
         """
@@ -114,8 +113,7 @@ class Renderer:
     ) -> tuple['Callable[..., Awaitable[Any]] | None', dict[str, 'Any']]:
         """Return the render method and its kwargs for editing a message.
 
-        Returns
-        -------
+        Returns:
             Render method and its kwargs for editing a message.
 
         """
@@ -152,8 +150,7 @@ class Renderer:
     ) -> 'Any':
         """Return the kwargs for edit render method with media.
 
-        Returns
-        -------
+        Returns:
             Kwargs for edit render method with media.
 
         """
@@ -192,8 +189,7 @@ class Renderer:
     ) -> tuple['Callable[..., Awaitable[Any]]', dict[str, 'Any']]:
         """Return the render method and its kwargs for sending a new message.
 
-        Returns
-        -------
+        Returns:
             Render method and its kwargs for sending a new message.
 
         """
@@ -239,8 +235,7 @@ class Renderer:
     def _is_url(cover: 'str | PathLike[str]') -> bool:
         """Check if the cover is specified using either a local path or a URL.
 
-        Returns
-        -------
+        Returns:
             Result of checking the cover for URL format.
 
         """
@@ -279,8 +274,7 @@ class Renderer:
         """Render the screen components (i.e., cover, description and keyboard),
         and return a corresponding object of the Message type.
 
-        Returns
-        -------
+        Returns:
             Rendered object of `Message` type.
 
         """

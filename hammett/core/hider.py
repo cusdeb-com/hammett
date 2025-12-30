@@ -32,8 +32,7 @@ class Hider:
     def __eq__(self, other: object) -> bool:
         """Compare two Hider objects.
 
-        Returns
-        -------
+        Returns:
             Result of comparing two Hider objects.
 
         """
@@ -45,8 +44,7 @@ class Hider:
     def __hash__(self) -> int:
         """Return object hash.
 
-        Returns
-        -------
+        Returns:
             Object hash.
 
         """
@@ -55,8 +53,7 @@ class Hider:
     def __or__(self: 'Self', other: 'Hider') -> 'Self':
         """Perform `or` operation.
 
-        Returns
-        -------
+        Returns:
             Instance of the hider.
 
         """
@@ -99,8 +96,7 @@ class HidersChecker:
     ) -> bool:
         """Represent a stub for checking whether the user is an admin.
 
-        Returns
-        -------
+        Returns:
             Result of checking whether the user is an admin.
 
         """
@@ -113,8 +109,7 @@ class HidersChecker:
     ) -> bool:
         """Represent a stub for checking whether the user is a beta tester.
 
-        Returns
-        -------
+        Returns:
             Result of checking whether the user is a beta tester.
 
         """
@@ -127,8 +122,7 @@ class HidersChecker:
     ) -> bool:
         """Represent a stub for checking whether the user is a moderator.
 
-        Returns
-        -------
+        Returns:
             Result of checking whether the user is a moderator.
 
         """

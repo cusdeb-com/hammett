@@ -62,8 +62,7 @@ class TestContextDecorator:
     def __enter__(self: 'Self') -> 'Any':
         """Invoke when execution enters the context of the with statement.
 
-        Returns
-        -------
+        Returns:
             Call to the `enable` method.
 
         """
@@ -89,8 +88,7 @@ class TestContextDecorator:
     def decorate_callable(self: 'Self', func: 'Func') -> 'Callable[..., Any | Awaitable[Any]]':
         """Decorate either a coroutine or a function.
 
-        Returns
-        -------
+        Returns:
             Decorated coroutine or function.
 
         """
@@ -145,8 +143,7 @@ class catch_render_config(TestContextDecorator):  # noqa: N801
     def enable(self: 'Self') -> 'Self':
         """Invoke when execution enters the context of the `with` statement.
 
-        Returns
-        -------
+        Returns:
             Instance of the catch_render_config.
 
         """

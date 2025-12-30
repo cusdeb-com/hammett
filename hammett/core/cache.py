@@ -22,8 +22,7 @@ CACHE_REDIS_CLI: 'redis.Redis[Any]' = redis.Redis(
 def cache(ttl: int) -> 'Callable[[Any], Any]':
     """Cache the result of the decorated function.
 
-    Returns
-    -------
+    Returns:
         Wrapped decorated function.
 
     """

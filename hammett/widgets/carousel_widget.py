@@ -81,8 +81,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> 'State':
         """Initialize the widget.
 
-        Returns
-        -------
+        Returns:
             State after widget initialization.
 
         """
@@ -118,8 +117,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> 'dict[Any, Any]':
         """Return the post-initialization widget state to be saved in context.
 
-        Returns
-        -------
+        Returns:
             Post-initialization widget state.
 
         """
@@ -143,8 +141,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> 'Keyboard':
         """Determine which button to disable and return the updated keyboard.
 
-        Returns
-        -------
+        Returns:
             Keyboard for the widget.
 
         """
@@ -192,8 +189,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> None:
         """Handle switching image in a regular mode.
 
-        Returns
-        -------
+        Returns:
             None.
 
         """
@@ -224,8 +220,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> None:
         """Handle switching image in an infinity mode.
 
-        Returns
-        -------
+        Returns:
             None.
 
         """
@@ -258,8 +253,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> None:
         """Switch to the next image.
 
-        Returns
-        -------
+        Returns:
             None.
 
         """
@@ -285,8 +279,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> None:
         """Switch to the previous image.
 
-        Returns
-        -------
+        Returns:
             None.
 
         """
@@ -309,8 +302,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> list[list[str]]:
         """Return the `images` attribute of the widget.
 
-        Returns
-        -------
+        Returns:
             `Images` attribute of the widget.
 
         """
@@ -324,8 +316,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> 'State':
         """Handle the case when the widget is used as StartScreen.
 
-        Returns
-        -------
+        Returns:
             State after jumping to the widget.
 
         """
@@ -340,8 +331,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> 'State':
         """Handle the case when the widget is passed to Button as `MOVE_SOURCE_TYPE`.
 
-        Returns
-        -------
+        Returns:
             State after moving to the widget.
 
         """
@@ -357,8 +347,7 @@ class CarouselWidget(BaseStateWidget):
     ) -> 'State':
         """Handle the case when the widget is used as a notification.
 
-        Returns
-        -------
+        Returns:
             State after sending the widget.
 
         """

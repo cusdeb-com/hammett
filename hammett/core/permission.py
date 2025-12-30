@@ -22,8 +22,7 @@ if TYPE_CHECKING:
 def apply_permission_to(handler: 'HandlerAlias') -> 'HandlerAlias':
     """Apply permissions to the specified handler.
 
-    Returns
-    -------
+    Returns:
         Wrapped handler.
 
     """
@@ -48,8 +47,7 @@ def ignore_permissions(
     """Decorate handlers (Screen methods) to specify which permissions
     they are allowed to ignore.
 
-    Returns
-    -------
+    Returns:
         Wrapped handler.
 
     """
@@ -80,8 +78,7 @@ class Permission(Screen):
         """Check if there is a permission to invoke handlers (Screen methods).
         The method is invoked under the hood, so you should not run it directly.
 
-        Returns
-        -------
+        Returns:
             Wrapped handler.
 
         """

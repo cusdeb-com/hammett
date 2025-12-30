@@ -28,8 +28,7 @@ class I18NMixin(Screen):
     ) -> str:
         """Return the language code.
 
-        Returns
-        -------
+        Returns:
             Current language code.
 
         """
@@ -88,8 +87,7 @@ class RouteMixin(Screen):
     ) -> 'State':
         """Return the first found state in the routes.
 
-        Returns
-        -------
+        Returns:
             First found state in the states declared in a `routes`
             attribute of the mixin.
 
@@ -113,8 +111,7 @@ class RouteMixin(Screen):
         """Change the state and switch to the screen sending
         it as a new message.
 
-        Returns
-        -------
+        Returns:
             State after jumping to the screen.
 
         """
@@ -133,8 +130,7 @@ class RouteMixin(Screen):
         """Change the state and switch to the screen re-rendering
         the previous message.
 
-        Returns
-        -------
+        Returns:
             State after moving to the screen.
 
         """
@@ -154,8 +150,7 @@ class StartMixin(Screen):
     ) -> 'State':
         """Invoke on the /start command.
 
-        Returns
-        -------
+        Returns:
             State after invoking /start command.
 
         """

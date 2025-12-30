@@ -33,8 +33,7 @@ class _Encoder(json.JSONEncoder):
     def default(self: 'Self', obj: 'Any') -> 'Any':
         """Handle encoding some objects that cannot be serialized into JSON.
 
-        Returns
-        -------
+        Returns:
             Encoded object.
 
         """
@@ -99,8 +98,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     def _decode_conversations(json_string: str) -> dict[str, dict[tuple[str | int, ...], object]]:
         """Decode a conversations dict (that uses tuples as keys) from a JSON-string.
 
-        Returns
-        -------
+        Returns:
             Decoded conversations dict.
 
         """
@@ -119,8 +117,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Encode a conversations dict (that uses tuples as keys) to a
         JSON-serializable way.
 
-        Returns
-        -------
+        Returns:
             Encoded conversations dict.
 
         """
@@ -135,8 +132,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     async def _get_data(self: 'Self', key: str) -> 'Any':
         """Fetch the data from the database by the specified key.
 
-        Returns
-        -------
+        Returns:
             Encoded data from the database.
 
         """
@@ -153,8 +149,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     def _decode_data(self: 'Self', data: dict[str, bytes]) -> dict[int, 'CD | UD']:
         """Return decoded data.
 
-        Returns
-        -------
+        Returns:
             Decoded data.
 
         """
@@ -171,8 +166,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     async def _hgetall_by_chunks(self: 'Self', key: str) -> dict[str, bytes]:
         """Return hash type of the data from the database.
 
-        Returns
-        -------
+        Returns:
             Hash type of the data from the database.
 
         """
@@ -260,8 +254,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         or an empty object of the type `telegram.ext.ContextTypes.bot_data`
         otherwise.
 
-        Returns
-        -------
+        Returns:
             Bot data from the database.
 
         """
@@ -276,8 +269,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Return the callback data from the database, if it exists,
         or None otherwise.
 
-        Returns
-        -------
+        Returns:
             Callback data from the database.
 
         """
@@ -297,8 +289,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Return the chat data from the database, if it exists,
         or an empty dict otherwise.
 
-        Returns
-        -------
+        Returns:
             Chat data from the database.
 
         """
@@ -312,8 +303,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Return the conversations from the database, if it exists,
         or an empty dict otherwise.
 
-        Returns
-        -------
+        Returns:
             Conversations from the database.
 
         """
@@ -329,8 +319,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Return the user data from the database, if it exists,
         or an empty dict otherwise.
 
-        Returns
-        -------
+        Returns:
             User data from the database.
 
         """

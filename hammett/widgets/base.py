@@ -51,8 +51,7 @@ class BaseWidget(Screen):
     ) -> 'Keyboard':
         """Add an extra keyboard below the widget buttons.
 
-        Returns
-        -------
+        Returns:
             Extra keyboard below the widget buttons.
 
         """
@@ -168,8 +167,7 @@ class BaseStateWidget(BaseWidget):
         """Safely get the specified value from the widget state dictionary
         stored in user_data.
 
-        Returns
-        -------
+        Returns:
             Value from the widget state.
 
         """
@@ -257,8 +255,7 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'dict[Any, Any]':
         """Return the post-initialization widget state to be saved in context.
 
-        Returns
-        -------
+        Returns:
             Post-initialization widget state.
 
         """
@@ -319,8 +316,7 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'State':
         """Initialize the widget.
 
-        Returns
-        -------
+        Returns:
             State after widget initialization.
 
         """
@@ -357,8 +353,7 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'State':
         """Invoke when clicking on a choice.
 
-        Returns
-        -------
+        Returns:
             State after clicking on a choice.
 
         """
@@ -388,8 +383,7 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'Choices':
         """Return the `choices` attribute of the widget.
 
-        Returns
-        -------
+        Returns:
             `Choices` attribute of the widget.
 
         """
@@ -402,8 +396,7 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'InitializedChoices':
         """Return the initialized choices.
 
-        Returns
-        -------
+        Returns:
             Initialized choices.
 
         """
@@ -422,8 +415,7 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'InitializedChoices':
         """Return the choices made by the user.
 
-        Returns
-        -------
+        Returns:
             Choices made by the user.
 
         """
@@ -470,8 +462,7 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'State':
         """Handle the case when the widget is used as StartScreen.
 
-        Returns
-        -------
+        Returns:
             State after jumping to the widget.
 
         """
@@ -486,8 +477,7 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'State':
         """Handle the case when the widget is passed to Button as `MOVE_SOURCE_TYPE`.
 
-        Returns
-        -------
+        Returns:
             State after moving to the widget.
 
         """
@@ -503,8 +493,7 @@ class BaseChoiceWidget(BaseStateWidget):
     ) -> 'State':
         """Handle the case when the widget is used as a notification.
 
-        Returns
-        -------
+        Returns:
             State after sending the widget.
 
         """

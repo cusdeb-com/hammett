@@ -21,8 +21,7 @@ class StartMarker:
     def __getitem__(self: 'Self', item: str) -> str:
         """Return an element by a key.
 
-        Returns
-        -------
+        Returns:
             Element by a passed key.
 
         """
@@ -43,8 +42,7 @@ class StartMarker:
     def items(self: 'Self') -> 'ItemsView[str, str]':
         """Return a dictionary with start markers as items.
 
-        Returns
-        -------
+        Returns:
             Items of the dictionary with start markers.
 
         """
@@ -53,8 +51,7 @@ class StartMarker:
     def keys(self: 'Self') -> 'KeysView[str]':
         """Return a dictionary with start-markers as keys.
 
-        Returns
-        -------
+        Returns:
             Keys of the dictionary with start markers.
 
         """
@@ -82,8 +79,7 @@ class StartMarker:
     def values(self: 'Self') -> 'ValuesView[str]':
         """Return a dictionary with start-markers as values.
 
-        Returns
-        -------
+        Returns:
             Values of the dictionary with start markers.
 
         """

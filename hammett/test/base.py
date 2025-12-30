@@ -66,8 +66,7 @@ class TestBot(Bot):
     ) -> 'bool | JSONDict | list[JSONDict]':
         """Override the method not to send any request.
 
-        Returns
-        -------
+        Returns:
             Mock of sending request.
 
         """
@@ -116,8 +115,7 @@ class BaseTestCase(unittest.TestCase):
     def get_chat(self) -> 'Chat':
         """Return the `Chat` object for testing purposes.
 
-        Returns
-        -------
+        Returns:
             `Chat` object.
 
         """
@@ -126,8 +124,7 @@ class BaseTestCase(unittest.TestCase):
     def get_context(self) -> 'CallbackContext':  # type: ignore[type-arg]
         """Return the `CallbackContext` object for testing purposes.
 
-        Returns
-        -------
+        Returns:
             `CallbackContext` object.
 
         """
@@ -140,8 +137,7 @@ class BaseTestCase(unittest.TestCase):
     def get_message(self) -> 'Message':
         """Return the `Message` object for testing purposes.
 
-        Returns
-        -------
+        Returns:
             `Message` object.
 
         """
@@ -155,8 +151,7 @@ class BaseTestCase(unittest.TestCase):
     def get_native_application(self) -> 'Application':  # type: ignore[type-arg]
         """Return the `Application` object for testing purposes.
 
-        Returns
-        -------
+        Returns:
             `Application` object.
 
         """
@@ -169,8 +164,7 @@ class BaseTestCase(unittest.TestCase):
     def get_update(self) -> 'Update':
         """Return the `Update` object for testing purposes.
 
-        Returns
-        -------
+        Returns:
             `Update` object.
 
         """
@@ -179,8 +173,7 @@ class BaseTestCase(unittest.TestCase):
     def get_user(self) -> 'User':
         """Return the `User` object for testing purposes.
 
-        Returns
-        -------
+        Returns:
             `User` object.
 
         """
@@ -193,8 +186,7 @@ class BaseTestCase(unittest.TestCase):
         """Transform `FinalRenderConfig` from `RenderConfig` if `RenderConfig` is provided,
         and pass the chat id to `FinalRenderConfig` for future assertions in tests.
 
-        Returns
-        -------
+        Returns:
             Ready `FinalRenderConfig` object.
 
         """
