@@ -333,7 +333,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Update the bot data (if changed) and, depending on on_flush attribute,
         reflect the change in the database.
         """
-        if self.bot_data == data:
+        stored_data = await self._get_data(self._BOT_DATA_KEY)
+        if self.bot_data == data and stored_data == data:
             return
 
         self.bot_data = data
