@@ -239,19 +239,24 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     async def flush(self: 'Self') -> None:
         """Store all the data kept in the memory to the database."""
         if self.bot_data is not None:
+            LOGGER.debug('Saving bot_data to RedisPersistence...')
             await self._hsetall_data(self._BOT_DATA_KEY, self.bot_data)
 
         if self.callback_data is not None:
+            LOGGER.debug('Saving callback_data to RedisPersistence...')
             await self._set_data(self._CALLBACK_DATA_KEY, self.callback_data)
 
         if self.chat_data is not None:
+            LOGGER.debug('Saving chat_data to RedisPersistence...')
             await self._hsetall_data(self._CHAT_DATA_KEY, self.chat_data)
 
         if self.conversations is not None:
+            LOGGER.debug('Saving conversations to RedisPersistence...')
             conversations = self._encode_conversations(self.conversations)
             await self._set_data(self._CONVERSATIONS_KEY, conversations, ready_json=True)
 
         if self.user_data is not None:
+            LOGGER.debug('Saving user_data to RedisPersistence...')
             await self._hsetall_data(self._USER_DATA_KEY, self.user_data)
 
     async def get_bot_data(self: 'Self') -> 'BD':
