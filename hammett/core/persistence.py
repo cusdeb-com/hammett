@@ -233,20 +233,20 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
     async def flush(self: 'Self') -> None:
         """Store all the data kept in the memory to the database."""
-        if self.bot_data:
+        if self.bot_data is not None:
             await self._set_data(self._BOT_DATA_KEY, self.bot_data)
 
-        if self.callback_data:
+        if self.callback_data is not None:
             await self._set_data(self._CALLBACK_DATA_KEY, self.callback_data)
 
-        if self.chat_data:
+        if self.chat_data is not None:
             await self._hsetall_data(self._CHAT_DATA_KEY, self.chat_data)
 
-        if self.conversations:
+        if self.conversations is not None:
             conversations = self._encode_conversations(self.conversations)
             await self._set_data(self._CONVERSATIONS_KEY, conversations, ready_json=True)
 
-        if self.user_data:
+        if self.user_data is not None:
             await self._hsetall_data(self._USER_DATA_KEY, self.user_data)
 
     async def get_bot_data(self: 'Self') -> 'BD':
@@ -258,7 +258,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             Bot data from the database.
 
         """
-        if not self.bot_data:
+        if self.bot_data is None:
             data = await self._get_data(self._BOT_DATA_KEY) or self.context_types.bot_data()
 
             self.bot_data = data
@@ -273,7 +273,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             Callback data from the database.
 
         """
-        if not self.callback_data:
+        if self.callback_data is None:
             data = await self._get_data(self._CALLBACK_DATA_KEY)
             if not data:
                 data = None
@@ -293,7 +293,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             Chat data from the database.
 
         """
-        if not self.chat_data:
+        if self.chat_data is None:
             data = await self._hgetall_by_chunks(self._CHAT_DATA_KEY)
             self.chat_data = cast('dict[int, CD]', self._decode_data(data))
 
@@ -307,7 +307,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             Conversations from the database.
 
         """
-        if not self.conversations:
+        if self.conversations is None:
             conversations = await self.redis_cli.get(self._CONVERSATIONS_KEY)
             self.conversations = self._decode_conversations(
                 conversations,
@@ -323,7 +323,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             User data from the database.
 
         """
-        if not self.user_data:
+        if self.user_data is None:
             data = await self._hgetall_by_chunks(self._USER_DATA_KEY)
             self.user_data = cast('dict[int, UD]', self._decode_data(data))
 
@@ -375,7 +375,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Update the conversations for the given handler and, depending on on_flush attribute,
         reflect the change in the database.
         """
-        if not self.conversations:
+        if self.conversations is None:
             self.conversations = {}
 
         if self.conversations.setdefault(name, {}).get(key) == new_state:
