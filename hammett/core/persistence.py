@@ -183,19 +183,19 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         return data
 
-    async def _hset_data(self: 'Self', key: str, field: int, data: 'CD | UD') -> None:
+    async def _hset_data(self: 'Self', key: str, field: int, data: 'CD | BD | UD') -> None:
         """Store the data to the database in the hash format under the specified key."""
         await self.redis_cli.hset(key, str(field), json.dumps(data, cls=_Encoder))
 
     async def _hsetall_data(
         self: 'Self',
         key: str,
-        data: dict[int, 'UD'] | dict[int, 'CD'],
+        data: 'dict[int, UD] | dict[int, CD] | BD',
     ) -> None:
         """Replace hash type of the data to specified value."""
         async with self.redis_cli.pipeline() as pipe:
             pipe.multi()
-            for field, value in data.items():
+            for field, value in data.items():  # type: ignore[union-attr]
                 await pipe.hset(key, str(field), json.dumps(value, cls=_Encoder))
 
             await pipe.execute()
@@ -239,7 +239,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     async def flush(self: 'Self') -> None:
         """Store all the data kept in the memory to the database."""
         if self.bot_data is not None:
-            await self._set_data(self._BOT_DATA_KEY, self.bot_data)
+            await self._hsetall_data(self._BOT_DATA_KEY, self.bot_data)
 
         if self.callback_data is not None:
             await self._set_data(self._CALLBACK_DATA_KEY, self.callback_data)
@@ -264,9 +264,10 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
 
         """
         if self.bot_data is None:
-            data = await self._get_data(self._BOT_DATA_KEY) or self.context_types.bot_data()
+            chunked_data = await self._hgetall_by_chunks(self._BOT_DATA_KEY)
+            decoded_data = self._decode_and_cast_keys(chunked_data)
 
-            self.bot_data = data
+            self.bot_data = cast('BD', decoded_data or self.context_types.bot_data())
 
         return self.bot_data
 
@@ -338,13 +339,17 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Update the bot data (if changed) and, depending on on_flush attribute,
         reflect the change in the database.
         """
-        stored_data = await self._get_data(self._BOT_DATA_KEY)
-        if self.bot_data == data and stored_data == data:
+        if self.bot_data is None:
+            self.bot_data = cast('BD', {})
+
+        chunked_data = await self._hgetall_by_chunks(self._BOT_DATA_KEY)
+        decoded_data = self._decode_and_cast_keys(chunked_data)
+        if self.bot_data == data and decoded_data == data:
             return
 
         self.bot_data = data
         if not self.on_flush:
-            await self._set_data(self._BOT_DATA_KEY, self.bot_data)
+            await self._hsetall_data(self._BOT_DATA_KEY, self.bot_data)
 
     async def update_callback_data(self: 'Self', data: 'CDCData') -> None:
         """Update the callback data (if changed) and, depending on on_flush attribute,
