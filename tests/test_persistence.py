@@ -52,8 +52,16 @@ class PersistenceTests(BaseTestCase):
 
     async def test_decoding_of_data(self):
         """Test decoding of the data."""
-        decoded_data = self.persistence._decode_data({
-            str(USER_ID): json.dumps(_DATA).encode('utf-8'),
+        decoded_data = self.persistence._decode_and_cast_keys(
+            {str(USER_ID): json.dumps(_DATA).encode('utf-8')},
+            int,
+        )
+        self.assertDictEqual(decoded_data, {USER_ID: _DATA})
+
+    async def test_decoding_of_data_keeps_key_type(self):
+        """Test decoding of the data without key type conversion."""
+        decoded_data = self.persistence._decode_and_cast_keys({
+            USER_ID: json.dumps(_DATA).encode('utf-8'),
         })
         self.assertDictEqual(decoded_data, {USER_ID: _DATA})
 
@@ -143,7 +151,7 @@ class PersistenceTests(BaseTestCase):
         await self.persistence._hsetall_data('test_key', data)
 
         encoded_data = await self.persistence._hgetall_by_chunks('test_key')
-        decoded_data = self.persistence._decode_data(encoded_data)
+        decoded_data = self.persistence._decode_and_cast_keys(encoded_data, int)
         self.assertEqual(decoded_data, data)
 
     @override_settings(REDIS_PERSISTENCE={})
