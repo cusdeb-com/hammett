@@ -146,16 +146,21 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         else:
             return redis_data
 
-    def _decode_data(self: 'Self', data: dict[str, bytes]) -> dict[int, 'CD | UD']:
-        """Return decoded data.
+    @staticmethod
+    def _decode_and_cast_keys(
+        data: 'dict[Any, bytes]',
+        key_type: type[str] | type[int] | None = None,
+    ) -> dict[int | str, 'BD | CD | UD']:
+        """Decode JSON values and optionally cast dictionary keys.
 
         Returns:
-            Decoded data.
+            Dictionary with decoded values and converted keys.
 
         """
         decoded_data = {}
         for key, val in data.items():
-            decoded_data[int(key)] = json.loads(val)
+            new_key = key_type(key) if key_type is not None else key
+            decoded_data[new_key] = json.loads(val)
 
         return decoded_data
 
@@ -295,7 +300,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """
         if self.chat_data is None:
             data = await self._hgetall_by_chunks(self._CHAT_DATA_KEY)
-            self.chat_data = cast('dict[int, CD]', self._decode_data(data))
+            self.chat_data = cast('dict[int, CD]', self._decode_and_cast_keys(data, int))
 
         return self.chat_data
 
@@ -325,7 +330,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """
         if self.user_data is None:
             data = await self._hgetall_by_chunks(self._USER_DATA_KEY)
-            self.user_data = cast('dict[int, UD]', self._decode_data(data))
+            self.user_data = cast('dict[int, UD]', self._decode_and_cast_keys(data, int))
 
         return self.user_data
 
