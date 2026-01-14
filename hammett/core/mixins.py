@@ -32,11 +32,11 @@ class I18NMixin(Screen):
             Current language code.
 
         """
-        if context.user_data:
+        if context.user_data is None:
+            language_code = settings.LANGUAGE_CODE
+        else:
             user_data = cast('dict[str, Any]', context.user_data)
             language_code = user_data.get('language_code', settings.LANGUAGE_CODE)
-        else:
-            language_code = settings.LANGUAGE_CODE
 
         return cast('str', language_code)
 
@@ -48,7 +48,7 @@ class I18NMixin(Screen):
         **_kwargs: 'Any',
     ) -> None:
         """Set the language code."""
-        if context.user_data:
+        if context.user_data is not None:
             user_data = cast('dict[str, Any]', context.user_data)
             user_data['language_code'] = language_code
 

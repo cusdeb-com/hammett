@@ -172,7 +172,7 @@ class BaseStateWidget(BaseWidget):
 
         """
         state_value = None
-        if context.user_data:
+        if context.user_data is not None:
             user_data = cast('dict[str, Any]', context.user_data)
             try:
                 current_state_key = await self._get_state_key(update)
@@ -195,7 +195,7 @@ class BaseStateWidget(BaseWidget):
         """Safely set the specified value to widget state dictionary
         stored in user_data.
         """
-        if not context.user_data:
+        if context.user_data is None:
             return
 
         with contextlib.suppress(FailedToGetStateKey):  # raised when invoked on /start

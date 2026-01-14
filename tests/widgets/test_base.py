@@ -77,8 +77,6 @@ class BaseStateWidgetTests(BaseTestCase):
 
     async def test_get_state_value_returns_none_when_failed_to_get_state_key(self):
         """Test get_state_value returns None if _get_state_key raises FailedToGetStateKey."""
-        self.context.user_data.update({1: 1})
-
         widget = TestStateWidget()
         with patch(
             'hammett.widgets.base.BaseStateWidget._get_state_key',
@@ -100,8 +98,6 @@ class BaseStateWidgetTests(BaseTestCase):
 
     async def test_set_and_get_state_value_roundtrip(self):
         """Test that set_state_value stores the value and get_state_value retrieves it."""
-        self.context.user_data.update({1: 1})
-
         widget = TestStateWidget()
         with patch(
             'hammett.widgets.base.get_callback_query',
@@ -161,8 +157,6 @@ class BaseChoiceWidgetTests(BaseTestCase):
             return_value=SimpleNamespace(message=self.message),
         ):
             widget = TestBaseChoiceWidget()
-            # Ensure user_data is truthy so set_state_value doesn't early-return
-            self.context.user_data.update({'seed': True})
             initialized_choices = (
                 (True, 'a', 'Option A'),
                 (False, 'b', 'Option B'),
@@ -186,8 +180,6 @@ class BaseChoiceWidgetTests(BaseTestCase):
     async def test_get_initialized_choices_returns_saved_state(self):
         """Test that get_initialized_choices returns the choices saved in state."""
         widget = TestBaseChoiceWidget()
-        # Ensure user_data is truthy and seed state via set_state_value
-        self.context.user_data.update({'seed': True})
         choices = (
             (False, 'a', 'Option A'),
             (True, 'b', 'Option B'),
