@@ -51,8 +51,9 @@ class I18NMixinTests(BaseTestCase):
         screen = TestI18NScreen()
         self.context.user_data.clear()
 
+        language_code = 'it'
         await screen.set_language_code(None, self.context, 'it')
-        self.assertNotIn('language_code', self.context.user_data)
+        self.assertEqual(self.context.user_data['language_code'], language_code)
 
     async def test_set_language_code_updates_user_data_when_present(self):
         """Test the case when set_language_code updates non-empty user_data."""

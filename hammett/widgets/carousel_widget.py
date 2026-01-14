@@ -257,12 +257,12 @@ class CarouselWidget(BaseStateWidget):
             None.
 
         """
-        if context.user_data:
+        if context.user_data is None:
+            current_image = _START_POSITION
+        else:
             current_image = (
                 await self.get_state_value(update, context, 'position') or _START_POSITION
             )
-        else:
-            current_image = _START_POSITION
 
         return await self._switch_handle_method(
             update,
