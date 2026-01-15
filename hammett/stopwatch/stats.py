@@ -1,6 +1,8 @@
 """The module contains classes that implement handler stats processing."""
 
 import json
+import platform
+from hashlib import md5
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -8,7 +10,18 @@ from hammett.core.handlers import get_handler_name
 
 if TYPE_CHECKING:
     from hammett.core.constants import HandlerStats
-    from hammett.types import Handler
+    from hammett.types import Handler, StopwatchStats
+
+
+def get_full_platform() -> tuple[str, str, str]:
+    """Return info about the current platform.
+
+    Returns
+    -------
+        Information about the current platform.
+
+    """
+    return platform.python_version(), platform.python_implementation(), platform.platform()
 
 
 class BaseStatsProcessor:
@@ -46,7 +59,7 @@ class PrintStatsProcessor(BaseStatsProcessor):
 class JsonStatsProcessor(BaseStatsProcessor):
     """The class collects the stats from all handlers and dumps them into a JSON file."""
 
-    _all_stats: 'dict[str, list[HandlerStats]]' = {}
+    _all_stats: 'StopwatchStats' = {}
 
     async def process(self) -> None:
         """Add handler stats to all stats dict."""
@@ -61,6 +74,10 @@ class JsonStatsProcessor(BaseStatsProcessor):
     @classmethod
     async def on_exit(cls) -> None:
         """Dump the accumulated stats into a file."""
+        platform_name = ';'.join(get_full_platform())
+        file_name = f'handler-stats-{md5(platform_name.encode()).hexdigest()}.json'  # noqa: S324
+        stats_to_dump = (platform_name, cls._all_stats)
+
         # we can't use async writing to a file because it won't execute in time
-        with Path('handler_stats.json').open('w', encoding='utf-8') as f:  # noqa: ASYNC230
-            json.dump(cls._all_stats, f, ensure_ascii=False, indent=4)
+        with Path(file_name).open('w', encoding='utf-8') as f:  # noqa: ASYNC230
+            json.dump(stats_to_dump, f, ensure_ascii=False, indent=4)
