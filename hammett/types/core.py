@@ -1,4 +1,4 @@
-"""The module contains the types used throughout the framework."""
+"""The module contains the types used throughout the `core` package."""
 
 from collections.abc import Awaitable, Callable, Coroutine, Iterable, Sequence
 from enum import Enum, auto

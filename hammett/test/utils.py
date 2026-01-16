@@ -41,7 +41,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.constants import FinalRenderConfig
-    from hammett.types import Func
+    from hammett.types.core import Func
 
 
 class TestContextDecorator:

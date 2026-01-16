@@ -37,7 +37,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.constants import FinalRenderConfig
-    from hammett.types import Keyboard, State
+    from hammett.types.core import Keyboard, State
     from hammett.widgets.types import Choice, Choices, InitializedChoices
 
 

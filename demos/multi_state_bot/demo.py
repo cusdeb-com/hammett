@@ -5,7 +5,7 @@ from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
 from hammett.core.handlers import register_typing_handler
 from hammett.core.mixins import RouteMixin, StartMixin
 from hammett.core.persistence import RedisPersistence
-from hammett.types import State
+from hammett.types.core import State
 
 ANONYMOUS_SCREEN_DESCRIPTION = (
     'Hello, <b>Anonymous</b>!\n'

@@ -7,7 +7,7 @@ from functools import wraps
 from typing import TYPE_CHECKING, Any, cast
 
 from hammett.core.exceptions import CommandNameIsEmpty
-from hammett.types import HandlerAlias, HandlerType, State
+from hammett.types.core import HandlerAlias, HandlerType, State
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from telegram.ext.filters import BaseFilter
 
-    from hammett.types import Handler, PayloadStorage
+    from hammett.types.core import Handler, PayloadStorage
 
 LOGGER = logging.getLogger(__name__)
 

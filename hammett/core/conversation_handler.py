@@ -37,7 +37,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import CCT
     from typing_extensions import Self
 
-    from hammett.types import CheckUpdateType
+    from hammett.types.core import CheckUpdateType
 
 DEFAULT_TRUE: DefaultValue[bool] = DefaultValue(value=True)
 
