@@ -30,7 +30,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.types import Document, Keyboard, State
+    from hammett.types.core import Document, Keyboard, State
 
 LOGGER = logging.getLogger(__name__)
 

@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, TypedDict, cast
 if TYPE_CHECKING:
     from os import PathLike
 
-    from hammett.types import Attachments, Document, Keyboard, State
+    from hammett.types.core import Attachments, Document, Keyboard, State
 
 # Use 'cast' instead of 'State(0)' to avoid a circular import
 DEFAULT_STATE = cast('State', '0')

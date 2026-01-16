@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.constants import LatestMessage
-    from hammett.types import Document, Keyboard
+    from hammett.types.core import Document, Keyboard
 
 
 class Renderer:

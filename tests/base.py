@@ -13,7 +13,7 @@ from hammett.core.mixins import RouteMixin, StartMixin
 from hammett.core.permission import Permission
 from hammett.core.renderer import Renderer
 from hammett.core.screen import Screen
-from hammett.types import State
+from hammett.types.core import State
 
 BOT_TEST_NAME = 'test'
 

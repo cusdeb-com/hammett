@@ -11,7 +11,7 @@ from hammett.core.exceptions import ImproperlyConfigured
 from hammett.core.persistence import RedisPersistence, _Encoder
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import override_settings
-from hammett.types import State
+from hammett.types.core import State
 from tests.base import CHAT_ID, USER_ID
 
 _BOT_NAME = 'test'

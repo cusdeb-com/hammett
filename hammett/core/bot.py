@@ -25,7 +25,7 @@ from hammett.core.exceptions import (
 from hammett.core.handlers import calc_checksum, log_unregistered_handler
 from hammett.core.permission import apply_permission_to
 from hammett.error_handler import default_error_handler
-from hammett.types import HandlerAlias, HandlerType, JobConfig
+from hammett.types.core import HandlerAlias, HandlerType, JobConfig
 from hammett.utils.log import configure_logging
 from hammett.utils.translation import HammettTranslation
 
@@ -39,7 +39,7 @@ if TYPE_CHECKING:
 
     from hammett.core.mixins import StartMixin
     from hammett.core.screen import Screen
-    from hammett.types import Handler, HandlerAlias, NativeStates, State, States
+    from hammett.types.core import Handler, HandlerAlias, NativeStates, State, States
 
 __all__ = ('Bot', )
 

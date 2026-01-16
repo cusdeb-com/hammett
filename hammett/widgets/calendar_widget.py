@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.types import Handler, Keyboard, State
+    from hammett.types.core import Handler, Keyboard, State
 
 
 class CalendarUnit(str, Enum):

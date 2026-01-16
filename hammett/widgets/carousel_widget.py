@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.constants import FinalRenderConfig
-    from hammett.types import Keyboard, State
+    from hammett.types.core import Keyboard, State
 
 _END_POSITION, _START_POSITION = -1, 0
 

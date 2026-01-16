@@ -22,11 +22,11 @@ from hammett.core.handlers import (
 )
 from hammett.core.screen import Screen
 from hammett.test.base import BaseTestCase
-from hammett.types import HandlerType
+from hammett.types.core import HandlerType
 from tests.base import BaseTestScreenWithHandler
 
 if TYPE_CHECKING:
-    from hammett.types import Handler
+    from hammett.types.core import Handler
 
 _TEST_BUTTON_NAME = 'Test button'
 

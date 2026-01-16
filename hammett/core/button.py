@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from hammett.core.hider import Hider, HidersChecker
-    from hammett.types import Handler, Source
+    from hammett.types.core import Handler, Source
 
 _HANDLER_SOURCES_TYPES = (
     SourceTypes.HANDLER_SOURCE_TYPE,
