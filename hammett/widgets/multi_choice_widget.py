@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from typing_extensions import Self
 
-    from hammett.widgets.types import Choice, Choices, InitializedChoices
+    from hammett.types.widgets import Choice, Choices, InitializedChoices
 
 
 class MultiChoiceWidget(BaseChoiceWidget):

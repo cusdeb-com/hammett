@@ -38,7 +38,7 @@ if TYPE_CHECKING:
 
     from hammett.core.constants import FinalRenderConfig
     from hammett.types.core import Keyboard, State
-    from hammett.widgets.types import Choice, Choices, InitializedChoices
+    from hammett.types.widgets import Choice, Choices, InitializedChoices
 
 
 class BaseWidget(Screen):
