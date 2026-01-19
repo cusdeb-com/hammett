@@ -47,6 +47,14 @@ services:
       - valkey
     restart: always
 
+  jinja2-bot:
+    build:
+      dockerfile: ./jinja2_bot/Dockerfile
+    env_file: ./jinja2_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   multi-state-bot:
     build:
       dockerfile: ./multi_state_bot/Dockerfile

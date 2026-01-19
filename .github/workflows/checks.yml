@@ -59,6 +59,7 @@ jobs:
           env HAMMETT_SETTINGS_MODULE=demos.clicker_bot.settings python3 demos/clicker_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.dynamic_keyboard_bot.settings python3 demos/dynamic_keyboard_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.hide_keyboard_bot.settings python3 demos/hide_keyboard_bot/tests.py
+          env HAMMETT_SETTINGS_MODULE=demos.jinja2_bot.settings python3 demos/jinja2_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.multi_state_bot.settings python3 demos/multi_state_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.paywall_bot.settings TOKEN=test-token python3 demos/paywall_bot/tests.py
           env HAMMETT_SETTINGS_MODULE=demos.quiz_bot.settings TOKEN=test-token python3 demos/quiz_bot/tests.py
