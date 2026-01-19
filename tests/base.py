@@ -70,7 +70,7 @@ class BaseTestScreenWithMockedRenderer(Screen):
     def __init__(self):
         """Initialize a screen object."""
         super().__init__()
-        self.renderer = TestRenderer(self.html_parse_mode)
+        self.renderer = TestRenderer(self.parse_mode)
 
 
 class TestDenyingPermission(BaseTestPermission):

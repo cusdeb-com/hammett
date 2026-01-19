@@ -33,9 +33,9 @@ class Renderer:
 
     _cached_covers: 'dict[str | PathLike[str], str]' = {}
 
-    def __init__(self: 'Self', html_parse_mode: 'ParseMode | None') -> None:
+    def __init__(self: 'Self', parse_mode: 'ParseMode | None') -> None:
         """Initialize a renderer object."""
-        self.html_parse_mode = DEFAULT_NONE if html_parse_mode is None else html_parse_mode.value
+        self.parse_mode = DEFAULT_NONE if parse_mode is None else parse_mode.value
 
     #
     # Private methods
@@ -66,7 +66,7 @@ class Renderer:
         if not document_kwargs.get('caption'):
             document_kwargs['caption'] = description
 
-        document_kwargs['parse_mode'] = self.html_parse_mode
+        document_kwargs['parse_mode'] = self.parse_mode
 
         return InputMediaDocument(media, **document_kwargs)
 
@@ -81,7 +81,7 @@ class Renderer:
             Object of the `InputMediaPhoto` type with passed attributes.
 
         """
-        return InputMediaPhoto(caption=caption, media=media, parse_mode=self.html_parse_mode)
+        return InputMediaPhoto(caption=caption, media=media, parse_mode=self.parse_mode)
 
     @staticmethod
     async def _create_markup_keyboard(
@@ -129,7 +129,7 @@ class Renderer:
 
             send = context.bot.edit_message_media
         else:
-            kwargs['parse_mode'] = self.html_parse_mode
+            kwargs['parse_mode'] = self.parse_mode
             kwargs['text'] = config.description
 
             send = context.bot.edit_message_text
@@ -190,7 +190,7 @@ class Renderer:
         """
         kwargs: Any = {
             'chat_id': config.chat_id,
-            'parse_mode': self.html_parse_mode,
+            'parse_mode': self.parse_mode,
         }
 
         cover = config.cover

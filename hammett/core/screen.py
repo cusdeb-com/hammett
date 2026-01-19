@@ -44,8 +44,8 @@ class Screen:
     cover: 'str | PathLike[str]' = ''
     description: str = ''
     document: 'Document | None' = None
-    html_parse_mode: 'ParseMode | None' = ParseMode.HTML
     hide_keyboard: bool = False
+    parse_mode: 'ParseMode | None' = ParseMode.HTML
     renderer_class = Renderer
 
     _initialized: bool = False
@@ -54,7 +54,7 @@ class Screen:
     def __init__(self: 'Self') -> None:
         """Initialize a screen object."""
         if not self._initialized:
-            self.renderer = Renderer(self.html_parse_mode)
+            self.renderer = Renderer(self.parse_mode)
             self._initialized = True
 
     def __new__(cls: type['Screen'], *args: 'Any', **kwargs: 'Any') -> 'Screen':
