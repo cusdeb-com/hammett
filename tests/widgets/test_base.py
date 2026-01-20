@@ -5,6 +5,8 @@
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from telegram.ext import CallbackContext
+
 from hammett.core.constants import EMPTY_KEYBOARD, FinalRenderConfig
 from hammett.core.exceptions import FailedToGetDataAttributeOfQuery, PayloadIsEmpty
 from hammett.test.base import BaseTestCase
@@ -107,8 +109,19 @@ class BaseStateWidgetTests(BaseTestCase):
             actual = await widget.get_state_value(self.update, self.context, 'foo')
             self.assertEqual(actual, 'bar')
 
-    async def test_set_return_none_when_user_data_is_empty(self):
-        """Test that set_state_value returns None when user_data is empty."""
+
+class BaseStateWidgetTestsWithoutUpdate(BaseTestCase):
+    """The class implements tests for BaseStateWidget internals without update."""
+
+    def get_context(self):
+        """Return the `CallbackContext` object for testing purposes."""
+        return CallbackContext(
+            self.get_native_application(),
+            chat_id=self.chat_id,
+        )
+
+    async def test_set_return_none_when_user_data_is_none(self):
+        """Test that set_state_value returns None when user_data is None."""
         widget = TestStateWidget()
         actual = await widget.set_state_value(self.update, self.context, 'foo', 'bar')
         self.assertIsNone(actual)
