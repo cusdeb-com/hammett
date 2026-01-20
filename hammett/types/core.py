@@ -2,7 +2,7 @@
 
 from collections.abc import Awaitable, Callable, Coroutine, Iterable, Sequence
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, NewType, Protocol, TypedDict, TypeVar
+from typing import TYPE_CHECKING, Any, NewType, Protocol, TypeAlias, TypedDict, TypeVar
 from uuid import UUID
 
 import telegram
@@ -40,7 +40,7 @@ States = dict[State, Iterable[type[Screen]]]
 
 Func = TypeVar('Func', bound=Callable[..., Any])
 
-Attachments = (
+Attachments: TypeAlias = (
     Sequence[telegram.InputMediaAudio] | Sequence[telegram.InputMediaDocument] |
     Sequence[telegram.InputMediaPhoto] | Sequence[telegram.InputMediaVideo]
 )
