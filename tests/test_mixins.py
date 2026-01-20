@@ -2,6 +2,8 @@
 
 from unittest.mock import AsyncMock, MagicMock
 
+from telegram.ext import CallbackContext
+
 from hammett.core.constants import DEFAULT_STATE, RenderConfig
 from hammett.core.exceptions import ImproperlyConfigured, ScreenRouteIsEmpty
 from hammett.core.mixins import I18NMixin, RouteMixin
@@ -37,34 +39,41 @@ class I18NMixinTests(BaseTestCase):
         language = await screen.get_language_code(None, self.context)
         self.assertEqual(language, 'ru')
 
-    @override_settings(LANGUAGE_CODE='de')
-    async def test_language_code_getting_when_user_data_is_empty(self):
-        """Test the case when a language code is taken from settings if user_data is empty."""
-        screen = TestI18NScreen()
-        self.context.user_data.clear()
-
-        language = await screen.get_language_code(None, self.context)
-        self.assertEqual(language, 'de')
-
-    async def test_set_language_code_is_noop_when_user_data_is_empty(self):
-        """Test the case when set_language_code does nothing for empty user_data."""
-        screen = TestI18NScreen()
-        self.context.user_data.clear()
-
-        language_code = 'it'
-        await screen.set_language_code(None, self.context, 'it')
-        self.assertEqual(self.context.user_data['language_code'], language_code)
-
     async def test_set_language_code_updates_user_data_when_present(self):
         """Test the case when set_language_code updates non-empty user_data."""
         screen = TestI18NScreen()
         self.context.user_data.clear()
-        self.context.user_data.update({'dummy': True})
 
         language_code = 'es'
         await screen.set_language_code(None, self.context, language_code)
         self.assertIn('language_code', self.context.user_data)
         self.assertEqual(self.context.user_data['language_code'], language_code)
+
+
+class I18NMixinTestsWithoutUpdate(BaseTestCase):
+    """The class implements the tests for the I18NMixin without update."""
+
+    def get_context(self):
+        """Return the `CallbackContext` object for testing purposes."""
+        return CallbackContext(
+            self.get_native_application(),
+            chat_id=self.chat_id,
+        )
+
+    @override_settings(LANGUAGE_CODE='de')
+    async def test_language_code_getting_when_user_data_is_empty(self):
+        """Test the case when a language code is taken from settings if user_data is empty."""
+        screen = TestI18NScreen()
+
+        language = await screen.get_language_code(None, self.context)
+        self.assertEqual(language, 'de')
+
+    async def test_set_language_code_is_noop_when_user_data_is_none(self):
+        """Test the case when set_language_code does when user_data is None."""
+        screen = TestI18NScreen()
+
+        await screen.set_language_code(None, self.context, 'it')
+        self.assertIsNone(self.context.user_data)
 
 
 class RouteMixinTests(BaseTestCase):
