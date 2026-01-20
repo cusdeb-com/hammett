@@ -68,4 +68,4 @@ jobs:
       - name: Run Hammett tests with Python ${{ matrix.python-version }}
         run: |
           env HAMMETT_SETTINGS_MODULE=tests.settings coverage run -m unittest discover -s tests/
-          coverage report
+          coverage report --fail-under=100
