@@ -38,8 +38,18 @@ from typing import TYPE_CHECKING
 from unittest.util import _common_shorten_repr
 
 from asgiref.sync import async_to_sync
-from telegram import Bot, Chat, Message, Update, User
-from telegram._utils.defaultvalue import DEFAULT_NONE
+from telegram import (
+    Bot,
+    Chat,
+    InputFile,
+    InputMedia,
+    InputMediaDocument,
+    InputMediaPhoto,
+    Message,
+    Update,
+    User,
+)
+from telegram._utils.defaultvalue import DEFAULT_NONE, DefaultValue
 from telegram.constants import ChatType
 from telegram.ext import Application, ApplicationBuilder, CallbackContext
 
@@ -235,3 +245,103 @@ class BaseTestCase(unittest.TestCase):
             standard_msg = self._truncateMessage(standard_msg, diff)  # type: ignore[attr-defined]
 
             self.fail(self._formatMessage(msg, standard_msg))
+
+
+class BaseTestInputMedia(InputMedia):
+    """The class represents a base media object for testing purposes."""
+
+    __hash__ = None  # type: ignore[assignment]
+
+    def __eq__(self: 'Self', other: object) -> bool:
+        """Compare two InputMedia objects.
+
+        Returns:
+            Result of comparing two InputMedia objects.
+
+        """
+        if isinstance(other, InputMedia):
+            return (
+                self._check_media(other) and
+                self._check_parse_mode(other) and
+                self.caption == other.caption and
+                self.caption_entities == other.caption_entities
+            )
+
+        return False
+
+    def _check_media(self: 'Self', other: 'InputMedia') -> bool:
+        """Compare the media fields of two InputMedia objects.
+
+        Returns:
+            Result of comparing the media values of the two InputMedia objects.
+
+        """
+        if isinstance(self.media, str) and isinstance(other.media, str):
+            return self.media == other.media
+
+        if isinstance(self.media, InputFile) and isinstance(other.media, InputFile):
+            return (
+                self.media.filename == other.media.filename and
+                self.media.input_file_content == other.media.input_file_content and
+                self.media.mimetype == other.media.mimetype
+            )
+
+        return False
+
+    def _check_parse_mode(self: 'Self', other: 'InputMedia') -> bool:
+        """Compare the parse_mode fields of two InputMedia objects.
+
+        Returns:
+            Result of comparing the parse_mode values of the two InputMedia objects.
+
+        """
+        if isinstance(self.parse_mode, str) and isinstance(other.parse_mode, str):
+            return self.media == other.media
+
+        if isinstance(self.parse_mode, DefaultValue) and isinstance(other.parse_mode, DefaultValue):
+            return self.parse_mode.value == other.parse_mode.value
+
+        return False
+
+
+class TestInputMediaDocument(BaseTestInputMedia, InputMediaDocument):
+    """The class represents a document for testing purposes."""
+
+    __hash__ = None  # type: ignore[assignment]
+
+    def __eq__(self: 'Self', other: object) -> bool:
+        """Compare two InputMediaDocument objects.
+
+        Returns:
+            Result of comparing two InputMediaDocument objects.
+
+        """
+        if isinstance(other, InputMediaDocument):
+            return (
+                super().__eq__(other) and
+                self.disable_content_type_detection == other.disable_content_type_detection
+            )
+
+        return False
+
+
+class TestInputMediaPhoto(BaseTestInputMedia, InputMediaPhoto):
+    """The class represents a photo for testing purposes."""
+
+    __hash__ = None  # type: ignore[assignment]
+
+    def __eq__(self: 'Self', other: object) -> bool:
+        """Compare two InputMediaPhoto objects.
+
+        Returns:
+            Result of comparing two InputMediaPhoto objects.
+
+        """
+        if isinstance(other, InputMediaPhoto):
+            return (
+                super().__eq__(other) and
+                self.has_spoiler == other.has_spoiler and
+                self.show_caption_above_media == other.show_caption_above_media
+            )
+
+        return False
