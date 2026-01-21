@@ -56,7 +56,7 @@ class TestBot(Bot):
 
     async def _do_post(
         self: 'Self',
-        endpoint: str,  # noqa: ARG002
+        endpoint: str,
         data: 'JSONDict',  # noqa: ARG002
         *,
         read_timeout: 'ODVInput[float]' = DEFAULT_NONE,  # noqa: ARG002
@@ -70,6 +70,13 @@ class TestBot(Bot):
             Mock of sending request.
 
         """
+        if endpoint == 'sendMediaGroup':
+            return [{
+                'chat': {'id': 1, 'type': ChatType.PRIVATE},
+                'date': datetime.now(timezone.utc).timestamp(),
+                'message_id': 1,
+            }]
+
         return {
             'message_id': 1,
             'from_user': 1,
