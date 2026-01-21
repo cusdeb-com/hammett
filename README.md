@@ -16,6 +16,7 @@ Here's the **Getting Started** guide, available in both 🇬🇧 [English](https
 ## Live Demos
 
 * [admin-panel-bot](https://t.me/HammettAdminPanelBot) showcases how to control the visibility of buttons based on the user role (see the demo's [source](demos/admin_panel_bot)).
+* [attachments-bot](https://t.me/HammettAttachmentsBot) explains how to send messages with several files (see the demo's [source](demos/attachments_bot)).
 * [carousel-bot](https://t.me/HammettCarouselBot) demonstrates how to work with the carousel widget (see the demo's [source](demos/carousel_bot)).
 * [clicker-bot](https://t.me/HammettClickerBot) illustrates how to attach a handler to a button (see the demo's [source](demos/clicker_bot)).
 * [dynamic-keyboard-bot](https://t.me/HammettDynamicKeyboardBot) shows how to create and work with a dynamic keyboard (see the demo's [source](demos/dynamic_keyboard_bot)).
