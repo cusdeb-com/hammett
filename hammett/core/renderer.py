@@ -6,12 +6,14 @@ from typing import TYPE_CHECKING
 from uuid import uuid4
 
 import aiofiles
-from telegram import InlineKeyboardMarkup, InputMediaDocument, InputMediaPhoto, PhotoSize
+from telegram import InlineKeyboardMarkup, InputMediaDocument, InputMediaPhoto, PhotoSize, error
 from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.error import BadRequest
 
 from hammett.core.constants import EMPTY_KEYBOARD, FinalRenderConfig
-from hammett.core.exceptions import ScreenDocumentDataIsEmpty
+from hammett.core.exceptions import ScreenDocumentDataIsEmpty, ScreenRenderNotSupported
+
+_NO_MESSAGE_TO_EDIT = 'There is no text in the message to edit'
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -272,6 +274,11 @@ class Renderer:
         Returns:
             Rendered object of `Message` type.
 
+        Raises:
+            BadRequest: If Telegram cannot process the request.
+            ScreenRenderNotSupported: If the target screen cannot be rendered over
+            the current one due to incompatible layout.
+
         """
         from hammett.conf import settings
 
@@ -295,7 +302,17 @@ class Renderer:
 
             method_kwargs['read_timeout'] = settings.SEND_METHODS_READ_TIMEOUT
 
-            send_object = await send(**method_kwargs)
+            try:
+                send_object = await send(**method_kwargs)
+            except error.BadRequest as exc:
+                if exc.message == _NO_MESSAGE_TO_EDIT:
+                    msg = (
+                        'Unsupported screen transition due to incompatible layout. '
+                        'Use covers consistently or disable them entirely.'
+                    )
+                    raise ScreenRenderNotSupported(msg) from exc
+
+                raise
 
             message = send_object
             if (
