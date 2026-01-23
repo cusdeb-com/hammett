@@ -8,11 +8,12 @@ from unittest.mock import AsyncMock, patch
 
 from telegram import InlineKeyboardMarkup, InputMediaPhoto, PhotoSize
 from telegram.constants import ParseMode
+from telegram.error import BadRequest
 
 from hammett.core import Button
 from hammett.core.constants import FinalRenderConfig, SourceTypes
-from hammett.core.exceptions import ScreenDocumentDataIsEmpty
-from hammett.core.renderer import Renderer
+from hammett.core.exceptions import ScreenDocumentDataIsEmpty, ScreenRenderNotSupported
+from hammett.core.renderer import _NO_MESSAGE_TO_EDIT, Renderer
 from hammett.test.base import BaseTestCase
 
 
@@ -277,6 +278,46 @@ class RendererTests(BaseTestCase):
             await renderer.render(None, self.context, config)
 
             self.assertEqual(Renderer._cached_covers.get(tmp.name), 'last')
+
+    async def test_render_raises_screen_render_not_supported_when_no_message_to_edit(self):
+        """Test the case when BadRequest with 'There is no text in the message to edit'
+        message is raised and ScreenRenderNotSupported is raised instead.
+        """
+        renderer = Renderer(ParseMode.HTML)
+        fake_send = AsyncMock(side_effect=BadRequest(_NO_MESSAGE_TO_EDIT))
+
+        with (
+            patch.object(
+                renderer,
+                '_get_edit_render_method',
+                new=AsyncMock(return_value=(fake_send, {'chat_id': self.chat_id}))),
+            self.assertRaises(ScreenRenderNotSupported) as exc_context,
+        ):
+            await renderer.render(None, self.context, FinalRenderConfig(as_new_message=False))
+
+        self.assertEqual(
+            exc_context.exception.args[0],
+            'Unsupported screen transition due to incompatible layout. '
+            'Use covers consistently or disable them entirely.',
+        )
+        self.assertIsInstance(exc_context.exception.__cause__, BadRequest)
+
+    async def test_render_re_raises_bad_request_when_message_differs_from_no_message_to_edit(self):
+        """Test the case when BadRequest with a different message is re-raised."""
+        renderer = Renderer(ParseMode.HTML)
+        error_message = 'Bad request: message is invalid'
+        fake_send = AsyncMock(side_effect=BadRequest(error_message))
+
+        with (
+            patch.object(
+                renderer,
+                '_get_edit_render_method',
+                new=AsyncMock(return_value=(fake_send, {'chat_id': self.chat_id}))),
+            self.assertRaises(BadRequest) as exc_context,
+        ):
+            await renderer.render(None, self.context, FinalRenderConfig(as_new_message=False))
+
+        self.assertEqual(exc_context.exception.message, error_message)
 
     async def test_render_uses_new_message_render_method_when_as_new_message_true(self):
         """Test that render delegates to _get_new_message_render_method
