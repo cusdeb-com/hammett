@@ -101,6 +101,7 @@ class ConversationHandler(NativeConversationHandler['Any']):
                         update, application, handler_check_result, context,
                     ),
                     update=update,
+                    name=f'ConversationHandler:{update.update_id}:handle_update:non_blocking_cb',
                 )
         except ApplicationHandlerStop as exception:
             new_state = exception.state
@@ -126,6 +127,7 @@ class ConversationHandler(NativeConversationHandler['Any']):
                             new_state, application, update, context, conversation_key,
                         ),
                         update=update,
+                        name=f'ConversationHandler:{update.update_id}:handle_update:timeout_job',
                     )
                 else:
                     self._schedule_job(new_state, application, update, context, conversation_key)
