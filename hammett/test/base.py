@@ -111,15 +111,13 @@ class BaseTestCase(unittest.TestCase):
     update_id = 1
     user_id = 1
 
-    def __init__(self: 'Self', method_name: str) -> None:
+    def setUp(self: 'Self') -> None:
         """Initialize a base test case object."""
         self.chat = self.get_chat()
         self.context = self.get_context()
         self.user = self.get_user()
         self.message = self.get_message()
         self.update = self.get_update()
-
-        super().__init__(method_name)
 
     def __call__(self: 'Self', result: 'unittest.result.TestResult | None' = None) -> None:
         """Override __call__ to wrap asynchronous tests."""

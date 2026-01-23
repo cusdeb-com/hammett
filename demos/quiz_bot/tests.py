@@ -23,6 +23,8 @@ class HammettQuizBotTests(BaseTestCase):
 
     def setUp(self):
         """Initialize questions from the file for testing."""
+        super().setUp()
+
         gettext.textdomain(settings.DOMAIN)
         gettext.bindtextdomain(settings.DOMAIN, settings.LOCALE_PATHS)
 

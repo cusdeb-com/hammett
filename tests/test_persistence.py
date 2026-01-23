@@ -30,6 +30,8 @@ class PersistenceTests(BaseTestCase):
         """Initialize a persistence object and replace its Redis instance
         with a fake one.
         """
+        super().setUp()
+
         self.persistence = RedisPersistence()
         self.persistence.redis_cli = FakeAsyncRedis()
 

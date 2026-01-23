@@ -46,6 +46,8 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
     def setUp(self):
         """Reset the `PAID_USERS` attribute."""
+        super().setUp()
+
         settings.PAID_USERS = []
 
     @catch_render_config()
