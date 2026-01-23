@@ -44,6 +44,7 @@ class Screen:
     cover: 'str | PathLike[str]' = ''
     description: str = ''
     document: 'Document | None' = None
+    media = None
     hide_keyboard: bool = False
     parse_mode: 'ParseMode | None' = ParseMode.HTML
     renderer_class = Renderer
@@ -92,7 +93,7 @@ class Screen:
         final_config.cache_covers = (
             final_config.cache_covers or await self.get_cache_covers(update, context)
         )
-        final_config.cover = final_config.cover or await self.get_cover(update, context)
+        final_config.media = final_config.media or await self.get_media(update, context)
         final_config.chat_id = final_config.chat_id or context._chat_id  # noqa: SLF001
         final_config.hide_keyboard = (
             final_config.hide_keyboard or await self.get_hide_keyboard(update, context)
@@ -101,13 +102,13 @@ class Screen:
         final_config.description = (
             final_config.description or await self.get_description(update, context)
         )
-        final_config.document = final_config.document or await self.get_document(update, context)
-        if (
-            not final_config.description and not final_config.document and
-            not final_config.attachments and not final_config.cover
-        ):
-            msg = f'The description of {self.__class__.__name__} is empty'
-            raise ScreenDescriptionIsEmpty(msg)
+        # final_config.document = final_config.document or await self.get_document(update, context)
+        # if (
+        #     not final_config.description and not final_config.document and
+        #     not final_config.attachments and not final_config.cover
+        # ):
+        #     msg = f'The description of {self.__class__.__name__} is empty'
+        #     raise ScreenDescriptionIsEmpty(msg)
 
         if not config or config.keyboard is None:
             final_config.keyboard = (
@@ -264,6 +265,19 @@ class Screen:
 
         """
         return self.hide_keyboard
+
+    async def get_media(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> bool:
+        """Return the `hide_keyboard` attribute of the screen.
+
+        Returns:
+            `Hide_keyboard` attribute of the screen.
+
+        """
+        return self.media
 
     @staticmethod
     async def get_payload(

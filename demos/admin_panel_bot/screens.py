@@ -2,7 +2,7 @@
 
 from hammett.conf import settings
 from hammett.core import Button, Screen
-from hammett.core.constants import SourceTypes
+from hammett.core.constants import SourceTypes, MediaConfig, MediaTypes
 from hammett.core.handlers import register_button_handler
 from hammett.core.hider import ONLY_FOR_ADMIN, Hider
 from hammett.core.mixins import StartMixin
@@ -46,7 +46,6 @@ class AdminPanelScreen(Screen):
                     hiders=Hider(ONLY_FOR_ADMIN))],
         ]
 
-
 class MainMenuScreen(StartMixin, Screen):
     """The class implements MainMenuScreen."""
 
@@ -76,6 +75,16 @@ class MainMenuScreen(StartMixin, Screen):
         settings.ADMIN_GROUP.append(user.id)
 
         return await super().start(update, context)
+
+    async def get_media(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'MediaConfig':
+        return MediaConfig(
+            media='https://bigpicture.ru/wp-content/uploads/2019/07/f80c17c20888385424184ebf736be7f1.jpg',
+            type=MediaTypes.PHOTO,
+        )
 
 
 class NotAdminConfirmationScreen(Screen):

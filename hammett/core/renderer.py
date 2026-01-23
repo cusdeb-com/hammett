@@ -10,7 +10,7 @@ from telegram import InlineKeyboardMarkup, InputMediaDocument, InputMediaPhoto, 
 from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.error import BadRequest
 
-from hammett.core.constants import EMPTY_KEYBOARD, FinalRenderConfig
+from hammett.core.constants import EMPTY_KEYBOARD, FinalRenderConfig, MediaTypes, MediaConfig
 from hammett.core.exceptions import ScreenDocumentDataIsEmpty
 
 if TYPE_CHECKING:
@@ -193,26 +193,31 @@ class Renderer:
             'parse_mode': self.parse_mode,
         }
 
-        cover = config.cover
         send: Callable[..., Awaitable[Any]]
-        if config.document:
-            input_media_document = self._create_input_media_document(
-                config.document,
-                config.description,
+        if config.media is None:
+            kwargs['text'] = config.description
+
+            send = context.bot.send_message
+        elif config.media.type == MediaTypes.DOCUMENT:
+            input_media_document = InputMediaDocument(
+                media=config.media.media,
+                caption=config.description,
+                parse_mode=self.parse_mode,
+                *({} if config.media.kwargs is None else config.media.kwargs)
             )
             kwargs['caption'] = input_media_document.caption
             kwargs['document'] = input_media_document.media
 
             send = context.bot.send_document
-        elif cover:
-            if self._is_url(cover) and config.cache_covers:
-                cover = f'{cover}?{uuid4()}'
+        elif config.media.type == MediaTypes.PHOTO:
+            if self._is_url(config.media.media) and config.cache_covers:
+                cover = f'{config.media.media}?{uuid4()}'
             elif config.cache_covers:
-                cover_file_id = self._cached_covers.get(cover)
-                cover = cover_file_id or cover
+                cover_file_id = self._cached_covers.get(config.media.media)
+                cover = cover_file_id or config.media.media
 
             kwargs['caption'] = config.description
-            kwargs['photo'] = cover
+            kwargs['photo'] = config.media.media
 
             send = context.bot.send_photo
         elif config.attachments:
@@ -299,12 +304,12 @@ class Renderer:
 
             message = send_object
             if (
-                config.cover
+                config.media is not None and config.media.type == MediaTypes.PHOTO
                 and config.cache_covers
                 and getattr(send_object, 'photo', None)
-                and not self._is_url(config.cover)
+                and not self._is_url(config.media.media)
             ):
                 photo_size_object = send_object.photo[-1]
-                self._cached_covers[config.cover] = photo_size_object.file_id
+                self._cached_covers[config.media.media] = photo_size_object.file_id
 
         return message

@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING, TypedDict, cast
 if TYPE_CHECKING:
     from os import PathLike
 
+    from typing import Any
+
     from hammett.types.core import Attachments, Document, Keyboard, State
 
 # Use 'cast' instead of 'State(0)' to avoid a circular import
@@ -37,12 +39,26 @@ class RenderConfig:
     message_id: int = 0
     as_new_message: bool = False
     cache_covers: bool = False
-    cover: 'str | PathLike[str]' = ''
+    media: 'MediaConfig | None' = None
     description: str = ''
     attachments: 'Attachments | None' = None
-    document: 'Document | None' = None
     keyboard: 'Keyboard | None' = None
     hide_keyboard: bool = False
+
+class MediaTypes(str, Enum):
+    """"""
+
+    PHOTO = auto()
+    DOCUMENT = auto()
+
+
+@dataclass
+class MediaConfig:
+    """"""
+
+    media: str | None = None
+    type: 'MediaTypes' = MediaTypes.PHOTO
+    kwargs: 'dict[Any, Any] | None' = None
 
 
 @dataclass
