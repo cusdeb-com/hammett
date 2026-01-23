@@ -49,6 +49,12 @@ class ScreenDocumentDataIsEmpty(Exception):
     """
 
 
+class ScreenRenderNotSupported(Exception):
+    """Raised when attempting to re-render screen with a cover
+    when the next one doesn't have it.
+    """
+
+
 class ScreenRouteIsEmpty(Exception):
     """Raised when the route of the route mixin is found
     to be empty.
