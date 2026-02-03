@@ -37,6 +37,7 @@ def _autodiscover_screens_in_module(
         and obj is not Screen
         and obj not in exclude_screens
         and not obj.__module__.startswith('hammett')
+        and not obj.__dict__.get('abstract')
     }
 
 

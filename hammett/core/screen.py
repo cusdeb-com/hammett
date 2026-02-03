@@ -40,6 +40,7 @@ LOGGER = logging.getLogger(__name__)
 class Screen:
     """The class implements the interface of a screen."""
 
+    abstract: bool = False
     cache_covers: bool = False
     cover: 'str | PathLike[str]' = ''
     description: str = ''
