@@ -57,7 +57,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
     def __init__(
         self: 'Self',
         store_data: 'PersistenceInput | None' = None,
-        on_flush: bool = False,  # noqa: FBT001,FBT002
+        *,
+        on_flush: bool = False,
         update_interval: float = 60,
         context_types: 'ContextTypes[Any, UD, CD, BD] | None' = None,
     ) -> None:
@@ -204,7 +205,8 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         self: 'Self',
         key: str,
         data: object | str,
-        ready_json: bool = False,  # noqa: FBT001, FBT002
+        *,
+        ready_json: bool = False,
     ) -> None:
         """Store the data to the database using the specified key."""
         data = data if isinstance(data, str) and ready_json else json.dumps(data, cls=_Encoder)
