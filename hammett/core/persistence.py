@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
 import redis.asyncio as redis
-from redis.exceptions import ConnectionError
+from redis.exceptions import ConnectionError as RedisConnectionError
 from telegram.ext import BasePersistence, ContextTypes
 from telegram.ext._utils.types import BD, CD, UD, ConversationDict
 
@@ -140,7 +140,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             redis_data = await self.redis_cli.get(key)
             if redis_data:
                 return json.loads(redis_data)
-        except (ConnectionError, json.JSONDecodeError):
+        except (RedisConnectionError, json.JSONDecodeError):
             LOGGER.exception('Failed to get the data from the database by the key %s', key)
             return None
         else:
