@@ -6,6 +6,7 @@ import os
 import unittest
 
 from tests.test_bot import BotTests
+from tests.test_bot_stopwatch import BotStopWatchTests
 from tests.test_buttons import ButtonsTests
 from tests.test_conf import ConfigurationTests
 from tests.test_error_handler import ErrorHandlerTests
@@ -23,7 +24,10 @@ from tests.test_persistence import PersistenceTests
 from tests.test_renderer import RendererTests
 from tests.test_screens import ScreenTests, ScreenTestsWithoutUpdate
 from tests.test_start_marker import StartMarkerTests
+from tests.test_stopwatch_collector import StopWatchCollectorTests
+from tests.test_stopwatch_event_loop import StopWatchEventLoopPolicyTests, StopWatchSelectorTests
 from tests.test_template import TemplateTests
+from tests.utils.test_handler import UtilsHandlerTests
 from tests.utils.test_misc import UtilsMiscTests
 from tests.utils.test_module_loading import UtilsModuleLoadingTests
 from tests.utils.test_render_config import (
