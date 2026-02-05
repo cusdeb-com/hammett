@@ -10,32 +10,33 @@ from hammett.core.exceptions import UnknownSourceType
 from hammett.test.base import BaseTestCase
 from tests.base import TestRouteScreen, TestScreen
 
+_BUTTON_KWARGS = {
+    'caption': 'Test',
+    'source': TestScreen,
+    'source_type': SourceTypes.MOVE_SOURCE_TYPE,
+}
+
 
 class ButtonsTests(BaseTestCase):
     """The class implements the tests for buttons."""
 
-    kwargs = {
-        'caption': 'Test',
-        'source': TestScreen,
-        'source_type': SourceTypes.MOVE_SOURCE_TYPE,
-    }
     url = 'https://example.org/app'
 
     def test_button_equality(self):
         """Test comparing two Buttons with each other."""
-        button_one = Button(**self.kwargs)
-        button_two = Button(**self.kwargs)
+        button_one = Button(**_BUTTON_KWARGS)
+        button_two = Button(**_BUTTON_KWARGS)
 
         assert button_one == button_two
 
     def test_button_equality_with_non_button(self):
         """Test comparing a Button with a non-Button object."""
-        button = Button(**self.kwargs)
+        button = Button(**_BUTTON_KWARGS)
         assert button != object()
 
     def test_button_hash(self):
         """Test hashing a Button instance."""
-        button = Button(**self.kwargs)
+        button = Button(**_BUTTON_KWARGS)
         assert isinstance(hash(button), int)
 
     async def test_create_handler_button(self):
@@ -90,7 +91,7 @@ class ButtonsTests(BaseTestCase):
 
     async def test_create_uses_source_shortcut_if_it_already_set(self):
         """Test that the shortcut handler's checksum is used if it's already set."""
-        button = Button(**self.kwargs)
+        button = Button(**_BUTTON_KWARGS)
         handler_checksum = handlers.calc_checksum(getattr(button, 'source_shortcut', None))
         inline_button, _ = await button.create(self.update, self.context)
 
