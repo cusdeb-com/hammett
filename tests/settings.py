@@ -4,4 +4,4 @@ IS_ADMIN = False
 
 IS_MODERATOR = False
 
-TOKEN = 'secret-token'  # noqa: S105
+TOKEN = 'secret-token'
