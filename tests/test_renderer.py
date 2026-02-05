@@ -40,12 +40,12 @@ class RendererTests(BaseTestCase):
             Button('Third', handler, source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
         ]
         markup = await renderer._create_markup_keyboard(keyboard, self.update, self.context)
-        self.assertIsInstance(markup, InlineKeyboardMarkup)
+        assert isinstance(markup, InlineKeyboardMarkup)
 
         inline_keyboard = markup.inline_keyboard
-        self.assertEqual(len(inline_keyboard), 2)
-        self.assertEqual([b.text for b in inline_keyboard[0]], ['First'])
-        self.assertEqual([b.text for b in inline_keyboard[1]], ['Second', 'Third'])
+        assert len(inline_keyboard) == 2
+        assert [b.text for b in inline_keyboard[0]] == ['First']
+        assert [b.text for b in inline_keyboard[1]] == ['Second', 'Third']
 
     async def test_get_edit_render_method_media_kwargs_for_document(self):
         """Test the case when caption and parse mode are set for a document."""
@@ -59,9 +59,9 @@ class RendererTests(BaseTestCase):
             description=caption,
         )
 
-        self.assertEqual(media_kwargs['media'].caption, caption)
-        self.assertEqual(media_kwargs['media'].parse_mode, ParseMode.HTML)
-        self.assertEqual(media_kwargs['media'].media.input_file_content, media)
+        assert media_kwargs['media'].caption == caption
+        assert media_kwargs['media'].parse_mode == ParseMode.HTML
+        assert media_kwargs['media'].media.input_file_content == media
 
     async def test_get_edit_render_method_media_kwargs_for_photo_size(self):
         """Test the case when caption and parse mode are set for a PhotoSize."""
@@ -73,9 +73,9 @@ class RendererTests(BaseTestCase):
             description=caption,
         )
 
-        self.assertEqual(media_kwargs['media'].caption, caption)
-        self.assertEqual(media_kwargs['media'].parse_mode, ParseMode.HTML)
-        self.assertEqual(media_kwargs['media'].media, media)
+        assert media_kwargs['media'].caption == caption
+        assert media_kwargs['media'].parse_mode == ParseMode.HTML
+        assert media_kwargs['media'].media == media
 
     async def test_get_edit_render_method_media_kwargs_with_file(self):
         """Test the case when caption and parse mode are set for a media in cache."""
@@ -92,9 +92,9 @@ class RendererTests(BaseTestCase):
                 description=caption,
             )
 
-            self.assertEqual(media_kwargs['media'].caption, caption)
-            self.assertEqual(media_kwargs['media'].parse_mode, ParseMode.HTML)
-            self.assertEqual(media_kwargs['media'].media.input_file_content, content.encode())
+            assert media_kwargs['media'].caption == caption
+            assert media_kwargs['media'].parse_mode == ParseMode.HTML
+            assert media_kwargs['media'].media.input_file_content == content.encode()
 
     async def test_get_edit_render_method_media_kwargs_with_media_in_cache(self):
         """Test the case when caption and parse mode are set for a media in cache."""
@@ -106,9 +106,9 @@ class RendererTests(BaseTestCase):
             description=caption,
         )
 
-        self.assertEqual(media_kwargs['media'].caption, caption)
-        self.assertEqual(media_kwargs['media'].parse_mode, ParseMode.HTML)
-        self.assertEqual(media_kwargs['media'].media, 'test_file')
+        assert media_kwargs['media'].caption == caption
+        assert media_kwargs['media'].parse_mode == ParseMode.HTML
+        assert media_kwargs['media'].media == 'test_file'
 
     async def test_get_edit_render_method_returns_media_sender_for_cover_url(self):
         """Test the case when edit mode uses media sender for a cover URL."""
@@ -121,11 +121,11 @@ class RendererTests(BaseTestCase):
         )
         send, kwargs = await renderer._get_edit_render_method(self.context, config)
 
-        self.assertEqual(send, self.context.bot.edit_message_media)
-        self.assertIn('media', kwargs)
-        self.assertIsInstance(kwargs['media'], InputMediaPhoto)
-        self.assertEqual(kwargs['media'].caption, caption)
-        self.assertIn(url, kwargs['media'].media)
+        assert send == self.context.bot.edit_message_media
+        assert 'media' in kwargs
+        assert isinstance(kwargs['media'], InputMediaPhoto)
+        assert kwargs['media'].caption == caption
+        assert url in kwargs['media'].media
 
     async def test_get_edit_render_method_returns_text_sender_for_text_only(self):
         """Test the case when edit mode uses text sender for description only."""
@@ -138,9 +138,9 @@ class RendererTests(BaseTestCase):
 
         send, kwargs = await renderer._get_edit_render_method(self.context, config)
 
-        self.assertEqual(send, self.context.bot.edit_message_text)
-        self.assertEqual(kwargs['text'], caption)
-        self.assertIn('parse_mode', kwargs)
+        assert send == self.context.bot.edit_message_text
+        assert kwargs['text'] == caption
+        assert 'parse_mode' in kwargs
 
     async def test_get_new_message_render_method_for_attachments(self):
         """Test the case when attachments are set."""
@@ -156,10 +156,10 @@ class RendererTests(BaseTestCase):
         config = FinalRenderConfig(attachments=[document_one, document_two])
         send, media_kwargs = await renderer._get_new_message_render_method(self.context, config)
 
-        self.assertEqual(send, self.context.bot.send_media_group)
-        self.assertEqual(media_kwargs['parse_mode'], ParseMode.HTML)
-        self.assertEqual(media_kwargs['media'][0], document_one)
-        self.assertEqual(media_kwargs['media'][1], document_two)
+        assert send == self.context.bot.send_media_group
+        assert media_kwargs['parse_mode'] == ParseMode.HTML
+        assert media_kwargs['media'][0] == document_one
+        assert media_kwargs['media'][1] == document_two
 
     async def test_get_new_message_render_method_for_document(self):
         """Test the case when caption and parse mode are set for a document."""
@@ -172,10 +172,10 @@ class RendererTests(BaseTestCase):
         )
         send, media_kwargs = await renderer._get_new_message_render_method(self.context, config)
 
-        self.assertEqual(send, self.context.bot.send_document)
-        self.assertEqual(media_kwargs['caption'], caption)
-        self.assertEqual(media_kwargs['parse_mode'], ParseMode.HTML)
-        self.assertEqual(media_kwargs['document'].input_file_content, media)
+        assert send == self.context.bot.send_document
+        assert media_kwargs['caption'] == caption
+        assert media_kwargs['parse_mode'] == ParseMode.HTML
+        assert media_kwargs['document'].input_file_content == media
 
     async def test_get_new_message_render_method_returns_photo_sender_for_cover_url(self):
         """Test the case when new message mode uses photo sender for a cover URL."""
@@ -190,11 +190,11 @@ class RendererTests(BaseTestCase):
 
         send, media_kwargs = await renderer._get_new_message_render_method(self.context, config)
 
-        self.assertEqual(send, self.context.bot.send_photo)
-        self.assertEqual(media_kwargs['caption'], caption)
-        self.assertEqual(media_kwargs['parse_mode'], ParseMode.HTML)
-        self.assertIn(url, str(media_kwargs['photo']))
-        self.assertIn('?', str(media_kwargs['photo']))
+        assert send == self.context.bot.send_photo
+        assert media_kwargs['caption'] == caption
+        assert media_kwargs['parse_mode'] == ParseMode.HTML
+        assert url in str(media_kwargs['photo'])
+        assert '?' in str(media_kwargs['photo'])
 
     async def test_get_new_message_render_method_returns_text_sender_for_text_only(self):
         """Test the case when new message mode uses text sender for description only."""
@@ -203,9 +203,9 @@ class RendererTests(BaseTestCase):
         config = FinalRenderConfig(description=caption)
         send, media_kwargs = await renderer._get_new_message_render_method(self.context, config)
 
-        self.assertEqual(send, self.context.bot.send_message)
-        self.assertEqual(media_kwargs['text'], caption)
-        self.assertEqual(media_kwargs['parse_mode'], ParseMode.HTML)
+        assert send == self.context.bot.send_message
+        assert media_kwargs['text'] == caption
+        assert media_kwargs['parse_mode'] == ParseMode.HTML
 
     async def test_get_new_message_render_method_with_file(self):
         """Test the case when caption and parse mode are set for a media in cache."""
@@ -221,10 +221,10 @@ class RendererTests(BaseTestCase):
                 ),
             )
 
-            self.assertEqual(send, self.context.bot.send_photo)
-            self.assertEqual(media_kwargs['caption'], caption)
-            self.assertEqual(media_kwargs['parse_mode'], ParseMode.HTML)
-            self.assertEqual(media_kwargs['photo'], tmp.file.name)
+            assert send == self.context.bot.send_photo
+            assert media_kwargs['caption'] == caption
+            assert media_kwargs['parse_mode'] == ParseMode.HTML
+            assert media_kwargs['photo'] == tmp.file.name
 
     async def test_hide_keyboard_sends_empty_keyboard_reply_markup(self):
         """Test hide_keyboard sends an empty keyboard via edit_message_reply_markup
@@ -244,16 +244,16 @@ class RendererTests(BaseTestCase):
 
         fake_bot.edit_message_reply_markup.assert_awaited_once()
         kwargs = fake_bot.edit_message_reply_markup.await_args.kwargs  # type: ignore[attr-defined]
-        self.assertEqual(kwargs['chat_id'], self.chat.id)
-        self.assertEqual(kwargs['message_id'], self.message_id)
-        self.assertIsInstance(kwargs['reply_markup'], InlineKeyboardMarkup)
-        self.assertEqual(kwargs['reply_markup'].inline_keyboard, ())
+        assert kwargs['chat_id'] == self.chat.id
+        assert kwargs['message_id'] == self.message_id
+        assert isinstance(kwargs['reply_markup'], InlineKeyboardMarkup)
+        assert kwargs['reply_markup'].inline_keyboard == ()
 
     def test_is_url_detects_http_and_https(self):
         """Test the case when URLs are detected correctly."""
-        self.assertTrue(Renderer._is_url('http://example.com/file.png'))
-        self.assertTrue(Renderer._is_url('https://example.com/file.png'))
-        self.assertFalse(Renderer._is_url('local/file.png'))
+        assert Renderer._is_url('http://example.com/file.png')
+        assert Renderer._is_url('https://example.com/file.png')
+        assert not Renderer._is_url('local/file.png')
 
     async def test_render_caches_photo_file_id_for_local_cover(self):
         """Test the case when the photo file id is cached for a local cover."""
@@ -277,7 +277,7 @@ class RendererTests(BaseTestCase):
             )
             await renderer.render(None, self.context, config)
 
-            self.assertEqual(Renderer._cached_covers.get(tmp.name), 'last')
+            assert Renderer._cached_covers.get(tmp.name) == 'last'
 
     async def test_render_raises_screen_render_not_supported_when_no_message_to_edit(self):
         """Test the case when BadRequest with 'There is no text in the message to edit'
@@ -295,12 +295,12 @@ class RendererTests(BaseTestCase):
         ):
             await renderer.render(None, self.context, FinalRenderConfig(as_new_message=False))
 
-        self.assertEqual(
-            exc_context.exception.args[0],
-            'Unsupported screen transition due to incompatible layout. '
-            'Use covers consistently or disable them entirely.',
+        assert (
+            exc_context.exception.args[0]
+            == 'Unsupported screen transition due to incompatible layout. '
+            'Use covers consistently or disable them entirely.'
         )
-        self.assertIsInstance(exc_context.exception.__cause__, BadRequest)
+        assert isinstance(exc_context.exception.__cause__, BadRequest)
 
     async def test_render_re_raises_bad_request_when_message_differs_from_no_message_to_edit(self):
         """Test the case when BadRequest with a different message is re-raised."""
@@ -317,7 +317,7 @@ class RendererTests(BaseTestCase):
         ):
             await renderer.render(None, self.context, FinalRenderConfig(as_new_message=False))
 
-        self.assertEqual(exc_context.exception.message, error_message)
+        assert exc_context.exception.message == error_message
 
     async def test_render_uses_new_message_render_method_when_as_new_message_true(self):
         """Test that render delegates to _get_new_message_render_method
@@ -336,8 +336,8 @@ class RendererTests(BaseTestCase):
             mocked_get_new.assert_awaited_once()
             fake_send.assert_awaited_once()
             kwargs = fake_send.await_args.kwargs
-            self.assertEqual(kwargs['chat_id'], self.chat_id)
-            self.assertIsInstance(kwargs['reply_markup'], InlineKeyboardMarkup)
+            assert kwargs['chat_id'] == self.chat_id
+            assert isinstance(kwargs['reply_markup'], InlineKeyboardMarkup)
 
     async def test_render_uses_edit_message_render_method_when_as_new_message_false(self):
         """Test that render delegates to _get_edit_render_method when as_new_message is False."""
@@ -354,5 +354,5 @@ class RendererTests(BaseTestCase):
             mocked_get_new.assert_awaited_once()
             fake_send.assert_awaited_once()
             kwargs = fake_send.await_args.kwargs
-            self.assertEqual(kwargs['chat_id'], self.chat_id)
-            self.assertIsInstance(kwargs['reply_markup'], InlineKeyboardMarkup)
+            assert kwargs['chat_id'] == self.chat_id
+            assert isinstance(kwargs['reply_markup'], InlineKeyboardMarkup)

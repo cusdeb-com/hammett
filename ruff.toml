@@ -17,7 +17,6 @@ ignore = [
     "PLC0415", # import-outside-top-level
     "PLC2701", # import-private-name
     "PLR6301", # no-self-use
-    "PT009",  # pytest-unittest-assertion
     "PT027",  # pytest-unittest-raises-assertion
     "RUF012",  # mutable-class-default
     "S301",  # 	suspicious-pickle-usage

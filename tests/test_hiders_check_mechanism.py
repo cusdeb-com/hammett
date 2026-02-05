@@ -60,7 +60,7 @@ class HidersCheckerTests(BaseTestCase):
             source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
-        self.assertTrue(visibility)
+        assert visibility
 
         settings.IS_ADMIN = False
         button = Button(
@@ -70,7 +70,7 @@ class HidersCheckerTests(BaseTestCase):
             source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
-        self.assertFalse(visibility)
+        assert not visibility
 
     @override_settings(HIDERS_CHECKER='tests.test_hiders_check_mechanism.TestAsyncHidersChecker')
     async def test_async_hider(self):
@@ -122,7 +122,7 @@ class HidersCheckerTests(BaseTestCase):
             source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
-        self.assertTrue(visibility)
+        assert visibility
 
         settings.IS_ADMIN = False
         settings.IS_MODERATOR = False
@@ -133,7 +133,7 @@ class HidersCheckerTests(BaseTestCase):
             source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
-        self.assertFalse(visibility)
+        assert not visibility
 
     @override_settings(HIDERS_CHECKER='test')
     def test_invalid_import(self):
@@ -173,21 +173,21 @@ class HidersCheckerTests(BaseTestCase):
             source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)
-        self.assertFalse(visibility)
+        assert not visibility
 
     def test_hider_equality(self):
         """Test comparing two Hiders with each other."""
         hider_one = Hider(ONLY_FOR_ADMIN)
         hider_two = Hider(ONLY_FOR_ADMIN)
 
-        self.assertEqual(hider_one, hider_two)
+        assert hider_one == hider_two
 
     def test_hider_equality_with_non_hider(self):
         """Test comparing a Button with a non-Button object."""
         hider = Hider(ONLY_FOR_ADMIN)
-        self.assertNotEqual(hider, object())
+        assert hider != object()
 
     def test_hider_hash(self):
         """Test hashing a Button instance."""
         hider = Hider(ONLY_FOR_ADMIN)
-        self.assertIsInstance(hash(hider), int)
+        assert isinstance(hash(hider), int)

@@ -67,8 +67,8 @@ class CarouselWidgetTests(BaseTestCase):
             current_image=1,
         )
 
-        self.assertEqual(keyboard[0][0], widget._disabled_button)
-        self.assertEqual(keyboard[0][1], widget._disabled_button)
+        assert keyboard[0][0] == widget._disabled_button
+        assert keyboard[0][1] == widget._disabled_button
 
     @catch_render_config()
     async def test_carousel_widget_infinity_mode_with_back_handler(self, actual):
@@ -291,12 +291,7 @@ class CarouselWidgetWithoutUpdateTests(BaseTestCase):
             chat_id=CHAT_ID,
             message_id=MESSAGE_ID,
         )
-        self.assertEqual(updated_user_data, {
-            USER_ID: {
-                state_key: {'images': widget.images},
-                **_DATA,
-            },
-        })
+        assert updated_user_data == {USER_ID: {state_key: {'images': widget.images}, **_DATA}}
 
     @catch_render_config()
     async def test_carousel_render_after_calling_move_handler_without_update(self, actual):

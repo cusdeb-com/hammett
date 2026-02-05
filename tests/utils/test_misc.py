@@ -22,4 +22,4 @@ class UtilsMiscTests(BaseTestCase):
         actual = await get_callback_query(self.update)
 
         self._mock_query.answer.assert_awaited_once()
-        self.assertIs(actual, self._mock_query)
+        assert actual is self._mock_query

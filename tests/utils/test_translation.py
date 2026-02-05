@@ -35,7 +35,7 @@ class UtilsTranslationTests(BaseTestCase):
         and language is provided.
         """
         unknown_key = 'unknown_key'
-        self.assertEqual(gettext(unknown_key, language='en'), unknown_key)
+        assert gettext(unknown_key, language='en') == unknown_key
 
     @override_settings(LANGUAGE_CODE='fr')
     async def test_gettext_uses_settings_language_code_when_language_not_provided(self):
@@ -61,9 +61,9 @@ class UtilsTranslationTests(BaseTestCase):
         translation = HammettTranslation('en')
         translation.merge(DummyTranslations())
 
-        self.assertEqual(translation.gettext('HELLO'), 'Hola')
-        self.assertEqual(translation.ngettext('apples', 'apples', 1), '1 manzana')
-        self.assertEqual(translation.ngettext('apples', 'apples', 3), 'manzanas')
+        assert translation.gettext('HELLO') == 'Hola'
+        assert translation.ngettext('apples', 'apples', 1) == '1 manzana'
+        assert translation.ngettext('apples', 'apples', 3) == 'manzanas'
 
     def test_merge_adds_fallback_from_other_when_present(self):
         """Test that merge adds fallback from the other translations object when present."""
@@ -86,8 +86,8 @@ class UtilsTranslationTests(BaseTestCase):
 
     async def test_ngettext_returns_correct_form_without_catalog(self):
         """Test ngettext chooses singular/plural when no catalog mapping exists."""
-        self.assertEqual(ngettext('apple', 'apples', 1, language='en'), 'apple')
-        self.assertEqual(ngettext('apple', 'apples', 2, language='en'), 'apples')
+        assert ngettext('apple', 'apples', 1, language='en') == 'apple'
+        assert ngettext('apple', 'apples', 2, language='en') == 'apples'
 
     async def test_ngettext_uses_fallback_when_catalog_missing_entry(self):
         """Test that ngettext falls back to self._fallback.ngettext when plural key missing."""
@@ -105,7 +105,7 @@ class UtilsTranslationTests(BaseTestCase):
         translation._catalog = _TranslationCatalog(DummyOther())
         translation._fallback = DummyFallback()
 
-        self.assertEqual(translation.ngettext('apples', 'apples', 2), 'fallback:apples:2')
+        assert translation.ngettext('apples', 'apples', 2) == 'fallback:apples:2'
 
     @override_settings(LOCALE_PATHS=[Path(__file__).parent / 'locale'])
     async def test_merges_for_each_locale_path_in_order(self):
@@ -113,8 +113,8 @@ class UtilsTranslationTests(BaseTestCase):
         for each the LOCALE_PATHS entry.
         """
         translation = HammettTranslation('pt-br')
-        self.assertIn('test', translation._catalog._catalogs[0])
-        self.assertIn('ensaio', translation._catalog._catalogs[0].values())
+        assert 'test' in translation._catalog._catalogs[0]
+        assert 'ensaio' in translation._catalog._catalogs[0].values()
 
     @override_settings(LANGUAGE_CODE='fr')
     async def test_ngettext_uses_settings_language_code_when_language_not_provided(self):
@@ -129,7 +129,7 @@ class UtilsTranslationTests(BaseTestCase):
         catalog = translation._catalog._catalogs[0]
         for abbr in calendar.month_abbr:
             if abbr:  # skip empty string at index 0
-                self.assertIn(abbr, catalog)
+                assert abbr in catalog
 
 
 class UtilsTranslationCatalogTests(BaseTestCase):
@@ -138,8 +138,8 @@ class UtilsTranslationCatalogTests(BaseTestCase):
     async def test_get_with_default_and_missing(self):
         """Test getting a value with a default and missing key."""
         catalog = _TranslationCatalog()
-        self.assertIsNone(catalog.get('MISSING'))
-        self.assertEqual(catalog.get('MISSING', 'default'), 'default')
+        assert catalog.get('MISSING') is None
+        assert catalog.get('MISSING', 'default') == 'default'
 
     async def test_getitem_raises_keyerror_when_missing(self):
         """Test __getitem__ raises KeyError with the missing key value."""
@@ -147,12 +147,12 @@ class UtilsTranslationCatalogTests(BaseTestCase):
         with self.assertRaises(KeyError) as ctx_str:
             catalog['MISSING']
 
-        self.assertEqual(ctx_str.exception.args[0], 'MISSING')
+        assert ctx_str.exception.args[0] == 'MISSING'
 
         with self.assertRaises(KeyError) as ctx_tuple:
             catalog['apples', 0]
 
-        self.assertEqual(ctx_tuple.exception.args[0], ('apples', 0))
+        assert ctx_tuple.exception.args[0] == ('apples', 0)
 
     async def test_items_and_keys_iterate(self):
         """Test iterating over the catalog."""
@@ -162,8 +162,8 @@ class UtilsTranslationCatalogTests(BaseTestCase):
 
         keys = set(catalog.keys())
         items = dict(catalog.items())
-        self.assertTrue({'A', 'B'}.issubset(keys))
-        self.assertTrue({'A': 'a', 'B': 'b'}.items() <= items.items())
+        assert {'A', 'B'}.issubset(keys)
+        assert {'A': 'a', 'B': 'b'}.items() <= items.items()
 
     async def test_plural_returns_value_or_raises(self):
         """Test returning a value or raising an error for plural forms."""
@@ -173,8 +173,8 @@ class UtilsTranslationCatalogTests(BaseTestCase):
                 self.plural = lambda n: 0 if n == 1 else 1
 
         catalog = _TranslationCatalog(DummyTranslations())
-        self.assertEqual(catalog.plural('apples', 1), '1 apple')
-        self.assertEqual(catalog.plural('apples', 3), 'apples')
+        assert catalog.plural('apples', 1) == '1 apple'
+        assert catalog.plural('apples', 3) == 'apples'
 
     async def test_set_and_get_and_contains(self):
         """Test setting, getting, and checking for keys in the catalog."""
@@ -183,10 +183,10 @@ class UtilsTranslationCatalogTests(BaseTestCase):
         catalog['apples', 0] = '1 manzana'
         catalog['apples', 1] = 'manzanas'
 
-        self.assertIn('HELLO', catalog)
-        self.assertIn(('apples', 0), catalog)
-        self.assertEqual(catalog['HELLO'], 'Hola')
-        self.assertEqual(catalog['apples', 1], 'manzanas')
+        assert 'HELLO' in catalog
+        assert ('apples', 0) in catalog
+        assert catalog['HELLO'] == 'Hola'
+        assert catalog['apples', 1] == 'manzanas'
 
     async def test_update_overrides_previous_catalog(self):
         """Test updating the catalog with a new value."""
@@ -196,7 +196,7 @@ class UtilsTranslationCatalogTests(BaseTestCase):
                 self.plural = lambda n: 0 if n == 1 else 1
 
         catalog = _TranslationCatalog(DummyTranslations('first'))
-        self.assertEqual(catalog['KEY'], 'first')
+        assert catalog['KEY'] == 'first'
 
         catalog.update(DummyTranslations('second'))
-        self.assertEqual(catalog['KEY'], 'second')
+        assert catalog['KEY'] == 'second'

@@ -23,7 +23,7 @@ class UtilsRenderConfigTests(BaseTestCase):
         self.context.user_data.update({LATEST_SENT_MSG_KEY: expected})
 
         actual = get_latest_message(self.context, self.message)
-        self.assertEqual(actual, expected)
+        assert actual == expected
 
     async def test_get_latest_message_returns_none_when_absent(self):
         """Test returning None when there is no stored latest message."""
@@ -31,7 +31,7 @@ class UtilsRenderConfigTests(BaseTestCase):
         self.context._application.user_data = {self.message.chat_id: {}}  # noqa: SLF001
 
         actual = get_latest_message(self.context, self.message)
-        self.assertIsNone(actual)
+        assert actual is None
 
     async def test_save_latest_message_writes_to_context_user_data(self):
         """Test saving the latest message into context.user_data."""
@@ -40,12 +40,12 @@ class UtilsRenderConfigTests(BaseTestCase):
 
         await save_latest_message(self.context, config, self.message)
 
-        self.assertIn(LATEST_SENT_MSG_KEY, self.context.user_data)
-        self.assertEqual(self.context.user_data[LATEST_SENT_MSG_KEY], {
+        assert LATEST_SENT_MSG_KEY in self.context.user_data
+        assert self.context.user_data[LATEST_SENT_MSG_KEY] == {
             'hide_keyboard': True,
             'message_id': self.message.message_id,
             'chat_id': self.message.chat_id,
-        })
+        }
 
 
 class UtilsRenderConfigTestsWithoutUpdate(BaseTestCase):
@@ -65,7 +65,7 @@ class UtilsRenderConfigTestsWithoutUpdate(BaseTestCase):
         self.context._application.user_data = {}  # noqa: SLF001
 
         actual = get_latest_message(self.context, self.message)
-        self.assertIsNone(actual)
+        assert actual is None
 
     async def test_get_latest_message_from_persistence_when_typeerror(self):
         """Test retrieving the latest message from persistence on TypeError."""
@@ -83,7 +83,7 @@ class UtilsRenderConfigTestsWithoutUpdate(BaseTestCase):
 
         actual = get_latest_message(self.context, self.message)
 
-        self.assertEqual(actual, expected)
+        assert actual == expected
 
     async def test_save_latest_message_raises_without_persistence_on_typeerror(self):
         """Test raising MissingPersistence when no persistence is configured."""
@@ -104,7 +104,7 @@ class UtilsRenderConfigTestsWithoutUpdate(BaseTestCase):
         await save_latest_message(self.context, config, self.message)
 
         updated_user_data = self.context._application.persistence.user_data  # noqa: SLF001
-        self.assertEqual(updated_user_data, {
+        assert updated_user_data == {
             self.message.chat_id: {
                 LATEST_SENT_MSG_KEY: {
                     'hide_keyboard': False,
@@ -112,4 +112,4 @@ class UtilsRenderConfigTestsWithoutUpdate(BaseTestCase):
                     'chat_id': self.message.chat_id,
                 },
             },
-        })
+        }

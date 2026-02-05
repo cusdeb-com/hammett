@@ -68,17 +68,17 @@ class ScreenTests(BaseTestCase):
         """Test getters return default values from Screen attributes."""
         screen = TestScreen()
 
-        self.assertFalse(await screen.get_cache_covers(self.update, self.context))
-        self.assertEqual(await screen.get_cover(self.update, self.context), '')
-        self.assertIsNone(await screen.get_document(self.update, self.context))
-        self.assertFalse(await screen.get_hide_keyboard(self.update, self.context))
+        assert not await screen.get_cache_covers(self.update, self.context)
+        assert not await screen.get_cover(self.update, self.context)
+        assert await screen.get_document(self.update, self.context) is None
+        assert not await screen.get_hide_keyboard(self.update, self.context)
 
     async def test_get_config_returns_default_render_config(self):
         """Test that get_config returns the default RenderConfig instance."""
         screen = TestScreen()
         config = await screen.get_config(self.update, self.context)
 
-        self.assertEqual(config, RenderConfig())
+        assert config == RenderConfig()
 
     async def test_get_payload_raises_when_query_has_no_data(self):
         """Test the case when getting payload fails because query has no data."""
@@ -111,19 +111,19 @@ class ScreenTests(BaseTestCase):
         ):
             value = await Screen.get_payload(self.update, self.context)
 
-        self.assertEqual(value, 'value')
-        self.assertNotIn('key', storage)
+        assert value == 'value'
+        assert 'key' not in storage
 
     def test_getting_existing_current_state(self):
         """Test getting the existing current state."""
         state_value = 'custom_state'
         self.context.user_data['current_state'] = state_value
 
-        self.assertEqual(Screen.get_current_state(self.context), state_value)
+        assert Screen.get_current_state(self.context) == state_value
 
     def test_getting_non_existing_current_state(self):
         """Test getting the existing current state."""
-        self.assertIsNone(Screen.get_current_state(self.context))
+        assert Screen.get_current_state(self.context) is None
 
     @catch_render_config()
     async def test_jump_sets_as_new_message_true(self, actual):
@@ -147,7 +147,7 @@ class ScreenTests(BaseTestCase):
         )):
             await TestScreen().move(self.update, self.context)
 
-        self.assertEqual(actual.final_render_config.message_id, message_id)
+        assert actual.final_render_config.message_id == message_id
 
     @catch_render_config()
     async def test_move_uses_default_config_without_as_new_message(self, actual):
@@ -237,7 +237,7 @@ class ScreenTests(BaseTestCase):
         first = TestScreen()
         second = TestScreen()
 
-        self.assertIs(first, second)
+        assert first is second
 
     @override_settings(SAVE_LATEST_MESSAGE=False)
     async def test_warning_logged_when_hide_keyboard_without_save_latest_message(self):
@@ -253,8 +253,8 @@ class ScreenTests(BaseTestCase):
         ):
             await screen.render(self.update, self.context, config=config)
 
-        self.assertEqual(len(log.records), 1)
-        self.assertIn('SAVE_LATEST_MESSAGE setting set to True', log.records[0].message)
+        assert len(log.records) == 1
+        assert 'SAVE_LATEST_MESSAGE setting set to True' in log.records[0].message
 
 
 class ScreenTestsWithoutUpdate(BaseTestCase):
@@ -279,7 +279,7 @@ class ScreenTestsWithoutUpdate(BaseTestCase):
         await TestScreenWithMockedRendererAndHideKeyboard().send(self.context)
 
         updated_user_data = self.context._application.persistence.user_data
-        self.assertEqual(updated_user_data, {
+        assert updated_user_data == {
             USER_ID: {
                 LATEST_SENT_MSG_KEY: {
                     'hide_keyboard': True,
@@ -288,6 +288,6 @@ class ScreenTestsWithoutUpdate(BaseTestCase):
                 },
                 **_DATA,
             },
-        })
+        }
 
         await self.context._application.persistence.redis_cli.aclose()

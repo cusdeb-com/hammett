@@ -75,7 +75,7 @@ class PermissionsTests(BaseTestCase):
         screen = TestScreen()
 
         state = await screen.move(self.update, self.context)
-        self.assertEqual(state, PERMISSION_DENIED_STATE)
+        assert state == PERMISSION_DENIED_STATE
 
     @override_settings(PERMISSIONS=[
         'tests.test_permissions_mechanism.MainPermission',
@@ -97,7 +97,7 @@ class PermissionsTests(BaseTestCase):
             'MainPermission.has_permission',
             'SubPermission.has_permission',
         ]
-        self.assertEqual(PERMISSIONS_ORDER, expected)
+        assert expected == PERMISSIONS_ORDER
 
     @override_settings(PERMISSIONS=['tests.base.TestGivingPermission'], TOKEN='secret-token')
     async def test_giving_permission(self):
@@ -110,7 +110,7 @@ class PermissionsTests(BaseTestCase):
         screen = TestScreen()
 
         state = await screen.move(self.update, self.context)
-        self.assertEqual(state, DEFAULT_STATE)
+        assert state == DEFAULT_STATE
 
     @override_settings(PERMISSIONS=[
         'tests.test_permissions_mechanism.PermissionWithoutHandlePermissionDeniedMethod',
@@ -161,7 +161,7 @@ class PermissionsTests(BaseTestCase):
         screen = ScreenWithIgnorePermissionHandler()
 
         state = await screen.handler(self.update, self.context)
-        self.assertEqual(state, DEFAULT_STATE)
+        assert state == DEFAULT_STATE
 
     @override_settings(PERMISSIONS=[
         'tests.base.TestGivingPermission',
@@ -185,7 +185,7 @@ class PermissionsTests(BaseTestCase):
         screen = ScreenWithIgnorePermissionHandler()
 
         state = await screen.handler(self.update, self.context)
-        self.assertEqual(state, DEFAULT_STATE)
+        assert state == DEFAULT_STATE
 
     @override_settings(PERMISSIONS=[
         'tests.test_permissions_mechanism.TestPermissionWithSyncChecker',
@@ -200,7 +200,7 @@ class PermissionsTests(BaseTestCase):
         screen = TestScreen()
 
         state = await screen.move(self.update, self.context)
-        self.assertEqual(state, PERMISSION_DENIED_STATE)
+        assert state == PERMISSION_DENIED_STATE
 
     @override_settings(PERMISSIONS=['tests.base.TestDenyingPermission'], TOKEN='secret-token')
     async def test_wrapping_handler_with_permission_specified(self):
@@ -213,7 +213,7 @@ class PermissionsTests(BaseTestCase):
         screen = ScreenWithHandler()
 
         state = await screen.handler(self.update, self.context)
-        self.assertEqual(state, PERMISSION_DENIED_STATE)
+        assert state == PERMISSION_DENIED_STATE
 
     @override_settings(PERMISSIONS=['tests.base.TestDenyingPermission'], TOKEN='secret-token')
     async def test_wrapping_start_method_with_permission_specified(self):
@@ -226,4 +226,4 @@ class PermissionsTests(BaseTestCase):
         screen = TestStartScreen()
 
         state = await screen.start(self.update, self.context)
-        self.assertEqual(state, PERMISSION_DENIED_STATE)
+        assert state == PERMISSION_DENIED_STATE

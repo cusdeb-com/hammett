@@ -65,7 +65,7 @@ class HammettMultiStateBotTests(BaseTestCase):
         self.context.user_data['current_state'] = DEFAULT_STATE
 
         state = await IntroductionScreen().move_along_route(self.update, self.context)
-        self.assertEqual(state, TYPE_NAME_STATE)
+        assert state == TYPE_NAME_STATE
 
     @catch_render_config()
     async def test_introduction_screen_render_after_calling_handle_text_input_handler(self, actual):

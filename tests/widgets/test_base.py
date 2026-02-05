@@ -72,10 +72,7 @@ class BaseStateWidgetTests(BaseTestCase):
             chat_id=self.chat.id,
             message_id=self.message.message_id,
         )
-        self.assertEqual(
-            f'{widget.__class__.__name__}_{self.chat.id}_{self.message.message_id}',
-            state_key,
-        )
+        assert f'{widget.__class__.__name__}_{self.chat.id}_{self.message.message_id}' == state_key
 
     async def test_get_state_value_returns_none_when_failed_to_get_state_key(self):
         """Test get_state_value returns None if _get_state_key raises FailedToGetStateKey."""
@@ -85,7 +82,7 @@ class BaseStateWidgetTests(BaseTestCase):
             side_effect=FailedToGetStateKey,
         ):
             actual = await widget.get_state_value(self.update, self.context, 'choices')
-            self.assertIsNone(actual)
+            assert actual is None
 
     async def test_initialized_state_not_implemented_raises(self):
         """Test that _initialized_state raises NotImplementedError by default."""
@@ -107,7 +104,7 @@ class BaseStateWidgetTests(BaseTestCase):
         ):
             await widget.set_state_value(self.update, self.context, 'foo', 'bar')
             actual = await widget.get_state_value(self.update, self.context, 'foo')
-            self.assertEqual(actual, 'bar')
+            assert actual == 'bar'
 
 
 class BaseStateWidgetTestsWithoutUpdate(BaseTestCase):
@@ -124,7 +121,7 @@ class BaseStateWidgetTestsWithoutUpdate(BaseTestCase):
         """Test that set_state_value returns None when user_data is None."""
         widget = TestStateWidget()
         actual = await widget.set_state_value(self.update, self.context, 'foo', 'bar')
-        self.assertIsNone(actual)
+        assert actual is None
 
 
 class BaseChoiceWidgetTests(BaseTestCase):
@@ -152,16 +149,13 @@ class BaseChoiceWidgetTests(BaseTestCase):
         )
         keyboard = await widget._build_keyboard(self.update, self.context, initialized_choices)
         captions = [row[0].caption for row in keyboard]
-        self.assertEqual(captions, [
-            f'{widget.unchosen_emoji} Option A',
-            f'{widget.chosen_emoji} Option B',
-        ])
+        assert captions == [f'{widget.unchosen_emoji} Option A', f'{widget.chosen_emoji} Option B']
 
     async def test_get_choices_returns_attribute(self):
         """Test that get_choices returns the choices attribute."""
         widget = TestBaseChoiceWidget()
         actual = await widget.get_choices(None, self.context)
-        self.assertEqual(actual, widget.choices)
+        assert actual == widget.choices
 
     async def test_get_chosen_choices_filters_true_flags(self):
         """Test that get_chosen_choices filters true flags."""
@@ -176,7 +170,7 @@ class BaseChoiceWidgetTests(BaseTestCase):
             )
             await widget.set_state_value(self.update, self.context, 'choices', initialized_choices)
             chosen = await widget.get_chosen_choices(self.update, self.context)
-            self.assertEqual(chosen, ((True, 'a', 'Option A'),))
+            assert chosen == ((True, 'a', 'Option A'),)
 
     async def test_get_initialized_choices_returns_empty_when_state_unavailable(self):
         """Test that get_initialized_choices returns empty tuple when
@@ -188,7 +182,7 @@ class BaseChoiceWidgetTests(BaseTestCase):
             return_value=SimpleNamespace(),
         ):
             actual = await widget.get_initialized_choices(self.update, self.context)
-            self.assertEqual(actual, ())
+            assert actual == ()
 
     async def test_get_initialized_choices_returns_saved_state(self):
         """Test that get_initialized_choices returns the choices saved in state."""
@@ -203,7 +197,7 @@ class BaseChoiceWidgetTests(BaseTestCase):
         ):
             await widget.set_state_value(self.update, self.context, 'choices', choices)
             actual = await widget.get_initialized_choices(self.update, self.context)
-            self.assertEqual(actual, choices)
+            assert actual == choices
 
     async def test_get_payload_raises_when_payload_not_found(self):
         """Test getting payload fails when payload is absent in storage."""
@@ -239,8 +233,8 @@ class BaseChoiceWidgetTests(BaseTestCase):
             patch('hammett.widgets.base.get_payload_storage', return_value=storage),
         ):
             value = await TestBaseChoiceWidget.get_payload(self.update, self.context)
-            self.assertEqual(value, 'value')
-            self.assertIn('key', storage)
+            assert value == 'value'
+            assert 'key' in storage
 
     async def test_initialized_state_returns_empty_choices(self):
         """Test that initialized_state returns the choices."""
@@ -251,7 +245,7 @@ class BaseChoiceWidgetTests(BaseTestCase):
             self.message,
             FinalRenderConfig(),
         )
-        self.assertEqual(actual, {'choices': ()})
+        assert actual == {'choices': ()}
 
     async def test_initialized_state_returns_passed_choices(self):
         """Test that initialized_state returns the passed choices."""
@@ -263,7 +257,7 @@ class BaseChoiceWidgetTests(BaseTestCase):
             FinalRenderConfig(),
             widget.choices,
         )
-        self.assertEqual(actual, {'choices': widget.choices})
+        assert actual == {'choices': widget.choices}
 
     async def test_raises_error_if_emojis_are_undefined(self):
         """Test that BaseChoiceWidget raises an error if no emojis are specified."""
@@ -300,4 +294,4 @@ class BaseWidgetTests(BaseTestCase):
 
         widget = TestBaseWidget()
         keyboard = await widget.add_extra_keyboard(self.update, self.context)
-        self.assertEqual(keyboard, EMPTY_KEYBOARD)
+        assert keyboard == EMPTY_KEYBOARD

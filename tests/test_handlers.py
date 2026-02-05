@@ -52,7 +52,7 @@ class HandlersTests(BaseTestCase):
 
     def test_clearing_passed_command_name(self):
         """Test clearing a passed command name."""
-        self.assertEqual('test', _clear_command_name('/test'))
+        assert _clear_command_name('/test') == 'test'
 
     def test_create_decorator_sets_command_name(self):
         """Test that the decorator sets a cleared command name for command handlers."""
@@ -63,8 +63,8 @@ class HandlersTests(BaseTestCase):
 
         decorated = create_decorator('/start')(sample)
 
-        self.assertEqual(decorated.handler_type, HandlerType.COMMAND_HANDLER)
-        self.assertEqual(decorated.command_name, 'start')
+        assert decorated.handler_type == HandlerType.COMMAND_HANDLER
+        assert decorated.command_name == 'start'
 
     def test_create_decorator_sets_default_attributes(self):
         """Test that the decorator sets default attributes for a handler."""
@@ -75,9 +75,9 @@ class HandlersTests(BaseTestCase):
 
         decorated = create_decorator()(sample)
 
-        self.assertEqual(decorated.handler_type, HandlerType.TYPING_HANDLER)
-        self.assertEqual(decorated.permissions_ignored, [])
-        self.assertIsNone(decorated.filters)
+        assert decorated.handler_type == HandlerType.TYPING_HANDLER
+        assert decorated.permissions_ignored == []
+        assert decorated.filters is None
 
     def test_create_decorator_sets_filters_attribute(self):
         """Test that the decorator sets attributes for a handler."""
@@ -88,8 +88,8 @@ class HandlersTests(BaseTestCase):
 
         decorated = create_decorator(filters=filters.AUDIO)(handler)
 
-        self.assertEqual(decorated.handler_type, HandlerType.INPUT_HANDLER)
-        self.assertIs(decorated.filters, filters.AUDIO)
+        assert decorated.handler_type == HandlerType.INPUT_HANDLER
+        assert decorated.filters is filters.AUDIO
 
     def test_getting_handler_name(self):
         """Test getting a handler name."""
@@ -97,7 +97,7 @@ class HandlersTests(BaseTestCase):
         handler = cast('Handler', screen.handler)
 
         handler_name = _get_handler_name(handler)
-        self.assertEqual('TestScreenWithHandler.handler', handler_name)
+        assert handler_name == 'TestScreenWithHandler.handler'
 
     def test_getting_payload_storage_when_it_is_initialized(self):
         """Test getting payload storage when it is initialized."""
@@ -108,8 +108,8 @@ class HandlersTests(BaseTestCase):
         bot_data[namespace] = existing_storage
         storage = get_payload_storage(self.context)
 
-        self.assertIs(storage, existing_storage)
-        self.assertEqual(storage, {'foo': 'bar'})
+        assert storage is existing_storage
+        assert storage == {'foo': 'bar'}
 
     def test_getting_payload_storage_when_it_is_not_initialized(self):
         """Test getting payload storage when it is not initialized."""
@@ -118,10 +118,10 @@ class HandlersTests(BaseTestCase):
         bot_data.pop(namespace, None)
         storage = get_payload_storage(self.context)
 
-        self.assertIsInstance(storage, dict)
-        self.assertIn(namespace, bot_data)
-        self.assertIs(storage, bot_data[namespace])
-        self.assertEqual(storage, {})
+        assert isinstance(storage, dict)
+        assert namespace in bot_data
+        assert storage is bot_data[namespace]
+        assert storage == {}
 
     def test_getting_static_handler_name(self):
         """Test getting a static handler name."""
@@ -129,7 +129,7 @@ class HandlersTests(BaseTestCase):
         handler = cast('Handler', screen.handler)
 
         handler_name = _get_handler_name(handler)
-        self.assertEqual('TestScreenWithStaticHandler.handler', handler_name)
+        assert handler_name == 'TestScreenWithStaticHandler.handler'
 
     def test_log_unregistered_handler_with_non_callable(self):
         """Test log_unregistered_handler when handler is not callable."""
@@ -160,10 +160,10 @@ class HandlersTests(BaseTestCase):
         """Test passing a string value to the calc_checksum function."""
         string_value = 'test'
         string_checksum = calc_checksum(string_value)
-        self.assertIsInstance(string_checksum, str)
+        assert isinstance(string_checksum, str)
 
         expected_string_checksum = str(zlib.adler32(string_value.encode('utf8')))
-        self.assertEqual(string_checksum, expected_string_checksum)
+        assert string_checksum == expected_string_checksum
 
     def test_passing_handler_to_calc_checksum(self):
         """Test passing a handler to the calc_checksum function."""
@@ -172,7 +172,7 @@ class HandlersTests(BaseTestCase):
 
         handler_name = _get_handler_name(handler)
         expected_handler_checksum = str(zlib.adler32(handler_name.encode('utf8')))
-        self.assertEqual(calc_checksum(handler), expected_handler_checksum)
+        assert calc_checksum(handler) == expected_handler_checksum
 
     def test_passing_unsupported_type_to_calc_checksum(self):
         """Test passing an unsupported type to the calc_checksum function."""
@@ -187,9 +187,9 @@ class HandlersTests(BaseTestCase):
         with self.assertLogs('hammett.core.handlers', level='WARNING') as log:
             log_unregistered_handler(unregistered_handler)
 
-        self.assertEqual(len(log.records), 1)
-        self.assertIn('resembles a handler', log.records[0].message)
-        self.assertIn(unregistered_handler.__name__, log.records[0].message)
+        assert len(log.records) == 1
+        assert 'resembles a handler' in log.records[0].message
+        assert unregistered_handler.__name__ in log.records[0].message
 
     async def test_wrapper_delegates_to_original_handler(self):
         """Test that decorated handler delegates execution to the original handler."""
@@ -203,4 +203,4 @@ class HandlersTests(BaseTestCase):
         result = await decorated_handler(*test_args, **test_kwargs)
 
         mock_handler.assert_called_once_with(*test_args, **test_kwargs)
-        self.assertEqual(result, DEFAULT_STATE)
+        assert result == DEFAULT_STATE
