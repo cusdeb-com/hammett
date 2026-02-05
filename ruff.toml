@@ -29,7 +29,7 @@ inline-quotes = "single"
 [lint.per-file-ignores]
 "demos/*" = ["ANN", "DOC"]
 "demos/*/tests.py" = ["S101"]
-"tests/*" = ["ANN", "DOC", "S101"]
+"tests/*" = ["ANN", "DOC", "S101", "S105"]
 
 [lint.pylint]
 max-args = 7
