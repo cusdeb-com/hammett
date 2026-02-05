@@ -273,8 +273,9 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
 
             mock_run_webhook.assert_called_once()
             call_kwargs = mock_run_webhook.call_args.kwargs
+            expected_port = 80
             assert call_kwargs['listen'] == '127.0.0.1'
-            assert call_kwargs['port'] == 80
+            assert call_kwargs['port'] == expected_port
             assert call_kwargs['url_path'] == '/webhook'
             assert call_kwargs['webhook_url'] == 'https://test.com/webhook'
             assert 'allowed_updates' in call_kwargs

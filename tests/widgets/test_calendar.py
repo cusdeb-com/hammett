@@ -163,7 +163,8 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         in_range_days = [day for day, _ in days if day is not None]
         assert in_range_days[0] == date(2020, 2, 5)
         assert in_range_days[-1] == date(2020, 2, 20)
-        assert len(in_range_days) == 16
+        expect_num_of_available_days = 16
+        assert len(in_range_days) == expect_num_of_available_days
 
     async def test_get_handler_button_builds_button_with_payload_and_handler(self):
         """Test _get_handler_button creates a Button with expected attributes and payload JSON."""
@@ -171,11 +172,16 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
             return DEFAULT_STATE
 
         payload = {'unit': CalendarUnit.DAY, 'date': ['2025', '10', '07']}
-        button = CalendarWidget._get_handler_button('Caption', handler, payload, chat_id=123)
+        button = CalendarWidget._get_handler_button(
+            'Caption',
+            handler,
+            payload,
+            chat_id=self.chat_id,
+        )
 
         assert isinstance(button, Button)
         assert button.caption == 'Caption'
-        assert button.chat_id == 123
+        assert button.chat_id == self.chat_id
         assert button.source == handler
         assert isinstance(button.payload, str)
         assert '2025' in button.payload
@@ -188,16 +194,17 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
         widget = TestCalendarWidgetWithBoundaries()
         start_date = date(2020, 1, 1)
+        number_of_months = 6  # Jan..Jun
         items = await widget._get_months_or_years(
             self.update,
             self.context,
             CalendarUnit.MONTH,
             start_date,
-            items_num=6,  # Jan..Jun
+            items_num=number_of_months,
         )
 
         # Expect: Jan before range -> None, Feb/Mar/Apr valid, May/Jun after range -> None, None
-        assert len(items) == 6
+        assert len(items) == number_of_months
         assert items[0] is None
         assert [d.month for d in items[1:4] if d is not None] == [2, 3, 4]
         assert items[4] is None
@@ -211,16 +218,17 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
         widget = TestCalendarWidgetWithBoundaries()
         start_date = date(2018, 1, 1)
+        number_of_years = 6  # 2018..2023
         items = await widget._get_months_or_years(
             self.update,
             self.context,
             CalendarUnit.YEAR,
             start_date,
-            items_num=6,  # 2018..2023
+            items_num=number_of_years,
         )
 
         # Expect: 2018 before range -> None; 2019, 2020, 2021 valid; 2022, 2023 after -> None, None
-        assert len(items) == 6
+        assert len(items) == number_of_years
         assert items[0] is None
         assert [d.year for d in items[1:4] if d is not None] == [2019, 2020, 2021]
         assert items[4] is None

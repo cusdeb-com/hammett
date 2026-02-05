@@ -43,7 +43,8 @@ class RendererTests(BaseTestCase):
         assert isinstance(markup, InlineKeyboardMarkup)
 
         inline_keyboard = markup.inline_keyboard
-        assert len(inline_keyboard) == 2
+        expect_num_of_rows = 2
+        assert len(inline_keyboard) == expect_num_of_rows
         assert [b.text for b in inline_keyboard[0]] == ['First']
         assert [b.text for b in inline_keyboard[1]] == ['Second', 'Third']
 
