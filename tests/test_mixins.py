@@ -37,7 +37,7 @@ class I18NMixinTests(BaseTestCase):
         self.context.user_data.update({'language_code': 'ru'})
 
         language = await screen.get_language_code(None, self.context)
-        self.assertEqual(language, 'ru')
+        assert language == 'ru'
 
     async def test_set_language_code_updates_user_data_when_present(self):
         """Test the case when set_language_code updates non-empty user_data."""
@@ -46,8 +46,8 @@ class I18NMixinTests(BaseTestCase):
 
         language_code = 'es'
         await screen.set_language_code(None, self.context, language_code)
-        self.assertIn('language_code', self.context.user_data)
-        self.assertEqual(self.context.user_data['language_code'], language_code)
+        assert 'language_code' in self.context.user_data
+        assert self.context.user_data['language_code'] == language_code
 
 
 class I18NMixinTestsWithoutUpdate(BaseTestCase):
@@ -66,14 +66,14 @@ class I18NMixinTestsWithoutUpdate(BaseTestCase):
         screen = TestI18NScreen()
 
         language = await screen.get_language_code(None, self.context)
-        self.assertEqual(language, 'de')
+        assert language == 'de'
 
     async def test_set_language_code_is_noop_when_user_data_is_none(self):
         """Test the case when set_language_code does when user_data is None."""
         screen = TestI18NScreen()
 
         await screen.set_language_code(None, self.context, 'it')
-        self.assertIsNone(self.context.user_data)
+        assert self.context.user_data is None
 
 
 class RouteMixinTests(BaseTestCase):
@@ -85,7 +85,7 @@ class RouteMixinTests(BaseTestCase):
         screen.get_current_state = MagicMock(return_value=DEFAULT_STATE)
 
         result_state = screen.get_return_state_from_routes(self.context)
-        self.assertEqual(result_state, TEST_STATE)
+        assert result_state == TEST_STATE
 
     async def test_get_return_state_from_routes_when_no_match(self):
         """Test the case when the current state does not match any route."""
@@ -93,7 +93,7 @@ class RouteMixinTests(BaseTestCase):
         screen.get_current_state = MagicMock(return_value=TEST_STATE)
 
         result_state = screen.get_return_state_from_routes(self.context)
-        self.assertEqual(result_state, TEST_STATE)
+        assert result_state == TEST_STATE
 
     async def test_jump_along_route_sets_as_new_message_and_renders(self):
         """Test the case when jump_along_route sets as_new_message and renders."""
@@ -108,9 +108,9 @@ class RouteMixinTests(BaseTestCase):
         screen.render.assert_awaited_once()
 
         called_kwargs = screen.render.call_args.kwargs
-        self.assertIn('config', called_kwargs)
-        self.assertTrue(called_kwargs['config'].as_new_message)
-        self.assertEqual(state, TEST_STATE)
+        assert 'config' in called_kwargs
+        assert called_kwargs['config'].as_new_message
+        assert state == TEST_STATE
 
     def test_invalid_routes_structure_raises_exception(self):
         """Test the case when the routes attribute has an invalid structure."""
@@ -134,9 +134,9 @@ class RouteMixinTests(BaseTestCase):
         screen.render.assert_awaited_once()
 
         called_kwargs = screen.render.call_args.kwargs
-        self.assertIn('config', called_kwargs)
-        self.assertFalse(called_kwargs['config'].as_new_message)
-        self.assertEqual(state, TEST_STATE)
+        assert 'config' in called_kwargs
+        assert not called_kwargs['config'].as_new_message
+        assert state == TEST_STATE
 
     async def test_route_mixin_raises_exception_when_routes_attribute_is_empty(self):
         """Test that ScreenRouteIsEmpty is raised when routes attribute is missing or empty."""
@@ -152,4 +152,4 @@ class StartMixinTests(BaseTestCase):
         screen = TestStartScreen()
         state = await screen.start(self.update, self.context)
 
-        self.assertEqual(DEFAULT_STATE, state)
+        assert state == DEFAULT_STATE

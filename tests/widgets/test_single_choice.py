@@ -51,11 +51,11 @@ class SingleChoiceWidgetTests(BaseTestCase):
 
         keyboard = await widget._build_keyboard(self.update, self.context, initialized)
         captions = [row[0].caption for row in keyboard]
-        self.assertEqual(captions, [
+        assert captions == [
             f'{widget.unchosen_emoji} Option A',
             f'{widget.chosen_emoji} Option B',
             f'{widget.unchosen_emoji} Option C',
-        ])
+        ]
 
     async def test_initialize_choices_default_marks(self):
         """Test that _initialize_choices marks no choice as selected by default."""
@@ -66,12 +66,10 @@ class SingleChoiceWidgetTests(BaseTestCase):
             widget.choices,
         )
 
-        self.assertEqual(
-            initialized, (
-                (False, 'a', 'Option A'),
-                (False, 'b', 'Option B'),
-                (False, 'c', 'Option C'),
-            ),
+        assert initialized == (
+            (False, 'a', 'Option A'),
+            (False, 'b', 'Option B'),
+            (False, 'c', 'Option C'),
         )
 
     async def test_initialize_choices_marks_with_initial_value(self):
@@ -83,12 +81,10 @@ class SingleChoiceWidgetTests(BaseTestCase):
             widget.choices,
         )
 
-        self.assertEqual(
-            initialized, (
-                (False, 'a', 'Option A'),
-                (True, 'b', 'Option B'),
-                (False, 'c', 'Option C'),
-            ),
+        assert initialized == (
+            (False, 'a', 'Option A'),
+            (True, 'b', 'Option B'),
+            (False, 'c', 'Option C'),
         )
 
     async def test_switch_marks_only_selected_choice(self):
@@ -101,12 +97,10 @@ class SingleChoiceWidgetTests(BaseTestCase):
             await widget.move(self.update, self.context)  # initialize state
 
             switched = await widget.switch(self.update, self.context, ('b', 'Option B'))
-            self.assertEqual(
-                switched, (
-                    (False, 'a', 'Option A'),
-                    (True, 'b', 'Option B'),
-                    (False, 'c', 'Option C'),
-                ),
+            assert switched == (
+                (False, 'a', 'Option A'),
+                (True, 'b', 'Option B'),
+                (False, 'c', 'Option C'),
             )
 
     @catch_render_config()
@@ -207,7 +201,7 @@ class BaseChoiceWidgetTestsUsingSingleChoiceWidget(BaseTestCase):
                     choices,
                 ),
             ))
-            self.assertEqual(actual.final_render_config, expected)
+            assert actual.final_render_config == expected
 
             await widget._on_choice_click(self.update, self.context)  # choose Option B
 
@@ -224,4 +218,4 @@ class BaseChoiceWidgetTestsUsingSingleChoiceWidget(BaseTestCase):
                     choices,
                 ),
             ))
-            self.assertEqual(actual.final_render_config, expected)
+            assert actual.final_render_config == expected

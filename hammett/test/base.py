@@ -207,12 +207,8 @@ class BaseTestCase(unittest.TestCase):
         msg: str | None = None,
     ) -> None:
         """Compare two FinalRenderConfig objects."""
-        self.assertIsInstance(
-            expected, FinalRenderConfig, 'First argument is not a FinalRenderConfig',
-        )
-        self.assertIsInstance(
-            actual, FinalRenderConfig, 'Second argument is not a FinalRenderConfig',
-        )
+        assert isinstance(expected, FinalRenderConfig), 'First argument is not a FinalRenderConfig'  # noqa: S101
+        assert isinstance(actual, FinalRenderConfig), 'Second argument is not a FinalRenderConfig'  # noqa: S101
 
         if expected != actual:
             first_config_repr, second_config_repr = _common_shorten_repr(

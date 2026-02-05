@@ -23,8 +23,8 @@ class ConfigurationTests(BaseTestCase):
         """Test that GlobalSettings delegates getattr and repr to global_settings."""
         settings = GlobalSettings()
 
-        self.assertEqual(settings.DOMAIN, global_settings.DOMAIN)
-        self.assertEqual(repr(settings), f'<{settings.__class__.__name__}>')
+        assert settings.DOMAIN == global_settings.DOMAIN
+        assert repr(settings) == f'<{settings.__class__.__name__}>'
 
     def test_lazy_object_delattr_raises_on_wrapped(self):
         """Test LazyObject.__delattr__ raises TypeError when deleting _wrapped."""
@@ -36,7 +36,7 @@ class ConfigurationTests(BaseTestCase):
         with self.assertRaises(TypeError) as context:
             delattr(obj, '_wrapped')
 
-        self.assertIn("can't delete _wrapped.", str(context.exception))
+        assert "can't delete _wrapped." in str(context.exception)
 
     def test_lazy_object_delattr_triggers_setup_and_deletes_attr(self):
         """Test __delattr__ calls _setup when unevaluated and deletes attribute from wrapped."""
@@ -62,16 +62,16 @@ class ConfigurationTests(BaseTestCase):
 
         obj = TestLazy()
         obj.NEW_ATTR = 'value'
-        self.assertEqual(obj.NEW_ATTR, 'value')
+        assert obj.NEW_ATTR == 'value'
 
     def test_lazy_settings_delattr_removes_attr_and_clears_cache(self):
         """Test LazySettings __delattr__ removes attribute from wrapped and clears cached value."""
         settings = LazySettings()
         setting = settings.TOKEN  # evaluate and cache
-        self.assertEqual(settings.__dict__.get('TOKEN'), setting)
+        assert settings.__dict__.get('TOKEN') == setting
 
         delattr(settings, 'TOKEN')
-        self.assertTrue('TOKEN' not in settings.__dict__)
+        assert 'TOKEN' not in settings.__dict__
         with self.assertRaises(AttributeError):
             _ = settings.TOKEN
 
@@ -94,24 +94,24 @@ class ConfigurationTests(BaseTestCase):
         settings = LazySettings()
         _ = settings.DOMAIN
 
-        self.assertEqual(repr(settings), '<LazySettings "tests.settings">')
+        assert repr(settings) == '<LazySettings "tests.settings">'
 
     def test_lazy_settings_repr_unevaluated(self):
         """Test LazySettings.__repr__ returns Unevaluated when not set up."""
         settings = LazySettings()
-        self.assertEqual(repr(settings), '<LazySettings [Unevaluated]>')
+        assert repr(settings) == '<LazySettings [Unevaluated]>'
 
     def test_lazy_settings_setattr_updates_value_and_clears_cache(self):
         """Test LazySettings __setattr__ updates wrapped value and returns updated on next get."""
         settings = LazySettings()
-        self.assertTrue('IS_ADMIN' not in settings.__dict__)
+        assert 'IS_ADMIN' not in settings.__dict__
 
         _ = settings.IS_ADMIN  # trigger evaluation and cache
-        self.assertTrue('IS_ADMIN' in settings.__dict__)
+        assert 'IS_ADMIN' in settings.__dict__
 
         settings.IS_ADMIN = True
-        self.assertTrue('IS_ADMIN' not in settings.__dict__)
-        self.assertEqual(settings.IS_ADMIN, True)
+        assert 'IS_ADMIN' not in settings.__dict__
+        assert settings.IS_ADMIN
 
     def test_lazyobject_requires_setup(self):
         """Test that LazyObject requires setup."""
@@ -130,7 +130,7 @@ class ConfigurationTests(BaseTestCase):
 
         obj = TestLazy()
         # __class__ should be the class of the wrapped object, not TestLazy
-        self.assertIs(obj.__class__, list)
+        assert obj.__class__ is list
 
     def test_new_method_proxy_triggers_setup_and_delegates_str(self):
         """Test that proxied __str__ triggers _setup and delegates to wrapped object."""
@@ -139,7 +139,7 @@ class ConfigurationTests(BaseTestCase):
                 self._wrapped = 'abc'
 
         obj = TestLazy()
-        self.assertEqual(str(obj), 'abc')
+        assert str(obj) == 'abc'
 
     def test_settings_check_hiders_checker_must_be_subclass(self):
         """Test that Settings checks that HIDERS_CHECKER_CLASS is a subclass."""
@@ -163,10 +163,10 @@ class ConfigurationTests(BaseTestCase):
         """Test that Settings loads and overrides the settings."""
         settings = Settings('tests.settings')
 
-        self.assertTrue(hasattr(settings, 'DOMAIN'))  # default
-        self.assertEqual(settings.TOKEN, 'secret-token')  # overridden in tests.settings
+        assert hasattr(settings, 'DOMAIN')  # default
+        assert settings.TOKEN == 'secret-token'  # overridden in tests.settings
 
     def test_settings_repr(self):
         """Test that Settings.__repr__ returns the module name in the expected format."""
         settings = Settings('tests.settings')
-        self.assertEqual(repr(settings), "<Settings 'tests.settings'>")
+        assert repr(settings) == "<Settings 'tests.settings'>"

@@ -125,7 +125,7 @@ class HammettReminderBotTests(BaseTestCase):
                 '🏠 Main Menu', MainMenuScreen, source_type=SourceTypes.JUMP_SOURCE_TYPE),
             ]],
         ))
-        self.assertFalse(self.context.chat_data['remind_is_set'])
+        assert not self.context.chat_data['remind_is_set']
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
         with self.assertRaises(KeyError):
             self.context.chat_data['seconds']

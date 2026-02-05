@@ -26,17 +26,17 @@ class ButtonsTests(BaseTestCase):
         button_one = Button(**self.kwargs)
         button_two = Button(**self.kwargs)
 
-        self.assertEqual(button_one, button_two)
+        assert button_one == button_two
 
     def test_button_equality_with_non_button(self):
         """Test comparing a Button with a non-Button object."""
         button = Button(**self.kwargs)
-        self.assertNotEqual(button, object())
+        assert button != object()
 
     def test_button_hash(self):
         """Test hashing a Button instance."""
         button = Button(**self.kwargs)
-        self.assertIsInstance(hash(button), int)
+        assert isinstance(hash(button), int)
 
     async def test_create_handler_button(self):
         """Test creating a button with HANDLER_SOURCE_TYPE."""
@@ -52,8 +52,8 @@ class ButtonsTests(BaseTestCase):
             f'button={handlers.calc_checksum(caption)},'
             f'user_id={self.user_id}'
         )
-        self.assertEqual(inline_button.callback_data, expected_data)
-        self.assertIsInstance(inline_button, InlineKeyboardButton)
+        assert inline_button.callback_data == expected_data
+        assert isinstance(inline_button, InlineKeyboardButton)
 
     async def test_create_handler_button_with_payload_and_update_none(self):
         """Test creating a handler button with payload when update is None."""
@@ -74,19 +74,19 @@ class ButtonsTests(BaseTestCase):
         )
 
         inline_button, _ = await button.create(None, self.context)
-        self.assertEqual(inline_button.callback_data, expected_data)
-        self.assertIsInstance(inline_button, InlineKeyboardButton)
+        assert inline_button.callback_data == expected_data
+        assert isinstance(inline_button, InlineKeyboardButton)
 
         storage = handlers.get_payload_storage(self.context)
-        self.assertEqual(storage[expected_data], 'payload')
+        assert storage[expected_data] == 'payload'
 
     async def test_create_url_button(self):
         """Test creating a button with URL_SOURCE_TYPE."""
         button = Button('Open', self.url, source_type=SourceTypes.URL_SOURCE_TYPE)
         inline_button, _ = await button.create(self.update, self.context)
 
-        self.assertIsInstance(inline_button, InlineKeyboardButton)
-        self.assertEqual(inline_button.url, self.url)
+        assert isinstance(inline_button, InlineKeyboardButton)
+        assert inline_button.url == self.url
 
     async def test_create_uses_source_shortcut_if_it_already_set(self):
         """Test that the shortcut handler's checksum is used if it's already set."""
@@ -94,15 +94,15 @@ class ButtonsTests(BaseTestCase):
         handler_checksum = handlers.calc_checksum(getattr(button, 'source_shortcut', None))
         inline_button, _ = await button.create(self.update, self.context)
 
-        self.assertIn(handler_checksum, inline_button.callback_data)
+        assert handler_checksum in inline_button.callback_data
 
     async def test_create_web_app_button(self):
         """Test creating a button with WEB_APP_SOURCE_TYPE."""
         button = Button('WebApp', self.url, source_type=SourceTypes.WEB_APP_SOURCE_TYPE)
         inline_button, _ = await button.create(self.update, self.context)
 
-        self.assertIsInstance(inline_button, InlineKeyboardButton)
-        self.assertEqual(inline_button.web_app.url, self.url)
+        assert isinstance(inline_button, InlineKeyboardButton)
+        assert inline_button.web_app.url == self.url
 
     async def test_mapping_shortcuts_for_jump_along_route_and_move_along_route(self):
         """Test that source_shortcut is set for the JUMP_ALONG_ROUTE and
@@ -113,26 +113,26 @@ class ButtonsTests(BaseTestCase):
             TestRouteScreen,
             source_type=SourceTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE,
         )
-        self.assertTrue(callable(getattr(jump_button, 'source_shortcut', None)))
-        self.assertEqual(jump_button.source_shortcut.__name__, 'jump_along_route')
+        assert callable(getattr(jump_button, 'source_shortcut', None))
+        assert jump_button.source_shortcut.__name__ == 'jump_along_route'
 
         move_button = Button(
             'Move',
             TestRouteScreen,
             source_type=SourceTypes.MOVE_ALONG_ROUTE_SOURCE_TYPE,
         )
-        self.assertTrue(callable(getattr(move_button, 'source_shortcut', None)))
-        self.assertEqual(move_button.source_shortcut.__name__, 'move_along_route')
+        assert callable(getattr(move_button, 'source_shortcut', None))
+        assert move_button.source_shortcut.__name__ == 'move_along_route'
 
     async def test_mapping_shortcuts_for_jump_and_move(self):
         """Test that source_shortcut is set for the jump and move shortcut types."""
         jump_button = Button('Jump', TestScreen, source_type=SourceTypes.JUMP_SOURCE_TYPE)
-        self.assertTrue(callable(getattr(jump_button, 'source_shortcut', None)))
-        self.assertEqual(jump_button.source_shortcut.__name__, 'jump')
+        assert callable(getattr(jump_button, 'source_shortcut', None))
+        assert jump_button.source_shortcut.__name__ == 'jump'
 
         move_button = Button('Move', TestScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE)
-        self.assertTrue(callable(getattr(move_button, 'source_shortcut', None)))
-        self.assertEqual(move_button.source_shortcut.__name__, 'move')
+        assert callable(getattr(move_button, 'source_shortcut', None))
+        assert move_button.source_shortcut.__name__ == 'move'
 
     async def test_non_callable_source_as_handler(self):
         """Test the case when a button handler is not callable."""
@@ -190,9 +190,9 @@ class TestGetUserId(BaseTestCase):
     async def test_get_user_id_with_update_none(self):
         """Test that _get_user_id returns user id from context when Update is None."""
         user_id = Button._get_user_id(None, self.context)  # noqa: SLF001
-        self.assertEqual(user_id, self._user_id_in_context)
+        assert user_id == self._user_id_in_context
 
     async def test_get_user_id_with_update_present(self):
         """Test that _get_user_id returns user id from Update when present."""
         user_id = Button._get_user_id(self.update, self.context)  # noqa: SLF001
-        self.assertEqual(user_id, self._user_id_in_update)
+        assert user_id == self._user_id_in_update

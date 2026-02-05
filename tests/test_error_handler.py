@@ -38,8 +38,8 @@ class ErrorHandlerTests(BaseTestCase):
         with self.assertLogs('hammett.error_handler', level='WARNING') as log:
             await default_error_handler(self.update, self.context)
 
-        self.assertEqual(len(log.records), 1)
-        self.assertIn('Query is too old', log.records[0].message)
+        assert len(log.records) == 1
+        assert 'Query is too old' in log.records[0].message
 
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_UPDATE_MASSAGE_FAIL': True})
     async def test_warning_logged_for_message_not_modified_when_ignored(self):
@@ -49,8 +49,8 @@ class ErrorHandlerTests(BaseTestCase):
         with self.assertLogs('hammett.error_handler', level='WARNING') as log:
             await default_error_handler(self.update, self.context)
 
-        self.assertEqual(len(log.records), 1)
-        self.assertIn('Message is not modified', log.records[0].message)
+        assert len(log.records) == 1
+        assert 'Message is not modified' in log.records[0].message
 
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_TIMED_OUT': True})
     async def test_warning_logged_for_timed_out_when_ignored(self):
@@ -60,5 +60,5 @@ class ErrorHandlerTests(BaseTestCase):
         with self.assertLogs('hammett.error_handler', level='WARNING') as log:
             await default_error_handler(self.update, self.context)
 
-        self.assertEqual(len(log.records), 1)
-        self.assertIn('Timed out', log.records[0].message)
+        assert len(log.records) == 1
+        assert 'Timed out' in log.records[0].message

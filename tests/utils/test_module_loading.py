@@ -10,17 +10,17 @@ class UtilsModuleLoadingTests(BaseTestCase):
     def test_import_string_imports_attribute(self):
         """Test importing an attribute from a dotted path."""
         actual = import_string('hammett.test.base.BaseTestCase')
-        self.assertIs(actual, BaseTestCase)
+        assert actual is BaseTestCase
 
     def test_import_string_raises_on_invalid_path(self):
         """Test raising ImportError on invalid dotted path format."""
         with self.assertRaises(ImportError) as ctx:
             import_string('not_a_module_path')
 
-        self.assertIn("doesn't look like a module path", str(ctx.exception))
+        assert "doesn't look like a module path" in str(ctx.exception)
 
     def test_import_string_raises_on_missing_attribute(self):
         """Test raising ImportError when attribute does not exist in the module."""
         with self.assertRaises(ImportError) as ctx:
             import_string('importlib.nonexistent_attr')
-        self.assertIn('does not define a "nonexistent_attr"', str(ctx.exception))
+        assert 'does not define a "nonexistent_attr"' in str(ctx.exception)

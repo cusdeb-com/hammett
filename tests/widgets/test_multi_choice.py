@@ -56,11 +56,11 @@ class MultiChoiceWidgetTests(BaseTestCase):
 
         keyboard = await widget._build_keyboard(self.update, self.context, initialized)
         captions = [row[0].caption for row in keyboard]
-        self.assertEqual(captions, [
+        assert captions == [
             f'{widget.chosen_emoji} Option A',
             f'{widget.chosen_emoji} Option B',
             f'{widget.unchosen_emoji} Option C',
-        ])
+        ]
 
     async def test_initialize_choices_default_marks(self):
         """Test that _initialize_choices marks no choice as selected by default."""
@@ -71,12 +71,10 @@ class MultiChoiceWidgetTests(BaseTestCase):
             widget.choices,
         )
 
-        self.assertEqual(
-            initialized, (
-                (False, 'a', 'Option A'),
-                (False, 'b', 'Option B'),
-                (False, 'c', 'Option C'),
-            ),
+        assert initialized == (
+            (False, 'a', 'Option A'),
+            (False, 'b', 'Option B'),
+            (False, 'c', 'Option C'),
         )
 
     async def test_initialize_choices_marks_with_initial_value(self):
@@ -88,12 +86,10 @@ class MultiChoiceWidgetTests(BaseTestCase):
             widget.choices,
         )
 
-        self.assertEqual(
-            initialized, (
-                (True, 'a', 'Option A'),
-                (True, 'b', 'Option B'),
-                (False, 'c', 'Option C'),
-            ),
+        assert initialized == (
+            (True, 'a', 'Option A'),
+            (True, 'b', 'Option B'),
+            (False, 'c', 'Option C'),
         )
 
     @catch_render_config()
@@ -171,13 +167,10 @@ class MultiChoiceWidgetTests(BaseTestCase):
             await widget.move(self.update, self.context)  # initialize state
 
             switched = await widget.switch(self.update, self.context, ('b', 'Option B'))
-            self.assertEqual(
-                switched,
-                (
-                    (False, 'a', 'Option A'),
-                    (True, 'b', 'Option B'),
-                    (False, 'c', 'Option C'),
-                ),
+            assert switched == (
+                (False, 'a', 'Option A'),
+                (True, 'b', 'Option B'),
+                (False, 'c', 'Option C'),
             )
 
 
@@ -213,7 +206,7 @@ class BaseChoiceWidgetTestsUsingMultiChoiceWidget(BaseTestCase):
                     choices,
                 ),
             ))
-            self.assertEqual(actual.final_render_config, expected)
+            assert actual.final_render_config == expected
 
             await widget._on_choice_click(self.update, self.context)  # choose Option B
 
@@ -230,7 +223,7 @@ class BaseChoiceWidgetTestsUsingMultiChoiceWidget(BaseTestCase):
                     choices,
                 ),
             ))
-            self.assertEqual(actual.final_render_config, expected)
+            assert actual.final_render_config == expected
 
 
 class BaseStateWidgetTestsUsingMultiChoiceWidget(BaseTestCase):
@@ -252,7 +245,7 @@ class BaseStateWidgetTestsUsingMultiChoiceWidget(BaseTestCase):
                 widget.choices,
             )
 
-            self.assertIn(initialized_choices, self.context.user_data[state_key].values())
+            assert initialized_choices in self.context.user_data[state_key].values()
 
 
 class BaseStateWidgetTestsUsingMultiChoiceWidgetWithoutUpdate(BaseTestCase):
@@ -317,5 +310,5 @@ class BaseStateWidgetTestsUsingMultiChoiceWidgetWithoutUpdate(BaseTestCase):
             message_id=self.message.message_id,
         )
         user_data = self.context._application.user_data[self.user.id]
-        self.assertIn(choices, user_data[state_key].values())
-        self.assertEqual(actual.final_render_config, expected)
+        assert choices in user_data[state_key].values()
+        assert actual.final_render_config == expected

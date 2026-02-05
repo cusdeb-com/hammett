@@ -103,8 +103,8 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             persistence=RedisPersistence(),
         )
 
-        self.assertIsNotNone(bot._native_application.persistence)
-        self.assertIsInstance(bot._native_application.persistence, RedisPersistence)
+        assert bot._native_application.persistence is not None
+        assert isinstance(bot._native_application.persistence, RedisPersistence)
 
     @override_settings(LOGGING=_TEST_LOGGING, TOKEN='secret-token')
     def test_bot_initialization_with_logging_setup(self):
@@ -112,15 +112,12 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         an overriden LOGGING setting.
         """
         get_bot()
-        self.assertEqual(
-            logging.root.manager.loggerDict['hammett_test'].getEffectiveLevel(),
-            logging.INFO,
-        )
+        assert logging.root.manager.loggerDict['hammett_test'].getEffectiveLevel() == logging.INFO
 
     def test_bot_initialization_without_persistence_specified(self):
         """Test a bot initialization without a persistence specified."""
         bot = get_bot()
-        self.assertIsNone(bot._native_application.persistence)
+        assert bot._native_application.persistence is None
 
     def test_creating_button_handler(self):
         """Test creating CallbackQueryHandler for the button handler type."""
@@ -134,9 +131,9 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             mock_possible_handler,
         )
 
-        self.assertIsInstance(handler_object, CallbackQueryHandler)
-        self.assertEqual(handler_object.callback, mock_handler)
-        self.assertEqual(handler_object.pattern.pattern, calc_checksum(mock_handler))
+        assert isinstance(handler_object, CallbackQueryHandler)
+        assert handler_object.callback == mock_handler
+        assert handler_object.pattern.pattern == calc_checksum(mock_handler)
 
     def test_creating_command_handler(self):
         """Test creating MessageHandler for the command handler type."""
@@ -150,8 +147,8 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             mock_possible_handler,
         )
 
-        self.assertIsInstance(handler_object, MessageHandler)
-        self.assertEqual(handler_object.callback, mock_handler)
+        assert isinstance(handler_object, MessageHandler)
+        assert handler_object.callback == mock_handler
 
     def test_creating_input_handler(self):
         """Test creating MessageHandler for the input handler type."""
@@ -165,9 +162,9 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             mock_possible_handler,
         )
 
-        self.assertIsInstance(handler_object, MessageHandler)
-        self.assertEqual(handler_object.callback, mock_handler)
-        self.assertIs(handler_object.filters, filters.TEXT)
+        assert isinstance(handler_object, MessageHandler)
+        assert handler_object.callback == mock_handler
+        assert handler_object.filters is filters.TEXT
 
     def test_creating_typing_handler(self):
         """Test creating MessageHandler for the typing handler type."""
@@ -180,9 +177,9 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             mock_possible_handler,
         )
 
-        self.assertIsInstance(handler_object, MessageHandler)
-        self.assertEqual(handler_object.callback, mock_handler)
-        self.assertEqual(handler_object.filters.name, (filters.TEXT & (~filters.COMMAND)).name)
+        assert isinstance(handler_object, MessageHandler)
+        assert handler_object.callback == mock_handler
+        assert handler_object.filters.name == (filters.TEXT & ~filters.COMMAND).name
 
     def test_registering_job_without_callback_specified(self):
         """Test registering a job without `callback` key specified."""
@@ -218,8 +215,8 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         )
 
         registered_error_handlers = list(bot._native_application.error_handlers)
-        self.assertEqual(registered_error_handlers[0], _test_error_handler)
-        self.assertEqual(registered_error_handlers[1], default_error_handler)
+        assert registered_error_handlers[0] == _test_error_handler
+        assert registered_error_handlers[1] == default_error_handler
 
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_TIMED_OUT': True}, TOKEN='secret-token')
     def test_registering_default_error_handler_only(self):
@@ -227,7 +224,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         bot = get_bot()
         registered_error_handler = next(iter(bot._native_application.error_handlers))
 
-        self.assertEqual(registered_error_handler, default_error_handler)
+        assert registered_error_handler == default_error_handler
 
     def test_registering_route_handlers(self):
         """Test registering route handlers."""
@@ -241,10 +238,10 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         )
 
         jump_along_route_callback = bot._native_states[DEFAULT_STATE][2].callback
-        self.assertEqual(jump_along_route_callback, TestRouteScreen().jump_along_route)
+        assert jump_along_route_callback == TestRouteScreen().jump_along_route
 
         move_along_route_callback = bot._native_states[DEFAULT_STATE][3].callback
-        self.assertEqual(move_along_route_callback, TestRouteScreen().move_along_route)
+        assert move_along_route_callback == TestRouteScreen().move_along_route
 
     @patch('hammett.core.bot.HammettTranslation')
     def test_run_with_polling_mode(self, _mock_translation):
@@ -276,11 +273,11 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
 
             mock_run_webhook.assert_called_once()
             call_kwargs = mock_run_webhook.call_args.kwargs
-            self.assertEqual(call_kwargs['listen'], '127.0.0.1')
-            self.assertEqual(call_kwargs['port'], 80)
-            self.assertEqual(call_kwargs['url_path'], '/webhook')
-            self.assertEqual(call_kwargs['webhook_url'], 'https://test.com/webhook')
-            self.assertIn('allowed_updates', call_kwargs)
+            assert call_kwargs['listen'] == '127.0.0.1'
+            assert call_kwargs['port'] == 80
+            assert call_kwargs['url_path'] == '/webhook'
+            assert call_kwargs['webhook_url'] == 'https://test.com/webhook'
+            assert 'allowed_updates' in call_kwargs
 
     @override_settings(TOKEN='secret-token')
     @patch('hammett.core.bot.HammettTranslation')
@@ -299,12 +296,12 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         ):
             bot.run()
 
-            self.assertEqual(len(log.records), 1)
-            self.assertIn(
-                "It's recommended to avoid using the following versions of Python",
-                log.records[0].message,
+            assert len(log.records) == 1
+            assert (
+                "It's recommended to avoid using the following versions of Python"
+                in log.records[0].message
             )
-            self.assertIn('3.11.5, 3.11.6, and 3.12.0', log.records[0].message)
+            assert '3.11.5, 3.11.6, and 3.12.0' in log.records[0].message
 
     @override_settings(TOKEN='secret-token')
     @patch('hammett.core.bot.HammettTranslation')
@@ -331,14 +328,11 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         handlers = bot._native_application.handlers[0][0]
         pattern = calc_checksum('TestScreenWithKeyboard.move')
 
-        self.assertIsInstance(handlers.entry_points[0], CommandHandler)
-        self.assertEqual(handlers.name, BOT_TEST_NAME)
-        self.assertEqual(
-            # Handlers are registered in alphabetical order,
-            # and the move method comes right after jump.
-            handlers.states[DEFAULT_STATE][1].pattern,
-            re.compile(pattern),
-        )
+        assert isinstance(handlers.entry_points[0], CommandHandler)
+        assert handlers.name == BOT_TEST_NAME
+        # Handlers are registered in alphabetical order,
+        # and the move method comes right after jump.
+        assert handlers.states[DEFAULT_STATE][1].pattern == re.compile(pattern)
 
     def test_successful_registering_error_handler(self):
         """Test successful registering of `error_handler`."""
@@ -349,7 +343,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         )
 
         registered_error_handler = next(iter(bot._native_application.error_handlers))
-        self.assertEqual(registered_error_handler, _test_error_handler)
+        assert registered_error_handler == _test_error_handler
 
     def test_successful_registering_job(self):
         """Test successful registering of a job."""
@@ -362,7 +356,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             }],
         )
         registered_job = bot._native_application.job_queue.jobs()[0].callback
-        self.assertEqual(registered_job, _test_job)
+        assert registered_job == _test_job
 
     @override_settings(TOKEN='')
     def test_unsuccessful_bot_initialization_with_empty_token(self):

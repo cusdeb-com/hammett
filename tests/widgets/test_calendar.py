@@ -51,7 +51,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         """Test getting the calendar config using the `_do_nothing` handler."""
         await TestDayCalendarWidget()._do_nothing(self.update, self.context)
 
-        self.assertIsNone(actual.final_render_config)
+        assert actual.final_render_config is None
 
     @catch_render_config()
     async def test_day_calendar_page_render_after_calling_send_handler(self, actual):
@@ -66,7 +66,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
                 *await TestDayCalendarWidget().add_extra_keyboard(self.update, self.context),
             ],
         ))
-        self.assertEqual(actual.final_render_config, expected)
+        assert actual.final_render_config == expected
 
     @catch_render_config()
     async def test_day_calendar_render_after_calling_on_day_click_handler(self, actual):
@@ -94,28 +94,28 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
                     *await widget.add_extra_keyboard(self.update, self.context),
                 ],
             ))
-            self.assertEqual(actual.final_render_config, expected)
-            self.assertEqual(state, DEFAULT_STATE)
+            assert actual.final_render_config == expected
+            assert state == DEFAULT_STATE
 
     async def test_default_description_getters_return_attributes(self):
         """Test that default description getters return corresponding class attributes."""
         some_date = date(2020, 1, 1)
         widget = TestYearCalendarWidget()
-        self.assertEqual(
-            await widget.get_year_description(self.update, self.context, some_date),
-            TestYearCalendarWidget.year_description,
+        assert (
+            await widget.get_year_description(self.update, self.context, some_date)
+            == TestYearCalendarWidget.year_description
         )
 
         widget = TestMonthCalendarWidget()
-        self.assertEqual(
-            await widget.get_month_description(self.update, self.context, some_date),
-            TestMonthCalendarWidget.month_description,
+        assert (
+            await widget.get_month_description(self.update, self.context, some_date)
+            == TestMonthCalendarWidget.month_description
         )
 
         widget = TestDayCalendarWidget()
-        self.assertEqual(
-            await widget.get_day_description(self.update, self.context, some_date),
-            TestDayCalendarWidget.day_description,
+        assert (
+            await widget.get_day_description(self.update, self.context, some_date)
+            == TestDayCalendarWidget.day_description
         )
 
     async def test_get_current_date_uses_current_date_attribute_and_confirm_description(self):
@@ -125,10 +125,10 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
         widget = TestWithCustomDate()
         current = await widget.get_current_date(self.update, self.context)
-        self.assertEqual(current, date(2000, 1, 2))
+        assert current == date(2000, 1, 2)
 
         desc = await widget.get_confirm_description(self.update, self.context, current)
-        self.assertEqual(desc, '2 Jan 2000')
+        assert desc == '2 Jan 2000'
 
     async def test_get_days_returns_month_grid_with_expected_blanks_and_captions(self):
         """Test _get_days returns full month grid with blanks and correct day captions."""
@@ -145,10 +145,10 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         none_count = sum(1 for day, _ in days if day is None)
         some_days = [int(text) for day, text in days if day is not None]
 
-        self.assertEqual(none_count, blanks)
-        self.assertEqual(len(some_days), last_day)
-        self.assertEqual(some_days[0], 1)
-        self.assertEqual(some_days[-1], last_day)
+        assert none_count == blanks
+        assert len(some_days) == last_day
+        assert some_days[0] == 1
+        assert some_days[-1] == last_day
 
     async def test_get_days_respects_left_and_right_boundaries(self):
         """Test _get_days marks out-of-bound days as blanks according to boundaries."""
@@ -161,9 +161,9 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         days = await widget._get_days(self.update, self.context, start)
 
         in_range_days = [day for day, _ in days if day is not None]
-        self.assertEqual(in_range_days[0], date(2020, 2, 5))
-        self.assertEqual(in_range_days[-1], date(2020, 2, 20))
-        self.assertEqual(len(in_range_days), 16)
+        assert in_range_days[0] == date(2020, 2, 5)
+        assert in_range_days[-1] == date(2020, 2, 20)
+        assert len(in_range_days) == 16
 
     async def test_get_handler_button_builds_button_with_payload_and_handler(self):
         """Test _get_handler_button creates a Button with expected attributes and payload JSON."""
@@ -173,12 +173,12 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         payload = {'unit': CalendarUnit.DAY, 'date': ['2025', '10', '07']}
         button = CalendarWidget._get_handler_button('Caption', handler, payload, chat_id=123)
 
-        self.assertIsInstance(button, Button)
-        self.assertEqual(button.caption, 'Caption')
-        self.assertEqual(button.chat_id, 123)
-        self.assertEqual(button.source, handler)
-        self.assertIsInstance(button.payload, str)
-        self.assertIn('2025', button.payload)
+        assert isinstance(button, Button)
+        assert button.caption == 'Caption'
+        assert button.chat_id == 123
+        assert button.source == handler
+        assert isinstance(button.payload, str)
+        assert '2025' in button.payload
 
     async def test_get_months_or_years_produces_leading_and_trailing_empty_slots_for_months(self):
         """Test _get_months_or_years returns Nones before/after when outside boundaries (months)."""
@@ -197,11 +197,11 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         )
 
         # Expect: Jan before range -> None, Feb/Mar/Apr valid, May/Jun after range -> None, None
-        self.assertEqual(len(items), 6)
-        self.assertIsNone(items[0])
-        self.assertEqual([d.month for d in items[1:4] if d is not None], [2, 3, 4])
-        self.assertIsNone(items[4])
-        self.assertIsNone(items[5])
+        assert len(items) == 6
+        assert items[0] is None
+        assert [d.month for d in items[1:4] if d is not None] == [2, 3, 4]
+        assert items[4] is None
+        assert items[5] is None
 
     async def test_get_months_or_years_produces_leading_and_trailing_empty_slots_for_years(self):
         """Test _get_months_or_years returns Nones before/after when outside boundaries (years)."""
@@ -220,11 +220,11 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         )
 
         # Expect: 2018 before range -> None; 2019, 2020, 2021 valid; 2022, 2023 after -> None, None
-        self.assertEqual(len(items), 6)
-        self.assertIsNone(items[0])
-        self.assertEqual([d.year for d in items[1:4] if d is not None], [2019, 2020, 2021])
-        self.assertIsNone(items[4])
-        self.assertIsNone(items[5])
+        assert len(items) == 6
+        assert items[0] is None
+        assert [d.year for d in items[1:4] if d is not None] == [2019, 2020, 2021]
+        assert items[4] is None
+        assert items[5] is None
 
     async def test_getting_arranged_buttons(self):
         """Test getting the arranged buttons."""
@@ -237,48 +237,45 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
         row_size = 2
         arranged_buttons = _arrange_buttons_into_rows(buttons, row_size=row_size)
-        self.assertEqual(len(arranged_buttons[0]), row_size)
-        self.assertEqual(len(arranged_buttons[1]), row_size)
+        assert len(arranged_buttons[0]) == row_size
+        assert len(arranged_buttons[1]) == row_size
 
     async def test_getting_calendar_description_that_includes_result_date(self):
         """Test getting the description that includes the result date."""
         actual = await TestDayCalendarWidget().get_confirm_description(
             self.update, self.context, datetime(1, 1, 1, tzinfo=timezone.utc),
         )
-        self.assertEqual(actual, '1 Jan 1')
+        assert actual == '1 Jan 1'
 
     def test_getting_date_as_list(self):
         """Test _date_to_list returns [year, month, day] as strings."""
-        self.assertEqual(
-            CalendarWidget._date_to_list(date(2025, 10, 7)),
-            ['2025', '10', '7'],
-        )
+        assert CalendarWidget._date_to_list(date(2025, 10, 7)) == ['2025', '10', '7']
 
     async def test_getting_left_boundary(self):
         """Test getting the left boundary of the given calendar unit."""
         date = datetime(10, 10, 10, tzinfo=timezone.utc).date()
 
         actual = _get_left_boundary(date, CalendarUnit.DAY)
-        self.assertEqual(actual, date)
+        assert actual == date
 
         actual = _get_left_boundary(date, CalendarUnit.MONTH)
-        self.assertEqual(actual, datetime(10, 10, 1, tzinfo=timezone.utc).date())
+        assert actual == datetime(10, 10, 1, tzinfo=timezone.utc).date()
 
         actual = _get_left_boundary(date, CalendarUnit.YEAR)
-        self.assertEqual(actual, datetime(10, 1, 1, tzinfo=timezone.utc).date())
+        assert actual == datetime(10, 1, 1, tzinfo=timezone.utc).date()
 
     async def test_getting_right_boundary(self):
         """Test getting the right boundary of the given calendar unit."""
         date = datetime(10, 10, 10, tzinfo=timezone.utc).date()
 
         actual = _get_right_boundary(date, CalendarUnit.DAY)
-        self.assertEqual(actual, date)
+        assert actual == date
 
         actual = _get_right_boundary(date, CalendarUnit.MONTH)
-        self.assertEqual(actual, datetime(10, 10, 31, tzinfo=timezone.utc).date())
+        assert actual == datetime(10, 10, 31, tzinfo=timezone.utc).date()
 
         actual = _get_right_boundary(date, CalendarUnit.YEAR)
-        self.assertEqual(actual, datetime(10, 12, 31, tzinfo=timezone.utc).date())
+        assert actual == datetime(10, 12, 31, tzinfo=timezone.utc).date()
 
     async def test_getting_month_name(self):
         """Test getting the translated month names."""
@@ -286,10 +283,9 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
             'янв', 'фев', 'мар', 'апр', 'май', 'июн',
             'июл', 'авг', 'сен', 'окт', 'ноя', 'дек',
         ]
-        self.assertEqual([
-            TestDayCalendarWidget.get_month_name(month, 'ru')
-            for month in range(1, 13)
-        ], expected)
+        assert [
+            TestDayCalendarWidget.get_month_name(month, 'ru') for month in range(1, 13)
+        ] == expected
 
         self.context.user_data.pop('language_code', None)
 
@@ -306,7 +302,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
                 *await TestMonthCalendarWidget().add_extra_keyboard(self.update, self.context),
             ],
         ))
-        self.assertEqual(actual.final_render_config, expected)
+        assert actual.final_render_config == expected
 
     @catch_render_config()
     async def test_month_or_year_render_after_calling_on_month_or_year_click(self, actual):
@@ -338,20 +334,20 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
                 ),
                 keyboard=keyboard,
             ))
-            self.assertEqual(actual.final_render_config, expected)
-            self.assertEqual(state, DEFAULT_STATE)
+            assert actual.final_render_config == expected
+            assert state == DEFAULT_STATE
 
     async def test_set_left_boundary_default(self):
         """Test default left boundary is the earliest possible date."""
         widget = TestDayCalendarWidget()
         boundary = await widget.set_left_boundary(self.update, self.context)
-        self.assertEqual(boundary, date(1, 1, 1))
+        assert boundary == date(1, 1, 1)
 
     async def test_set_right_boundary_default(self):
         """Test default right boundary is the farthest possible date."""
         widget = TestDayCalendarWidget()
         boundary = await widget.set_right_boundary(self.update, self.context)
-        self.assertEqual(boundary, date(2999, 12, 31))
+        assert boundary == date(2999, 12, 31)
 
     @catch_render_config()
     async def test_year_calendar_page_render_after_calling_move_handler(self, actual):
@@ -365,7 +361,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
                 *await TestYearCalendarWidget().add_extra_keyboard(self.update, self.context),
             ],
         ))
-        self.assertEqual(actual.final_render_config, expected)
+        assert actual.final_render_config == expected
 
     @catch_render_config()
     async def test_navigation_render_after_calling_on_navigation_click(self, actual):
@@ -397,4 +393,4 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
                 ),
                 keyboard=keyboard,
             ))
-            self.assertEqual(actual.final_render_config, expected)
+            assert actual.final_render_config == expected
