@@ -13,15 +13,15 @@ extend-select = ["W", "E"]
 preview = true
 
 ignore = [
-    "ANN401",  # any-type
+    "ANN401", # any-type
     "CPY001", # missing-copyright-notice
-    "D205",  # blank-line-after-summary
+    "D205", # blank-line-after-summary
     "PLC0415", # import-outside-top-level
     "PLC2701", # import-private-name
     "PLR6301", # no-self-use
-    "PT027",  # pytest-unittest-raises-assertion
-    "S301",  # 	suspicious-pickle-usage
-    "S403",  # 	suspicious-pickle-import
+    "PT027", # pytest-unittest-raises-assertion
+    "S301", # suspicious-pickle-usage
+    "S403", # suspicious-pickle-import
 ]
 
 [lint.flake8-quotes]
