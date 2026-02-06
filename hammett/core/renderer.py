@@ -2,7 +2,8 @@
 
 import contextlib
 import re
-from typing import TYPE_CHECKING
+from os import PathLike
+from typing import TYPE_CHECKING, ClassVar
 from uuid import uuid4
 
 import aiofiles
@@ -17,7 +18,6 @@ _NO_MESSAGE_TO_EDIT = 'There is no text in the message to edit'
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
-    from os import PathLike
     from typing import Any
 
     from telegram import Message, Update
@@ -33,7 +33,9 @@ if TYPE_CHECKING:
 class Renderer:
     """The class implements screen rendering."""
 
-    _cached_covers: 'dict[str | PathLike[str], str]' = {}
+    # Class-level cache shared by all Renderer instances and
+    # reduce memory usage.
+    _cached_covers: ClassVar[dict[str | PathLike[str], str]] = {}
 
     def __init__(self: 'Self', parse_mode: 'ParseMode | None') -> None:
         """Initialize a renderer object."""
