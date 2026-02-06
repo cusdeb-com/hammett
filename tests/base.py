@@ -96,7 +96,7 @@ class TestRenderer(Renderer):
         """Represent a stub for testing purposes."""
         return Message(
             MESSAGE_ID,
-            datetime.datetime(2000, 1, 1, 0, 0, 0, tzinfo=datetime.timezone.utc),
+            datetime.datetime(2000, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
             Chat(CHAT_ID, ChatType.SENDER),
         )
 

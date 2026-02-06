@@ -33,7 +33,7 @@ import difflib
 import pprint
 import unittest
 from dataclasses import asdict
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 from unittest.util import _common_shorten_repr
 
@@ -77,7 +77,7 @@ class TestBot(Bot):
                 'id': 1,
                 'type': ChatType.PRIVATE,
             },
-            'date': datetime.now(timezone.utc).timestamp(),
+            'date': datetime.now(UTC).timestamp(),
         }
 
 
@@ -143,7 +143,7 @@ class BaseTestCase(unittest.TestCase):
         """
         return Message(
             self.message_id,
-            datetime.now(tz=timezone.utc),
+            datetime.now(tz=UTC),
             self.chat,
             from_user=self.user,
         )

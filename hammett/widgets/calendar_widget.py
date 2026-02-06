@@ -3,7 +3,7 @@
 import calendar
 import itertools
 import json
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from enum import StrEnum
 from typing import TYPE_CHECKING
 
@@ -638,7 +638,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
             `current_date` attribute of the widget.
 
         """
-        return self.current_date or datetime.now(tz=timezone.utc).date()
+        return self.current_date or datetime.now(tz=UTC).date()
 
     async def get_dates_with_captions(
         self: 'Self',
