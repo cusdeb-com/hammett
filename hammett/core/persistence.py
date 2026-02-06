@@ -16,12 +16,11 @@ from hammett.conf import settings
 from hammett.core.exceptions import ImproperlyConfiguredError
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Self
 
     from telegram._utils.types import JSONDict
     from telegram.ext import PersistenceInput
     from telegram.ext._utils.types import CDCData, ConversationKey
-    from typing_extensions import Self
 
 
 LOGGER = logging.getLogger(__name__)

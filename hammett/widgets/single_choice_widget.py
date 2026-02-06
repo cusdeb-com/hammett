@@ -5,12 +5,11 @@ from typing import TYPE_CHECKING
 from hammett.widgets.base import BaseChoiceWidget
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
     from hammett.types.widgets import Choice, Choices, InitializedChoices
 

@@ -18,13 +18,12 @@ _NO_MESSAGE_TO_EDIT = 'There is no text in the message to edit'
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Message, Update
     from telegram._utils.types import FileInput
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
     from hammett.core.constants import LatestMessage, ParseMode
     from hammett.types.core import Document, Keyboard

@@ -17,12 +17,11 @@ from hammett.utils.translation import gettext as _
 from hammett.widgets.base import BaseWidget
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
     from hammett.types.core import Handler, Keyboard, State
 
