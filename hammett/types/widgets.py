@@ -4,4 +4,6 @@ Choice = tuple[str, str]
 
 Choices = tuple[Choice, ...]
 
+Images = tuple[tuple[str, str], ...]
+
 InitializedChoices = tuple[tuple[bool, str, str], ...]

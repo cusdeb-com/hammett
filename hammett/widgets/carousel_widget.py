@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
     from hammett.core.constants import FinalRenderConfig
     from hammett.types.core import Keyboard, State
+    from hammett.types.widgets import Images
 
 _END_POSITION, _START_POSITION = -1, 0
 
@@ -27,7 +28,7 @@ class CarouselWidget(BaseStateWidget):
     for a list of images.
     """
 
-    images: list[list[str]] = []
+    images: 'Images | None' = None
     infinity: bool = False
     back_caption: str = '⏮'
     next_caption: str = '⏭'
@@ -37,16 +38,11 @@ class CarouselWidget(BaseStateWidget):
         """Initialize a carousel widget object.
 
         Raises:
-            ImproperlyConfigured: If the `images` attribute has the wrong type.
             ImproperlyConfigured: If the `back_caption`, `next_caption`, and `disable_caption`
             attributes are not specified.
 
         """
         super().__init__()
-
-        if not isinstance(self.images, list):
-            msg = f'The images attribute of {self.__class__.__name__} must be a list of lists'
-            raise ImproperlyConfigured(msg)
 
         if not (self.back_caption and self.next_caption and self.disable_caption):
             msg = (
@@ -77,16 +73,29 @@ class CarouselWidget(BaseStateWidget):
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
         config: 'RenderConfig | None' = None,
-        images: list[list[str]] | None = None,
+        images: 'Images | None' = None,
     ) -> 'State':
         """Initialize the widget.
 
         Returns:
             State after widget initialization.
 
+        Raises:
+            ImproperlyConfigured: If the `images` attribute has the wrong type.
+
         """
         config = config or RenderConfig()
         current_images = images or await self.get_images(update, context)
+        if (
+            not current_images or
+            not isinstance(current_images, tuple) or
+            not all(item and isinstance(item, tuple) for item in current_images)
+        ):
+            msg = (
+                f'The images attribute of {self.__class__.__name__} must be '
+                f'a tuple of tuples'
+            )
+            raise ImproperlyConfigured(msg)
 
         cover, description = current_images[_START_POSITION]
         config.cover = cover
@@ -122,7 +131,7 @@ class CarouselWidget(BaseStateWidget):
 
         """
         return {
-            'images': kwargs.get('images', []),
+            'images': kwargs.get('images', ()),
         }
 
     async def _do_nothing(
@@ -136,7 +145,7 @@ class CarouselWidget(BaseStateWidget):
         self: 'Self',
         update: 'Update | None',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        images: list[list[str]],
+        images: 'Images | tuple[()]',
         current_image: int,
     ) -> 'Keyboard':
         """Determine which button to disable and return the updated keyboard.
@@ -193,7 +202,7 @@ class CarouselWidget(BaseStateWidget):
             None.
 
         """
-        images = await self.get_state_value(update, context, 'images') or []
+        images = await self.get_state_value(update, context, 'images') or ()
 
         try:
             cover, description = images[next_state]
@@ -224,7 +233,7 @@ class CarouselWidget(BaseStateWidget):
             None.
 
         """
-        images = await self.get_state_value(update, context, 'images') or []
+        images = await self.get_state_value(update, context, 'images') or ()
 
         try:
             cover, description = images[next_state]
@@ -299,7 +308,7 @@ class CarouselWidget(BaseStateWidget):
         self: 'Self',
         _update: 'Update | None',
         _context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> list[list[str]]:
+    ) -> 'Images | None':
         """Return the `images` attribute of the widget.
 
         Returns:
@@ -342,7 +351,7 @@ class CarouselWidget(BaseStateWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
-        images: list[list[str]] | None = None,
+        images: 'Images | None' = None,
         **_kwargs: 'Any',
     ) -> 'State':
         """Handle the case when the widget is used as a notification.
