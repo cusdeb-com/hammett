@@ -18,7 +18,6 @@ ignore = [
     "PLC2701", # import-private-name
     "PLR6301", # no-self-use
     "PT027",  # pytest-unittest-raises-assertion
-    "RUF012",  # mutable-class-default
     "S301",  # 	suspicious-pickle-usage
     "S403",  # 	suspicious-pickle-import
 ]
