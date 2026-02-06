@@ -36,9 +36,7 @@ from hammett.conf import GlobalSettings, settings
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
     from types import TracebackType
-    from typing import Any
-
-    from typing_extensions import Self
+    from typing import Any, Self
 
     from hammett.core.constants import FinalRenderConfig
     from hammett.types.core import Func

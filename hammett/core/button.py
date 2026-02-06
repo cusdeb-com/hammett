@@ -10,10 +10,11 @@ from hammett.core.exceptions import ImproperlyConfiguredError, UnknownSourceType
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
+    from typing import Self
+
     from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
     from hammett.core.hider import Hider, HidersChecker
     from hammett.types.core import Handler, Source

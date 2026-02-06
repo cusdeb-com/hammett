@@ -7,6 +7,5 @@ ruff
 types-aiofiles
 types-python-dateutil
 types-redis
-typing_extensions
 
 -r requirements.txt

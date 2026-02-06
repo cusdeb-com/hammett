@@ -25,12 +25,11 @@ from hammett.utils.render_config import get_latest_message, save_latest_message
 
 if TYPE_CHECKING:
     from os import PathLike
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Message, Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
     from hammett.types.core import Document, Keyboard, State
 

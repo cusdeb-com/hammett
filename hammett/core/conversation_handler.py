@@ -30,12 +30,11 @@ from telegram.ext._application import ApplicationHandlerStop
 from telegram.ext._extbot import ExtBot
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Update
     from telegram.ext import Application
     from telegram.ext._utils.types import CCT
-    from typing_extensions import Self
 
     from hammett.types.core import CheckUpdateType
 
