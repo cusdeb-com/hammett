@@ -1,6 +1,6 @@
 """The module is a script for running the bot."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from hammett.core import Bot, Button, Screen
 from hammett.core.constants import DEFAULT_STATE, SourceTypes
@@ -24,7 +24,7 @@ MAIN_MENU_SCREEN_DESCRIPTION = (
 
 def _calculate_days(date_):
     """Return the number of days remaining until the selected date."""
-    return (date_ - datetime.now(tz=timezone.utc).date()).days
+    return (date_ - datetime.now(tz=UTC).date()).days
 
 
 class ChoosingDateScreen(CalendarWidget):
@@ -50,7 +50,7 @@ class ChoosingDateScreen(CalendarWidget):
 
     async def set_left_boundary(self, _update, _context):
         """Return the earliest date that can be selected in the calendar."""
-        return datetime.now(tz=timezone.utc).date()
+        return datetime.now(tz=UTC).date()
 
 
 class MainMenuScreen(StartMixin, Screen):

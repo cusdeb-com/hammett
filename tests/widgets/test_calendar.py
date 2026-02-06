@@ -4,7 +4,7 @@
 
 import calendar
 import json
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -264,7 +264,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         actual = await TestDayCalendarWidget().get_confirm_description(
             self.update,
             self.context,
-            datetime(1, 1, 1, tzinfo=timezone.utc),
+            datetime(1, 1, 1, tzinfo=UTC),
         )
         assert actual == '1 Jan 1'
 
@@ -274,29 +274,29 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
     async def test_getting_left_boundary(self):
         """Test getting the left boundary of the given calendar unit."""
-        date = datetime(10, 10, 10, tzinfo=timezone.utc).date()
+        date = datetime(10, 10, 10, tzinfo=UTC).date()
 
         actual = _get_left_boundary(date, CalendarUnit.DAY)
         assert actual == date
 
         actual = _get_left_boundary(date, CalendarUnit.MONTH)
-        assert actual == datetime(10, 10, 1, tzinfo=timezone.utc).date()
+        assert actual == datetime(10, 10, 1, tzinfo=UTC).date()
 
         actual = _get_left_boundary(date, CalendarUnit.YEAR)
-        assert actual == datetime(10, 1, 1, tzinfo=timezone.utc).date()
+        assert actual == datetime(10, 1, 1, tzinfo=UTC).date()
 
     async def test_getting_right_boundary(self):
         """Test getting the right boundary of the given calendar unit."""
-        date = datetime(10, 10, 10, tzinfo=timezone.utc).date()
+        date = datetime(10, 10, 10, tzinfo=UTC).date()
 
         actual = _get_right_boundary(date, CalendarUnit.DAY)
         assert actual == date
 
         actual = _get_right_boundary(date, CalendarUnit.MONTH)
-        assert actual == datetime(10, 10, 31, tzinfo=timezone.utc).date()
+        assert actual == datetime(10, 10, 31, tzinfo=UTC).date()
 
         actual = _get_right_boundary(date, CalendarUnit.YEAR)
-        assert actual == datetime(10, 12, 31, tzinfo=timezone.utc).date()
+        assert actual == datetime(10, 12, 31, tzinfo=UTC).date()
 
     async def test_getting_month_name(self):
         """Test getting the translated month names."""

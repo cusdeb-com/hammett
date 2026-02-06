@@ -4,7 +4,7 @@
 
 import os
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 from hammett.core import Button
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
@@ -31,7 +31,7 @@ class HammettMultiStateBotTests(BaseTestCase):
         """Return the `Message` object with text attribute for testing purposes."""
         return Message(
             self.message_id,
-            datetime.now(tz=timezone.utc),
+            datetime.now(tz=UTC),
             self.chat,
             from_user=self.user,
             text=_TEST_NAME,
