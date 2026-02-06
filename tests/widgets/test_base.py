@@ -8,14 +8,14 @@ from unittest.mock import patch
 from telegram.ext import CallbackContext
 
 from hammett.core.constants import EMPTY_KEYBOARD, FinalRenderConfig
-from hammett.core.exceptions import FailedToGetDataAttributeOfQuery, PayloadIsEmpty
+from hammett.core.exceptions import FailedToGetDataAttributeOfQueryError, PayloadIsEmptyError
 from hammett.test.base import BaseTestCase
 from hammett.widgets.base import BaseChoiceWidget, BaseStateWidget, BaseWidget
 from hammett.widgets.exceptions import (
-    ChoiceEmojisAreUndefined,
-    ChoicesFormatIsInvalid,
-    FailedToGetStateKey,
-    NoChoicesSpecified,
+    ChoiceEmojisAreUndefinedError,
+    ChoicesFormatIsInvalidError,
+    FailedToGetStateKeyError,
+    NoChoicesSpecifiedError,
 )
 from tests.base import BaseTestScreenWithDescription
 
@@ -57,11 +57,13 @@ class BaseStateWidgetTests(BaseTestCase):
     """The class implements tests for BaseStateWidget internals."""
 
     async def test_get_state_key_raises_when_message_is_missing(self):
-        """Test _get_state_key raises FailedToGetStateKey when callback query has no message."""
+        """Test _get_state_key raises FailedToGetStateKeyError when callback query
+        has no message.
+        """
         widget = TestStateWidget()
         with (
             patch('hammett.widgets.base.get_callback_query', return_value=SimpleNamespace()),
-            self.assertRaises(FailedToGetStateKey),
+            self.assertRaises(FailedToGetStateKeyError),
         ):
             await widget._get_state_key(self.update)
 
@@ -75,11 +77,11 @@ class BaseStateWidgetTests(BaseTestCase):
         assert f'{widget.__class__.__name__}_{self.chat.id}_{self.message.message_id}' == state_key
 
     async def test_get_state_value_returns_none_when_failed_to_get_state_key(self):
-        """Test get_state_value returns None if _get_state_key raises FailedToGetStateKey."""
+        """Test get_state_value returns None if _get_state_key raises FailedToGetStateKeyError."""
         widget = TestStateWidget()
         with patch(
             'hammett.widgets.base.BaseStateWidget._get_state_key',
-            side_effect=FailedToGetStateKey,
+            side_effect=FailedToGetStateKeyError,
         ):
             actual = await widget.get_state_value(self.update, self.context, 'choices')
             assert actual is None
@@ -131,13 +133,13 @@ class BaseChoiceWidgetTests(BaseTestCase):
         """Test that build_keyboard raises an error if the choices are in an invalid format."""
         widget = TestBaseChoiceWidget()
         bad_initialized_choices = (('a', 'Option A'),)
-        with self.assertRaises(ChoicesFormatIsInvalid):
+        with self.assertRaises(ChoicesFormatIsInvalidError):
             await widget._build_keyboard(self.update, self.context, bad_initialized_choices)
 
     async def test_build_keyboard_raises_no_choices_specified(self):
         """Test that build_keyboard raises an error if no choices are specified."""
         widget = TestBaseChoiceWidget()
-        with self.assertRaises(NoChoicesSpecified):
+        with self.assertRaises(NoChoicesSpecifiedError):
             await widget._build_keyboard(self.update, self.context, ())
 
     async def test_build_keyboard_with_valid_initialized_choices(self):
@@ -207,7 +209,7 @@ class BaseChoiceWidgetTests(BaseTestCase):
                 return_value=SimpleNamespace(data='key'),
             ),
             patch('hammett.core.handlers.get_payload_storage', return_value={}),
-            self.assertRaises(PayloadIsEmpty),
+            self.assertRaises(PayloadIsEmptyError),
         ):
             await TestBaseChoiceWidget.get_payload(self.update, self.context)
 
@@ -218,7 +220,7 @@ class BaseChoiceWidgetTests(BaseTestCase):
                 'hammett.widgets.base.get_callback_query',
                 return_value=SimpleNamespace(data=None),
             ),
-            self.assertRaises(FailedToGetDataAttributeOfQuery),
+            self.assertRaises(FailedToGetDataAttributeOfQueryError),
         ):
             await TestBaseChoiceWidget.get_payload(self.update, self.context)
 
@@ -265,7 +267,7 @@ class BaseChoiceWidgetTests(BaseTestCase):
         class TestBaseChoiceWidgetWithoutEmojis(BaseChoiceWidgetWithChoices):
             """The class implements a concrete subclass for testing BaseChoiceWidget behavior."""
 
-        with self.assertRaises(ChoiceEmojisAreUndefined):
+        with self.assertRaises(ChoiceEmojisAreUndefinedError):
             TestBaseChoiceWidgetWithoutEmojis()
 
     async def test_raises_error_if_initialize_choices_is_not_implemented(self):

@@ -6,7 +6,7 @@ import zlib
 from functools import wraps
 from typing import TYPE_CHECKING, Any, cast
 
-from hammett.core.exceptions import CommandNameIsEmpty
+from hammett.core.exceptions import CommandNameIsEmptyError
 from hammett.types.core import HandlerAlias, HandlerType, State
 
 if TYPE_CHECKING:
@@ -24,20 +24,20 @@ LOGGER = logging.getLogger(__name__)
 def _clear_command_name(command_name: str) -> str:
     """Clear the specified command name.
 
-    Raise `CommandNameIsEmpty` if the name either is empty or consists only of '/'.
+    Raise `CommandNameIsEmptyError` if the name either is empty or consists only of '/'.
 
     Returns:
         Cleared command name.
 
     Raises:
-        CommandNameIsEmpty: If the provided command name is empty.
+        CommandNameIsEmptyError: If the provided command name is empty.
 
     """
     if command_name and command_name[0] == '/':
         command_name = command_name[1:]
 
     if not command_name.strip():
-        raise CommandNameIsEmpty
+        raise CommandNameIsEmptyError
 
     return command_name
 
@@ -79,12 +79,12 @@ def _register_handler(
             if value == HandlerType.COMMAND_HANDLER:
                 try:
                     handler.command_name = _clear_command_name(command_name)
-                except CommandNameIsEmpty as exc:
+                except CommandNameIsEmptyError as exc:
                     msg = (
                         f"Unable to register the '{handler.__name__}' handler for "
                         f"a command with an empty name."
                     )
-                    raise CommandNameIsEmpty(msg) from exc
+                    raise CommandNameIsEmptyError(msg) from exc
 
             @wraps(handler)
             async def wrapper(

@@ -10,7 +10,7 @@ from fakeredis import FakeAsyncRedis
 from telegram.ext import CallbackContext
 
 from hammett.core.constants import RenderConfig
-from hammett.core.exceptions import MissingPersistence
+from hammett.core.exceptions import MissingPersistenceError
 from hammett.core.persistence import RedisPersistence
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import catch_render_config
@@ -261,9 +261,9 @@ class BaseStateWidgetTestsUsingMultiChoiceWidgetWithoutUpdate(BaseTestCase):
         )
 
     async def test_widget_raises_error_when_no_persistence_is_configured(self):
-        """Test raising MissingPersistence when no persistence is configured."""
+        """Test raising MissingPersistenceError when no persistence is configured."""
         widget = TestMultiChoiceWidget()
-        with self.assertRaises(MissingPersistence):
+        with self.assertRaises(MissingPersistenceError):
             await widget.jump(self.update, self.context)
 
     async def test_post_render_uses_last_message_from_tuple(self):

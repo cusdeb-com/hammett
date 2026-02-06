@@ -7,7 +7,7 @@ from pathlib import Path
 
 from fakeredis import FakeAsyncRedis
 
-from hammett.core.exceptions import ImproperlyConfigured
+from hammett.core.exceptions import ImproperlyConfiguredError
 from hammett.core.persistence import RedisPersistence, _Encoder
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import override_settings
@@ -154,7 +154,7 @@ class PersistenceTests(BaseTestCase):
     @override_settings(REDIS_PERSISTENCE={})
     def test_initialization_without_db_specified(self):
         """Test an initialization without specifying DB attribute."""
-        with self.assertRaises(ImproperlyConfigured):
+        with self.assertRaises(ImproperlyConfiguredError):
             RedisPersistence()
 
     def test_passing_path_type_object_to_custom_encoder(self):

@@ -39,7 +39,7 @@ import os
 from typing import TYPE_CHECKING
 
 from hammett.conf import global_settings
-from hammett.core.exceptions import ImproperlyConfigured
+from hammett.core.exceptions import ImproperlyConfiguredError
 from hammett.core.hider import HidersChecker
 
 if TYPE_CHECKING:
@@ -184,7 +184,7 @@ class LazySettings(LazyObject):
         if the user hasn't configured settings manually.
 
         Raises:
-            ImproperlyConfigured: If the `HAMMETT_SETTINGS_MODULE` environment variable
+            ImproperlyConfiguredError: If the `HAMMETT_SETTINGS_MODULE` environment variable
             is not specified.
 
         """
@@ -197,7 +197,7 @@ class LazySettings(LazyObject):
                 f'{_HAMMETT_SETTINGS_MODULE} or call settings.configure() '
                 f'before accessing settings.'
             )
-            raise ImproperlyConfigured(msg)
+            raise ImproperlyConfiguredError(msg)
 
         self._wrapped = Settings(settings_module)
 
@@ -278,22 +278,22 @@ class Settings:
         """Check the settings for gross errors.
 
         Raises:
-            ImproperlyConfigured: If the registered `HIDERS_CHECKER_CLASS` is not a subclass of
+            ImproperlyConfiguredError: If the registered `HIDERS_CHECKER_CLASS` is not a subclass of
             `HiderChecker`.
-            ImproperlyConfigured: If the `PERMISSIONS` setting is neither a list nor a tuple.
+            ImproperlyConfiguredError: If the `PERMISSIONS` setting is neither a list nor a tuple.
 
         """
         if self._is_overridden('HIDERS_CHECKER_CLASS'):
             setting_value = getattr(self._settings_module, 'HIDERS_CHECKER_CLASS')  # noqa: B009
             if not isinstance(setting_value, type) or not issubclass(setting_value, HidersChecker):
                 msg = 'HIDERS_CHECKER_CLASS must be a subclass of HidersChecker'
-                raise ImproperlyConfigured(msg)
+                raise ImproperlyConfiguredError(msg)
 
         if self._is_overridden('PERMISSIONS'):
             setting_value = getattr(self._settings_module, 'PERMISSIONS')  # noqa: B009
             if not isinstance(setting_value, list | tuple):
                 msg = "The 'PERMISSIONS' setting must be a list or a tuple."
-                raise ImproperlyConfigured(msg)
+                raise ImproperlyConfiguredError(msg)
 
     def _is_overridden(self: 'Self', setting: str) -> bool:
         """Check if the specified setting is overriden.

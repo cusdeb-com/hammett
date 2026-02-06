@@ -1,73 +1,73 @@
 """The module contains the global Hammett exception and warning classes."""
 
 
-class CallbackNotProvided(Exception):
+class CallbackNotProvidedError(Exception):
     """Raised when a callback function for a job has not been provided."""
 
 
-class CommandNameIsEmpty(Exception):
+class CommandNameIsEmptyError(Exception):
     """Raised when trying to register a handler for
     a command with an empty name (i.e., '/').
     """
 
 
-class FailedToGetDataAttributeOfQuery(Exception):
+class FailedToGetDataAttributeOfQueryError(Exception):
     """Raised when the attempt to get a data attribute of a query fails."""
 
 
-class JobKwargsNotProvided(Exception):
+class JobKwargsNotProvidedError(Exception):
     """Raised when `job_kwargs` for a job has not been provided."""
 
 
-class ImproperlyConfigured(Exception):
+class ImproperlyConfiguredError(Exception):
     """Raised when Hammett is somehow improperly configured."""
 
 
-class HiderIsUnregistered(Exception):
+class HiderIsUnregisteredError(Exception):
     """Raised when an unregistered hider is used."""
 
 
-class MissingPersistence(Exception):
+class MissingPersistenceError(Exception):
     """Raised when some feature requires persistence,
     but it's not configured.
     """
 
 
-class PayloadIsEmpty(Exception):
+class PayloadIsEmptyError(Exception):
     """Raised when trying to get an empty payload."""
 
 
-class ScreenDescriptionIsEmpty(Exception):
+class ScreenDescriptionIsEmptyError(Exception):
     """Raised when attempting to render a screen, but the description
     of the screen is found to be empty.
     """
 
 
-class ScreenDocumentDataIsEmpty(Exception):
+class ScreenDocumentDataIsEmptyError(Exception):
     """Raised when attempting to send a screen with a document,
     but the document data of the screen is found to be empty.
     """
 
 
-class ScreenRenderNotSupported(Exception):
+class ScreenRenderNotSupportedError(Exception):
     """Raised when attempting to re-render screen with a cover
     when the next one doesn't have it.
     """
 
 
-class ScreenRouteIsEmpty(Exception):
+class ScreenRouteIsEmptyError(Exception):
     """Raised when the route of the route mixin is found
     to be empty.
     """
 
 
-class TokenIsNotSpecified(Exception):
+class TokenIsNotSpecifiedError(Exception):
     """Raised when the token is not specified."""
 
 
-class UnknownHandlerType(Exception):
+class UnknownHandlerTypeError(Exception):
     """Raised when an unknown type is specified for a handler."""
 
 
-class UnknownSourceType(Exception):
+class UnknownSourceTypeError(Exception):
     """Raised when an unknown source type is specified for an inline button."""

@@ -12,7 +12,7 @@ from telegram._utils.defaultvalue import DEFAULT_NONE
 from telegram.error import BadRequest
 
 from hammett.core.constants import EMPTY_KEYBOARD, FinalRenderConfig
-from hammett.core.exceptions import ScreenDocumentDataIsEmpty, ScreenRenderNotSupported
+from hammett.core.exceptions import ScreenDocumentDataIsEmptyError, ScreenRenderNotSupportedError
 
 _NO_MESSAGE_TO_EDIT = 'There is no text in the message to edit'
 
@@ -56,7 +56,7 @@ class Renderer:
             Object of the `InputMediaDocument` type with passed attributes.
 
         Raises:
-            ScreenDocumentDataIsEmpty: If the `media` attribute of the `Document`
+            ScreenDocumentDataIsEmptyError: If the `media` attribute of the `Document`
             type object is empty.
 
         """
@@ -64,7 +64,7 @@ class Renderer:
             media = document['media']
         except KeyError as exc:
             msg = f'The document data of {self.__class__.__name__} is empty'
-            raise ScreenDocumentDataIsEmpty(msg) from exc
+            raise ScreenDocumentDataIsEmptyError(msg) from exc
 
         document_kwargs = document.get('document_kwargs', {})
         if not document_kwargs.get('caption'):
@@ -278,7 +278,7 @@ class Renderer:
 
         Raises:
             BadRequest: If Telegram cannot process the request.
-            ScreenRenderNotSupported: If the target screen cannot be rendered over
+            ScreenRenderNotSupportedError: If the target screen cannot be rendered over
             the current one due to incompatible layout.
 
         """
@@ -312,7 +312,7 @@ class Renderer:
                         'Unsupported screen transition due to incompatible layout. '
                         'Use covers consistently or disable them entirely.'
                     )
-                    raise ScreenRenderNotSupported(msg) from exc
+                    raise ScreenRenderNotSupportedError(msg) from exc
 
                 raise
 

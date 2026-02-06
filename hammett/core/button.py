@@ -6,7 +6,7 @@ from telegram import InlineKeyboardButton, WebAppInfo
 
 from hammett.core import handlers
 from hammett.core.constants import SourceTypes
-from hammett.core.exceptions import ImproperlyConfigured, UnknownSourceType
+from hammett.core.exceptions import ImproperlyConfiguredError, UnknownSourceTypeError
 from hammett.utils.module_loading import import_string
 
 if TYPE_CHECKING:
@@ -155,7 +155,7 @@ class Button:
 
             if not settings.HIDERS_CHECKER:
                 msg = "The 'HIDERS_CHECKER' setting is not set"
-                raise ImproperlyConfigured(msg)
+                raise ImproperlyConfiguredError(msg)
 
             if self.hiders:
                 hiders_checker: type[HidersChecker] = import_string(settings.HIDERS_CHECKER)
@@ -191,7 +191,7 @@ class Button:
             Object of the `InlineKeyboardButton` type.
 
         Raises:
-            UnknownSourceType: If the source type of the button is unknown.
+            UnknownSourceTypeError: If the source type of the button is unknown.
 
         """
         visibility = await self._specify_visibility(update, context)
@@ -224,4 +224,4 @@ class Button:
                 web_app=WebAppInfo(url=self.source),
             ), visibility
 
-        raise UnknownSourceType
+        raise UnknownSourceTypeError

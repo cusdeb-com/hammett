@@ -6,7 +6,7 @@ from telegram.ext import CallbackContext
 from hammett.core import handlers
 from hammett.core.button import Button
 from hammett.core.constants import DEFAULT_STATE, SourceTypes
-from hammett.core.exceptions import UnknownSourceType
+from hammett.core.exceptions import UnknownSourceTypeError
 from hammett.test.base import BaseTestCase
 from tests.base import TestRouteScreen, TestScreen
 
@@ -147,7 +147,7 @@ class ButtonsTests(BaseTestCase):
     async def test_unknown_source_type(self):
         """Test the case when an unknown source type passed."""
         unknown_source_type = 100
-        with self.assertRaises(UnknownSourceType):
+        with self.assertRaises(UnknownSourceTypeError):
             button = Button(
                 'Test',
                 TestScreen,

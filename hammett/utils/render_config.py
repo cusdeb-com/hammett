@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 from hammett.core.constants import LATEST_SENT_MSG_KEY
-from hammett.core.exceptions import MissingPersistence
+from hammett.core.exceptions import MissingPersistenceError
 
 if TYPE_CHECKING:
     from telegram import Message
@@ -47,7 +47,7 @@ async def save_latest_message(
     """Save the latest message info.
 
     Raises:
-        MissingPersistence: If the attempt to save the latest message information fails because
+        MissingPersistenceError: If the attempt to save the latest message information fails because
         the message was sent via a job.
 
     """
@@ -65,7 +65,7 @@ async def save_latest_message(
                 f"To solve the issue either don't use {save_latest_message.__name__} in jobs "
                 f"or configure persistence."
             )
-            raise MissingPersistence(msg) from exc
+            raise MissingPersistenceError(msg) from exc
 
         user_data = context._application.user_data[message.chat_id]  # noqa: SLF001
         user_data.update({  # type: ignore[attr-defined]

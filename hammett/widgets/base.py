@@ -15,17 +15,17 @@ from hammett.core.constants import (
     SourceTypes,
 )
 from hammett.core.exceptions import (
-    FailedToGetDataAttributeOfQuery,
-    MissingPersistence,
-    PayloadIsEmpty,
+    FailedToGetDataAttributeOfQueryError,
+    MissingPersistenceError,
+    PayloadIsEmptyError,
 )
 from hammett.core.handlers import get_payload_storage, register_button_handler
 from hammett.utils.misc import get_callback_query
 from hammett.widgets.exceptions import (
-    ChoiceEmojisAreUndefined,
-    ChoicesFormatIsInvalid,
-    FailedToGetStateKey,
-    NoChoicesSpecified,
+    ChoiceEmojisAreUndefinedError,
+    ChoicesFormatIsInvalidError,
+    FailedToGetStateKeyError,
+    NoChoicesSpecifiedError,
 )
 
 if TYPE_CHECKING:
@@ -72,7 +72,7 @@ class BaseStateWidget(BaseWidget):
         """Save to user_data initialized state after screen rendering if it's new message.
 
         Raises:
-            MissingPersistence: If the widgets are used in jobs with no specified persistence.
+            MissingPersistenceError: If the widgets are used in jobs with no specified persistence.
 
         """
         await super()._post_render(update, context, message, config, **kwargs)
@@ -100,7 +100,7 @@ class BaseStateWidget(BaseWidget):
                         f"To solve the issue either don't use {self.__class__.__name__} in jobs "
                         f"or configure persistence."
                     )
-                    raise MissingPersistence(msg) from exc
+                    raise MissingPersistenceError(msg) from exc
 
                 user_data = context._application.user_data[message.chat_id]  # noqa: SLF001
                 user_data.update({  # type: ignore[attr-defined]
@@ -141,14 +141,14 @@ class BaseStateWidget(BaseWidget):
             Widget state key.
 
         Raises:
-            FailedToGetStateKey: If the query object does not have any message.
+            FailedToGetStateKeyError: If the query object does not have any message.
 
         """
         if update:
             query = await get_callback_query(update)
             message = getattr(query, 'message', None)
             if message is None:
-                raise FailedToGetStateKey
+                raise FailedToGetStateKeyError
 
             current_chat_id = message.chat_id
             current_message_id = message.message_id
@@ -177,7 +177,7 @@ class BaseStateWidget(BaseWidget):
             try:
                 current_state_key = await self._get_state_key(update)
                 state = user_data.get(current_state_key)
-            except FailedToGetStateKey:
+            except FailedToGetStateKeyError:
                 return None
 
             if state and state.get(state_key):
@@ -198,7 +198,7 @@ class BaseStateWidget(BaseWidget):
         if context.user_data is None:
             return
 
-        with contextlib.suppress(FailedToGetStateKey):  # raised when invoked on /start
+        with contextlib.suppress(FailedToGetStateKeyError):  # raised when invoked on /start
             current_state_key = await self._get_state_key(update)
             user_data = cast('dict[str, Any]', context.user_data)
 
@@ -220,7 +220,7 @@ class BaseChoiceWidget(BaseStateWidget):
         """Initialize a base choice widget object.
 
         Raises:
-            ChoiceEmojisAreUndefined: If the `chosen_emoji` or `unchosen_emoji` attributes
+            ChoiceEmojisAreUndefinedError: If the `chosen_emoji` or `unchosen_emoji` attributes
             are not specified.
 
         """
@@ -228,7 +228,7 @@ class BaseChoiceWidget(BaseStateWidget):
 
         if not self.chosen_emoji or not self.unchosen_emoji:
             msg = f'{self.__class__.__name__} must specify both chosen_emoji and unchosen_emoji'
-            raise ChoiceEmojisAreUndefined(msg)
+            raise ChoiceEmojisAreUndefinedError(msg)
 
     #
     # Private methods
@@ -275,13 +275,13 @@ class BaseChoiceWidget(BaseStateWidget):
             Keyboard for the widget.
 
         Raises:
-            ChoicesFormatIsInvalid: If the type of the `choices` attribute is not correct.
-            NoChoicesSpecified: If the `choices` attribute is not specified.
+            ChoicesFormatIsInvalidError: If the type of the `choices` attribute is not correct.
+            NoChoicesSpecifiedError: If the `choices` attribute is not specified.
 
         """
         if not len(choices):
             msg = f'{self.__class__.__name__} must specify at least one choice'
-            raise NoChoicesSpecified(msg)
+            raise NoChoicesSpecifiedError(msg)
 
         keyboard = []
         for choice in choices:
@@ -292,7 +292,7 @@ class BaseChoiceWidget(BaseStateWidget):
                     f'Each choice of {self.__class__.__name__} must be '
                     f'a tuple containing a code and a name'
                 )
-                raise ChoicesFormatIsInvalid(msg) from exc
+                raise ChoicesFormatIsInvalidError(msg) from exc
 
             box = self.chosen_emoji if chosen else self.unchosen_emoji
             keyboard.append([
@@ -437,20 +437,20 @@ class BaseChoiceWidget(BaseStateWidget):
             Payload of the button.
 
         Raises:
-            FailedToGetDataAttributeOfQuery: If the query object does not have any data.
-            PayloadIsEmpty: If the attempt to retrieve the payload fails.
+            FailedToGetDataAttributeOfQueryError: If the query object does not have any data.
+            PayloadIsEmptyError: If the attempt to retrieve the payload fails.
 
         """
         query = await get_callback_query(update)
 
         data = getattr(query, 'data', None)
         if data is None:
-            raise FailedToGetDataAttributeOfQuery
+            raise FailedToGetDataAttributeOfQueryError
 
         payload_storage = get_payload_storage(context)
         payload = payload_storage.get(data)
         if not payload:
-            raise PayloadIsEmpty
+            raise PayloadIsEmptyError
 
         return payload
 

@@ -13,7 +13,7 @@ from telegram.ext import BasePersistence, ContextTypes
 from telegram.ext._utils.types import BD, CD, UD, ConversationDict
 
 from hammett.conf import settings
-from hammett.core.exceptions import ImproperlyConfigured
+from hammett.core.exceptions import ImproperlyConfiguredError
 
 if TYPE_CHECKING:
     from typing import Any
@@ -65,7 +65,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """Initialize a redis persistence object.
 
         Raises:
-            ImproperlyConfigured: If the `DB` setting of `RedisPersistence` is empty.
+            ImproperlyConfiguredError: If the `DB` setting of `RedisPersistence` is empty.
 
         """
         super().__init__(
@@ -77,7 +77,7 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
             settings.REDIS_PERSISTENCE['DB']
         except KeyError as exc:
             msg = f'{exc.args[0]} is missing in the REDIS_PERSISTENCE setting.'
-            raise ImproperlyConfigured(msg) from exc
+            raise ImproperlyConfiguredError(msg) from exc
 
         self.redis_cli: redis.Redis[Any] = redis.Redis(
             **{key.lower(): val for key, val in settings.REDIS_PERSISTENCE.items()},

@@ -4,7 +4,7 @@ from fakeredis import FakeAsyncRedis
 from telegram.ext import CallbackContext
 
 from hammett.core.constants import LATEST_SENT_MSG_KEY, FinalRenderConfig
-from hammett.core.exceptions import MissingPersistence
+from hammett.core.exceptions import MissingPersistenceError
 from hammett.core.persistence import RedisPersistence
 from hammett.test.base import BaseTestCase
 from hammett.utils.render_config import get_latest_message, save_latest_message
@@ -86,10 +86,10 @@ class UtilsRenderConfigTestsWithoutUpdate(BaseTestCase):
         assert actual == expected
 
     async def test_save_latest_message_raises_without_persistence_on_typeerror(self):
-        """Test raising MissingPersistence when no persistence is configured."""
+        """Test raising MissingPersistenceError when no persistence is configured."""
         self.context._application.persistence = None  # noqa: SLF001
 
-        with self.assertRaises(MissingPersistence):
+        with self.assertRaises(MissingPersistenceError):
             await save_latest_message(self.context, FinalRenderConfig(), self.message)
 
     async def test_save_latest_message_updates_persistence_on_typeerror(self):

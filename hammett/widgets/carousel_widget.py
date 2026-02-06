@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from hammett.core import Button
 from hammett.core.constants import DEFAULT_STATE, RenderConfig, SourceTypes
-from hammett.core.exceptions import ImproperlyConfigured
+from hammett.core.exceptions import ImproperlyConfiguredError
 from hammett.core.handlers import register_button_handler
 from hammett.widgets.base import BaseStateWidget
 
@@ -38,7 +38,7 @@ class CarouselWidget(BaseStateWidget):
         """Initialize a carousel widget object.
 
         Raises:
-            ImproperlyConfigured: If the `back_caption`, `next_caption`, and `disable_caption`
+            ImproperlyConfiguredError: If the `back_caption`, `next_caption`, and `disable_caption`
             attributes are not specified.
 
         """
@@ -49,7 +49,7 @@ class CarouselWidget(BaseStateWidget):
                 f'{self.__class__.__name__} must specify both back_caption, next_caption '
                 f'and disable_caption'
             )
-            raise ImproperlyConfigured(msg)
+            raise ImproperlyConfiguredError(msg)
 
         self._back_button = Button(
             self.back_caption,
@@ -81,7 +81,7 @@ class CarouselWidget(BaseStateWidget):
             State after widget initialization.
 
         Raises:
-            ImproperlyConfigured: If the `images` attribute has the wrong type.
+            ImproperlyConfiguredError: If the `images` attribute has the wrong type.
 
         """
         config = config or RenderConfig()
@@ -95,7 +95,7 @@ class CarouselWidget(BaseStateWidget):
                 f'The images attribute of {self.__class__.__name__} must be '
                 f'a tuple of tuples'
             )
-            raise ImproperlyConfigured(msg)
+            raise ImproperlyConfiguredError(msg)
 
         cover, description = current_images[_START_POSITION]
         config.cover = cover

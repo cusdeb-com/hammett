@@ -9,7 +9,7 @@ from fakeredis import FakeAsyncRedis
 from telegram.ext import CallbackContext
 
 from hammett.core.constants import RenderConfig
-from hammett.core.exceptions import ImproperlyConfigured
+from hammett.core.exceptions import ImproperlyConfiguredError
 from hammett.core.persistence import RedisPersistence
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import catch_render_config
@@ -248,15 +248,15 @@ class CarouselWidgetTests(BaseTestCase):
         class BadImagesWidget(CarouselWidget):
             images = 'not-a-tuple'
 
-        with self.assertRaises(ImproperlyConfigured):
+        with self.assertRaises(ImproperlyConfiguredError):
             await BadImagesWidget().move(self.update, self.context)
 
     def test_improperly_configured_missing_captions(self):
-        """Test that missing captions raise ImproperlyConfigured in __init__."""
+        """Test that missing captions raise ImproperlyConfiguredError in __init__."""
         class BadCaptionsWidget(CarouselWidget):
             back_caption = next_caption = disable_caption = ''
 
-        with self.assertRaises(ImproperlyConfigured):
+        with self.assertRaises(ImproperlyConfiguredError):
             BadCaptionsWidget()
 
 

@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from hammett.conf import GlobalSettings, global_settings
 from hammett.conf.lazy_settings import LazyObject, LazySettings, Settings
-from hammett.core.exceptions import ImproperlyConfigured
+from hammett.core.exceptions import ImproperlyConfiguredError
 from hammett.test.base import BaseTestCase
 
 
@@ -81,7 +81,7 @@ class ConfigurationTests(BaseTestCase):
         """
         with (
             patch.dict(os.environ, {}, clear=False),
-            self.assertRaises(ImproperlyConfigured),
+            self.assertRaises(ImproperlyConfiguredError),
         ):
             os.environ.pop('HAMMETT_SETTINGS_MODULE', None)
             settings = LazySettings()
@@ -146,7 +146,7 @@ class ConfigurationTests(BaseTestCase):
         module = SimpleNamespace(HIDERS_CHECKER_CLASS=object)
         with (
             patch('importlib.import_module', return_value=module),
-            self.assertRaises(ImproperlyConfigured),
+            self.assertRaises(ImproperlyConfiguredError),
         ):
             Settings('tests.settings')
 
@@ -155,7 +155,7 @@ class ConfigurationTests(BaseTestCase):
         module = SimpleNamespace(PERMISSIONS=123)
         with (
             patch('importlib.import_module', return_value=module),
-            self.assertRaises(ImproperlyConfigured),
+            self.assertRaises(ImproperlyConfiguredError),
         ):
             Settings('tests.settings')
 
