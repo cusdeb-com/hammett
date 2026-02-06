@@ -16,6 +16,7 @@ ignore = [
     "ANN401", # any-type
     "CPY001", # missing-copyright-notice
     "D205", # blank-line-after-summary
+    "D213", # multi-line-summary-second-line
     "PLC0415", # import-outside-top-level
     "PLC2701", # import-private-name
     "PLR6301", # no-self-use
