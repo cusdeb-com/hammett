@@ -15,6 +15,7 @@ preview = true
 ignore = [
     "ANN401", # any-type
     "CPY001", # missing-copyright-notice
+    "D203", # incorrect-blank-line-before-class
     "D205", # blank-line-after-summary
     "D213", # multi-line-summary-second-line
     "PLC0415", # import-outside-top-level
