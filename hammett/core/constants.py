@@ -1,7 +1,7 @@
 """The module contains the constants used in the core."""
 
 from dataclasses import dataclass, field
-from enum import Enum, auto
+from enum import Enum, StrEnum, auto
 from typing import TYPE_CHECKING, TypedDict, cast
 
 if TYPE_CHECKING:
@@ -62,7 +62,7 @@ class LatestMessage(TypedDict):
     hide_keyboard: bool
 
 
-class ParseMode(str, Enum):
+class ParseMode(StrEnum):
     """The class contains the available types of parse modes to use for text formatting."""
 
     HTML = 'HTML'
