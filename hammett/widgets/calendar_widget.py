@@ -4,7 +4,7 @@ import calendar
 import itertools
 import json
 from datetime import date, datetime, timezone
-from enum import Enum
+from enum import StrEnum
 from typing import TYPE_CHECKING
 
 from dateutil.relativedelta import relativedelta
@@ -27,7 +27,7 @@ if TYPE_CHECKING:
     from hammett.types.core import Handler, Keyboard, State
 
 
-class CalendarUnit(str, Enum):
+class CalendarUnit(StrEnum):
     """The class represents all available calendar units."""
 
     DAY = 'day'
