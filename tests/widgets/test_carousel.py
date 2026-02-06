@@ -52,6 +52,7 @@ class CarouselWidgetTests(BaseTestCase):
         """Initialize a persistence object and replace its Redis instance
         with a fake one.
         """
+        super().setUp()
         self.context._application.persistence = RedisPersistence()
         self.context._application.persistence.redis_cli = FakeAsyncRedis()
 
@@ -267,6 +268,7 @@ class CarouselWidgetWithoutUpdateTests(BaseTestCase):
         """Initialize a persistence object and replace its Redis instance
         with a fake one.
         """
+        super().setUp()
         self.context._application.persistence = RedisPersistence()
         self.context._application.persistence.redis_cli = FakeAsyncRedis()
 

@@ -1,0 +1,46 @@
+[
+  {
+    "name": "AdminPanelBot",
+    "url": "https://t.me/HammettAdminPanelBot"
+  },
+  {
+    "name": "CarouselBot",
+    "url": "https://t.me/HammettCarouselBot"
+  },
+  {
+    "name": "ClickerBot",
+    "url": "https://t.me/HammettClickerBot"
+  },
+  {
+    "name": "DynamicKeyboardBot",
+    "url": "https://t.me/HammettDynamicKeyboardBot"
+  },
+  {
+    "name": "HideKeyboardBot",
+    "url": "https://t.me/HammettHideKeyboardBot"
+  },
+  {
+    "name": "MultiStateBot",
+    "url": "https://t.me/HammettMultiStateBot"
+  },
+  {
+    "name": "PaywallBot",
+    "url": "https://t.me/HammettPaywallBot"
+  },
+  {
+    "name": "QuizBot",
+    "url": "https://t.me/HammettQuizBot"
+  },
+  {
+    "name": "ReminderBot",
+    "url": "https://t.me/HammettReminderBot"
+  },
+  {
+    "name": "SayHelloBot",
+    "url": "https://t.me/HammettSayHelloBot"
+  },
+  {
+    "name": "SimpleJumpBot",
+    "url": "https://t.me/HammettSimpleJumpBot"
+  }
+]

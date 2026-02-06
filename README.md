@@ -16,10 +16,13 @@ Here's the **Getting Started** guide, available in both 🇬🇧 [English](https
 ## Live Demos
 
 * [admin-panel-bot](https://t.me/HammettAdminPanelBot) showcases how to control the visibility of buttons based on the user role (see the demo's [source](demos/admin_panel_bot)).
+* [attachments-bot](https://t.me/HammettAttachmentsBot) explains how to send messages with several files (see the demo's [source](demos/attachments_bot)).
 * [carousel-bot](https://t.me/HammettCarouselBot) demonstrates how to work with the carousel widget (see the demo's [source](demos/carousel_bot)).
 * [clicker-bot](https://t.me/HammettClickerBot) illustrates how to attach a handler to a button (see the demo's [source](demos/clicker_bot)).
 * [dynamic-keyboard-bot](https://t.me/HammettDynamicKeyboardBot) shows how to create and work with a dynamic keyboard (see the demo's [source](demos/dynamic_keyboard_bot)).
+* [error-handler-bot](https://t.me/HammettErrorHandlerBot) showcases how error handlers process different types of exceptions (see the demo's [source](demos/error_handler_bot)).
 * [hide-keyboard-bot](https://t.me/HammettHideKeyboardBot) explains how to hide keyboards from previous messages (see the demo's [source](demos/hide_keyboard_bot)).
+* [jinja2-bot](https://t.me/HammettJinja2Bot) shows how to use [Jinja2](https://jinja.palletsprojects.com/en/stable/) in descriptions (see the demo's [source](demos/jinja2_bot)).
 * [multi-state-bot](https://t.me/HammettMultiStateBot) showcases how to work with multiple states (see the demo's [source](demos/multi_state_bot)).
 * [paywall-bot](https://t.me/HammettPaywallBot) demonstrates how to manage access to the bot screens by checking specific conditions (see the demo's [source](demos/paywall_bot)).
 * [quiz-bot](https://t.me/HammettQuizBot) showcases the single-choice and multi-choice widgets to tackle various tasks (see the demo's [source](demos/quiz_bot)).

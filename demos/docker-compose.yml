@@ -7,6 +7,14 @@ services:
       - valkey
     restart: always
 
+  attachments-bot:
+    build:
+      dockerfile: attachments_bot/Dockerfile
+    env_file: attachments_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   calendar-bot:
     build:
       dockerfile: ./calendar_bot/Dockerfile
@@ -31,10 +39,26 @@ services:
       - valkey
     restart: always
 
+  error-handler-bot:
+    build:
+      dockerfile: ./error_handler_bot/Dockerfile
+    env_file: ./error_handler_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
   hide-keyboard-bot:
     build:
       dockerfile: ./hide_keyboard_bot/Dockerfile
     env_file: ./hide_keyboard_bot/.env
+    depends_on:
+      - valkey
+    restart: always
+
+  jinja2-bot:
+    build:
+      dockerfile: ./jinja2_bot/Dockerfile
+    env_file: ./jinja2_bot/.env
     depends_on:
       - valkey
     restart: always
