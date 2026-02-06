@@ -46,6 +46,7 @@ class UtilsTranslationTests(BaseTestCase):
 
     async def test_hammett_translation_merge_adds_entries(self):
         """Test merging external translations into the HammettTranslation catalog."""
+
         class DummyTranslations(native_gettext.GNUTranslations):
             def __init__(self):
                 # Intentionally skip base __init__ to avoid file I/O
@@ -67,6 +68,7 @@ class UtilsTranslationTests(BaseTestCase):
 
     def test_merge_adds_fallback_from_other_when_present(self):
         """Test that merge adds fallback from the other translations object when present."""
+
         class DummyTranslations(native_gettext.GNUTranslations):
             def __init__(self):
                 self._catalog = {'HELLO': 'Hola'}
@@ -91,6 +93,7 @@ class UtilsTranslationTests(BaseTestCase):
 
     async def test_ngettext_uses_fallback_when_catalog_missing_entry(self):
         """Test that ngettext falls back to self._fallback.ngettext when plural key missing."""
+
         class DummyOther(native_gettext.GNUTranslations):
             def __init__(self):
                 self._catalog = {}
@@ -167,6 +170,7 @@ class UtilsTranslationCatalogTests(BaseTestCase):
 
     async def test_plural_returns_value_or_raises(self):
         """Test returning a value or raising an error for plural forms."""
+
         class DummyTranslations(native_gettext.GNUTranslations):
             def __init__(self):
                 self._catalog = {('apples', 0): '1 apple', ('apples', 1): 'apples'}
@@ -190,6 +194,7 @@ class UtilsTranslationCatalogTests(BaseTestCase):
 
     async def test_update_overrides_previous_catalog(self):
         """Test updating the catalog with a new value."""
+
         class DummyTranslations(native_gettext.GNUTranslations):
             def __init__(self, value: str):
                 self._catalog = {'KEY': value}

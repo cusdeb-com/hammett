@@ -45,16 +45,20 @@ class BaseQuizScreen(BaseScreen, BaseChoiceWidget):
     async def add_extra_keyboard(self, _update, context):
         """Add an extra keyboard below the widget buttons."""
         language_code = context.user_data.get('language_code', 'en')
-        return [[
-            Button(
-                _('🏠 Main Menu', language_code),
-                MainMenuScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE),
-            Button(
-                _('Next ➡️', language_code),
-                self.next_question,
-                source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-        ]]
+        return [
+            [
+                Button(
+                    _('🏠 Main Menu', language_code),
+                    MainMenuScreen,
+                    source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                ),
+                Button(
+                    _('Next ➡️', language_code),
+                    self.next_question,
+                    source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                ),
+            ],
+        ]
 
     async def get_choices(self, _update, context, **_kwargs):
         """Return the choices with the available answers to the question."""
@@ -87,11 +91,9 @@ class BaseQuizScreen(BaseScreen, BaseChoiceWidget):
 
         if (
             # The list of selected answers must be sorted to match the correct answer
-            isinstance(context.user_data['answer'], list) and
-            sorted(context.user_data['answer']) == questions[index]['correct_answer']
-        ) or (
-            context.user_data['answer'] == questions[index]['correct_answer']
-        ):
+            isinstance(context.user_data['answer'], list)
+            and sorted(context.user_data['answer']) == questions[index]['correct_answer']
+        ) or (context.user_data['answer'] == questions[index]['correct_answer']):
             context.user_data['correct_answers_num'] += 1
 
         context.user_data['question_index'] += 1
@@ -118,12 +120,15 @@ class LanguageSwitcherScreen(BaseScreen, SingleChoiceWidget):
     async def add_extra_keyboard(self, _update, context):
         """Add an extra keyboard below the widget buttons."""
         language_code = context.user_data.get('language_code', 'en')
-        return [[
-            Button(
-                _('⬅️ Back', language_code),
-                MainMenuScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE),
-        ]]
+        return [
+            [
+                Button(
+                    _('⬅️ Back', language_code),
+                    MainMenuScreen,
+                    source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                ),
+            ],
+        ]
 
     async def get_initial_value(self, _update, context):
         """Return the updated or default language code."""
@@ -150,24 +155,34 @@ class MainMenuScreen(BaseScreen, StartMixin):
         """Set up the default keyboard for the screen."""
         language_code = context.user_data.get('language_code', 'en')
         return [
-            [Button(
-                _('❓ Start Quiz', language_code),
-                self.start_quiz_handler,
-                source_type=SourceTypes.HANDLER_SOURCE_TYPE,
-            )],
-            [Button(
-                _('🌍 Language', language_code),
-                LanguageSwitcherScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE,
-            )],
-            [Button(
-                _('📄 Source Code', language_code),
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/quiz_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [
+                Button(
+                    _('❓ Start Quiz', language_code),
+                    self.start_quiz_handler,
+                    source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    _('🌍 Language', language_code),
+                    LanguageSwitcherScreen,
+                    source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    _('📄 Source Code', language_code),
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/quiz_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
         ]
 
     async def render(self, update, context, *, config=None, **kwargs):
@@ -246,10 +261,15 @@ class ResultScreen(BaseScreen):
     async def add_default_keyboard(self, _update, context):
         """Set up the default keyboard for the screen."""
         language_code = context.user_data.get('language_code', 'en')
-        return [[
-            Button(_('🏠 Main Menu', language_code), MainMenuScreen,
-                   source_type=SourceTypes.MOVE_SOURCE_TYPE),
-        ]]
+        return [
+            [
+                Button(
+                    _('🏠 Main Menu', language_code),
+                    MainMenuScreen,
+                    source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                ),
+            ],
+        ]
 
     async def get_description(self, update, context):
         """Return the `description` attribute of the screen."""

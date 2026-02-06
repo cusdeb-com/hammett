@@ -76,10 +76,7 @@ class RouteMixin(Screen):
             raise ScreenRouteIsEmptyError(msg)
 
         if not all(isinstance(item, tuple) for item in self.routes):
-            msg = (
-                f'The `routes` attribute of {self.__class__.__name__} must be '
-                f'a tuple of tuples.'
-            )
+            msg = f'The `routes` attribute of {self.__class__.__name__} must be a tuple of tuples.'
             raise ImproperlyConfiguredError(msg)
 
     def get_return_state_from_routes(

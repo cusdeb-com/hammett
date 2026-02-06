@@ -89,29 +89,35 @@ class Screen:
 
         """
         final_config = FinalRenderConfig(**asdict(config)) if config else FinalRenderConfig()
-        final_config.cache_covers = (
-            final_config.cache_covers or await self.get_cache_covers(update, context)
+        final_config.cache_covers = final_config.cache_covers or await self.get_cache_covers(
+            update,
+            context,
         )
         final_config.cover = final_config.cover or await self.get_cover(update, context)
         final_config.chat_id = final_config.chat_id or context._chat_id  # noqa: SLF001
-        final_config.hide_keyboard = (
-            final_config.hide_keyboard or await self.get_hide_keyboard(update, context)
+        final_config.hide_keyboard = final_config.hide_keyboard or await self.get_hide_keyboard(
+            update,
+            context,
         )
 
-        final_config.description = (
-            final_config.description or await self.get_description(update, context)
+        final_config.description = final_config.description or await self.get_description(
+            update,
+            context,
         )
         final_config.document = final_config.document or await self.get_document(update, context)
         if (
-            not final_config.description and not final_config.document and
-            not final_config.attachments and not final_config.cover
+            not final_config.description
+            and not final_config.document
+            and not final_config.attachments
+            and not final_config.cover
         ):
             msg = f'The description of {self.__class__.__name__} is empty'
             raise ScreenDescriptionIsEmptyError(msg)
 
         if not config or config.keyboard is None:
-            final_config.keyboard = (
-                final_config.keyboard or await self.add_default_keyboard(update, context)
+            final_config.keyboard = final_config.keyboard or await self.add_default_keyboard(
+                update,
+                context,
             )
 
         if not final_config.message_id and update:
@@ -306,6 +312,7 @@ class Screen:
         # It's necessary for unit tests. So, if you override this method,
         # don't forget these lines to avoid breaking the tests.
         from hammett.test import utils as test_utils
+
         await test_utils.hook_final_render_config(final_config)
 
         await self._pre_render(update, context, final_config, **kwargs)

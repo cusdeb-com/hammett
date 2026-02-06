@@ -28,6 +28,7 @@ class ConfigurationTests(BaseTestCase):
 
     def test_lazy_object_delattr_raises_on_wrapped(self):
         """Test LazyObject.__delattr__ raises TypeError when deleting _wrapped."""
+
         class TestLazy(LazyObject):
             def _setup(self):
                 self._wrapped = SimpleNamespace()
@@ -40,6 +41,7 @@ class ConfigurationTests(BaseTestCase):
 
     def test_lazy_object_delattr_triggers_setup_and_deletes_attr(self):
         """Test __delattr__ calls _setup when unevaluated and deletes attribute from wrapped."""
+
         class Inner:
             def __init__(self):
                 self.FOO = 'bar'
@@ -56,6 +58,7 @@ class ConfigurationTests(BaseTestCase):
 
     def test_lazy_object_setattr_triggers_setup_and_sets_attr(self):
         """Test __setattr__ calls _setup when unevaluated and sets attribute on wrapped."""
+
         class TestLazy(LazyObject):
             def _setup(self):
                 self._wrapped = SimpleNamespace()
@@ -115,6 +118,7 @@ class ConfigurationTests(BaseTestCase):
 
     def test_lazyobject_requires_setup(self):
         """Test that LazyObject requires setup."""
+
         class TestSettings(LazyObject):
             pass
 
@@ -124,6 +128,7 @@ class ConfigurationTests(BaseTestCase):
 
     def test_new_method_proxy_class_property_returns_wrapped_class(self):
         """Test that __class__ is proxied to the wrapped class via new_method_proxy."""
+
         class TestLazy(LazyObject):
             def _setup(self):
                 self._wrapped = []
@@ -134,6 +139,7 @@ class ConfigurationTests(BaseTestCase):
 
     def test_new_method_proxy_triggers_setup_and_delegates_str(self):
         """Test that proxied __str__ triggers _setup and delegates to wrapped object."""
+
         class TestLazy(LazyObject):
             def _setup(self):
                 self._wrapped = 'abc'

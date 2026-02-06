@@ -16,10 +16,14 @@ def render_template_from_string(template: str, context: dict[str, 'Any'] | None 
         Formatted description with passed data.
 
     """
-    return Environment(  # noqa: S701
-        loader=BaseLoader(),
-    ).from_string(
-        html.unescape(template),
-    ).render(
-        **({} if context is None else context),
+    return (
+        Environment(  # noqa: S701
+            loader=BaseLoader(),
+        )
+        .from_string(
+            html.unescape(template),
+        )
+        .render(
+            **({} if context is None else context),
+        )
     )

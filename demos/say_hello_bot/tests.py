@@ -21,10 +21,12 @@ class HammettSayHelloBotTests(BaseTestCase):
         """Test sending the `say_hello` command to get the final render config."""
         await HelloScreen().handle_typing_say_hello_command(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=HELLO_SCREEN_DESCRIPTION,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=HELLO_SCREEN_DESCRIPTION,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -32,17 +34,28 @@ class HammettSayHelloBotTests(BaseTestCase):
         """Test calling the `start` handler to get the final render config."""
         await StartScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=START_SCREEN_DESCRIPTION,
-            keyboard=[
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/say_hello_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                    source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=START_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/say_hello_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
 

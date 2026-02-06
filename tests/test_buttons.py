@@ -41,6 +41,7 @@ class ButtonsTests(BaseTestCase):
 
     async def test_create_handler_button(self):
         """Test creating a button with HANDLER_SOURCE_TYPE."""
+
         async def handler(_self, _update, _context):  # noqa: RUF029
             return DEFAULT_STATE
 
@@ -58,6 +59,7 @@ class ButtonsTests(BaseTestCase):
 
     async def test_create_handler_button_with_payload_and_update_none(self):
         """Test creating a handler button with payload when update is None."""
+
         async def handler(_self, _update, _context):  # noqa: RUF029
             return DEFAULT_STATE
 

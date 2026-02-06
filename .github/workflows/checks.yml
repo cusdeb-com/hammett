@@ -24,7 +24,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
 
-      - name: Run ruff
+      - name: Run ruff formater
+        run: ruff format . --check
+
+      - name: Run ruff linter
         run: ruff check . --config=ruff.toml
 
       - name: Run mypy

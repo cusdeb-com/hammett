@@ -63,14 +63,16 @@ async def save_latest_message(
             msg = (
                 "It's not possible to pass data to user_data. "
                 f"To solve the issue either don't use {save_latest_message.__name__} in jobs "
-                f"or configure persistence."
+                f'or configure persistence.'
             )
             raise MissingPersistenceError(msg) from exc
 
         user_data = context._application.user_data[message.chat_id]  # noqa: SLF001
-        user_data.update({  # type: ignore[attr-defined]
-            LATEST_SENT_MSG_KEY: latest_msg,
-        })
+        user_data.update(  # type: ignore[attr-defined]
+            {
+                LATEST_SENT_MSG_KEY: latest_msg,
+            },
+        )
 
         await context._application.persistence.update_user_data(  # noqa: SLF001
             message.chat_id,

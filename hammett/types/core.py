@@ -41,8 +41,10 @@ States = dict[State, Iterable[type[Screen]]]
 Func = TypeVar('Func', bound=Callable[..., Any])
 
 Attachments = (
-    Sequence[telegram.InputMediaAudio] | Sequence[telegram.InputMediaDocument] |
-    Sequence[telegram.InputMediaPhoto] | Sequence[telegram.InputMediaVideo]
+    Sequence[telegram.InputMediaAudio]
+    | Sequence[telegram.InputMediaDocument]
+    | Sequence[telegram.InputMediaPhoto]
+    | Sequence[telegram.InputMediaVideo]
 )
 
 

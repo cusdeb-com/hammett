@@ -322,9 +322,9 @@ class RedisPersistence(BasePersistence[UD, CD, BD]):
         """
         if self.conversations is None:
             conversations = await self.redis_cli.get(self._CONVERSATIONS_KEY)
-            self.conversations = self._decode_conversations(
-                conversations,
-            ) if conversations else {name: {}}
+            self.conversations = (
+                self._decode_conversations(conversations) if conversations else {name: {}}
+            )
 
         return self.conversations.get(name, {}).copy()
 

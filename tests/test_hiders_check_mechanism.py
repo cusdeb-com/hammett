@@ -167,9 +167,9 @@ class HidersCheckerTests(BaseTestCase):
         button = Button(
             _TEST_BUTTON_NAME,
             _TEST_URL,
-            hiders=Hider(ONLY_FOR_ADMIN) |
-            Hider(ONLY_FOR_BETA_TESTERS) |
-            Hider(ONLY_FOR_MODERATORS),
+            hiders=Hider(ONLY_FOR_ADMIN)
+            | Hider(ONLY_FOR_BETA_TESTERS)
+            | Hider(ONLY_FOR_MODERATORS),
             source_type=SourceTypes.URL_SOURCE_TYPE,
         )
         _, visibility = await button.create(self.update, self.context)

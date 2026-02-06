@@ -30,14 +30,17 @@ class RendererTests(BaseTestCase):
 
     async def test_create_markup_keyboard_with_button_rows(self):
         """Test the case when markup is created from rows with Button instances."""
+
         async def handler(_self, _update, _context):  # noqa: RUF029
             return None
 
         renderer = Renderer(ParseMode.HTML)
         keyboard = [
             [Button('First', handler, source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-            [Button('Second', handler, source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-            Button('Third', handler, source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
+            [
+                Button('Second', handler, source_type=SourceTypes.HANDLER_SOURCE_TYPE),
+                Button('Third', handler, source_type=SourceTypes.HANDLER_SOURCE_TYPE),
+            ],
         ]
         markup = await renderer._create_markup_keyboard(keyboard, self.update, self.context)
         assert isinstance(markup, InlineKeyboardMarkup)
@@ -53,7 +56,8 @@ class RendererTests(BaseTestCase):
         renderer = Renderer(ParseMode.HTML)
         media = b'media'
         caption = 'text'
-        media_kwargs = await renderer._get_edit_render_method_media_kwargs(media={
+        media_kwargs = await renderer._get_edit_render_method_media_kwargs(
+            media={
                 'media': media,
                 'document_kwargs': {},
             },
@@ -291,7 +295,8 @@ class RendererTests(BaseTestCase):
             patch.object(
                 renderer,
                 '_get_edit_render_method',
-                new=AsyncMock(return_value=(fake_send, {'chat_id': self.chat_id}))),
+                new=AsyncMock(return_value=(fake_send, {'chat_id': self.chat_id})),
+            ),
             self.assertRaises(ScreenRenderNotSupportedError) as exc_context,
         ):
             await renderer.render(None, self.context, FinalRenderConfig(as_new_message=False))
@@ -313,7 +318,8 @@ class RendererTests(BaseTestCase):
             patch.object(
                 renderer,
                 '_get_edit_render_method',
-                new=AsyncMock(return_value=(fake_send, {'chat_id': self.chat_id}))),
+                new=AsyncMock(return_value=(fake_send, {'chat_id': self.chat_id})),
+            ),
             self.assertRaises(BadRequest) as exc_context,
         ):
             await renderer.render(None, self.context, FinalRenderConfig(as_new_message=False))

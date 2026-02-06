@@ -6,6 +6,7 @@ from pathlib import Path
 
 with contextlib.suppress(ImportError):
     from dotenv import load_dotenv
+
     load_dotenv()
 
 MEDIA_ROOT = Path(__file__).resolve().parent / 'media'

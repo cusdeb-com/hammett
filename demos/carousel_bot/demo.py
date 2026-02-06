@@ -15,8 +15,8 @@ MAIN_MENU_SCREEN_FIRST_DESCRIPTION = (
 )
 
 MAIN_MENU_SCREEN_LAST_DESCRIPTION = (
-    "This is the end of the carousel.\n"
-    "\n"
+    'This is the end of the carousel.\n'
+    '\n'
     "Don't forget to check out Hammett and the source code of the demo!"
 )
 
@@ -45,14 +45,20 @@ class Gallery(CarouselWidget, StartMixin):
     async def add_extra_keyboard(self, _update, _context):
         """Return extra keyboard below the widget buttons."""
         return [
-            [Button(
-                '📄 Source Code',
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/carousel_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [
+                Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/carousel_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
         ]
 
 

@@ -87,14 +87,11 @@ class CarouselWidget(BaseStateWidget):
         config = config or RenderConfig()
         current_images = images or await self.get_images(update, context)
         if (
-            not current_images or
-            not isinstance(current_images, tuple) or
-            not all(item and isinstance(item, tuple) for item in current_images)
+            not current_images
+            or not isinstance(current_images, tuple)
+            or not all(item and isinstance(item, tuple) for item in current_images)
         ):
-            msg = (
-                f'The images attribute of {self.__class__.__name__} must be '
-                f'a tuple of tuples'
-            )
+            msg = f'The images attribute of {self.__class__.__name__} must be a tuple of tuples'
             raise ImproperlyConfiguredError(msg)
 
         cover, description = current_images[_START_POSITION]
@@ -103,8 +100,10 @@ class CarouselWidget(BaseStateWidget):
             config.description = description or self.description
 
         if self.infinity:
-            config.keyboard = (self._infinity_keyboard +
-                               await self.add_extra_keyboard(update, context))
+            config.keyboard = self._infinity_keyboard + await self.add_extra_keyboard(
+                update,
+                context,
+            )
         else:
             config.keyboard = await self._build_keyboard(
                 update,

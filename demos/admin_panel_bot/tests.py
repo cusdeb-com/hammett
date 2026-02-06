@@ -31,15 +31,29 @@ class HammettAdminPanelBotTests(BaseTestCase):
         """Test calling the `move` handler to get the final render config."""
         await AdminPanelScreen().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=ADMIN_PANEL_SCREEN_DESCRIPTION,
-            keyboard=[
-                [Button("⚠️ I'm not an admin!", NotAdminConfirmationScreen,
-                        source_type=SourceTypes.MOVE_SOURCE_TYPE, hiders=Hider(ONLY_FOR_ADMIN))],
-                [Button('⬅️ Main Menu', MainMenuScreen,
-                        source_type=SourceTypes.MOVE_SOURCE_TYPE, hiders=Hider(ONLY_FOR_ADMIN))],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=ADMIN_PANEL_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            "⚠️ I'm not an admin!",
+                            NotAdminConfirmationScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                            hiders=Hider(ONLY_FOR_ADMIN),
+                        ),
+                    ],
+                    [
+                        Button(
+                            '⬅️ Main Menu',
+                            MainMenuScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                            hiders=Hider(ONLY_FOR_ADMIN),
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -47,19 +61,36 @@ class HammettAdminPanelBotTests(BaseTestCase):
         """Test calling the `start` handler to get the final render config."""
         await MainMenuScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=MAIN_MENU_SCREEN_DESCRIPTION,
-            keyboard=[
-                [Button('👑 Admin Panel', AdminPanelScreen, hiders=Hider(ONLY_FOR_ADMIN),
-                        source_type=SourceTypes.MOVE_SOURCE_TYPE)],
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/admin_panel_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=MAIN_MENU_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            '👑 Admin Panel',
+                            AdminPanelScreen,
+                            hiders=Hider(ONLY_FOR_ADMIN),
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/admin_panel_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -67,16 +98,27 @@ class HammettAdminPanelBotTests(BaseTestCase):
         """Test calling the `move` handler to get the final render config."""
         await NotAdminConfirmationScreen().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=NOT_ADMIN_CONFIRMATION_SCREEN_DESCRIPTION,
-            keyboard=[[
-                Button('✅ Yes', NotAdminConfirmationScreen().exclude_from_admin_group,
-                        source_type=SourceTypes.HANDLER_SOURCE_TYPE,
-                        hiders=Hider(ONLY_FOR_ADMIN)),
-                Button('❌ No', MainMenuScreen,
-                        source_type=SourceTypes.MOVE_SOURCE_TYPE, hiders=Hider(ONLY_FOR_ADMIN)),
-            ]],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=NOT_ADMIN_CONFIRMATION_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            '✅ Yes',
+                            NotAdminConfirmationScreen().exclude_from_admin_group,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                            hiders=Hider(ONLY_FOR_ADMIN),
+                        ),
+                        Button(
+                            '❌ No',
+                            MainMenuScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                            hiders=Hider(ONLY_FOR_ADMIN),
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
 

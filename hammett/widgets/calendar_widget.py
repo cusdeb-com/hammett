@@ -43,8 +43,7 @@ def _arrange_buttons_into_rows(buttons: 'list[Button]', row_size: int) -> 'Keybo
 
     """
     return [
-        buttons[i:i + row_size]
-        for i in range(0, max(len(buttons) - row_size, 0) + 1, row_size)
+        buttons[i : i + row_size] for i in range(0, max(len(buttons) - row_size, 0) + 1, row_size)
     ]
 
 
@@ -118,34 +117,44 @@ class CalendarWidget(BaseWidget, I18NMixin):
 
         """
         current_date = (
-            await self.get_current_date(update, context)
-            if current_date is None
-            else current_date
+            await self.get_current_date(update, context) if current_date is None else current_date
         )
         days_num = calendar.monthrange(current_date.year, current_date.month)[1]
         start_date = current_date.replace(day=1)
 
         return [
-            *[[  # days of week buttons
-                self._get_handler_button(
-                    _(f'{weekday}', await self.get_language_code(update, context)),  # noqa: INT001
-                    self._do_nothing,
-                ) for weekday in calendar.day_abbr
-            ]],
-            *_arrange_buttons_into_rows([  # days buttons
-                self._get_handler_button(caption, self.on_day_click, {
-                    'unit': CalendarUnit.DAY,
-                    'date': self._date_to_list(date_),
-                }, chat_id=chat_id)
-                if isinstance(date_, date)
-                else self._get_handler_button(caption, self._do_nothing)
-                for date_, caption in await self._get_days(update, context, start_date)
+            *[
+                [
+                    self._get_handler_button(  # days of week buttons
+                        _(f'{weekday}', await self.get_language_code(update, context)),  # noqa: INT001
+                        self._do_nothing,
+                    )
+                    for weekday in calendar.day_abbr
+                ],
             ],
+            *_arrange_buttons_into_rows(  # days buttons
+                [
+                    self._get_handler_button(
+                        caption,
+                        self.on_day_click,
+                        {
+                            'unit': CalendarUnit.DAY,
+                            'date': self._date_to_list(date_),
+                        },
+                        chat_id=chat_id,
+                    )
+                    if isinstance(date_, date)
+                    else self._get_handler_button(caption, self._do_nothing)
+                    for date_, caption in await self._get_days(update, context, start_date)
+                ],
                 row_size=7,
             ),
             *await self._build_navigation_buttons(
-                update, context, CalendarUnit.DAY,
-                current_date=current_date, chat_id=chat_id,
+                update,
+                context,
+                CalendarUnit.DAY,
+                current_date=current_date,
+                chat_id=chat_id,
                 unit_size=relativedelta(months=1),
                 left_boundary=_get_left_boundary(
                     start_date + relativedelta(days=days_num - 1),
@@ -169,35 +178,47 @@ class CalendarWidget(BaseWidget, I18NMixin):
 
         """
         current_date = (
-            await self.get_current_date(update, context)
-            if current_date is None
-            else current_date
+            await self.get_current_date(update, context) if current_date is None else current_date
         )
         start_date = current_date.replace(month=1)
         return [
-            *_arrange_buttons_into_rows([  # month buttons
-                self._get_handler_button(
-                    self.get_month_name(date_.month, await self.get_language_code(update, context)),
-                    self._on_month_or_year_click, {
-                        'unit': CalendarUnit.MONTH,
-                        'date': self._date_to_list(date_),
-                    }, chat_id=chat_id,
-                )
-                if isinstance(date_, date)
-                else self._get_handler_button(' ', self._do_nothing)
-                for date_ in await self._get_months_or_years(
-                    update, context, CalendarUnit.MONTH, start_date, 12,
-                )
-            ],
+            *_arrange_buttons_into_rows(  # month buttons
+                [
+                    self._get_handler_button(
+                        self.get_month_name(
+                            date_.month,
+                            await self.get_language_code(update, context),
+                        ),
+                        self._on_month_or_year_click,
+                        {
+                            'unit': CalendarUnit.MONTH,
+                            'date': self._date_to_list(date_),
+                        },
+                        chat_id=chat_id,
+                    )
+                    if isinstance(date_, date)
+                    else self._get_handler_button(' ', self._do_nothing)
+                    for date_ in await self._get_months_or_years(
+                        update,
+                        context,
+                        CalendarUnit.MONTH,
+                        start_date,
+                        12,
+                    )
+                ],
                 self.month_row_size,
             ),
             *await self._build_navigation_buttons(
-                update, context, CalendarUnit.MONTH,
-                current_date=current_date, chat_id=chat_id,
+                update,
+                context,
+                CalendarUnit.MONTH,
+                current_date=current_date,
+                chat_id=chat_id,
                 unit_size=relativedelta(months=12),
                 left_boundary=_get_right_boundary(start_date, CalendarUnit.MONTH),
                 right_boundary=_get_left_boundary(start_date.replace(month=12), CalendarUnit.MONTH),
-        )]
+            ),
+        ]
 
     async def _build_keyboard(
         self: 'Self',
@@ -243,9 +264,7 @@ class CalendarWidget(BaseWidget, I18NMixin):
 
         """
         current_date = (
-            await self.get_current_date(update, context)
-            if current_date is None
-            else current_date
+            await self.get_current_date(update, context) if current_date is None else current_date
         )
         year, month, day = self._date_to_list(current_date)
 
@@ -254,42 +273,59 @@ class CalendarWidget(BaseWidget, I18NMixin):
 
         month = self.get_month_name(int(month), await self.get_language_code(update, context))
         middle_button_caption = getattr(
-            self, f'middle_{unit.value}_caption', '',
+            self,
+            f'middle_{unit.value}_caption',
+            '',
         ).format(
-            **dict(zip(
-                [CalendarUnit.YEAR.value, CalendarUnit.MONTH.value, CalendarUnit.DAY.value],
-                [year, month, day],
-                strict=True,
-        )))
-
-        return [[
-            # Previous button
-            self._get_handler_button(
-                self.back_caption, self._on_navigation_click, {
-                    'unit': unit,
-                    'date': self._date_to_list(current_date - unit_size),
-                }, chat_id=chat_id,
-            )
-            if prev_date >= await self.set_left_boundary(update, context)  # prev exists
-            else self._get_handler_button(self.disabled_caption, self._do_nothing),
-            # Middle button
-            self._get_handler_button(
-                middle_button_caption,
-                self._do_nothing if unit == CalendarUnit.YEAR else self._on_navigation_click, {
-                    'unit': CalendarUnit.MONTH if unit == CalendarUnit.DAY else CalendarUnit.YEAR,
-                    'date': self._date_to_list(current_date),
-                }, chat_id=chat_id,
+            **dict(
+                zip(
+                    [CalendarUnit.YEAR.value, CalendarUnit.MONTH.value, CalendarUnit.DAY.value],
+                    [year, month, day],
+                    strict=True,
+                ),
             ),
-            # Next button
-            self._get_handler_button(
-                self.next_caption, self._on_navigation_click, {
-                    'unit': unit,
-                    'date': self._date_to_list(current_date + unit_size),
-                }, chat_id=chat_id,
-            )
-            if next_date <= await self.set_right_boundary(update, context)  # next exists
-            else self._get_handler_button(self.disabled_caption, self._do_nothing),
-        ]]
+        )
+
+        return [
+            [
+                # Previous button
+                self._get_handler_button(
+                    self.back_caption,
+                    self._on_navigation_click,
+                    {
+                        'unit': unit,
+                        'date': self._date_to_list(current_date - unit_size),
+                    },
+                    chat_id=chat_id,
+                )
+                if prev_date >= await self.set_left_boundary(update, context)  # prev exists
+                else self._get_handler_button(self.disabled_caption, self._do_nothing),
+                # Middle button
+                self._get_handler_button(
+                    middle_button_caption,
+                    self._do_nothing if unit == CalendarUnit.YEAR else self._on_navigation_click,
+                    {
+                        'unit': CalendarUnit.MONTH
+                        if unit == CalendarUnit.DAY
+                        else CalendarUnit.YEAR,
+                        'date': self._date_to_list(current_date),
+                    },
+                    chat_id=chat_id,
+                ),
+                # Next button
+                self._get_handler_button(
+                    self.next_caption,
+                    self._on_navigation_click,
+                    {
+                        'unit': unit,
+                        'date': self._date_to_list(current_date + unit_size),
+                    },
+                    chat_id=chat_id,
+                )
+                if next_date <= await self.set_right_boundary(update, context)  # next exists
+                else self._get_handler_button(self.disabled_caption, self._do_nothing),
+            ],
+        ]
 
     async def _build_years(
         self: 'Self',
@@ -305,29 +341,40 @@ class CalendarWidget(BaseWidget, I18NMixin):
 
         """
         current_date = (
-            await self.get_current_date(update, context)
-            if current_date is None
-            else current_date
+            await self.get_current_date(update, context) if current_date is None else current_date
         )
         years_num = self.year_row_size * self.year_column_size
         start_date = current_date - relativedelta(years=(years_num - 1) // 2)
         return [
-            *_arrange_buttons_into_rows([  # year buttons
-                self._get_handler_button(f'{date_.year}', self._on_month_or_year_click, {
-                    'unit': CalendarUnit.YEAR,
-                    'date': self._date_to_list(date_),
-                }, chat_id=chat_id)
-                if isinstance(date_, date)
-                else self._get_handler_button(' ', self._do_nothing)
-                for date_ in await self._get_months_or_years(
-                    update, context, CalendarUnit.YEAR, start_date, years_num,
-                )
-            ],
+            *_arrange_buttons_into_rows(  # year buttons
+                [
+                    self._get_handler_button(
+                        f'{date_.year}',
+                        self._on_month_or_year_click,
+                        {
+                            'unit': CalendarUnit.YEAR,
+                            'date': self._date_to_list(date_),
+                        },
+                        chat_id=chat_id,
+                    )
+                    if isinstance(date_, date)
+                    else self._get_handler_button(' ', self._do_nothing)
+                    for date_ in await self._get_months_or_years(
+                        update,
+                        context,
+                        CalendarUnit.YEAR,
+                        start_date,
+                        years_num,
+                    )
+                ],
                 self.year_row_size,
             ),
             *await self._build_navigation_buttons(
-                update, context, CalendarUnit.YEAR,
-                current_date=current_date, chat_id=chat_id,
+                update,
+                context,
+                CalendarUnit.YEAR,
+                current_date=current_date,
+                chat_id=chat_id,
                 unit_size=relativedelta(years=years_num),
                 left_boundary=_get_right_boundary(start_date, CalendarUnit.YEAR),
                 right_boundary=_get_left_boundary(
@@ -379,12 +426,18 @@ class CalendarWidget(BaseWidget, I18NMixin):
         left_boundary = await self.set_left_boundary(update, context)
         right_boundary = await self.set_right_boundary(update, context)
 
-        return await self.get_dates_with_captions(update, context, year, month, [
-            date(year, month, day)
-            if day != 0 and left_boundary <= date(year, month, day) <= right_boundary
-            else None
-            for day in itertools.chain(*calendar.monthcalendar(year, month))
-        ])
+        return await self.get_dates_with_captions(
+            update,
+            context,
+            year,
+            month,
+            [
+                date(year, month, day)
+                if day != 0 and left_boundary <= date(year, month, day) <= right_boundary
+                else None
+                for day in itertools.chain(*calendar.monthcalendar(year, month))
+            ],
+        )
 
     async def _get_description(
         self: 'Self',
@@ -421,8 +474,10 @@ class CalendarWidget(BaseWidget, I18NMixin):
 
         """
         return Button(
-            caption, source,
-            source_type=SourceTypes.HANDLER_SOURCE_TYPE, chat_id=chat_id,
+            caption,
+            source,
+            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+            chat_id=chat_id,
             payload=payload if payload is None else json.dumps(payload),
         )
 
@@ -475,7 +530,10 @@ class CalendarWidget(BaseWidget, I18NMixin):
 
         config = config or RenderConfig()
         keyboard, unit = await self._build_keyboard(
-            update, context, current_date=current_date, chat_id=config.chat_id,
+            update,
+            context,
+            current_date=current_date,
+            chat_id=config.chat_id,
         )
         config.description = await self._get_description(update, context, unit, current_date)
         config.keyboard = keyboard
@@ -505,10 +563,14 @@ class CalendarWidget(BaseWidget, I18NMixin):
             unit=CalendarUnit.MONTH if unit == CalendarUnit.YEAR else CalendarUnit.DAY,
             current_date=current_date,
         )
-        await self.render(update, context, config=RenderConfig(
-            description=await self._get_description(update, context, unit, current_date),
-            keyboard=keyboard,
-        ))
+        await self.render(
+            update,
+            context,
+            config=RenderConfig(
+                description=await self._get_description(update, context, unit, current_date),
+                keyboard=keyboard,
+            ),
+        )
         return DEFAULT_STATE
 
     @register_button_handler
@@ -532,10 +594,14 @@ class CalendarWidget(BaseWidget, I18NMixin):
             unit=payload['unit'],
             current_date=current_date,
         )
-        await self.render(update, context, config=RenderConfig(
-            description=await self._get_description(update, context, unit, current_date),
-            keyboard=keyboard,
-        ))
+        await self.render(
+            update,
+            context,
+            config=RenderConfig(
+                description=await self._get_description(update, context, unit, current_date),
+                keyboard=keyboard,
+            ),
+        )
         return DEFAULT_STATE
 
     #
@@ -725,10 +791,14 @@ class CalendarWidget(BaseWidget, I18NMixin):
         payload = json.loads(await self.get_payload(update, context))
         current_date = date(*map(int, payload['date']))
 
-        await self.render(update, context, config=RenderConfig(
-            description=await self.get_confirm_description(update, context, current_date),
-            keyboard=await self.add_extra_keyboard(update, context),
-        ))
+        await self.render(
+            update,
+            context,
+            config=RenderConfig(
+                description=await self.get_confirm_description(update, context, current_date),
+                keyboard=await self.add_extra_keyboard(update, context),
+            ),
+        )
         return DEFAULT_STATE
 
     async def send(

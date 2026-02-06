@@ -27,7 +27,8 @@ def _autodiscover_screens_in_module(
 
     """
     return {
-        obj for _, obj in inspect.getmembers(module)
+        obj
+        for _, obj in inspect.getmembers(module)
         if inspect.isclass(obj)
         # Permission classes subclass Screen,
         # but their handlers do not need to be registered,

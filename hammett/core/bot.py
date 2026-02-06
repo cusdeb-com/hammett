@@ -41,7 +41,7 @@ if TYPE_CHECKING:
     from hammett.core.screen import Screen
     from hammett.types.core import Handler, HandlerAlias, NativeStates, State, States
 
-__all__ = ('Bot', )
+__all__ = ('Bot',)
 
 logger = logging.getLogger(__name__)
 
@@ -98,13 +98,15 @@ class Bot:
         self._register_error_handlers(error_handlers)
         self._register_jobs(job_configs)
 
-        self._native_application.add_handler(ConversationHandler(
-            entry_points=[CommandHandler('start', self._entry_point.start)],
-            states=self._native_states,
-            fallbacks=[CommandHandler('start', self._entry_point.start)],
-            name=self._name,
-            persistent=bool(persistence),
-        ))
+        self._native_application.add_handler(
+            ConversationHandler(
+                entry_points=[CommandHandler('start', self._entry_point.start)],
+                states=self._native_states,
+                fallbacks=[CommandHandler('start', self._entry_point.start)],
+                name=self._name,
+                persistent=bool(persistence),
+            ),
+        )
 
     @staticmethod
     def _get_handler_object(
@@ -211,8 +213,8 @@ class Bot:
                 possible_handler = getattr(screen, name)
                 possible_handler_type = getattr(possible_handler, 'handler_type', '')
                 if (
-                    name in self._builtin_handlers or
-                    possible_handler_type in acceptable_handler_types
+                    name in self._builtin_handlers
+                    or possible_handler_type in acceptable_handler_types
                 ):
                     handler, handler_type = possible_handler, possible_handler_type
 
@@ -228,11 +230,7 @@ class Bot:
                     possible_handler,
                 )
 
-                if (
-                    hasattr(screen, 'routes')
-                    and name in self._route_handlers
-                    and screen.routes
-                ):
+                if hasattr(screen, 'routes') and name in self._route_handlers and screen.routes:
                     for route in screen.routes:
                         route_states, _ = route
                         for route_state in route_states:
@@ -251,6 +249,7 @@ class Bot:
     def _setup(self: 'Self') -> None:
         """Configure logging."""
         from hammett.conf import settings
+
         configure_logging(settings.LOGGING)
 
     def provide_application_builder(self: 'Self') -> 'ApplicationBuilder':  # type: ignore[type-arg]
@@ -262,27 +261,29 @@ class Bot:
         """
         from hammett.conf import settings
 
-        return NativeApplication.builder().read_timeout(
-            settings.APPLICATION_BUILDER_READ_TIMEOUT,
-        ).token(
-            settings.TOKEN,
+        return (
+            NativeApplication.builder()
+            .read_timeout(
+                settings.APPLICATION_BUILDER_READ_TIMEOUT,
+            )
+            .token(
+                settings.TOKEN,
+            )
         )
 
     def run(self: 'Self') -> None:
         """Run the bot."""
         from hammett.conf import settings
 
-        if ((
-            sys.version_info.minor == 11 and (
-            sys.version_info.micro == 5 or sys.version_info.micro == 6
-        )) or (
-            sys.version_info.minor == 12 and sys.version_info.micro == 0
-        )):
+        if (
+            sys.version_info.minor == 11
+            and (sys.version_info.micro == 5 or sys.version_info.micro == 6)
+        ) or (sys.version_info.minor == 12 and sys.version_info.micro == 0):
             logger.warning(
                 "It's recommended to avoid using the following versions of Python: "
-                "3.11.5, 3.11.6, and 3.12.0. The reason for this recommendation is that "
-                "these versions raise a `RuntimeError` upon bot termination, which may "
-                "lead to an improper shutdown process.",
+                '3.11.5, 3.11.6, and 3.12.0. The reason for this recommendation is that '
+                'these versions raise a `RuntimeError` upon bot termination, which may '
+                'lead to an improper shutdown process.',
             )
 
         HammettTranslation(settings.LANGUAGE_CODE)

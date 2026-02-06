@@ -21,15 +21,18 @@ class HammettHideKeyboardBotTests(BaseTestCase):
         """Test calling the `jump` handler to get the final render config."""
         await NextScreen().jump(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            hide_keyboard=True,
-            description=NEXT_SCREEN_DESCRIPTION,
-            keyboard=[[
-                Button('⬅️ Back', StartScreen,
-                       source_type=SourceTypes.JUMP_SOURCE_TYPE),
-            ]],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                hide_keyboard=True,
+                description=NEXT_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button('⬅️ Back', StartScreen, source_type=SourceTypes.JUMP_SOURCE_TYPE),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -37,20 +40,30 @@ class HammettHideKeyboardBotTests(BaseTestCase):
         """Test calling the `start` handler to get the final render config."""
         await StartScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            hide_keyboard=True,
-            description=START_SCREEN_DESCRIPTION,
-            keyboard=[
-                [Button('Next screen ➡️', NextScreen,
-                       source_type=SourceTypes.JUMP_SOURCE_TYPE)],
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/hide_keyboard_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                hide_keyboard=True,
+                description=START_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [Button('Next screen ➡️', NextScreen, source_type=SourceTypes.JUMP_SOURCE_TYPE)],
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/hide_keyboard_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
 

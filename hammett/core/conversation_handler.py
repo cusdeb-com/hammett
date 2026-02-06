@@ -93,12 +93,18 @@ class ConversationHandler(NativeConversationHandler['Any']):
         try:  # Now create task or await the callback
             if block:
                 new_state: object = await handler.handle_update(
-                    update, application, handler_check_result, context,
+                    update,
+                    application,
+                    handler_check_result,
+                    context,
                 )
             else:
                 new_state = application.create_task(
                     coroutine=handler.handle_update(
-                        update, application, handler_check_result, context,
+                        update,
+                        application,
+                        handler_check_result,
+                        context,
                     ),
                     update=update,
                     name=f'ConversationHandler:{update.update_id}:handle_update:non_blocking_cb',
@@ -124,7 +130,11 @@ class ConversationHandler(NativeConversationHandler['Any']):
                     # checking if the new state is self.END is done in _schedule_job
                     application.create_task(
                         self._schedule_job_delayed(
-                            new_state, application, update, context, conversation_key,
+                            new_state,
+                            application,
+                            update,
+                            context,
+                            conversation_key,
                         ),
                         update=update,
                         name=f'ConversationHandler:{update.update_id}:handle_update:timeout_job',
@@ -155,7 +165,9 @@ class ConversationHandler(NativeConversationHandler['Any']):
             if current_state != new_state:
                 LOGGER.debug(
                     'Switched to `%s` state from `%s` state via `%s` handler.',
-                    new_state, current_state, handler_name,
+                    new_state,
+                    current_state,
+                    handler_name,
                 )
 
         if raise_dp_handler_stop:

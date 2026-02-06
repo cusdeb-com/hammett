@@ -103,6 +103,7 @@ class TestContextDecorator:
 
                     return await func(*args, **kwargs)
         else:
+
             @wraps(func)
             def inner(*args: 'Any', **kwargs: 'Any') -> 'Any':
                 with self as context:

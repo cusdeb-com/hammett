@@ -82,7 +82,7 @@ def _register_handler(
                 except CommandNameIsEmptyError as exc:
                     msg = (
                         f"Unable to register the '{handler.__name__}' handler for "
-                        f"a command with an empty name."
+                        f'a command with an empty name.'
                     )
                     raise CommandNameIsEmptyError(msg) from exc
 
@@ -92,8 +92,11 @@ def _register_handler(
                 **kwargs: 'Any',
             ) -> 'Any':
                 return await handler(*args, **kwargs)
+
             return cast('Handler', wrapper)
+
         return decorator
+
     return create_decorator
 
 
@@ -125,6 +128,7 @@ def get_payload_storage(context: 'CallbackContext[BT, UD, CD, BD]') -> 'PayloadS
 
     """
     from hammett.conf import settings
+
     namespace = settings.PAYLOAD_NAMESPACE
     bot_data = cast('dict[str, PayloadStorage]', context.bot_data)
     try:
@@ -152,9 +156,9 @@ def log_unregistered_handler(obj: 'Any') -> None:
     params = set(signature.parameters.keys())
     params.difference_update({'self', 'args', 'kwargs'})  # remove optional parameters
     if (
-        len(params) == len(mandatory_params) and
-        params.intersection(mandatory_params) == mandatory_params and
-        signature.return_annotation in mandatory_return_annotations
+        len(params) == len(mandatory_params)
+        and params.intersection(mandatory_params) == mandatory_params
+        and signature.return_annotation in mandatory_return_annotations
     ):
         LOGGER.warning(
             '%s resembles a handler. Perhaps you forgot to register it.',

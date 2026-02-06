@@ -114,15 +114,17 @@ class SingleChoiceWidgetTests(BaseTestCase):
             self.context,
             widget.choices,
         )
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description='Test description',
-            keyboard=await widget._build_keyboard(
-                self.update,
-                self.context,
-                initialized_choices,
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description='Test description',
+                keyboard=await widget._build_keyboard(
+                    self.update,
+                    self.context,
+                    initialized_choices,
+                ),
             ),
-        ))
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -136,14 +138,16 @@ class SingleChoiceWidgetTests(BaseTestCase):
             self.context,
             widget.choices,
         )
-        expected = self.prepare_final_render_config(RenderConfig(
-            description='Test description',
-            keyboard=await widget._build_keyboard(
-                self.update,
-                self.context,
-                initialized_choices,
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description='Test description',
+                keyboard=await widget._build_keyboard(
+                    self.update,
+                    self.context,
+                    initialized_choices,
+                ),
             ),
-        ))
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -157,15 +161,17 @@ class SingleChoiceWidgetTests(BaseTestCase):
             self.context,
             widget.choices,
         )
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description='Test description',
-            keyboard=await widget._build_keyboard(
-                self.update,
-                self.context,
-                initialized_choices,
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description='Test description',
+                keyboard=await widget._build_keyboard(
+                    self.update,
+                    self.context,
+                    initialized_choices,
+                ),
             ),
-        ))
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
 
@@ -193,14 +199,16 @@ class BaseChoiceWidgetTestsUsingSingleChoiceWidget(BaseTestCase):
                 (False, 'b', 'Option B'),
                 (False, 'c', 'Option C'),
             )
-            expected = self.prepare_final_render_config(RenderConfig(
-                description=widget.description,
-                keyboard=await widget._build_keyboard(
-                    self.update,
-                    self.context,
-                    choices,
+            expected = self.prepare_final_render_config(
+                RenderConfig(
+                    description=widget.description,
+                    keyboard=await widget._build_keyboard(
+                        self.update,
+                        self.context,
+                        choices,
+                    ),
                 ),
-            ))
+            )
             assert actual.final_render_config == expected
 
             await widget._on_choice_click(self.update, self.context)  # choose Option B
@@ -210,12 +218,14 @@ class BaseChoiceWidgetTestsUsingSingleChoiceWidget(BaseTestCase):
                 (True, 'b', 'Option B'),
                 (False, 'c', 'Option C'),
             )
-            expected = self.prepare_final_render_config(RenderConfig(
-                description=widget.description,
-                keyboard=await widget._build_keyboard(
-                    self.update,
-                    self.context,
-                    choices,
+            expected = self.prepare_final_render_config(
+                RenderConfig(
+                    description=widget.description,
+                    keyboard=await widget._build_keyboard(
+                        self.update,
+                        self.context,
+                        choices,
+                    ),
                 ),
-            ))
+            )
             assert actual.final_render_config == expected

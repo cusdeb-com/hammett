@@ -26,6 +26,7 @@ def cache(ttl: int) -> 'Callable[[Any], Any]':
         Wrapped decorated function.
 
     """
+
     def decorator(func: 'Callable[[Any], Any]') -> 'Callable[[Any], Any]':
         try:
             settings.REDIS_CACHE['DB']

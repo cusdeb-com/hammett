@@ -155,11 +155,17 @@ class BaseTestCase(unittest.TestCase):
             `Application` object.
 
         """
-        return ApplicationBuilder().bot(
-            TestBot(token=settings.TOKEN),
-        ).concurrent_updates(
-            concurrent_updates=False,
-        ).application_class(Application).build()
+        return (
+            ApplicationBuilder()
+            .bot(
+                TestBot(token=settings.TOKEN),
+            )
+            .concurrent_updates(
+                concurrent_updates=False,
+            )
+            .application_class(Application)
+            .build()
+        )
 
     def get_update(self) -> 'Update':
         """Return the `Update` object for testing purposes.
@@ -212,14 +218,17 @@ class BaseTestCase(unittest.TestCase):
 
         if expected != actual:
             first_config_repr, second_config_repr = _common_shorten_repr(
-                expected, actual,  # type: ignore[arg-type]
+                expected,  # type: ignore[arg-type]
+                actual,  # type: ignore[arg-type]
             )
 
             standard_msg = f'{first_config_repr} != {second_config_repr}'
-            diff = '\n' + '\n'.join(difflib.ndiff(
-                pprint.pformat(expected).splitlines(),
-                pprint.pformat(actual).splitlines(),
-            ))
+            diff = '\n' + '\n'.join(
+                difflib.ndiff(
+                    pprint.pformat(expected).splitlines(),
+                    pprint.pformat(actual).splitlines(),
+                ),
+            )
 
             standard_msg = self._truncateMessage(standard_msg, diff)  # type: ignore[attr-defined]
 

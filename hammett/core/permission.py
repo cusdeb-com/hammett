@@ -61,6 +61,7 @@ def ignore_permissions(
             return await handler(*args, **kwargs)
 
         return cast('Handler', wrapper)
+
     return decorator
 
 

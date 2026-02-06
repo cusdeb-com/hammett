@@ -64,6 +64,7 @@ def gettext(caption: str, language: str = '') -> str:
     """
     if not language:
         from hammett.conf import settings
+
         language = settings.LANGUAGE_CODE
 
     return _get_translation(language).gettext(caption)
@@ -78,6 +79,7 @@ def ngettext(singular: str, plural: str, num: int, language: str = '') -> str:
     """
     if not language:
         from hammett.conf import settings
+
         language = settings.LANGUAGE_CODE
 
     return _get_translation(language).ngettext(singular, plural, num)

@@ -14,23 +14,21 @@ from permissions import PaywallPermission
 
 MAIN_MENU_SCREEN_DESCRIPTION = (
     "Congratulations! You've successfully made a fake payment. Now you can see the "
-    "<b>Main Menu</b> screen even after typing the /start command.\n"
-    "\n"
+    '<b>Main Menu</b> screen even after typing the /start command.\n'
+    '\n'
     "<i>If you'd like to try the demo again, just click the button below "
-    "to make a fake refund 👇</i>"
+    'to make a fake refund 👇</i>'
 )
 
 FAKE_PAYMENT_SCREEN_DESCRIPTION = (
-    'To continue using the bot, you need to make a <i>fake</i> payment.\n'
-    '\n'
-    'Do you want to continue?'
+    'To continue using the bot, you need to make a <i>fake</i> payment.\n\nDo you want to continue?'
 )
 
 PAYMENT_SCREEN_DESCRIPTION = (
-    "Welcome to HammettPaywallBot!\n"
-    "\n"
+    'Welcome to HammettPaywallBot!\n'
+    '\n'
     "Now you see the <b>Payment</b> screen, and you <i>won't see any other screens</i> until "
-    "you make a <i>fake</i> payment. So, if you type the /start command, "
+    'you make a <i>fake</i> payment. So, if you type the /start command, '
     "you'll just get this screen again."
 )
 
@@ -42,16 +40,16 @@ class FakePaymentScreen(Screen):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the keyboard for the screen."""
-        return [[
-            Button(
-                '❌ No',
-                PaymentScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE),
-            Button(
-                '✅ Yes',
-                self.handle_fake_payment,
-                source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-        ]]
+        return [
+            [
+                Button('❌ No', PaymentScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE),
+                Button(
+                    '✅ Yes',
+                    self.handle_fake_payment,
+                    source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                ),
+            ],
+        ]
 
     @ignore_permissions([PaywallPermission])
     @register_button_handler
@@ -86,18 +84,27 @@ class MainMenuScreen(StartMixin):
     async def add_default_keyboard(self, _update, _context):
         """Set up the keyboard for the screen."""
         return [
-            [Button(
-                '💸 Fake Refund',
-                self.handle_fake_refund,
-                source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-            [Button(
-                '📄 Source Code',
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/paywall_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [
+                Button(
+                    '💸 Fake Refund',
+                    self.handle_fake_refund,
+                    source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/paywall_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
         ]
 
     @register_button_handler
@@ -115,12 +122,11 @@ class PaymentScreen(Screen):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the keyboard for the screen."""
-        return [[
-            Button(
-                '💳 Fake Pay',
-                FakePaymentScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE),
-        ]]
+        return [
+            [
+                Button('💳 Fake Pay', FakePaymentScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE),
+            ],
+        ]
 
     @ignore_permissions([PaywallPermission])
     async def move(self, update, context, **kwargs):
