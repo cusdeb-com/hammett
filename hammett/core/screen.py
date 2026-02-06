@@ -54,7 +54,7 @@ class Screen:
     def __init__(self: 'Self') -> None:
         """Initialize a screen object."""
         if not self._initialized:
-            self.renderer = Renderer(self.parse_mode)
+            self.renderer = self.renderer_class(self.parse_mode)
             self._initialized = True
 
     def __new__(cls: type['Screen'], *args: 'Any', **kwargs: 'Any') -> 'Screen':  # noqa: PYI034
