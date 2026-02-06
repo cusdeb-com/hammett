@@ -39,7 +39,7 @@ class TestMultiChoiceWidget(BaseTestMultiChoiceWidget):
 class TestMultiChoiceWidgetWithInitials(BaseTestMultiChoiceWidget):
     """MultiChoiceWidget with predefined initial value for tests."""
 
-    initial_values = ['a', 'b']
+    initial_values = ('a', 'b')
 
 
 class MultiChoiceWidgetTests(BaseTestCase):
