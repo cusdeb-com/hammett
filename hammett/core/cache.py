@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any
 import redis.asyncio as redis
 
 from hammett.conf import settings
-from hammett.core.exceptions import ImproperlyConfigured
+from hammett.core.exceptions import ImproperlyConfiguredError
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -31,7 +31,7 @@ def cache(ttl: int) -> 'Callable[[Any], Any]':
             settings.REDIS_CACHE['DB']
         except KeyError as exc:
             msg = f'{exc.args[0]} is missing in REDIS_CACHE setting'
-            raise ImproperlyConfigured(msg) from exc
+            raise ImproperlyConfiguredError(msg) from exc
 
         @wraps(func)
         async def wrapper(self: 'Self', *args: 'Any', **kwargs: 'Any') -> 'Any':  # type: ignore[misc]

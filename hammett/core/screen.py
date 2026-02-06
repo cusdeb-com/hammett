@@ -15,9 +15,9 @@ from hammett.core.constants import (
     RenderConfig,
 )
 from hammett.core.exceptions import (
-    FailedToGetDataAttributeOfQuery,
-    PayloadIsEmpty,
-    ScreenDescriptionIsEmpty,
+    FailedToGetDataAttributeOfQueryError,
+    PayloadIsEmptyError,
+    ScreenDescriptionIsEmptyError,
 )
 from hammett.core.renderer import Renderer
 from hammett.utils.misc import get_callback_query
@@ -85,7 +85,7 @@ class Screen:
             Finalized object of RenderConfig.
 
         Raises:
-            ScreenDescriptionIsEmpty: If the `description` attribute of the screen is empty.
+            ScreenDescriptionIsEmptyError: If the `description` attribute of the screen is empty.
 
         """
         final_config = FinalRenderConfig(**asdict(config)) if config else FinalRenderConfig()
@@ -107,7 +107,7 @@ class Screen:
             not final_config.attachments and not final_config.cover
         ):
             msg = f'The description of {self.__class__.__name__} is empty'
-            raise ScreenDescriptionIsEmpty(msg)
+            raise ScreenDescriptionIsEmptyError(msg)
 
         if not config or config.keyboard is None:
             final_config.keyboard = (
@@ -276,21 +276,21 @@ class Screen:
             Payload of the button.
 
         Raises:
-            FailedToGetDataAttributeOfQuery: If the query object does not have any data.
-            PayloadIsEmpty: If the attempt to retrieve the payload fails.
+            FailedToGetDataAttributeOfQueryError: If the query object does not have any data.
+            PayloadIsEmptyError: If the attempt to retrieve the payload fails.
 
         """
         query = await get_callback_query(update)
 
         data = getattr(query, 'data', None)
         if data is None:
-            raise FailedToGetDataAttributeOfQuery
+            raise FailedToGetDataAttributeOfQueryError
 
         try:
             payload_storage = handlers.get_payload_storage(context)
             return payload_storage.pop(data)
         except KeyError as exc:
-            raise PayloadIsEmpty from exc
+            raise PayloadIsEmptyError from exc
 
     async def render(
         self: 'Self',

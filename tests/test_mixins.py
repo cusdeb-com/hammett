@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock
 from telegram.ext import CallbackContext
 
 from hammett.core.constants import DEFAULT_STATE, RenderConfig
-from hammett.core.exceptions import ImproperlyConfigured, ScreenRouteIsEmpty
+from hammett.core.exceptions import ImproperlyConfiguredError, ScreenRouteIsEmptyError
 from hammett.core.mixins import I18NMixin, RouteMixin
 from hammett.test.base import BaseTestCase
 from hammett.test.utils import override_settings
@@ -118,7 +118,7 @@ class RouteMixinTests(BaseTestCase):
         class BadRoutesScreen(RouteMixin):
             routes = ({DEFAULT_STATE}, TEST_STATE)
 
-        with self.assertRaises(ImproperlyConfigured):
+        with self.assertRaises(ImproperlyConfiguredError):
             BadRoutesScreen()
 
     async def test_move_along_route_renders_without_as_new_message(self):
@@ -139,8 +139,8 @@ class RouteMixinTests(BaseTestCase):
         assert state == TEST_STATE
 
     async def test_route_mixin_raises_exception_when_routes_attribute_is_empty(self):
-        """Test that ScreenRouteIsEmpty is raised when routes attribute is missing or empty."""
-        with self.assertRaises(ScreenRouteIsEmpty):
+        """Test that ScreenRouteIsEmptyError is raised when routes attribute is missing or empty."""
+        with self.assertRaises(ScreenRouteIsEmptyError):
             TestRouteScreenWithoutRoutes()
 
 

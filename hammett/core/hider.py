@@ -3,7 +3,7 @@
 import asyncio
 from typing import TYPE_CHECKING
 
-from hammett.core.exceptions import HiderIsUnregistered
+from hammett.core.exceptions import HiderIsUnregisteredError
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -142,7 +142,7 @@ class HidersChecker:
             True if any of the HiderChecker checks are True.
 
         Raises:
-            HiderIsUnregistered: If the implemented hider is not registered.
+            HiderIsUnregisteredError: If the implemented hider is not registered.
 
         """
         for hider in self._hiders_set:
@@ -150,7 +150,7 @@ class HidersChecker:
                 hider_handler = self._registered_hiders[hider]
             except KeyError as exc:
                 msg = f"The hider '{hider}' is unregistered"
-                raise HiderIsUnregistered(msg) from exc
+                raise HiderIsUnregisteredError(msg) from exc
 
             if asyncio.iscoroutinefunction(hider_handler):
                 if await hider_handler(update, context):

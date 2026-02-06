@@ -17,10 +17,10 @@ from telegram.ext import (
 
 from hammett.core.conversation_handler import ConversationHandler
 from hammett.core.exceptions import (
-    CallbackNotProvided,
-    JobKwargsNotProvided,
-    TokenIsNotSpecified,
-    UnknownHandlerType,
+    CallbackNotProvidedError,
+    JobKwargsNotProvidedError,
+    TokenIsNotSpecifiedError,
+    UnknownHandlerTypeError,
 )
 from hammett.core.handlers import calc_checksum, log_unregistered_handler
 from hammett.core.permission import apply_permission_to
@@ -68,13 +68,13 @@ class Bot:
         """Initialize a bot object.
 
         Raises:
-            TokenIsNotSpecified: If the `TOKEN` attribute in the settings is not specified.
+            TokenIsNotSpecifiedError: If the `TOKEN` attribute in the settings is not specified.
 
         """
         from hammett.conf import settings
 
         if not settings.TOKEN:
-            raise TokenIsNotSpecified
+            raise TokenIsNotSpecifiedError
 
         self._setup()
 
@@ -118,7 +118,7 @@ class Bot:
             Handler object.
 
         Raises:
-            UnknownHandlerType: If the handler type is unknown.
+            UnknownHandlerTypeError: If the handler type is unknown.
 
         """
         handler_object: CallbackQueryHandler[Any, Any] | MessageHandler[Any, Any]
@@ -145,7 +145,7 @@ class Bot:
                 handler,
             )
         else:
-            raise UnknownHandlerType
+            raise UnknownHandlerTypeError
 
         return handler_object
 
@@ -173,8 +173,8 @@ class Bot:
         """Register the specified job queue handlers.
 
         Raises:
-            CallbackNotProvided: If `callback` of `JobConfig` is not provided.
-            JobKwargsNotProvided: If `job_kwargs` of `JobConfig` is not provided.
+            CallbackNotProvidedError: If `callback` of `JobConfig` is not provided.
+            JobKwargsNotProvidedError: If `job_kwargs` of `JobConfig` is not provided.
 
         """
         if job_configs is not None:
@@ -186,12 +186,12 @@ class Bot:
                         f'You must provide a callback function that will be executed by the job '
                         f'under the index {i}'
                     )
-                    raise CallbackNotProvided(msg)
+                    raise CallbackNotProvidedError(msg)
 
                 job_kwargs = job_config.get('job_kwargs')
                 if not job_kwargs:
                     msg = f'You must provide job_kwargs for the job under the index {i}'
-                    raise JobKwargsNotProvided(msg)
+                    raise JobKwargsNotProvidedError(msg)
 
                 if job_queue:
                     job_queue.run_custom(**job_config)

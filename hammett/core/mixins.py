@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, cast
 
 from hammett.conf import settings
 from hammett.core import Screen
-from hammett.core.exceptions import ImproperlyConfigured, ScreenRouteIsEmpty
+from hammett.core.exceptions import ImproperlyConfiguredError, ScreenRouteIsEmptyError
 
 if TYPE_CHECKING:
     from typing import Any
@@ -64,22 +64,23 @@ class RouteMixin(Screen):
         """Initialize a route mixin object.
 
         Raises:
-            ScreenRouteIsEmpty: If the `routes` attribute of the mixin is empty.
-            ImproperlyConfigured: If the `routes` attribute of the mixin is not a tuple with tuples.
+            ScreenRouteIsEmptyError: If the `routes` attribute of the mixin is empty.
+            ImproperlyConfiguredError: If the `routes` attribute of the mixin is not
+            a tuple with tuples.
 
         """
         super().__init__()
 
         if self.routes is None:
             msg = f'The `routes` attribute of {self.__class__.__name__} is empty'
-            raise ScreenRouteIsEmpty(msg)
+            raise ScreenRouteIsEmptyError(msg)
 
         if not all(isinstance(item, tuple) for item in self.routes):
             msg = (
                 f'The `routes` attribute of {self.__class__.__name__} must be '
                 f'a tuple of tuples.'
             )
-            raise ImproperlyConfigured(msg)
+            raise ImproperlyConfiguredError(msg)
 
     def get_return_state_from_routes(
         self: 'Self',

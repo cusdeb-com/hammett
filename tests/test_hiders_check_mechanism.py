@@ -3,7 +3,7 @@
 from hammett.conf import settings
 from hammett.core.button import Button
 from hammett.core.constants import SourceTypes
-from hammett.core.exceptions import HiderIsUnregistered, ImproperlyConfigured
+from hammett.core.exceptions import HiderIsUnregisteredError, ImproperlyConfiguredError
 from hammett.core.hider import (
     ONLY_FOR_ADMIN,
     ONLY_FOR_BETA_TESTERS,
@@ -88,14 +88,14 @@ class HidersCheckerTests(BaseTestCase):
             hiders=Hider(_ONLY_FOR_DEVELOPERS),
             source_type=SourceTypes.URL_SOURCE_TYPE,
         )
-        with self.assertRaises(HiderIsUnregistered):
+        with self.assertRaises(HiderIsUnregisteredError):
             await button.create(self.update, self.context)
 
     def test_empty_setting(self):
         """Test the case when a button uses the hiders mechanism,
         but the 'HIDERS_CHECKER' setting is empty.
         """
-        with self.assertRaises(ImproperlyConfigured):
+        with self.assertRaises(ImproperlyConfiguredError):
             Button(
                 _TEST_BUTTON_NAME,
                 _TEST_URL,

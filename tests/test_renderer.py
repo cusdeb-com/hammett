@@ -12,7 +12,7 @@ from telegram.error import BadRequest
 
 from hammett.core import Button
 from hammett.core.constants import FinalRenderConfig, SourceTypes
-from hammett.core.exceptions import ScreenDocumentDataIsEmpty, ScreenRenderNotSupported
+from hammett.core.exceptions import ScreenDocumentDataIsEmptyError, ScreenRenderNotSupportedError
 from hammett.core.renderer import _NO_MESSAGE_TO_EDIT, Renderer
 from hammett.test.base import BaseTestCase
 
@@ -25,7 +25,7 @@ class RendererTests(BaseTestCase):
         renderer = Renderer(ParseMode.HTML)
         document = {'document_kwargs': {}}
 
-        with self.assertRaises(ScreenDocumentDataIsEmpty):
+        with self.assertRaises(ScreenDocumentDataIsEmptyError):
             renderer._create_input_media_document(document, 'text')
 
     async def test_create_markup_keyboard_with_button_rows(self):
@@ -282,7 +282,7 @@ class RendererTests(BaseTestCase):
 
     async def test_render_raises_screen_render_not_supported_when_no_message_to_edit(self):
         """Test the case when BadRequest with 'There is no text in the message to edit'
-        message is raised and ScreenRenderNotSupported is raised instead.
+        message is raised and ScreenRenderNotSupportedError is raised instead.
         """
         renderer = Renderer(ParseMode.HTML)
         fake_send = AsyncMock(side_effect=BadRequest(_NO_MESSAGE_TO_EDIT))
@@ -292,7 +292,7 @@ class RendererTests(BaseTestCase):
                 renderer,
                 '_get_edit_render_method',
                 new=AsyncMock(return_value=(fake_send, {'chat_id': self.chat_id}))),
-            self.assertRaises(ScreenRenderNotSupported) as exc_context,
+            self.assertRaises(ScreenRenderNotSupportedError) as exc_context,
         ):
             await renderer.render(None, self.context, FinalRenderConfig(as_new_message=False))
 

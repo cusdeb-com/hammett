@@ -9,7 +9,7 @@ from telegram.ext import filters
 
 from hammett.conf import settings
 from hammett.core.constants import DEFAULT_STATE
-from hammett.core.exceptions import CommandNameIsEmpty
+from hammett.core.exceptions import CommandNameIsEmptyError
 from hammett.core.handlers import (
     _clear_command_name,
     _get_handler_name,
@@ -145,7 +145,7 @@ class HandlersTests(BaseTestCase):
 
     def test_registering_command_handler_without_specified_command_name(self):
         """Test registering a command handler without specified command name."""
-        with self.assertRaises(CommandNameIsEmpty):
+        with self.assertRaises(CommandNameIsEmptyError):
             class TestScreenWithCommandHandler(Screen):
                 """The class implements a screen without description
                 a screen for this test.

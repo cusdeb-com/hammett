@@ -14,10 +14,10 @@ from hammett.core.bot import Bot
 from hammett.core.button import Button
 from hammett.core.constants import DEFAULT_STATE, SourceTypes
 from hammett.core.exceptions import (
-    CallbackNotProvided,
-    JobKwargsNotProvided,
-    TokenIsNotSpecified,
-    UnknownHandlerType,
+    CallbackNotProvidedError,
+    JobKwargsNotProvidedError,
+    TokenIsNotSpecifiedError,
+    UnknownHandlerTypeError,
 )
 from hammett.core.handlers import calc_checksum
 from hammett.core.mixins import RouteMixin
@@ -183,7 +183,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
 
     def test_registering_job_without_callback_specified(self):
         """Test registering a job without `callback` key specified."""
-        with self.assertRaises(CallbackNotProvided):
+        with self.assertRaises(CallbackNotProvidedError):
             Bot(
                 BOT_TEST_NAME,
                 entry_point=TestStartScreen,
@@ -194,7 +194,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
 
     def test_registering_job_without_job_kwargs_specified(self):
         """Test registering a job without `job_kwargs` key specified."""
-        with self.assertRaises(JobKwargsNotProvided):
+        with self.assertRaises(JobKwargsNotProvidedError):
             Bot(
                 BOT_TEST_NAME,
                 entry_point=TestStartScreen,
@@ -364,15 +364,15 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         """Test the case when a bot is initialized unsuccessfully
         because of an empty token.
         """
-        with self.assertRaises(TokenIsNotSpecified):
+        with self.assertRaises(TokenIsNotSpecifiedError):
             get_bot()
 
     def test_unknown_handler_type_raises_exception(self):
-        """Test that an unknown handler type raises UnknownHandlerType exception."""
+        """Test that an unknown handler type raises UnknownHandlerTypeError exception."""
         mock_handler = MagicMock()
         mock_possible_handler = MagicMock()
 
-        with self.assertRaises(UnknownHandlerType):
+        with self.assertRaises(UnknownHandlerTypeError):
             Bot._get_handler_object(
                 mock_handler,
                 'unknown_type',

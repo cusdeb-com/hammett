@@ -10,9 +10,9 @@ from telegram.ext import CallbackContext
 
 from hammett.core.constants import LATEST_SENT_MSG_KEY, RenderConfig
 from hammett.core.exceptions import (
-    FailedToGetDataAttributeOfQuery,
-    PayloadIsEmpty,
-    ScreenDescriptionIsEmpty,
+    FailedToGetDataAttributeOfQueryError,
+    PayloadIsEmptyError,
+    ScreenDescriptionIsEmptyError,
 )
 from hammett.core.persistence import RedisPersistence
 from hammett.core.screen import Screen
@@ -84,7 +84,7 @@ class ScreenTests(BaseTestCase):
         """Test the case when getting payload fails because query has no data."""
         with (
             patch('hammett.utils.misc.get_callback_query', return_value=SimpleNamespace(data=None)),
-            self.assertRaises(FailedToGetDataAttributeOfQuery),
+            self.assertRaises(FailedToGetDataAttributeOfQueryError),
         ):
             await Screen.get_payload(self.update, self.context)
 
@@ -95,7 +95,7 @@ class ScreenTests(BaseTestCase):
                 'hammett.core.screen.get_callback_query',
                 return_value=SimpleNamespace(data='key'),
             ),
-            self.assertRaises(PayloadIsEmpty),
+            self.assertRaises(PayloadIsEmptyError),
         ):
             await Screen.get_payload(self.update, self.context)
 
@@ -199,7 +199,7 @@ class ScreenTests(BaseTestCase):
     async def test_screen_without_description(self):
         """Test the case when a description of a screen is empty."""
         screen = TestScreenWithoutDescription()
-        with self.assertRaises(ScreenDescriptionIsEmpty):
+        with self.assertRaises(ScreenDescriptionIsEmptyError):
             await screen.move(self.update, self.context)
 
     @catch_render_config()
