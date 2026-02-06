@@ -34,22 +34,43 @@ class HammettQuizBotTests(BaseTestCase):
         """Test calling the `start` handler to get the final render config."""
         await MainMenuScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=_(MainMenuScreen.caption),
-            hide_keyboard=True,
-            keyboard=[
-                [Button(_('❓ Start Quiz'), MainMenuScreen().start_quiz_handler,
-                    source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                [Button(_('🌍 Language'), LanguageSwitcherScreen,
-                    source_type=SourceTypes.MOVE_SOURCE_TYPE)],
-                [Button(_('📄 Source Code'),
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/quiz_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=_(MainMenuScreen.caption),
+                hide_keyboard=True,
+                keyboard=[
+                    [
+                        Button(
+                            _('❓ Start Quiz'),
+                            MainMenuScreen().start_quiz_handler,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            _('🌍 Language'),
+                            LanguageSwitcherScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            _('📄 Source Code'),
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/quiz_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -59,22 +80,43 @@ class HammettQuizBotTests(BaseTestCase):
 
         await MainMenuScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=_(MainMenuScreen.caption, 'pt-br'),
-            hide_keyboard=True,
-            keyboard=[
-                [Button(_('❓ Start Quiz', 'pt-br'), MainMenuScreen().start_quiz_handler,
-                    source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                [Button(_('🌍 Language', 'pt-br'), LanguageSwitcherScreen,
-                    source_type=SourceTypes.MOVE_SOURCE_TYPE)],
-                [Button(_('📄 Source Code', 'pt-br'),
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/quiz_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=_(MainMenuScreen.caption, 'pt-br'),
+                hide_keyboard=True,
+                keyboard=[
+                    [
+                        Button(
+                            _('❓ Start Quiz', 'pt-br'),
+                            MainMenuScreen().start_quiz_handler,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            _('🌍 Language', 'pt-br'),
+                            LanguageSwitcherScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            _('📄 Source Code', 'pt-br'),
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/quiz_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -84,22 +126,43 @@ class HammettQuizBotTests(BaseTestCase):
 
         await MainMenuScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=_(MainMenuScreen.caption, 'ru'),
-            hide_keyboard=True,
-            keyboard=[
-                [Button(_('❓ Start Quiz', 'ru'), MainMenuScreen().start_quiz_handler,
-                    source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                [Button(_('🌍 Language', 'ru'), LanguageSwitcherScreen,
-                    source_type=SourceTypes.MOVE_SOURCE_TYPE)],
-                [Button(_('📄 Source Code', 'ru'),
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/quiz_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=_(MainMenuScreen.caption, 'ru'),
+                hide_keyboard=True,
+                keyboard=[
+                    [
+                        Button(
+                            _('❓ Start Quiz', 'ru'),
+                            MainMenuScreen().start_quiz_handler,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            _('🌍 Language', 'ru'),
+                            LanguageSwitcherScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            _('📄 Source Code', 'ru'),
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/quiz_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
 

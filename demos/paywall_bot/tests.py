@@ -60,13 +60,27 @@ class HammettPaywallBotBotTests(BaseTestCase):
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
                 return [
-                    [Button('💸 Fake Refund', self.handle_fake_refund,
-                        source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                    [Button('📄 Source Code',
+                    [
+                        Button(
+                            '💸 Fake Refund',
+                            self.handle_fake_refund,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
                             'https://github.com/cusdeb-com/hammett/tree/main/demos/paywall_bot',
-                            source_type=SourceTypes.URL_SOURCE_TYPE)],
-                    [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                            source_type=SourceTypes.URL_SOURCE_TYPE)],
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
                 ]
 
             @register_button_handler
@@ -83,12 +97,16 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
-                return [[
-                    Button('❌ No', PaymentScreen,
-                        source_type=SourceTypes.MOVE_SOURCE_TYPE),
-                    Button('✅ Yes', self.handle_fake_payment,
-                        source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-                ]]
+                return [
+                    [
+                        Button('❌ No', PaymentScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE),
+                        Button(
+                            '✅ Yes',
+                            self.handle_fake_payment,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                ]
 
             @ignore_permissions([PaywallPermission])
             @register_button_handler
@@ -110,15 +128,21 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
         await TestFakePaymentScreen().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=FAKE_PAYMENT_SCREEN_DESCRIPTION,
-            keyboard=[[
-                Button('❌ No', PaymentScreen,
-                    source_type=SourceTypes.MOVE_SOURCE_TYPE),
-                Button('✅ Yes', FakePaymentScreen().handle_fake_payment,
-                    source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-            ]],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=FAKE_PAYMENT_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button('❌ No', PaymentScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE),
+                        Button(
+                            '✅ Yes',
+                            FakePaymentScreen().handle_fake_payment,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -133,13 +157,27 @@ class HammettPaywallBotBotTests(BaseTestCase):
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
                 return [
-                    [Button('💸 Fake Refund', self.handle_fake_refund,
-                        source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                    [Button('📄 Source Code',
+                    [
+                        Button(
+                            '💸 Fake Refund',
+                            self.handle_fake_refund,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
                             'https://github.com/cusdeb-com/hammett/tree/main/demos/paywall_bot',
-                            source_type=SourceTypes.URL_SOURCE_TYPE)],
-                    [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                            source_type=SourceTypes.URL_SOURCE_TYPE)],
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
                 ]
 
             @register_button_handler
@@ -156,12 +194,16 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
-                return [[
-                    Button('❌ No', PaymentScreen,
-                        source_type=SourceTypes.MOVE_SOURCE_TYPE),
-                    Button('✅ Yes', self.handle_fake_payment,
-                        source_type=SourceTypes.HANDLER_SOURCE_TYPE),
-                ]]
+                return [
+                    [
+                        Button('❌ No', PaymentScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE),
+                        Button(
+                            '✅ Yes',
+                            self.handle_fake_payment,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                ]
 
             @ignore_permissions([PaywallPermission])
             @register_button_handler
@@ -183,18 +225,34 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
         await TestFakePaymentScreen().handle_fake_payment(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=MAIN_MENU_SCREEN_DESCRIPTION,
-            keyboard=[
-                [Button('💸 Fake Refund', MainMenuScreen().handle_fake_refund,
-                       source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/paywall_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=MAIN_MENU_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            '💸 Fake Refund',
+                            MainMenuScreen().handle_fake_refund,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/paywall_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -209,13 +267,27 @@ class HammettPaywallBotBotTests(BaseTestCase):
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
                 return [
-                    [Button('💸 Fake Refund', self.handle_fake_refund,
-                           source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                    [Button('📄 Source Code',
+                    [
+                        Button(
+                            '💸 Fake Refund',
+                            self.handle_fake_refund,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
                             'https://github.com/cusdeb-com/hammett/tree/main/demos/paywall_bot',
-                            source_type=SourceTypes.URL_SOURCE_TYPE)],
-                    [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                            source_type=SourceTypes.URL_SOURCE_TYPE)],
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
                 ]
 
             @register_button_handler
@@ -232,10 +304,15 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
-                return [[
-                    Button('💳 Fake Pay', FakePaymentScreen,
-                           source_type=SourceTypes.MOVE_SOURCE_TYPE),
-                ]]
+                return [
+                    [
+                        Button(
+                            '💳 Fake Pay',
+                            FakePaymentScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                ]
 
             @ignore_permissions([PaywallPermission])
             async def move(self, update, context, **kwargs):
@@ -248,14 +325,21 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
         await TestMainMenuScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=PAYMENT_SCREEN_DESCRIPTION,
-            keyboard=[[
-                Button('💳 Fake Pay', FakePaymentScreen,
-                       source_type=SourceTypes.MOVE_SOURCE_TYPE),
-            ]],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=PAYMENT_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            '💳 Fake Pay',
+                            FakePaymentScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -270,13 +354,27 @@ class HammettPaywallBotBotTests(BaseTestCase):
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
                 return [
-                    [Button('💸 Fake Refund', self.handle_fake_refund,
-                           source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                    [Button('📄 Source Code',
+                    [
+                        Button(
+                            '💸 Fake Refund',
+                            self.handle_fake_refund,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
                             'https://github.com/cusdeb-com/hammett/tree/main/demos/paywall_bot',
-                            source_type=SourceTypes.URL_SOURCE_TYPE)],
-                    [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                            source_type=SourceTypes.URL_SOURCE_TYPE)],
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
                 ]
 
             @register_button_handler
@@ -293,10 +391,15 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
             async def add_default_keyboard(self, _update, _context):
                 """Set up the keyboard for the screen."""
-                return [[
-                    Button('💳 Fake Pay', FakePaymentScreen,
-                           source_type=SourceTypes.MOVE_SOURCE_TYPE),
-                ]]
+                return [
+                    [
+                        Button(
+                            '💳 Fake Pay',
+                            FakePaymentScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                ]
 
             @ignore_permissions([PaywallPermission])
             async def move(self, update, context, **kwargs):
@@ -309,13 +412,20 @@ class HammettPaywallBotBotTests(BaseTestCase):
 
         await TestPaymentScreen().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=PAYMENT_SCREEN_DESCRIPTION,
-            keyboard=[[
-                Button('💳 Fake Pay', FakePaymentScreen,
-                       source_type=SourceTypes.MOVE_SOURCE_TYPE),
-            ]],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=PAYMENT_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            '💳 Fake Pay',
+                            FakePaymentScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
 

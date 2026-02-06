@@ -6,6 +6,7 @@ from pathlib import Path
 
 with contextlib.suppress(ImportError):
     from dotenv import load_dotenv
+
     load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent

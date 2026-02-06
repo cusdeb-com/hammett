@@ -33,10 +33,7 @@ class ChoosingDateScreen(CalendarWidget):
     async def add_extra_keyboard(self, _update, _context):
         """Add an extra keyboard below the widget buttons."""
         return [
-            [Button(
-                '🏠 Main Menu',
-                MainMenuScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE)],
+            [Button('🏠 Main Menu', MainMenuScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE)],
         ]
 
     async def get_confirm_description(self, update, context, result_date):
@@ -66,18 +63,21 @@ class MainMenuScreen(StartMixin, Screen):
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
         return [
-            [Button(
-                '🗓 Choose Date',
-                ChoosingDateScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE)],
-            [Button(
-                '📄 Source Code',
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/calendar_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [Button('🗓 Choose Date', ChoosingDateScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE)],
+            [
+                Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/calendar_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
         ]
 
 

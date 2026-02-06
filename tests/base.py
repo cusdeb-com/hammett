@@ -108,9 +108,7 @@ class TestScreen(BaseTestScreenWithDescription):
 class TestRouteScreen(BaseTestScreenWithDescription, RouteMixin):
     """The class implements a screen for the tests related to routes."""
 
-    routes = (
-        ({DEFAULT_STATE}, TEST_STATE),
-    )
+    routes = (({DEFAULT_STATE}, TEST_STATE),)
 
 
 class TestStartScreen(BaseTestScreenWithDescription, StartMixin):

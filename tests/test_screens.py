@@ -131,20 +131,25 @@ class ScreenTests(BaseTestCase):
         screen = TestScreen()
         await screen.jump(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=TestScreen.description,
-            as_new_message=True,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=TestScreen.description,
+                as_new_message=True,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
     async def test_message_id_extracted_from_callback_query_when_missing(self, actual):
         """Test message_id is populated from callback query when not provided in config."""
         message_id = 123
-        with patch('hammett.core.screen.get_callback_query', return_value=SimpleNamespace(
-            message=SimpleNamespace(message_id=message_id),
-            data='test',
-        )):
+        with patch(
+            'hammett.core.screen.get_callback_query',
+            return_value=SimpleNamespace(
+                message=SimpleNamespace(message_id=message_id),
+                data='test',
+            ),
+        ):
             await TestScreen().move(self.update, self.context)
 
         assert actual.final_render_config.message_id == message_id
@@ -155,10 +160,12 @@ class ScreenTests(BaseTestCase):
         screen = TestScreen()
         await screen.move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=TestScreen.description,
-            as_new_message=False,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=TestScreen.description,
+                as_new_message=False,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     async def test_post_render_uses_last_message_from_tuple(self):
@@ -208,10 +215,12 @@ class ScreenTests(BaseTestCase):
         screen = TestScreen()
         await screen.send(self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=TestScreen.description,
-            as_new_message=True,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=TestScreen.description,
+                as_new_message=True,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -225,11 +234,13 @@ class ScreenTests(BaseTestCase):
 
         await screen.send(self.context, config=custom_config)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description='Overridden description',
-            keyboard=[],
-            as_new_message=True,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description='Overridden description',
+                keyboard=[],
+                as_new_message=True,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     def test_singleton_behavior_for_screen(self):

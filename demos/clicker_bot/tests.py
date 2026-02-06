@@ -21,19 +21,35 @@ class HammettClickerBotTests(BaseTestCase):
         """Test calling the `start` handler to get the final render config."""
         await ClickerScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=CLICKER_SCREEN_DESCRIPTION.format(num=0),
-            keyboard=[
-                [Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
-                       source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/clicker_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=CLICKER_SCREEN_DESCRIPTION.format(num=0),
+                keyboard=[
+                    [
+                        Button(
+                            '➕ 1',  # noqa: RUF001
+                            ClickerScreen().add_one_click,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/clicker_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -43,18 +59,34 @@ class HammettClickerBotTests(BaseTestCase):
 
         await ClickerScreen().add_one_click(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=CLICKER_SCREEN_DESCRIPTION.format(num=1),
-            keyboard=[
-                [Button('➕ 1', ClickerScreen().add_one_click,  # noqa: RUF001
-                       source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/clicker_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=CLICKER_SCREEN_DESCRIPTION.format(num=1),
+                keyboard=[
+                    [
+                        Button(
+                            '➕ 1',  # noqa: RUF001
+                            ClickerScreen().add_one_click,
+                            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/clicker_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
 

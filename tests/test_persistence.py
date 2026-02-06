@@ -57,9 +57,11 @@ class PersistenceTests(BaseTestCase):
 
     async def test_decoding_of_data_keeps_key_type(self):
         """Test decoding of the data without key type conversion."""
-        decoded_data = self.persistence._decode_and_cast_keys({
-            USER_ID: json.dumps(_DATA).encode('utf-8'),
-        })
+        decoded_data = self.persistence._decode_and_cast_keys(
+            {
+                USER_ID: json.dumps(_DATA).encode('utf-8'),
+            },
+        )
         assert decoded_data == {USER_ID: _DATA}
 
     async def test_dropping_of_empty_chat_data(self):
@@ -96,7 +98,9 @@ class PersistenceTests(BaseTestCase):
         assert conversations == {}
 
         await self.persistence.update_conversation(
-            _BOT_NAME, (CHAT_ID, USER_ID), _NEW_STATE,
+            _BOT_NAME,
+            (CHAT_ID, USER_ID),
+            _NEW_STATE,
         )
         updated_conversations = await self.persistence.get_conversations(_BOT_NAME)
         assert updated_conversations == {(CHAT_ID, USER_ID): _NEW_STATE}
@@ -172,7 +176,9 @@ class PersistenceTests(BaseTestCase):
         await self.persistence.update_bot_data(_DATA)
         await self.persistence.update_callback_data(([], _DATA))
         await self.persistence.update_conversation(
-            _BOT_NAME, (CHAT_ID, USER_ID), _NEW_STATE,
+            _BOT_NAME,
+            (CHAT_ID, USER_ID),
+            _NEW_STATE,
         )
         await self.persistence.update_chat_data(CHAT_ID, _DATA)
         await self.persistence.update_user_data(USER_ID, _DATA)
@@ -196,10 +202,14 @@ class PersistenceTests(BaseTestCase):
         assert self.persistence.callback_data == ([], _DATA)
 
         await self.persistence.update_conversation(
-            _BOT_NAME, (CHAT_ID, USER_ID), _NEW_STATE,
+            _BOT_NAME,
+            (CHAT_ID, USER_ID),
+            _NEW_STATE,
         )
         await self.persistence.update_conversation(
-            _BOT_NAME, (CHAT_ID, USER_ID), _NEW_STATE,
+            _BOT_NAME,
+            (CHAT_ID, USER_ID),
+            _NEW_STATE,
         )
         assert self.persistence.conversations == {_BOT_NAME: {(CHAT_ID, USER_ID): _NEW_STATE}}
 

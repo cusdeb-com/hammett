@@ -29,18 +29,19 @@ async def default_error_handler(
     from hammett.conf import settings
 
     error = context.error
-    if hasattr(error, 'message') and isinstance(error, BadRequest | TimedOut) and (
-        (
-            settings.ERROR_HANDLER_CONF.get('IGNORE_QUERY_IS_TOO_OLD') and
-            error.message == _QUERY_IS_TOO_OLD
-        ) or
-        (
-            settings.ERROR_HANDLER_CONF.get('IGNORE_TIMED_OUT') and
-            error.message == _TIMED_OUT
-        ) or
-        (
-            settings.ERROR_HANDLER_CONF.get('IGNORE_UPDATE_MASSAGE_FAIL') and
-            error.message.startswith(_UPDATE_MASSAGE_FAIL)
+    if (
+        hasattr(error, 'message')
+        and isinstance(error, BadRequest | TimedOut)
+        and (
+            (
+                settings.ERROR_HANDLER_CONF.get('IGNORE_QUERY_IS_TOO_OLD')
+                and error.message == _QUERY_IS_TOO_OLD
+            )
+            or (settings.ERROR_HANDLER_CONF.get('IGNORE_TIMED_OUT') and error.message == _TIMED_OUT)
+            or (
+                settings.ERROR_HANDLER_CONF.get('IGNORE_UPDATE_MASSAGE_FAIL')
+                and error.message.startswith(_UPDATE_MASSAGE_FAIL)
+            )
         )
     ):
         LOGGER.warning(error.message)

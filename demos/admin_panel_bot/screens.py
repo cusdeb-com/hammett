@@ -9,8 +9,8 @@ from hammett.core.mixins import StartMixin
 
 ADMIN_PANEL_SCREEN_DESCRIPTION = (
     "This is the <b>Admin Panel</b> screen. You've made it here because "
-    "you saw the button that takes you to this screen. Now, go ahead and "
-    "remove yourself from the <i>admin</i> group to see what changes."
+    'you saw the button that takes you to this screen. Now, go ahead and '
+    'remove yourself from the <i>admin</i> group to see what changes.'
 )
 
 MAIN_MENU_SCREEN_DESCRIPTION = (
@@ -21,8 +21,8 @@ MAIN_MENU_SCREEN_DESCRIPTION = (
 )
 
 NOT_ADMIN_CONFIRMATION_SCREEN_DESCRIPTION = (
-    "Are you sure you want to remove yourself from the <i>admin</i> group?"
-    "\n"
+    'Are you sure you want to remove yourself from the <i>admin</i> group?'
+    '\n'
     "Don't worry, you can get your privilege back right after the /start command 😉"
 )
 
@@ -35,15 +35,22 @@ class AdminPanelScreen(Screen):
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
         return [
-            [Button(
-                "⚠️ I'm not an admin!",
-                NotAdminConfirmationScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE,
-                hiders=Hider(ONLY_FOR_ADMIN))],
-            [Button('⬅️ Main Menu',
+            [
+                Button(
+                    "⚠️ I'm not an admin!",
+                    NotAdminConfirmationScreen,
+                    source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                    hiders=Hider(ONLY_FOR_ADMIN),
+                ),
+            ],
+            [
+                Button(
+                    '⬅️ Main Menu',
                     MainMenuScreen,
                     source_type=SourceTypes.MOVE_SOURCE_TYPE,
-                    hiders=Hider(ONLY_FOR_ADMIN))],
+                    hiders=Hider(ONLY_FOR_ADMIN),
+                ),
+            ],
         ]
 
 
@@ -55,19 +62,28 @@ class MainMenuScreen(StartMixin, Screen):
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
         return [
-            [Button(
-                '👑 Admin Panel',
-                AdminPanelScreen,
-                hiders=Hider(ONLY_FOR_ADMIN),
-                source_type=SourceTypes.MOVE_SOURCE_TYPE)],
-            [Button(
-                '📄 Source Code',
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/admin_panel_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [
+                Button(
+                    '👑 Admin Panel',
+                    AdminPanelScreen,
+                    hiders=Hider(ONLY_FOR_ADMIN),
+                    source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/admin_panel_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
         ]
 
     async def start(self, update, context):
@@ -85,18 +101,22 @@ class NotAdminConfirmationScreen(Screen):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
-        return [[
-            Button(
-                '✅ Yes',
-                self.exclude_from_admin_group,
-                source_type=SourceTypes.HANDLER_SOURCE_TYPE,
-                hiders=Hider(ONLY_FOR_ADMIN)),
-            Button(
-                '❌ No',
-                MainMenuScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE,
-                hiders=Hider(ONLY_FOR_ADMIN)),
-        ]]
+        return [
+            [
+                Button(
+                    '✅ Yes',
+                    self.exclude_from_admin_group,
+                    source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                    hiders=Hider(ONLY_FOR_ADMIN),
+                ),
+                Button(
+                    '❌ No',
+                    MainMenuScreen,
+                    source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                    hiders=Hider(ONLY_FOR_ADMIN),
+                ),
+            ],
+        ]
 
     @register_button_handler
     async def exclude_from_admin_group(self, update, context):

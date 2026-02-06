@@ -71,6 +71,7 @@ def new_method_proxy(func: 'Func') -> 'Any':
             self._setup()
 
         return func(self._wrapped, *args)
+
     return inner
 
 
@@ -212,9 +213,7 @@ class LazySettings(LazyObject):
         if self._wrapped is _EMPTY:
             return '<LazySettings [Unevaluated]>'
 
-        return (
-            f'<LazySettings "{self._wrapped.settings_module_name}">'  # type: ignore[attr-defined]
-        )
+        return f'<LazySettings "{self._wrapped.settings_module_name}">'  # type: ignore[attr-defined]
 
     def __getattr__(self: 'Self', name: str) -> 'Any':
         """Return the value of a setting and cache it in self.__dict__.

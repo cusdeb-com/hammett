@@ -21,18 +21,27 @@ class ClickerScreen(StartMixin):
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
         return [
-            [Button(
-                '➕ 1',  # noqa: RUF001
-                self.add_one_click,
-                source_type=SourceTypes.HANDLER_SOURCE_TYPE)],
-            [Button(
-                '📄 Source Code',
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/clicker_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [
+                Button(
+                    '➕ 1',  # noqa: RUF001
+                    self.add_one_click,
+                    source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/clicker_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
         ]
 
     @register_button_handler

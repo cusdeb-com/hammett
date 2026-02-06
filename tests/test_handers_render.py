@@ -40,14 +40,16 @@ class TestScreenWithSpecifiedHiderInKeyboard(BaseTestScreenWithDescription):
 
     async def add_default_keyboard(self, _update, _context):
         """Return a keyboard with the specified hider."""
-        return [[
-            Button(
-                _TEST_BUTTON_NAME,
-                _TEST_URL,
-                hiders=Hider(ONLY_FOR_ADMIN),
-                source_type=SourceTypes.URL_SOURCE_TYPE,
-            ),
-        ]]
+        return [
+            [
+                Button(
+                    _TEST_BUTTON_NAME,
+                    _TEST_URL,
+                    hiders=Hider(ONLY_FOR_ADMIN),
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+        ]
 
 
 class HandlersRenderTests(BaseTestCase):
@@ -60,9 +62,11 @@ class HandlersRenderTests(BaseTestCase):
         """
         await TestScreenWithDynamicAndStaticDescriptions().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=TestScreenWithDynamicAndStaticDescriptions.DYNAMIC_DESCRIPTION,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=TestScreenWithDynamicAndStaticDescriptions.DYNAMIC_DESCRIPTION,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -72,9 +76,11 @@ class HandlersRenderTests(BaseTestCase):
         """
         await TestScreenWithDynamicDescription().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=TestScreenWithDynamicDescription.DYNAMIC_DESCRIPTION,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=TestScreenWithDynamicDescription.DYNAMIC_DESCRIPTION,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -82,10 +88,12 @@ class HandlersRenderTests(BaseTestCase):
         """Test calling the `jump` handler to get the final render config."""
         await TestScreen().jump(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=TestScreen.description,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=TestScreen.description,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -93,9 +101,11 @@ class HandlersRenderTests(BaseTestCase):
         """Test calling the `move` handler to get the final render config."""
         await TestScreen().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=TestScreen.description,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=TestScreen.description,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -103,10 +113,12 @@ class HandlersRenderTests(BaseTestCase):
         """Test calling the `send` handler to get the final render config."""
         await TestScreen().send(self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=TestScreen.description,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=TestScreen.description,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -114,10 +126,12 @@ class HandlersRenderTests(BaseTestCase):
         """Test calling the `start` handler to get the final render config."""
         await TestStartScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=TestStartScreen.description,
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=TestStartScreen.description,
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @override_settings(
@@ -129,15 +143,19 @@ class HandlersRenderTests(BaseTestCase):
         """Test getting a final render config with a specified hider in the keyboard."""
         await TestScreenWithSpecifiedHiderInKeyboard().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=TestScreenWithSpecifiedHiderInKeyboard.description,
-            keyboard=[[
-                Button(
-                    _TEST_BUTTON_NAME,
-                    _TEST_URL,
-                    hiders=Hider(ONLY_FOR_ADMIN),
-                    source_type=SourceTypes.URL_SOURCE_TYPE,
-                ),
-            ]],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=TestScreenWithSpecifiedHiderInKeyboard.description,
+                keyboard=[
+                    [
+                        Button(
+                            _TEST_BUTTON_NAME,
+                            _TEST_URL,
+                            hiders=Hider(ONLY_FOR_ADMIN),
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)

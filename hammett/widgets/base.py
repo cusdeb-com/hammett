@@ -98,20 +98,22 @@ class BaseStateWidget(BaseWidget):
                     msg = (
                         f"It's not possible to pass data to user_data. "
                         f"To solve the issue either don't use {self.__class__.__name__} in jobs "
-                        f"or configure persistence."
+                        f'or configure persistence.'
                     )
                     raise MissingPersistenceError(msg) from exc
 
                 user_data = context._application.user_data[message.chat_id]  # noqa: SLF001
-                user_data.update({  # type: ignore[attr-defined]
-                    state_key: await self._initialized_state(
-                        update,
-                        context,
-                        message,
-                        config,
-                        **kwargs,
-                    ),
-                })
+                user_data.update(  # type: ignore[attr-defined]
+                    {
+                        state_key: await self._initialized_state(
+                            update,
+                            context,
+                            message,
+                            config,
+                            **kwargs,
+                        ),
+                    },
+                )
 
                 await context._application.persistence.update_user_data(  # noqa: SLF001
                     message.chat_id,
@@ -203,9 +205,11 @@ class BaseStateWidget(BaseWidget):
             user_data = cast('dict[str, Any]', context.user_data)
 
             current_state = user_data.get(current_state_key, {})
-            current_state.update({
-                state_key: state_value,
-            })
+            current_state.update(
+                {
+                    state_key: state_value,
+                },
+            )
             context.user_data[current_state_key] = current_state  # type: ignore[index]
 
 
@@ -295,14 +299,16 @@ class BaseChoiceWidget(BaseStateWidget):
                 raise ChoicesFormatIsInvalidError(msg) from exc
 
             box = self.chosen_emoji if chosen else self.unchosen_emoji
-            keyboard.append([
-                Button(
-                    f'{box} {name}',
-                    self._on_choice_click,
-                    payload=json.dumps({'code': code, 'name': name}),
-                    source_type=SourceTypes.HANDLER_SOURCE_TYPE,
-                ),
-            ])
+            keyboard.append(
+                [
+                    Button(
+                        f'{box} {name}',
+                        self._on_choice_click,
+                        payload=json.dumps({'code': code, 'name': name}),
+                        source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                    ),
+                ],
+            )
 
         return keyboard + await self.add_extra_keyboard(update, context)
 
@@ -400,11 +406,14 @@ class BaseChoiceWidget(BaseStateWidget):
             Initialized choices.
 
         """
-        current_choices: InitializedChoices = await self.get_state_value(
-            update,
-            context,
-            'choices',
-        ) or ()
+        current_choices: InitializedChoices = (
+            await self.get_state_value(
+                update,
+                context,
+                'choices',
+            )
+            or ()
+        )
 
         return current_choices
 

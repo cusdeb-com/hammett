@@ -29,18 +29,34 @@ class HammettReminderBotTests(BaseTestCase):
         """Test calling the `move` handler to get the final render config."""
         await MainMenuScreen().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=MAIN_MENU_SCREEN_DESCRIPTION,
-            keyboard=[
-                [Button('⏱️ Set Reminder', SettingReminderScreen,
-                        source_type=SourceTypes.MOVE_SOURCE_TYPE)],
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=MAIN_MENU_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            '⏱️ Set Reminder',
+                            SettingReminderScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -48,19 +64,35 @@ class HammettReminderBotTests(BaseTestCase):
         """Test calling the `start` handler to get the final render config."""
         await MainMenuScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=MAIN_MENU_SCREEN_DESCRIPTION,
-            keyboard=[
-                [Button('⏱️ Set Reminder', SettingReminderScreen,
-                        source_type=SourceTypes.MOVE_SOURCE_TYPE)],
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=MAIN_MENU_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            '⏱️ Set Reminder',
+                            SettingReminderScreen,
+                            source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -71,19 +103,30 @@ class HammettReminderBotTests(BaseTestCase):
 
         await MainMenuScreen().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=(
-                MAIN_MENU_SCREEN_DESCRIPTION +
-                MAIN_MENU_SCREEN_ADDITIONAL_DESCRIPTION.format(seconds=1)
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=(
+                    MAIN_MENU_SCREEN_DESCRIPTION
+                    + MAIN_MENU_SCREEN_ADDITIONAL_DESCRIPTION.format(seconds=1)
+                ),
+                keyboard=[
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
             ),
-            keyboard=[
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -94,20 +137,31 @@ class HammettReminderBotTests(BaseTestCase):
 
         await MainMenuScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=(
-                MAIN_MENU_SCREEN_DESCRIPTION +
-                MAIN_MENU_SCREEN_ADDITIONAL_DESCRIPTION.format(seconds=1)
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=(
+                    MAIN_MENU_SCREEN_DESCRIPTION
+                    + MAIN_MENU_SCREEN_ADDITIONAL_DESCRIPTION.format(seconds=1)
+                ),
+                keyboard=[
+                    [
+                        Button(
+                            '📄 Source Code',
+                            'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                    [
+                        Button(
+                            '🎸 Hammett Homepage',
+                            'https://github.com/cusdeb-com/hammett',
+                            source_type=SourceTypes.URL_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
             ),
-            keyboard=[
-                [Button('📄 Source Code',
-                        'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-                [Button('🎸 Hammett Homepage', 'https://github.com/cusdeb-com/hammett',
-                        source_type=SourceTypes.URL_SOURCE_TYPE)],
-            ],
-        ))
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -118,13 +172,21 @@ class HammettReminderBotTests(BaseTestCase):
 
         await send_reminder(self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=REMINDER_SCREEN_DESCRIPTION,
-            keyboard=[[Button(
-                '🏠 Main Menu', MainMenuScreen, source_type=SourceTypes.JUMP_SOURCE_TYPE),
-            ]],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=REMINDER_SCREEN_DESCRIPTION,
+                keyboard=[
+                    [
+                        Button(
+                            '🏠 Main Menu',
+                            MainMenuScreen,
+                            source_type=SourceTypes.JUMP_SOURCE_TYPE,
+                        ),
+                    ],
+                ],
+            ),
+        )
         assert not self.context.chat_data['remind_is_set']
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
         with self.assertRaises(KeyError):
@@ -135,10 +197,15 @@ class HammettReminderBotTests(BaseTestCase):
         """Test calling the `move` handler to get the final render config."""
         await SettingReminderScreen().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=SETTING_REMINDER_SCREEN_DESCRIPTION,
-            keyboard=await SettingReminderScreen().add_default_keyboard(self.update, self.context),
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=SETTING_REMINDER_SCREEN_DESCRIPTION,
+                keyboard=await SettingReminderScreen().add_default_keyboard(
+                    self.update,
+                    self.context,
+                ),
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
 

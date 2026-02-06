@@ -75,12 +75,12 @@ class Button:
             return super().__eq__(other)
 
         return (
-            self.caption == other.caption and
-            self.source == other.source and
-            self.source_type == other.source_type and
-            self.hiders == other.hiders and
-            self.payload == other.payload and
-            self.chat_id == other.chat_id
+            self.caption == other.caption
+            and self.source == other.source
+            and self.source_type == other.source_type
+            and self.hiders == other.hiders
+            and self.payload == other.payload
+            and self.chat_id == other.chat_id
         )
 
     def __hash__(self) -> int:
@@ -90,9 +90,16 @@ class Button:
             Object hash.
 
         """
-        return hash((
-            self.caption, self.source, self.source_type, self.hiders, self.payload, self.chat_id,
-        ))
+        return hash(
+            (
+                self.caption,
+                self.source,
+                self.source_type,
+                self.hiders,
+                self.payload,
+                self.chat_id,
+            ),
+        )
 
     def _check_source(self: 'Self') -> None:
         """Check if the source is valid.
@@ -112,11 +119,13 @@ class Button:
                     self.source_shortcut = cast('Handler', screen().move)
                 elif self.source_type == SourceTypes.JUMP_ALONG_ROUTE_SOURCE_TYPE:
                     self.source_shortcut = cast(
-                        'Handler', screen().jump_along_route,   # type: ignore[attr-defined]
+                        'Handler',
+                        screen().jump_along_route,  # type: ignore[attr-defined]
                     )
                 else:
                     self.source_shortcut = cast(
-                        'Handler', screen().move_along_route,  # type: ignore[attr-defined]
+                        'Handler',
+                        screen().move_along_route,  # type: ignore[attr-defined]
                     )
             else:
                 msg = (
@@ -168,9 +177,9 @@ class Button:
     ) -> bool:
         visibility = True
         if (
-            self.hiders and
-            self.hiders_checker and
-            not await self.hiders_checker.run(update, context)
+            self.hiders
+            and self.hiders_checker
+            and not await self.hiders_checker.run(update, context)
         ):
             visibility = False
 

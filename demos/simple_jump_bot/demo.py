@@ -26,13 +26,15 @@ class NextScreen(Screen):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
-        return [[
-            Button(
-                '⬅️ Back',
-                StartScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE,
-            ),
-        ]]
+        return [
+            [
+                Button(
+                    '⬅️ Back',
+                    StartScreen,
+                    source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                ),
+            ],
+        ]
 
 
 class StartScreen(StartMixin):
@@ -45,19 +47,27 @@ class StartScreen(StartMixin):
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
         return [
-            [Button(
-                'Next ➡️',
-                NextScreen,
-                source_type=SourceTypes.JUMP_SOURCE_TYPE,
-            )],
-            [Button(
-                '📄 Source Code',
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/simple_jump_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [
+                Button(
+                    'Next ➡️',
+                    NextScreen,
+                    source_type=SourceTypes.JUMP_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/simple_jump_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
         ]
 
 

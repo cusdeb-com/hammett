@@ -81,33 +81,45 @@ class CarouselWidgetTests(BaseTestCase):
             await widget.move(self.update, self.context)  # initialize state
 
             await widget._back(self.update, self.context)  # back
-            expected_next = self.prepare_final_render_config(RenderConfig(
-                description='description_2',
-                cover='cover_2',
-                keyboard=widget._infinity_keyboard + await widget.add_extra_keyboard(
-                    self.update, self.context,
+            expected_next = self.prepare_final_render_config(
+                RenderConfig(
+                    description='description_2',
+                    cover='cover_2',
+                    keyboard=widget._infinity_keyboard
+                    + await widget.add_extra_keyboard(
+                        self.update,
+                        self.context,
+                    ),
                 ),
-            ))
+            )
             self.assertFinalRenderConfigEqual(expected_next, actual.final_render_config)
 
             await widget._back(self.update, self.context)  # back again
-            expected_wrap = self.prepare_final_render_config(RenderConfig(
-                description='description_1',
-                cover='cover_1',
-                keyboard=widget._infinity_keyboard + await widget.add_extra_keyboard(
-                    self.update, self.context,
+            expected_wrap = self.prepare_final_render_config(
+                RenderConfig(
+                    description='description_1',
+                    cover='cover_1',
+                    keyboard=widget._infinity_keyboard
+                    + await widget.add_extra_keyboard(
+                        self.update,
+                        self.context,
+                    ),
                 ),
-            ))
+            )
             self.assertFinalRenderConfigEqual(expected_wrap, actual.final_render_config)
 
             await widget._back(self.update, self.context)  # back again
-            expected_next = self.prepare_final_render_config(RenderConfig(
-                description='description_2',
-                cover='cover_2',
-                keyboard=widget._infinity_keyboard + await widget.add_extra_keyboard(
-                    self.update, self.context,
+            expected_next = self.prepare_final_render_config(
+                RenderConfig(
+                    description='description_2',
+                    cover='cover_2',
+                    keyboard=widget._infinity_keyboard
+                    + await widget.add_extra_keyboard(
+                        self.update,
+                        self.context,
+                    ),
                 ),
-            ))
+            )
             self.assertFinalRenderConfigEqual(expected_next, actual.final_render_config)
 
     @catch_render_config()
@@ -121,33 +133,45 @@ class CarouselWidgetTests(BaseTestCase):
             await widget.move(self.update, self.context)  # initialize state
 
             await widget._next(self.update, self.context)  # next
-            expected_next = self.prepare_final_render_config(RenderConfig(
-                description='description_2',
-                cover='cover_2',
-                keyboard=widget._infinity_keyboard + await widget.add_extra_keyboard(
-                    self.update, self.context,
+            expected_next = self.prepare_final_render_config(
+                RenderConfig(
+                    description='description_2',
+                    cover='cover_2',
+                    keyboard=widget._infinity_keyboard
+                    + await widget.add_extra_keyboard(
+                        self.update,
+                        self.context,
+                    ),
                 ),
-            ))
+            )
             self.assertFinalRenderConfigEqual(expected_next, actual.final_render_config)
 
             await widget._next(self.update, self.context)  # next again
-            expected_wrap = self.prepare_final_render_config(RenderConfig(
-                description='description_1',
-                cover='cover_1',
-                keyboard=widget._infinity_keyboard + await widget.add_extra_keyboard(
-                    self.update, self.context,
+            expected_wrap = self.prepare_final_render_config(
+                RenderConfig(
+                    description='description_1',
+                    cover='cover_1',
+                    keyboard=widget._infinity_keyboard
+                    + await widget.add_extra_keyboard(
+                        self.update,
+                        self.context,
+                    ),
                 ),
-            ))
+            )
             self.assertFinalRenderConfigEqual(expected_wrap, actual.final_render_config)
 
             await widget._next(self.update, self.context)  # next again
-            expected_next = self.prepare_final_render_config(RenderConfig(
-                description='description_2',
-                cover='cover_2',
-                keyboard=widget._infinity_keyboard + await widget.add_extra_keyboard(
-                    self.update, self.context,
+            expected_next = self.prepare_final_render_config(
+                RenderConfig(
+                    description='description_2',
+                    cover='cover_2',
+                    keyboard=widget._infinity_keyboard
+                    + await widget.add_extra_keyboard(
+                        self.update,
+                        self.context,
+                    ),
                 ),
-            ))
+            )
             self.assertFinalRenderConfigEqual(expected_next, actual.final_render_config)
 
     @catch_render_config()
@@ -156,17 +180,19 @@ class CarouselWidgetTests(BaseTestCase):
         widget = TestCarouselWidget()
         await widget.jump(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description='description_1',
-            cover='cover_1',
-            keyboard=await widget._build_keyboard(
-                self.update,
-                self.context,
-                widget.images,
-                current_image=0,
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description='description_1',
+                cover='cover_1',
+                keyboard=await widget._build_keyboard(
+                    self.update,
+                    self.context,
+                    widget.images,
+                    current_image=0,
+                ),
             ),
-        ))
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -175,16 +201,18 @@ class CarouselWidgetTests(BaseTestCase):
         widget = TestCarouselWidget()
         await widget.move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description='description_1',
-            cover='cover_1',
-            keyboard=await widget._build_keyboard(
-                self.update,
-                self.context,
-                widget.images,
-                current_image=0,
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description='description_1',
+                cover='cover_1',
+                keyboard=await widget._build_keyboard(
+                    self.update,
+                    self.context,
+                    widget.images,
+                    current_image=0,
+                ),
             ),
-        ))
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     @catch_render_config()
@@ -198,29 +226,33 @@ class CarouselWidgetTests(BaseTestCase):
             await widget.move(self.update, self.context)  # initialize state
 
             await widget._next(self.update, self.context)  # next
-            expected_next = self.prepare_final_render_config(RenderConfig(
-                description='description_2',
-                cover='cover_2',
-                keyboard=await widget._build_keyboard(
-                    self.update,
-                    self.context,
-                    widget.images,
-                    current_image=1,
+            expected_next = self.prepare_final_render_config(
+                RenderConfig(
+                    description='description_2',
+                    cover='cover_2',
+                    keyboard=await widget._build_keyboard(
+                        self.update,
+                        self.context,
+                        widget.images,
+                        current_image=1,
+                    ),
                 ),
-            ))
+            )
             self.assertFinalRenderConfigEqual(expected_next, actual.final_render_config)
 
             await widget._back(self.update, self.context)  # back
-            expected_back = self.prepare_final_render_config(RenderConfig(
-                description='description_1',
-                cover='cover_1',
-                keyboard=await widget._build_keyboard(
-                    self.update,
-                    self.context,
-                    widget.images,
-                    current_image=0,
+            expected_back = self.prepare_final_render_config(
+                RenderConfig(
+                    description='description_1',
+                    cover='cover_1',
+                    keyboard=await widget._build_keyboard(
+                        self.update,
+                        self.context,
+                        widget.images,
+                        current_image=0,
+                    ),
                 ),
-            ))
+            )
             self.assertFinalRenderConfigEqual(expected_back, actual.final_render_config)
 
     @catch_render_config()
@@ -230,21 +262,24 @@ class CarouselWidgetTests(BaseTestCase):
         widget = TestCarouselWidget()
         await widget.send(self.context, images=custom_images)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description='description_1',
-            cover='cover_1',
-            keyboard=await widget._build_keyboard(
-                self.update,
-                self.context,
-                custom_images,
-                current_image=0,
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description='description_1',
+                cover='cover_1',
+                keyboard=await widget._build_keyboard(
+                    self.update,
+                    self.context,
+                    custom_images,
+                    current_image=0,
+                ),
             ),
-        ))
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
     async def test_improperly_configured_images_type(self):
         """Test that non-list images raise ImproperlyConfigured in _init."""
+
         class BadImagesWidget(CarouselWidget):
             images = 'not-a-tuple'
 
@@ -253,6 +288,7 @@ class CarouselWidgetTests(BaseTestCase):
 
     def test_improperly_configured_missing_captions(self):
         """Test that missing captions raise ImproperlyConfiguredError in __init__."""
+
         class BadCaptionsWidget(CarouselWidget):
             back_caption = next_caption = disable_caption = ''
 
@@ -309,15 +345,17 @@ class CarouselWidgetWithoutUpdateTests(BaseTestCase):
             await widget.move(self.update, self.context)
             await widget._next(self.update, self.context)
 
-            expected = self.prepare_final_render_config(RenderConfig(
-                description=caption,
-                keyboard=await widget._build_keyboard(
-                    self.update,
-                    self.context,
-                    # Since context.user_data is None, we can't get images attribute
-                    # and use widget's default images instead
-                    images=[],
-                    current_image=0,
+            expected = self.prepare_final_render_config(
+                RenderConfig(
+                    description=caption,
+                    keyboard=await widget._build_keyboard(
+                        self.update,
+                        self.context,
+                        # Since context.user_data is None, we can't get images attribute
+                        # and use widget's default images instead
+                        images=[],
+                        current_image=0,
+                    ),
                 ),
-            ))
+            )
             self.assertFinalRenderConfigEqual(expected, actual.final_render_config)

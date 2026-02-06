@@ -146,6 +146,7 @@ class HandlersTests(BaseTestCase):
     def test_registering_command_handler_without_specified_command_name(self):
         """Test registering a command handler without specified command name."""
         with self.assertRaises(CommandNameIsEmptyError):
+
             class TestScreenWithCommandHandler(Screen):
                 """The class implements a screen without description
                 a screen for this test.
@@ -167,6 +168,7 @@ class HandlersTests(BaseTestCase):
 
     def test_passing_handler_to_calc_checksum(self):
         """Test passing a handler to the calc_checksum function."""
+
         async def handler(_self, _update, _context):  # noqa: RUF029
             return DEFAULT_STATE
 
@@ -181,6 +183,7 @@ class HandlersTests(BaseTestCase):
 
     def test_warning_about_unregistered_handler(self):
         """Test warning about an unregistered handler."""
+
         async def unregistered_handler(self, update, context):  # noqa: ARG001 RUF029
             return DEFAULT_STATE
 

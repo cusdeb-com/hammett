@@ -74,9 +74,7 @@ async def _test_job(_context):
 class TestRouteScreen(RouteMixin):
     """The class implements a screen with a routes attribute."""
 
-    routes = (
-        ({DEFAULT_STATE}, _NEW_STATE),
-    )
+    routes = (({DEFAULT_STATE}, _NEW_STATE),)
 
 
 class TestScreenWithKeyboard(BaseTestScreenWithDescription):
@@ -86,8 +84,7 @@ class TestScreenWithKeyboard(BaseTestScreenWithDescription):
         """Set up the keyboard for the screen."""
         return [
             [
-                Button('⬅️ Main Menu', TestStartScreen,
-                       source_type=SourceTypes.MOVE_SOURCE_TYPE),
+                Button('⬅️ Main Menu', TestStartScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE),
             ],
         ]
 
@@ -187,9 +184,11 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             Bot(
                 BOT_TEST_NAME,
                 entry_point=TestStartScreen,
-                job_configs=[{
-                    'job_kwargs': {'trigger': 'interval'},
-                }],
+                job_configs=[
+                    {
+                        'job_kwargs': {'trigger': 'interval'},
+                    },
+                ],
             )
 
     def test_registering_job_without_job_kwargs_specified(self):
@@ -198,9 +197,11 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             Bot(
                 BOT_TEST_NAME,
                 entry_point=TestStartScreen,
-                job_configs=[{
-                    'callback': _test_job,
-                }],
+                job_configs=[
+                    {
+                        'callback': _test_job,
+                    },
+                ],
             )
 
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_TIMED_OUT': True}, TOKEN='secret-token')
@@ -351,10 +352,12 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
-            job_configs=[{
-                'callback': _test_job,
-                'job_kwargs': {'trigger': 'interval'},
-            }],
+            job_configs=[
+                {
+                    'callback': _test_job,
+                    'job_kwargs': {'trigger': 'interval'},
+                },
+            ],
         )
         registered_job = bot._native_application.job_queue.jobs()[0].callback
         assert registered_job == _test_job

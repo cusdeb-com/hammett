@@ -6,15 +6,9 @@ from hammett.core.handlers import register_button_handler
 from hammett.core.mixins import StartMixin
 from hammett.core.persistence import RedisPersistence
 
-MAIN_MENU_SCREEN_DESCRIPTION = (
-    'Welcome to HammettDynamicKeyboard!\n'
-    '\n'
-    'Just press any button.'
-)
+MAIN_MENU_SCREEN_DESCRIPTION = 'Welcome to HammettDynamicKeyboard!\n\nJust press any button.'
 
-MAIN_MENU_SCREEN_WITH_BUTTON_NUM_DESCRIPTION = (
-    "You've pressed button <b>number {button_num}</b>."
-)
+MAIN_MENU_SCREEN_WITH_BUTTON_NUM_DESCRIPTION = "You've pressed button <b>number {button_num}</b>."
 
 
 def request_dynamic_keyboard(handler):
@@ -22,24 +16,36 @@ def request_dynamic_keyboard(handler):
     buttons = range(3)  # do some API request
 
     keyboard = [
-        [Button(
-            f'Button {button_num + 1}',
-            handler,
-            source_type=SourceTypes.HANDLER_SOURCE_TYPE,
-            payload=MAIN_MENU_SCREEN_WITH_BUTTON_NUM_DESCRIPTION.format(button_num=button_num + 1),
-        )]
+        [
+            Button(
+                f'Button {button_num + 1}',
+                handler,
+                source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                payload=MAIN_MENU_SCREEN_WITH_BUTTON_NUM_DESCRIPTION.format(
+                    button_num=button_num + 1,
+                ),
+            ),
+        ]
         for button_num in buttons
     ]
-    keyboard.extend([
-        [Button(
-            '📄 Source Code',
-            'https://github.com/cusdeb-com/hammett/tree/main/demos/dynamic_keyboard_bot',
-            source_type=SourceTypes.URL_SOURCE_TYPE)],
-        [Button(
-            '🎸 Hammett Homepage',
-            'https://github.com/cusdeb-com/hammett',
-            source_type=SourceTypes.URL_SOURCE_TYPE)],
-    ])
+    keyboard.extend(
+        [
+            [
+                Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/dynamic_keyboard_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+        ],
+    )
 
     return keyboard
 

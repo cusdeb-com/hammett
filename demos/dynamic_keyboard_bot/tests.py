@@ -20,11 +20,13 @@ class HammettDynamicKeyboardTests(BaseTestCase):
         """Test calling the `start` handler to get the final render config."""
         await MainMenuScreen().start(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=MAIN_MENU_SCREEN_DESCRIPTION,
-            keyboard=request_dynamic_keyboard(MainMenuScreen().handle_button_click),
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=MAIN_MENU_SCREEN_DESCRIPTION,
+                keyboard=request_dynamic_keyboard(MainMenuScreen().handle_button_click),
+            ),
+        )
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
 

@@ -58,14 +58,16 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         """Test getting the day calendar page using the `send` handler."""
         await TestDayCalendarWidget().send(self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=TestDayCalendarWidget.day_description,
-            keyboard=[
-                *await TestDayCalendarWidget()._build_days(self.update, self.context, None),
-                *await TestDayCalendarWidget().add_extra_keyboard(self.update, self.context),
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=TestDayCalendarWidget.day_description,
+                keyboard=[
+                    *await TestDayCalendarWidget()._build_days(self.update, self.context, None),
+                    *await TestDayCalendarWidget().add_extra_keyboard(self.update, self.context),
+                ],
+            ),
+        )
         assert actual.final_render_config == expected
 
     @catch_render_config()
@@ -85,15 +87,19 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
             state = await widget.on_day_click(self.update, self.context)
 
             picked_date = date(*map(int, picked))
-            expected = self.prepare_final_render_config(RenderConfig(
-                message_id=self.message_id,
-                description=await widget.get_confirm_description(
-                    self.update, self.context, picked_date,
+            expected = self.prepare_final_render_config(
+                RenderConfig(
+                    message_id=self.message_id,
+                    description=await widget.get_confirm_description(
+                        self.update,
+                        self.context,
+                        picked_date,
+                    ),
+                    keyboard=[
+                        *await widget.add_extra_keyboard(self.update, self.context),
+                    ],
                 ),
-                keyboard=[
-                    *await widget.add_extra_keyboard(self.update, self.context),
-                ],
-            ))
+            )
             assert actual.final_render_config == expected
             assert state == DEFAULT_STATE
 
@@ -120,6 +126,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
     async def test_get_current_date_uses_current_date_attribute_and_confirm_description(self):
         """Test get_current_date returns the class attribute and confirm description format."""
+
         class TestWithCustomDate(CalendarWidget):
             current_date = date(2000, 1, 2)
 
@@ -152,6 +159,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
     async def test_get_days_respects_left_and_right_boundaries(self):
         """Test _get_days marks out-of-bound days as blanks according to boundaries."""
+
         class TestCalendarWidgetWithBoundaries(CalendarWidget):
             left_boundary = date(2020, 2, 5)
             right_boundary = date(2020, 2, 20)
@@ -168,6 +176,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
     async def test_get_handler_button_builds_button_with_payload_and_handler(self):
         """Test _get_handler_button creates a Button with expected attributes and payload JSON."""
+
         def handler(_update, _context):
             return DEFAULT_STATE
 
@@ -188,6 +197,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
     async def test_get_months_or_years_produces_leading_and_trailing_empty_slots_for_months(self):
         """Test _get_months_or_years returns Nones before/after when outside boundaries (months)."""
+
         class TestCalendarWidgetWithBoundaries(CalendarWidget):
             left_boundary = date(2020, 2, 1)
             right_boundary = date(2020, 4, 30)
@@ -212,6 +222,7 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
 
     async def test_get_months_or_years_produces_leading_and_trailing_empty_slots_for_years(self):
         """Test _get_months_or_years returns Nones before/after when outside boundaries (years)."""
+
         class TestCalendarWidgetWithBoundaries(CalendarWidget):
             left_boundary = date(2019, 1, 1)
             right_boundary = date(2021, 12, 31)
@@ -251,7 +262,9 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
     async def test_getting_calendar_description_that_includes_result_date(self):
         """Test getting the description that includes the result date."""
         actual = await TestDayCalendarWidget().get_confirm_description(
-            self.update, self.context, datetime(1, 1, 1, tzinfo=timezone.utc),
+            self.update,
+            self.context,
+            datetime(1, 1, 1, tzinfo=timezone.utc),
         )
         assert actual == '1 Jan 1'
 
@@ -288,8 +301,18 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
     async def test_getting_month_name(self):
         """Test getting the translated month names."""
         expected = [
-            'янв', 'фев', 'мар', 'апр', 'май', 'июн',
-            'июл', 'авг', 'сен', 'окт', 'ноя', 'дек',
+            'янв',
+            'фев',
+            'мар',
+            'апр',
+            'май',
+            'июн',
+            'июл',
+            'авг',
+            'сен',
+            'окт',
+            'ноя',
+            'дек',
         ]
         assert [
             TestDayCalendarWidget.get_month_name(month, 'ru') for month in range(1, 13)
@@ -302,14 +325,16 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         """Test getting the month calendar page using the `jump` handler."""
         await TestMonthCalendarWidget().jump(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            as_new_message=True,
-            description=TestMonthCalendarWidget.month_description,
-            keyboard=[
-                *await TestMonthCalendarWidget()._build_months(self.update, self.context, None),
-                *await TestMonthCalendarWidget().add_extra_keyboard(self.update, self.context),
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                as_new_message=True,
+                description=TestMonthCalendarWidget.month_description,
+                keyboard=[
+                    *await TestMonthCalendarWidget()._build_months(self.update, self.context, None),
+                    *await TestMonthCalendarWidget().add_extra_keyboard(self.update, self.context),
+                ],
+            ),
+        )
         assert actual.final_render_config == expected
 
     @catch_render_config()
@@ -335,13 +360,18 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
                 unit=CalendarUnit.MONTH,
                 current_date=current_date,
             )
-            expected = self.prepare_final_render_config(RenderConfig(
-                message_id=self.message_id,
-                description=await widget._get_description(
-                    self.update, self.context, unit, current_date,
+            expected = self.prepare_final_render_config(
+                RenderConfig(
+                    message_id=self.message_id,
+                    description=await widget._get_description(
+                        self.update,
+                        self.context,
+                        unit,
+                        current_date,
+                    ),
+                    keyboard=keyboard,
                 ),
-                keyboard=keyboard,
-            ))
+            )
             assert actual.final_render_config == expected
             assert state == DEFAULT_STATE
 
@@ -362,13 +392,15 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
         """Test getting the year calendar page using the `move` handler."""
         await TestYearCalendarWidget().move(self.update, self.context)
 
-        expected = self.prepare_final_render_config(RenderConfig(
-            description=TestYearCalendarWidget.year_description,
-            keyboard=[
-                *await TestYearCalendarWidget()._build_years(self.update, self.context, None),
-                *await TestYearCalendarWidget().add_extra_keyboard(self.update, self.context),
-            ],
-        ))
+        expected = self.prepare_final_render_config(
+            RenderConfig(
+                description=TestYearCalendarWidget.year_description,
+                keyboard=[
+                    *await TestYearCalendarWidget()._build_years(self.update, self.context, None),
+                    *await TestYearCalendarWidget().add_extra_keyboard(self.update, self.context),
+                ],
+            ),
+        )
         assert actual.final_render_config == expected
 
     @catch_render_config()
@@ -394,11 +426,16 @@ class CalendarWidgetTests(BaseTestCase):  # noqa: PLR0904
                 unit=payload['unit'],
                 current_date=current_date,
             )
-            expected = self.prepare_final_render_config(RenderConfig(
-                message_id=self.message_id,
-                description=await widget._get_description(
-                    self.update, self.context, unit, current_date,
+            expected = self.prepare_final_render_config(
+                RenderConfig(
+                    message_id=self.message_id,
+                    description=await widget._get_description(
+                        self.update,
+                        self.context,
+                        unit,
+                        current_date,
+                    ),
+                    keyboard=keyboard,
                 ),
-                keyboard=keyboard,
-            ))
+            )
             assert actual.final_render_config == expected

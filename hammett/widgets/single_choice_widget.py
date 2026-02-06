@@ -47,8 +47,7 @@ class SingleChoiceWidget(BaseChoiceWidget):
             ]
         else:
             initialized_choices = [
-                (False, choice_key, choice_value)
-                for choice_key, choice_value in choices
+                (False, choice_key, choice_value) for choice_key, choice_value in choices
             ]
 
         return tuple(initialized_choices)

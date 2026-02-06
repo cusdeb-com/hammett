@@ -77,10 +77,13 @@ class PermissionsTests(BaseTestCase):
         state = await screen.move(self.update, self.context)
         assert state == PERMISSION_DENIED_STATE
 
-    @override_settings(PERMISSIONS=[
-        'tests.test_permissions_mechanism.MainPermission',
-        'tests.test_permissions_mechanism.SubPermission',
-    ], TOKEN='secret-token')
+    @override_settings(
+        PERMISSIONS=[
+            'tests.test_permissions_mechanism.MainPermission',
+            'tests.test_permissions_mechanism.SubPermission',
+        ],
+        TOKEN='secret-token',
+    )
     async def test_execution_order_of_permissions(self):
         """Test the scenario with multiple permission classes where
         strict execution order is required.
@@ -112,9 +115,12 @@ class PermissionsTests(BaseTestCase):
         state = await screen.move(self.update, self.context)
         assert state == DEFAULT_STATE
 
-    @override_settings(PERMISSIONS=[
-        'tests.test_permissions_mechanism.PermissionWithoutHandlePermissionDeniedMethod',
-    ], TOKEN='secret-token')
+    @override_settings(
+        PERMISSIONS=[
+            'tests.test_permissions_mechanism.PermissionWithoutHandlePermissionDeniedMethod',
+        ],
+        TOKEN='secret-token',
+    )
     async def test_handle_permission_denied_method_is_not_implemented(self):
         """Test the case when the handle_permission_denied method is not implemented."""
 
@@ -127,9 +133,12 @@ class PermissionsTests(BaseTestCase):
         with self.assertRaises(NotImplementedError):
             await screen.move(self.update, self.context)
 
-    @override_settings(PERMISSIONS=[
-        'tests.test_permissions_mechanism.PermissionWithoutHasPermissionMethod',
-    ], TOKEN='secret-token')
+    @override_settings(
+        PERMISSIONS=[
+            'tests.test_permissions_mechanism.PermissionWithoutHasPermissionMethod',
+        ],
+        TOKEN='secret-token',
+    )
     async def test_has_permission_method_is_not_implemented(self):
         """Test the case when the has_permission method is not implemented."""
 
@@ -163,10 +172,13 @@ class PermissionsTests(BaseTestCase):
         state = await screen.handler(self.update, self.context)
         assert state == DEFAULT_STATE
 
-    @override_settings(PERMISSIONS=[
-        'tests.base.TestGivingPermission',
-        'tests.base.TestDenyingPermission',
-    ], TOKEN='secret-token')
+    @override_settings(
+        PERMISSIONS=[
+            'tests.base.TestGivingPermission',
+            'tests.base.TestDenyingPermission',
+        ],
+        TOKEN='secret-token',
+    )
     async def test_ignoring_second_permission(self):
         """Test the case when the second permission is ignored."""
 
@@ -187,9 +199,12 @@ class PermissionsTests(BaseTestCase):
         state = await screen.handler(self.update, self.context)
         assert state == DEFAULT_STATE
 
-    @override_settings(PERMISSIONS=[
-        'tests.test_permissions_mechanism.TestPermissionWithSyncChecker',
-    ], TOKEN='secret-token')
+    @override_settings(
+        PERMISSIONS=[
+            'tests.test_permissions_mechanism.TestPermissionWithSyncChecker',
+        ],
+        TOKEN='secret-token',
+    )
     async def test_sync_permission_denied(self):
         """Test the case when the permission checker is a synchronous."""
 

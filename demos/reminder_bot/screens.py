@@ -13,8 +13,7 @@ MAIN_MENU_SCREEN_DESCRIPTION = (
 )
 
 MAIN_MENU_SCREEN_ADDITIONAL_DESCRIPTION = (
-    "\n\n"
-    "You've set a reminder! It'll be here in <b>{seconds} sec</b>."
+    "\n\nYou've set a reminder! It'll be here in <b>{seconds} sec</b>."
 )
 
 REMINDER_SCREEN_DESCRIPTION = 'Alarm! You need to buy milk!'
@@ -29,22 +28,34 @@ class MainMenuScreen(StartMixin, Screen):
         """Set up the default keyboard for the screen."""
         keyboard = []
         if not context.chat_data.get('remind_is_set'):
-            keyboard.append([Button(
-                '⏱️ Set Reminder',
-                SettingReminderScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE)],
+            keyboard.append(
+                [
+                    Button(
+                        '⏱️ Set Reminder',
+                        SettingReminderScreen,
+                        source_type=SourceTypes.MOVE_SOURCE_TYPE,
+                    ),
+                ],
             )
 
-        keyboard.extend([
-            [Button(
-                '📄 Source Code',
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-        ])
+        keyboard.extend(
+            [
+                [
+                    Button(
+                        '📄 Source Code',
+                        'https://github.com/cusdeb-com/hammett/tree/main/demos/reminder_bot',
+                        source_type=SourceTypes.URL_SOURCE_TYPE,
+                    ),
+                ],
+                [
+                    Button(
+                        '🎸 Hammett Homepage',
+                        'https://github.com/cusdeb-com/hammett',
+                        source_type=SourceTypes.URL_SOURCE_TYPE,
+                    ),
+                ],
+            ],
+        )
         return keyboard
 
     async def get_description(self, _update, context):
@@ -65,12 +76,11 @@ class ReminderScreen(Screen):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
-        return [[
-            Button(
-                '🏠 Main Menu',
-                MainMenuScreen,
-                source_type=SourceTypes.JUMP_SOURCE_TYPE),
-        ]]
+        return [
+            [
+                Button('🏠 Main Menu', MainMenuScreen, source_type=SourceTypes.JUMP_SOURCE_TYPE),
+            ],
+        ]
 
 
 class SettingReminderScreen(Screen):
@@ -81,19 +91,22 @@ class SettingReminderScreen(Screen):
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
         time_keyboard = [
-            [Button(
-                f'⌛️ {time} sec',
-                self.set_reminder,
-                source_type=SourceTypes.HANDLER_SOURCE_TYPE,
-                payload=f'{time}',
-            )] for time in (15, 30, 60)]
+            [
+                Button(
+                    f'⌛️ {time} sec',
+                    self.set_reminder,
+                    source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                    payload=f'{time}',
+                ),
+            ]
+            for time in (15, 30, 60)
+        ]
 
-        time_keyboard.append([
-            Button(
-                '⬅️ Back',
-                MainMenuScreen,
-                source_type=SourceTypes.MOVE_SOURCE_TYPE),
-        ])
+        time_keyboard.append(
+            [
+                Button('⬅️ Back', MainMenuScreen, source_type=SourceTypes.MOVE_SOURCE_TYPE),
+            ],
+        )
         return time_keyboard
 
     @register_button_handler

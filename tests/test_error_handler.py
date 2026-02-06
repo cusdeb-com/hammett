@@ -20,6 +20,7 @@ class ErrorHandlerTests(BaseTestCase):
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_TIMED_OUT': True})
     async def test_non_matching_error_is_raised_even_if_some_flags_set(self):
         """Test unrelated errors are not swallowed by ignore flags and are raised."""
+
         class CustomError(Exception):
             pass
 
@@ -31,9 +32,9 @@ class ErrorHandlerTests(BaseTestCase):
     @override_settings(ERROR_HANDLER_CONF={'IGNORE_QUERY_IS_TOO_OLD': True})
     async def test_warning_logged_for_query_too_old_when_ignored(self):
         """Test the case when BadRequest(Query is too old) is ignored and logged."""
-        self.context.error = BadRequest(message=(
-            'Query is too old and response timeout expired or query id is invalid'
-        ))
+        self.context.error = BadRequest(
+            message='Query is too old and response timeout expired or query id is invalid',
+        )
 
         with self.assertLogs('hammett.error_handler', level='WARNING') as log:
             await default_error_handler(self.update, self.context)

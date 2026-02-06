@@ -29,7 +29,7 @@ class StartMarker:
 
     def _parse(self: 'Self') -> None:
         """Parse start-makers."""
-        markers = self._start_marker[len('/start '):]
+        markers = self._start_marker[len('/start ') :]
         if markers:
             parts = markers.removeprefix('=').removesuffix('=').split('=')
             if len(parts) % 2 != 0:

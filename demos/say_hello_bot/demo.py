@@ -6,10 +6,7 @@ from hammett.core.handlers import register_command_handler
 from hammett.core.mixins import StartMixin
 from hammett.core.persistence import RedisPersistence
 
-HELLO_SCREEN_DESCRIPTION = (
-    'Hello 👋\n'
-    'Now you see <b>HelloScreen</b>.'
-)
+HELLO_SCREEN_DESCRIPTION = 'Hello 👋\nNow you see <b>HelloScreen</b>.'
 
 START_SCREEN_DESCRIPTION = (
     'Welcome to HammettSimpleJumpBot!\n'
@@ -42,14 +39,20 @@ class StartScreen(StartMixin):
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
         return [
-            [Button(
-                '📄 Source Code',
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/say_hello_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [
+                Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/say_hello_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
         ]
 
 

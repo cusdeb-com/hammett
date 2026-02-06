@@ -31,13 +31,15 @@ class NextScreen(BaseScreen):
 
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
-        return [[
-            Button(
-                '⬅️ Back',
-                StartScreen,
-                source_type=SourceTypes.JUMP_SOURCE_TYPE,
-            ),
-        ]]
+        return [
+            [
+                Button(
+                    '⬅️ Back',
+                    StartScreen,
+                    source_type=SourceTypes.JUMP_SOURCE_TYPE,
+                ),
+            ],
+        ]
 
 
 class StartScreen(BaseScreen, StartMixin):
@@ -50,19 +52,27 @@ class StartScreen(BaseScreen, StartMixin):
     async def add_default_keyboard(self, _update, _context):
         """Set up the default keyboard for the screen."""
         return [
-            [Button(
-                'Next screen ➡️',
-                NextScreen,
-                source_type=SourceTypes.JUMP_SOURCE_TYPE,
-            )],
-            [Button(
-                '📄 Source Code',
-                'https://github.com/cusdeb-com/hammett/tree/main/demos/hide_keyboard_bot',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
-            [Button(
-                '🎸 Hammett Homepage',
-                'https://github.com/cusdeb-com/hammett',
-                source_type=SourceTypes.URL_SOURCE_TYPE)],
+            [
+                Button(
+                    'Next screen ➡️',
+                    NextScreen,
+                    source_type=SourceTypes.JUMP_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '📄 Source Code',
+                    'https://github.com/cusdeb-com/hammett/tree/main/demos/hide_keyboard_bot',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
+            [
+                Button(
+                    '🎸 Hammett Homepage',
+                    'https://github.com/cusdeb-com/hammett',
+                    source_type=SourceTypes.URL_SOURCE_TYPE,
+                ),
+            ],
         ]
 
 
