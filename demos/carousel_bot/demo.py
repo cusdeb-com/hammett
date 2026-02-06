@@ -29,18 +29,18 @@ class Gallery(CarouselWidget, StartMixin):
     """The class implements the gallery screen."""
 
     cache_covers = True
-    images = [
-        [settings.MEDIA_ROOT / '01.png', MAIN_MENU_SCREEN_FIRST_DESCRIPTION],
-        [settings.MEDIA_ROOT / '02.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
-        [settings.MEDIA_ROOT / '03.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
-        [settings.MEDIA_ROOT / '04.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
-        [settings.MEDIA_ROOT / '05.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
-        [settings.MEDIA_ROOT / '06.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
-        [settings.MEDIA_ROOT / '07.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
-        [settings.MEDIA_ROOT / '08.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
-        [settings.MEDIA_ROOT / '09.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION],
-        [settings.MEDIA_ROOT / '10.png', MAIN_MENU_SCREEN_LAST_DESCRIPTION],
-    ]
+    images = (
+        (settings.MEDIA_ROOT / '01.png', MAIN_MENU_SCREEN_FIRST_DESCRIPTION),
+        (settings.MEDIA_ROOT / '02.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION),
+        (settings.MEDIA_ROOT / '03.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION),
+        (settings.MEDIA_ROOT / '04.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION),
+        (settings.MEDIA_ROOT / '05.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION),
+        (settings.MEDIA_ROOT / '06.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION),
+        (settings.MEDIA_ROOT / '07.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION),
+        (settings.MEDIA_ROOT / '08.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION),
+        (settings.MEDIA_ROOT / '09.png', MAIN_MENU_SCREEN_MIDDLE_DESCRIPTION),
+        (settings.MEDIA_ROOT / '10.png', MAIN_MENU_SCREEN_LAST_DESCRIPTION),
+    )
 
     async def add_extra_keyboard(self, _update, _context):
         """Return extra keyboard below the widget buttons."""

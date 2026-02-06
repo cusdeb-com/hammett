@@ -27,10 +27,10 @@ _DATA = {'key1': 'value1', 'key2': 'value2'}
 class BaseTestCarouselWidget(CarouselWidget, BaseTestScreenWithMockedRenderer):
     """The class implements the base CarouselWidget for the testing purposes."""
 
-    images = [
-        ['cover_1', 'description_1'],
-        ['cover_2', 'description_2'],
-    ]
+    images = (
+        ('cover_1', 'description_1'),
+        ('cover_2', 'description_2'),
+    )
 
 
 class TestCarouselWidget(BaseTestCarouselWidget):
@@ -226,7 +226,7 @@ class CarouselWidgetTests(BaseTestCase):
     @catch_render_config()
     async def test_carousel_widget_render_after_calling_send_handler(self, actual):
         """Test calling the send handler to get the final render config."""
-        custom_images = [['cover_1', 'description_1']]
+        custom_images = (('cover_1', 'description_1'),)
         widget = TestCarouselWidget()
         await widget.send(self.context, images=custom_images)
 
@@ -243,13 +243,13 @@ class CarouselWidgetTests(BaseTestCase):
         ))
         self.assertFinalRenderConfigEqual(expected, actual.final_render_config)
 
-    def test_improperly_configured_images_type(self):
-        """Test that non-list images raise ImproperlyConfigured in __init__."""
+    async def test_improperly_configured_images_type(self):
+        """Test that non-list images raise ImproperlyConfigured in _init."""
         class BadImagesWidget(CarouselWidget):
-            images = 'not-a-list'
+            images = 'not-a-tuple'
 
         with self.assertRaises(ImproperlyConfigured):
-            BadImagesWidget()
+            await BadImagesWidget().move(self.update, self.context)
 
     def test_improperly_configured_missing_captions(self):
         """Test that missing captions raise ImproperlyConfigured in __init__."""
