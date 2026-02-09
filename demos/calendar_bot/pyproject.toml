@@ -1,0 +1,15 @@
+[project]
+name = "calendar-bot"
+version = "0.1.0"
+description = "The bot shows how to use the calendar widget."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "asgiref==3.8.1",
+    "hammett @ git+https://github.com/cusdeb-com/hammett.git@release1",
+    "python-dotenv==1.0.0",
+    "redis==5.0.1",
+]
+
+[tool.setuptools.packages.find]
+namespaces = false
