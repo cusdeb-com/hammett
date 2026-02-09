@@ -1,0 +1,15 @@
+[project]
+name = "admin-panel-bot"
+version = "0.1.0"
+description = "The bot is intended to showcase how to use the hiders mechanism to control the visibility of the buttons on the screens."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "asgiref==3.8.1",
+    "hammett @ git+https://github.com/cusdeb-com/hammett.git@release1",
+    "python-dotenv==1.0.0",
+    "redis==5.0.1",
+]
+
+[tool.setuptools.packages.find]
+namespaces = false
