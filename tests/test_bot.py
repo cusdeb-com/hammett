@@ -97,6 +97,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
+            states={DEFAULT_STATE: {TestStartScreen}},
             persistence=RedisPersistence(),
         )
 
@@ -184,6 +185,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             Bot(
                 BOT_TEST_NAME,
                 entry_point=TestStartScreen,
+                states={DEFAULT_STATE: {TestStartScreen}},
                 job_configs=[
                     {
                         'job_kwargs': {'trigger': 'interval'},
@@ -197,6 +199,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
             Bot(
                 BOT_TEST_NAME,
                 entry_point=TestStartScreen,
+                states={DEFAULT_STATE: {TestStartScreen}},
                 job_configs=[
                     {
                         'callback': _test_job,
@@ -212,6 +215,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
+            states={DEFAULT_STATE: {TestStartScreen}},
             error_handlers=[_test_error_handler],
         )
 
@@ -341,6 +345,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
+            states={DEFAULT_STATE: {TestStartScreen}},
             error_handlers=[_test_error_handler],
         )
 
@@ -352,6 +357,7 @@ class BotTests(BaseTestCase):  # noqa: PLR0904
         bot = Bot(
             BOT_TEST_NAME,
             entry_point=TestStartScreen,
+            states={DEFAULT_STATE: {TestStartScreen}},
             job_configs=[
                 {
                     'callback': _test_job,

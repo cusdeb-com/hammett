@@ -59,11 +59,11 @@ class Bot:
         name: str,
         *,
         entry_point: 'type[StartMixin]',
+        states: 'States',
         error_handlers: 'list[HandlerAlias] | None' = None,
         job_configs: 'list[JobConfig] | None' = None,
         native_states: 'NativeStates | None' = None,
         persistence: 'BasePersistence[UD, CD, BD] | None' = None,
-        states: 'States | None' = None,
     ) -> None:
         """Initialize a bot object.
 
@@ -91,9 +91,8 @@ class Bot:
 
         self._native_application = builder.build()
 
-        if self._states:
-            for state in self._states.items():
-                self._register_handlers(*state)
+        for state in self._states.items():
+            self._register_handlers(*state)
 
         self._register_error_handlers(error_handlers)
         self._register_jobs(job_configs)
