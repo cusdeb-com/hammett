@@ -5,7 +5,7 @@ WORKDIR /var/www/quiz_bot
 COPY ./quiz_bot .
 
 RUN apk --update add git gettext \
- && pip install -r requirements.txt \
+ && pip install . \
  && apk del git \
  \
  && msgfmt locale/en/LC_MESSAGES/hammett.po -o locale/en/LC_MESSAGES/hammett.mo \

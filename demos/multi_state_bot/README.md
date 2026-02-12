@@ -26,10 +26,10 @@ $ virtualenv -p python3 multi-state-bot-env
 $ source ./multi-state-bot-env/bin/activate
 ```
 
-Then, install the necessary dependencies from `requirements.txt`:
+Then, install the necessary dependencies from `pyproject.toml`:
 
 ```bash
-$ pip install -r requirements.txt
+$ pip install .
 ```
 
 ## Run the Bot
