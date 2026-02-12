@@ -26,10 +26,10 @@ $ virtualenv -p python3 quiz-bot-env
 $ source ./quiz-bot-env/bin/activate
 ```
 
-Then, install the necessary dependencies from `requirements.txt`:
+Then, install the necessary dependencies from `pyproject.toml`:
 
 ```bash
-$ pip install -r requirements.txt
+$ pip install .
 ```
 
 ## Run the Bot

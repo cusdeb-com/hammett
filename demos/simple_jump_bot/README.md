@@ -26,10 +26,10 @@ $ virtualenv -p python3 simple-jump-bot-env
 $ source ./simple-jump-bot-env/bin/activate
 ```
 
-Then, install the necessary dependencies from `requirements.txt`:
+Then, install the necessary dependencies from `pyproject.toml`:
 
 ```bash
-$ pip install -r requirements.txt
+$ pip install .
 ```
 
 ## Run the Bot

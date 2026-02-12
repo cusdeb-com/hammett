@@ -26,10 +26,10 @@ $ virtualenv -p python3 say-hello-bot-env
 $ source ./say-hello-bot-env/bin/activate
 ```
 
-Then, install the necessary dependencies from `requirements.txt`:
+Then, install the necessary dependencies from `pyproject.toml`:
 
 ```bash
-$ pip install -r requirements.txt
+$ pip install .
 ```
 
 ## Run the Bot

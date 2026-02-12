@@ -5,7 +5,7 @@ WORKDIR /var/www/clicker_bot
 COPY ./clicker_bot .
 
 RUN apk --update add git \
- && pip install -r requirements.txt \
+ && pip install . \
  && apk del git
 
 CMD env HAMMETT_SETTINGS_MODULE=settings python3 -m demo
