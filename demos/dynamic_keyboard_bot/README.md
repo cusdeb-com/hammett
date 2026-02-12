@@ -32,6 +32,16 @@ Then, install the necessary dependencies from `pyproject.toml`:
 $ pip install .
 ```
 
+### Using UV (recommended)
+
+If you prefer using [UV](https://docs.astral.sh/uv/), you can create a virtual environment and install dependencies with:
+
+```bash
+$ uv sync
+```
+
+This will automatically create a virtual environment (if needed) and install dependencies defined in `pyproject.toml`.
+
 ## Run the Bot
 
 Initially, you need to set the `HAMMETT_SETTINGS_MODULE` and `TOKEN` environment variables. After that, run the `demo.py` script using the following command:

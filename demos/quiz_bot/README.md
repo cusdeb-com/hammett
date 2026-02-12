@@ -32,6 +32,16 @@ Then, install the necessary dependencies from `pyproject.toml`:
 $ pip install .
 ```
 
+### Using UV (recommended)
+
+If you prefer using [UV](https://docs.astral.sh/uv/), you can create a virtual environment and install dependencies with:
+
+```bash
+$ uv sync
+```
+
+This will automatically create a virtual environment (if needed) and install dependencies defined in `pyproject.toml`.
+
 ## Run the Bot
 
 Firstly, you need to generate .mo files for a translation support using the following command:
@@ -63,6 +73,12 @@ The demo includes tests located in the `tests.py` module. To run the tests, use 
 
 ```bash
 $ env TOKEN=test-token python3 tests.py
+```
+
+If you are using `uv`:
+
+```bash
+$ env TOKEN=test-token uv run tests.py
 ```
 
 ## Docker
