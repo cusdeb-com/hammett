@@ -22,7 +22,7 @@ $ cd demos/hide_keyboard_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 hide-keyboard-bot-env
+$ python3 -m venv hide-keyboard-bot-env
 $ source ./hide-keyboard-bot-env/bin/activate
 ```
 

@@ -22,7 +22,7 @@ $ cd demos/admin_panel_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 admin-panel-bot-env
+$ python3 -m venv admin-panel-bot-env
 $ source ./admin-panel-bot-env/bin/activate
 ```
 

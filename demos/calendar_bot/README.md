@@ -22,7 +22,7 @@ $ cd demos/calendar_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 calendar-bot-env
+$ python3 -m venv calendar-bot-env
 $ source ./calendar-bot-env/bin/activate
 ```
 

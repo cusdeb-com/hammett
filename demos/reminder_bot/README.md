@@ -22,7 +22,7 @@ $ cd demos/reminder_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 reminder-bot-env
+$ python3 -m venv reminder-bot-env
 $ source ./reminder-bot-env/bin/activate
 ```
 

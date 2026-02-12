@@ -22,7 +22,7 @@ $ cd demos/dynamic_keyboard_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 dynamic-keyboard-bot-env
+$ python3 -m venv dynamic-keyboard-bot-env
 $ source ./dynamic-keyboard-bot-env/bin/activate
 ```
 

@@ -22,7 +22,7 @@ $ cd demos/paywall_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 paywall-bot-env
+$ python3 -m venv paywall-bot-env
 $ source ./paywall-bot-env/bin/activate
 ```
 

@@ -22,7 +22,7 @@ $ cd demos/simple_jump_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 simple-jump-bot-env
+$ python3 -m venv simple-jump-bot-env
 $ source ./simple-jump-bot-env/bin/activate
 ```
 
