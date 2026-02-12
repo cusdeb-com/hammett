@@ -22,7 +22,7 @@ $ cd demos/carousel_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 carousel-bot-env
+$ python3 -m venv carousel-bot-env
 $ source ./carousel-bot-env/bin/activate
 ```
 

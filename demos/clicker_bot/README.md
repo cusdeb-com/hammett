@@ -22,7 +22,7 @@ $ cd demos/clicker_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 clicker-bot-env
+$ python3 -m venv clicker-bot-env
 $ source ./clicker-bot-env/bin/activate
 ```
 

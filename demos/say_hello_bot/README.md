@@ -22,7 +22,7 @@ $ cd demos/say_hello_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 say-hello-bot-env
+$ python3 -m venv say-hello-bot-env
 $ source ./say-hello-bot-env/bin/activate
 ```
 

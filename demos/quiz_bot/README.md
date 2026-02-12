@@ -22,7 +22,7 @@ $ cd demos/quiz_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 quiz-bot-env
+$ python3 -m venv quiz-bot-env
 $ source ./quiz-bot-env/bin/activate
 ```
 

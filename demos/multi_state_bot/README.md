@@ -22,7 +22,7 @@ $ cd demos/multi_state_bot/
 Next, create and activate a virtual environment:
 
 ```bash
-$ virtualenv -p python3 multi-state-bot-env
+$ python3 -m venv multi-state-bot-env
 $ source ./multi-state-bot-env/bin/activate
 ```
 
