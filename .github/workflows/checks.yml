@@ -21,17 +21,20 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
       - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+        run: uv sync --locked --dev
 
       - name: Run ruff formater
-        run: ruff format . --check
+        run: uv run ruff format . --check
 
       - name: Run ruff linter
-        run: ruff check . --config=ruff.toml
+        run: uv run  ruff check . --config=ruff.toml
 
       - name: Run mypy
-        run: mypy --strict .
+        run: uv run mypy --strict .
   tests:
     name: Run tests with Python ${{ matrix.python-version }}
 
@@ -52,23 +55,26 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
       - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+        run: uv sync --locked --dev
 
       - name: Run demos tests with Python ${{ matrix.python-version }}
         run: |
-          env HAMMETT_SETTINGS_MODULE=demos.admin_panel_bot.settings python3 demos/admin_panel_bot/tests.py
-          env HAMMETT_SETTINGS_MODULE=demos.clicker_bot.settings python3 demos/clicker_bot/tests.py
-          env HAMMETT_SETTINGS_MODULE=demos.dynamic_keyboard_bot.settings python3 demos/dynamic_keyboard_bot/tests.py
-          env HAMMETT_SETTINGS_MODULE=demos.hide_keyboard_bot.settings python3 demos/hide_keyboard_bot/tests.py
-          env HAMMETT_SETTINGS_MODULE=demos.multi_state_bot.settings python3 demos/multi_state_bot/tests.py
-          env HAMMETT_SETTINGS_MODULE=demos.paywall_bot.settings TOKEN=test-token python3 demos/paywall_bot/tests.py
-          env HAMMETT_SETTINGS_MODULE=demos.quiz_bot.settings TOKEN=test-token python3 demos/quiz_bot/tests.py
-          env HAMMETT_SETTINGS_MODULE=demos.reminder_bot.settings python3 demos/reminder_bot/tests.py
-          env HAMMETT_SETTINGS_MODULE=demos.say_hello_bot.settings python3 demos/say_hello_bot/tests.py
-          env HAMMETT_SETTINGS_MODULE=demos.simple_jump_bot.settings python3 demos/simple_jump_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.admin_panel_bot.settings python3 demos/admin_panel_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.clicker_bot.settings python3 demos/clicker_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.dynamic_keyboard_bot.settings python3 demos/dynamic_keyboard_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.hide_keyboard_bot.settings python3 demos/hide_keyboard_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.multi_state_bot.settings python3 demos/multi_state_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.paywall_bot.settings TOKEN=test-token python3 demos/paywall_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.quiz_bot.settings TOKEN=test-token python3 demos/quiz_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.reminder_bot.settings python3 demos/reminder_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.say_hello_bot.settings python3 demos/say_hello_bot/tests.py
+          uv run env HAMMETT_SETTINGS_MODULE=demos.simple_jump_bot.settings python3 demos/simple_jump_bot/tests.py
 
       - name: Run Hammett tests with Python ${{ matrix.python-version }}
         run: |
-          env HAMMETT_SETTINGS_MODULE=tests.settings coverage run -m unittest discover -s tests/
-          coverage report --fail-under=100
+          uv run env HAMMETT_SETTINGS_MODULE=tests.settings coverage run -m unittest discover -s tests/
+          uv run coverage report --fail-under=100
