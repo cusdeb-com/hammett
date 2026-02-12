@@ -54,7 +54,7 @@ classifiers = [
 Repository = "https://github.com/cusdeb-com/hammett"
 
 [tool.setuptools.packages.find]
-exclude = ["demos*", "demos", "tests*", "tests.*", "tests", "dist", "requirements.txt"]
+exclude = ["demos*", "demos", "tests*", "tests.*", "tests", "dist"]
 
 [dependency-groups]
 dev = [
