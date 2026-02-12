@@ -1,6 +1,7 @@
 .idea
 .mypy_cache
 .ruff_cache
+*.venv
 __pycache__
 *.swp
 .env*
