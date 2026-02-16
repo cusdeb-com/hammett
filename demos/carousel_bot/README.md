@@ -42,6 +42,21 @@ $ uv sync
 
 This will automatically create a virtual environment (if needed) and install dependencies defined in `pyproject.toml`.
 
+### Redis Requirement
+
+This demo requires a running Redis-compatible server (e.g. [Redis](https://redis.io/docs/latest/) or [Valkey](https://valkey.io/docs/)).
+
+You can start a compatible server using Docker:
+
+```bash
+$ docker run -d --rm \
+  --name hammett-valkey \
+  -p "127.0.0.1:6379:6379" \
+  valkey/valkey:8.0
+```
+
+This will expose Valkey on `127.0.0.1:6379`.
+
 ## Run the Bot
 
 Initially, you need to set the `HAMMETT_SETTINGS_MODULE` and `TOKEN` environment variables. After that, run the `demo.py` script using the following command:
