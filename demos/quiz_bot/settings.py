@@ -16,7 +16,7 @@ LOCALE_PATHS = [
 ]
 
 REDIS_PERSISTENCE = {
-    'HOST': os.getenv('REDIS_PERSISTENCE_HOST', 'valkey'),
+    'HOST': os.getenv('REDIS_PERSISTENCE_HOST', '127.0.0.1'),
     'PORT': 6379,
     'DB': os.getenv('REDIS_PERSISTENCE_DB', '1'),
 }
