@@ -16,20 +16,20 @@ See the live demo [here](https://t.me/HammettHideKeyboardBot).
 First, navigate to the `demos/hide_keyboard_bot/` directory:
 
 ```bash
-$ cd demos/hide_keyboard_bot/
+cd demos/hide_keyboard_bot/
 ```
 
 Next, create and activate a virtual environment:
 
 ```bash
-$ python3 -m venv hide-keyboard-bot-env
-$ source ./hide-keyboard-bot-env/bin/activate
+python3 -m venv hide-keyboard-bot-env
+source ./hide-keyboard-bot-env/bin/activate
 ```
 
 Then, install the necessary dependencies from `pyproject.toml`:
 
 ```bash
-$ pip install .
+pip install .
 ```
 
 ### Using UV (recommended)
@@ -37,7 +37,7 @@ $ pip install .
 If you prefer using [UV](https://docs.astral.sh/uv/), you can create a virtual environment and install dependencies with:
 
 ```bash
-$ uv sync
+uv sync
 ```
 
 This will automatically create a virtual environment (if needed) and install dependencies defined in `pyproject.toml`.
@@ -49,7 +49,7 @@ This demo requires a running Redis-compatible server (e.g. [Redis](https://redis
 You can start a compatible server using Docker:
 
 ```bash
-$ docker run -d --rm \
+docker run -d --rm \
   --name hammett-valkey \
   -p "127.0.0.1:6379:6379" \
   valkey/valkey:8.0
@@ -62,14 +62,14 @@ This will expose Valkey on `127.0.0.1:6379`.
 Initially, you need to set the `HAMMETT_SETTINGS_MODULE` and `TOKEN` environment variables. After that, run the `demo.py` script using the following command:
 
 ```bash
-$ env HAMMETT_SETTINGS_MODULE=settings TOKEN=your-token python3 demo.py
+env HAMMETT_SETTINGS_MODULE=settings TOKEN=your-token python3 demo.py
 ```
 
 Alternatively, you can create a `.env` file to specify the `TOKEN`. In this case, execute these commands:
 
 ```bash
-$ source .env
-$ env HAMMETT_SETTINGS_MODULE=settings python3 demo.py
+source .env
+env HAMMETT_SETTINGS_MODULE=settings python3 demo.py
 ```
 
 After completing these steps, the bot will be up and ready to accept the `/start` command.
@@ -79,7 +79,7 @@ After completing these steps, the bot will be up and ready to accept the `/start
 The demo includes tests located in the `tests.py` module. To run the tests, use the following command:
 
 ```bash
-$ python3 tests.py
+python3 tests.py
 ```
 
 ## Docker
@@ -87,5 +87,5 @@ $ python3 tests.py
 To run the demo in a Docker container, first navigate to the `demos/` directory and execute the following command:
 
 ```bash
-$ docker compose up --build -d hide-keyboard-bot
+docker compose up --build -d hide-keyboard-bot
 ```
