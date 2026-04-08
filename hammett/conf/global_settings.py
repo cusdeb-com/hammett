@@ -27,6 +27,18 @@ LOCALE_PATHS: list[str] = []
 
 LOGGING: dict[str, 'Any'] = {}
 
+OPENTELEMETRY = {
+    'ENABLED': False,
+    'SERVICE_NAME': 'hammett',
+    'EXPORTER_OTLP_ENDPOINT': None,
+    'CAPTURE_USER_ATTRIBUTES': True,
+    'CAPTURE_SCREEN_ATTRIBUTES': True,
+    'CAPTURE_PERMISSION_CHECKS': True,
+    'UPDATE_HOOK': None,
+    'HANDLER_HOOK': None,
+    'PERMISSION_HOOK': None,
+}
+
 PAYLOAD_NAMESPACE = 'hammett'
 
 PERMISSIONS: list[str] = []

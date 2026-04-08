@@ -56,8 +56,18 @@ Repository = "https://github.com/cusdeb-com/hammett"
 [tool.setuptools.packages.find]
 exclude = ["demos*", "demos", "tests*", "tests.*", "tests", "dist"]
 
+[project.optional-dependencies]
+telemetry = [
+    "opentelemetry-api>=1.20.0",
+    "opentelemetry-sdk>=1.20.0",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.20.0",
+]
+
 [dependency-groups]
 dev = [
+    "opentelemetry-api>=1.20.0",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.20.0",
+    "opentelemetry-sdk>=1.20.0",
     "asgiref==3.7.2",
     "coverage==7.3.2",
     "fakeredis==2.31.3",
