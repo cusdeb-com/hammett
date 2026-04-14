@@ -246,10 +246,12 @@ class Bot:
             self._native_states[state] = []
 
     def _setup(self: 'Self') -> None:
-        """Configure logging."""
+        """Configure logging and observability infrastructure."""
         from hammett.conf import settings
+        from hammett.telemetry import instrument_telemetry
 
         configure_logging(settings.LOGGING)
+        instrument_telemetry(settings.OPENTELEMETRY)
 
     def provide_application_builder(self: 'Self') -> 'ApplicationBuilder':  # type: ignore[type-arg]
         """Return a native application builder.
