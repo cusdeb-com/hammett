@@ -1,13 +1,13 @@
 """The module contains the constants used in the core."""
 
 from dataclasses import dataclass, field
-from enum import Enum, auto
+from enum import Enum, StrEnum, auto
 from typing import TYPE_CHECKING, TypedDict, cast
 
 if TYPE_CHECKING:
     from os import PathLike
 
-    from hammett.types import Attachments, Document, Keyboard, State
+    from hammett.types.core import Attachments, Document, Keyboard, State
 
 # Use 'cast' instead of 'State(0)' to avoid a circular import
 DEFAULT_STATE = cast('State', '0')
@@ -17,15 +17,16 @@ EMPTY_KEYBOARD: 'Keyboard' = []
 LATEST_SENT_MSG_KEY = 'latest_sent_msg'
 
 
-class SourcesTypes(Enum):
+class SourceTypes(Enum):
     """The class contains the available types of sources."""
 
-    GOTO_SOURCE_TYPE = auto()
     HANDLER_SOURCE_TYPE = auto()
+    JUMP_ALONG_ROUTE_SOURCE_TYPE = auto()
     JUMP_SOURCE_TYPE = auto()
-    SGOTO_SOURCE_TYPE = auto()
-    SJUMP_SOURCE_TYPE = auto()
+    MOVE_ALONG_ROUTE_SOURCE_TYPE = auto()
+    MOVE_SOURCE_TYPE = auto()
     URL_SOURCE_TYPE = auto()
+    WEB_APP_SOURCE_TYPE = auto()
 
 
 @dataclass
@@ -53,15 +54,16 @@ class FinalRenderConfig(RenderConfig):
     keyboard: 'Keyboard' = field(default_factory=list)
 
 
-class SerializedFinalRenderConfig(TypedDict):
-    """The class represents a serialized final config after using `dataclasses.asdict`."""
+class LatestMessage(TypedDict):
+    """The class represents information about the latest message sent."""
 
-    chat_id: int | None
+    chat_id: int
     message_id: int
-    as_new_message: bool
-    cache_covers: bool
-    cover: 'str | PathLike[str]'
-    description: str
-    document: 'Document | None'
-    keyboard: 'Keyboard'
     hide_keyboard: bool
+
+
+class ParseMode(StrEnum):
+    """The class contains the available types of parse modes to use for text formatting."""
+
+    HTML = 'HTML'
+    MARKDOWN = 'MarkdownV2'

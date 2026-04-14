@@ -39,6 +39,14 @@ def import_string(dotted_path: str) -> type['Any']:
     """Import a dotted module path and return the attribute/class
     designated by the last name in the path.
     Raise `ImportError` if the import failed.
+
+    Returns:
+        Object getting by passed dotted path.
+
+    Raises:
+        ImportError: If the provided dotted path does not look like a module path.
+        ImportError: If the module does not define the specified attribute/class.
+
     """
     try:
         module_path, class_name = dotted_path.rsplit('.', 1)
@@ -49,7 +57,7 @@ def import_string(dotted_path: str) -> type['Any']:
     module = import_module(module_path)
 
     try:
-        return cast(type, getattr(module, class_name))
+        return cast('type', getattr(module, class_name))
     except AttributeError as err:
         msg = f'Module "{module_path}" does not define a "{class_name}" attribute/class'
         raise ImportError(msg) from err

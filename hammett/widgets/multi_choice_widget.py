@@ -6,14 +6,13 @@ from hammett.widgets.base import BaseChoiceWidget
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
-    from hammett.widgets.types import Choice, Choices, InitializedChoices
+    from hammett.types.widgets import Choice, Choices, InitializedChoices
 
 
 class MultiChoiceWidget(BaseChoiceWidget):
@@ -34,7 +33,12 @@ class MultiChoiceWidget(BaseChoiceWidget):
         choices: 'Choices',
         **_kwargs: 'Any',
     ) -> 'InitializedChoices':
-        """Initialize choices."""
+        """Initialize choices.
+
+        Returns:
+            Initialized choices.
+
+        """
         initial_values = await self.get_initial_values(update, context)
         if initial_values is not None:
             initialized_choices = [
@@ -43,8 +47,7 @@ class MultiChoiceWidget(BaseChoiceWidget):
             ]
         else:
             initialized_choices = [
-                (False, choice_key, choice_value)
-                for choice_key, choice_value in choices
+                (False, choice_key, choice_value) for choice_key, choice_value in choices
             ]
 
         return tuple(initialized_choices)
@@ -58,7 +61,12 @@ class MultiChoiceWidget(BaseChoiceWidget):
         _update: 'Update | None',
         _context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'Sequence[str] | None':
-        """Return the `initial_values` attribute of the widget."""
+        """Return the `initial_values` attribute of the widget.
+
+        Returns:
+            `Initial_value` attribute of the widget.
+
+        """
         return self.initial_values
 
     async def switch(
@@ -67,7 +75,12 @@ class MultiChoiceWidget(BaseChoiceWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
         selected_choice: 'Choice',
     ) -> 'InitializedChoices':
-        """Switch the widget from one state to another."""
+        """Switch the widget from one state to another.
+
+        Returns:
+            New state of the widget after switching it.
+
+        """
         current_choices = await self.get_initialized_choices(update, context)
 
         choices = []

@@ -7,7 +7,7 @@ import inspect
 import pkgutil
 from typing import TYPE_CHECKING
 
-from hammett.core.permissions import Permission
+from hammett.core.permission import Permission
 from hammett.core.screen import Screen
 
 if TYPE_CHECKING:
@@ -21,18 +21,23 @@ def _autodiscover_screens_in_module(
 ) -> 'set[type[Screen]]':
     """Look through the specified module for subclasses of the Screen class.
     The function skips the Permission subclasses and Screen itself.
+
+    Returns:
+        Set of the subclasses of the Screen class.
+
     """
     return {
-        obj for _, obj in inspect.getmembers(module)
+        obj
+        for _, obj in inspect.getmembers(module)
         if inspect.isclass(obj)
         # Permission classes subclass Screen,
         # but their handlers do not need to be registered,
         # so explicitly skip these classes.
         and not issubclass(obj, Permission)
         and issubclass(obj, Screen)
-        and obj is not Screen
         and obj not in exclude_screens
         and not obj.__module__.startswith('hammett')
+        and not obj.__dict__.get('abstract', False)
     }
 
 
@@ -42,6 +47,10 @@ def autodiscover_screens(
 ) -> 'set[type[Screen]]':
     """Automatically discover screens (i.e., subclasses of the Screen class),
     looking them in the specified package.
+
+    Returns:
+        Set of the screens.
+
     """
     if exclude_screens is None:
         exclude_screens = []

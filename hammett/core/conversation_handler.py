@@ -30,14 +30,13 @@ from telegram.ext._application import ApplicationHandlerStop
 from telegram.ext._extbot import ExtBot
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Update
     from telegram.ext import Application
     from telegram.ext._utils.types import CCT
-    from typing_extensions import Self
 
-    from hammett.types import CheckUpdateType
+    from hammett.types.core import CheckUpdateType
 
 DEFAULT_TRUE: DefaultValue[bool] = DefaultValue(value=True)
 
@@ -57,7 +56,16 @@ class ConversationHandler(NativeConversationHandler['Any']):
         check_result: 'CheckUpdateType[CCT]',
         context: 'CCT',
     ) -> object | None:
-        """Send the update to the callback for the current state and BaseHandler."""
+        """Send the update to the callback for the current state and BaseHandler.
+
+        Returns:
+            Object or None.
+
+        Raises:
+            ApplicationHandlerStop: If it's necessary to prevent the execution of any other handler
+            (even in different groups).
+
+        """
         current_state, conversation_key, handler, handler_check_result = check_result
         raise_dp_handler_stop = False
 
@@ -84,14 +92,21 @@ class ConversationHandler(NativeConversationHandler['Any']):
         try:  # Now create task or await the callback
             if block:
                 new_state: object = await handler.handle_update(
-                    update, application, handler_check_result, context,
+                    update,
+                    application,
+                    handler_check_result,
+                    context,
                 )
             else:
                 new_state = application.create_task(
                     coroutine=handler.handle_update(
-                        update, application, handler_check_result, context,
+                        update,
+                        application,
+                        handler_check_result,
+                        context,
                     ),
                     update=update,
+                    name=f'ConversationHandler:{update.update_id}:handle_update:non_blocking_cb',
                 )
         except ApplicationHandlerStop as exception:
             new_state = exception.state
@@ -114,9 +129,14 @@ class ConversationHandler(NativeConversationHandler['Any']):
                     # checking if the new state is self.END is done in _schedule_job
                     application.create_task(
                         self._schedule_job_delayed(
-                            new_state, application, update, context, conversation_key,
+                            new_state,
+                            application,
+                            update,
+                            context,
+                            conversation_key,
                         ),
                         update=update,
+                        name=f'ConversationHandler:{update.update_id}:handle_update:timeout_job',
                     )
                 else:
                     self._schedule_job(new_state, application, update, context, conversation_key)
@@ -142,11 +162,12 @@ class ConversationHandler(NativeConversationHandler['Any']):
                 handler_name = f'{handler.callback.__qualname__}'
 
             if current_state != new_state:
-                msg = (
-                    f'Switched to `{new_state}` state from '
-                    f'`{current_state}` state via `{handler_name}` handler.'
+                LOGGER.debug(
+                    'Switched to `%s` state from `%s` state via `%s` handler.',
+                    new_state,
+                    current_state,
+                    handler_name,
                 )
-                LOGGER.debug(msg)
 
         if raise_dp_handler_stop:
             # Don't pass the new state here. If we're in a nested conversation, the parent is

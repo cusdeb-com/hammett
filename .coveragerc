@@ -1,0 +1,6 @@
+[run]
+omit = ./demos/*, ./hammett/core/conversation_handler.py, ./hammett/test/*, ./hammett/types/*, ./tests/*
+
+[report]
+exclude_also =
+    if TYPE_CHECKING:

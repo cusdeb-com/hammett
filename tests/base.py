@@ -1,36 +1,83 @@
 """The module contains the classes for the Hammett tests."""
 
-# ruff: noqa: ANN001, ANN101, ANN201, ANN202, D401
-
+import datetime
 from abc import ABC
 
-from hammett.core.mixins import StartMixin
-from hammett.core.permissions import Permission
-from hammett.core.screen import Screen
+from telegram import Chat, Message
+from telegram.constants import ChatType
 
-PERMISSION_DENIED_STATE = '1'
+from hammett.core import Bot
+from hammett.core.constants import DEFAULT_STATE
+from hammett.core.handlers import register_button_handler
+from hammett.core.mixins import RouteMixin, StartMixin
+from hammett.core.permission import Permission
+from hammett.core.renderer import Renderer
+from hammett.core.screen import Screen
+from hammett.types.core import State
+
+BOT_TEST_NAME = 'test'
+
+CHAT_ID = 1
+
+MESSAGE_ID = 1
+
+PERMISSION_DENIED_STATE = State('1')
 
 PERMISSIONS_ORDER = []
+
+TEST_STATE = State('test_state')
+
+USER_ID = 1
 
 
 class BaseTestPermission(Permission, ABC):
     """The class implements a base permission for the tests."""
 
     def has_permission(self, _update, _context):
-        """Appends the method path to the permission order list."""
+        """Append the method path to the permission order list."""
         PERMISSIONS_ORDER.append(f'{self.__class__.__name__}.{self.has_permission.__name__}')
         return True
 
     async def handle_permission_denied(self, _update, _context):
-        """A stub handler for the testing purposes."""
+        """Represent a stub handler for the testing purposes."""
         return PERMISSION_DENIED_STATE
+
+
+class BaseTestScreenWithDescription(Screen):
+    """The class represents the base screen for the testing purposes."""
+
+    description = 'Test description'
+
+
+class BaseTestScreenWithHandler(Screen):
+    """The class represents the base screen for the testing purposes."""
+
+    @register_button_handler
+    async def handler(self, _update, _context):
+        """Represent a stub handler for the testing purposes."""
+        return DEFAULT_STATE
+
+
+class BaseTestScreenWithHideKeyboard(Screen):
+    """The class represents the base screen for the testing purposes."""
+
+    hide_keyboard = True
+
+
+class BaseTestScreenWithMockedRenderer(Screen):
+    """The class represents the base screen for the testing purposes."""
+
+    def __init__(self):
+        """Initialize a screen object."""
+        super().__init__()
+        self.renderer = TestRenderer(self.parse_mode)
 
 
 class TestDenyingPermission(BaseTestPermission):
     """The class implements a permission that can never be given."""
 
     async def has_permission(self, _update, _context):
-        """A stub permission checker for the testing purpose."""
+        """Represent a stub permission checker for the testing purpose."""
         return False
 
 
@@ -38,21 +85,44 @@ class TestGivingPermission(BaseTestPermission):
     """The class implements a permission that is always given."""
 
     async def has_permission(self, _update, _context):
-        """A stub permission checker for the testing purpose."""
+        """Represent a stub permission checker for the testing purpose."""
         return True
 
 
-class TestScreen(Screen):
+class TestRenderer(Renderer):
+    """The class implements screen rendering."""
+
+    async def render(self, _update, _context, _config, **_kwargs):
+        """Represent a stub for testing purposes."""
+        return Message(
+            MESSAGE_ID,
+            datetime.datetime(2000, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
+            Chat(CHAT_ID, ChatType.SENDER),
+        )
+
+
+class TestScreen(BaseTestScreenWithDescription):
     """The class implements a screen for the tests."""
 
-    description = 'A test description.'
+
+class TestRouteScreen(BaseTestScreenWithDescription, RouteMixin):
+    """The class implements a screen for the tests related to routes."""
+
+    routes = (({DEFAULT_STATE}, TEST_STATE),)
 
 
-class TestStartScreen(StartMixin):
+class TestStartScreen(BaseTestScreenWithDescription, StartMixin):
     """The class implements a start screen for the tests."""
 
-    description = 'A test StartScreen description.'
 
-    async def start(self, _update, _context):
-        """Invoked on the /start command."""
-        return
+def get_bot(screens=None):
+    """Return an initialized bot."""
+    screens = [TestScreen] if screens is None else screens
+
+    return Bot(
+        BOT_TEST_NAME,
+        entry_point=TestStartScreen,
+        states={
+            DEFAULT_STATE: screens,
+        },
+    )

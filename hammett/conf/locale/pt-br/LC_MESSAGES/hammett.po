@@ -1,0 +1,72 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Hammett 1.0.0\n"
+"POT-Creation-Date: 2025-05-13\n"
+"PO-Revision-Date: 2025-05-13\n"
+"Language: pt-br\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#
+# Days of week
+#
+
+msgid "Mon"
+msgstr "Seg"
+
+msgid "Tue"
+msgstr "Ter"
+
+msgid "Wed"
+msgstr "Qua"
+
+msgid "Thu"
+msgstr "Qui"
+
+msgid "Fri"
+msgstr "Sex"
+
+msgid "Sat"
+msgstr "Sáb"
+
+msgid "Sun"
+msgstr "Dom"
+
+#
+# Months
+#
+
+msgid "Jan"
+msgstr "jan"
+
+msgid "Feb"
+msgstr "fev"
+
+msgid "Mar"
+msgstr "mar"
+
+msgid "Apr"
+msgstr "abr"
+
+msgid "May"
+msgstr "mai"
+
+msgid "Jun"
+msgstr "jun"
+
+msgid "Jul"
+msgstr "jul"
+
+msgid "Aug"
+msgstr "ago"
+
+msgid "Sep"
+msgstr "set"
+
+msgid "Oct"
+msgstr "out"
+
+msgid "Nov"
+msgstr "nov"
+
+msgid "Dec"
+msgstr "dez"

@@ -1,0 +1,126 @@
+services:
+  admin-panel-bot:
+    build:
+      dockerfile: ./admin_panel_bot/Dockerfile
+    env_file: ./admin_panel_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  calendar-bot:
+    build:
+      dockerfile: ./calendar_bot/Dockerfile
+    env_file: ./calendar_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  carousel-bot:
+    build:
+      dockerfile: ./carousel_bot/Dockerfile
+    env_file: ./carousel_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  clicker-bot:
+    build:
+      dockerfile: ./clicker_bot/Dockerfile
+    env_file: ./clicker_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  hide-keyboard-bot:
+    build:
+      dockerfile: ./hide_keyboard_bot/Dockerfile
+    env_file: ./hide_keyboard_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  multi-state-bot:
+    build:
+      dockerfile: ./multi_state_bot/Dockerfile
+    env_file: ./multi_state_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  paywall-bot:
+    build:
+      dockerfile: ./paywall_bot/Dockerfile
+    env_file: ./paywall_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  dynamic-keyboard-bot:
+    build:
+      dockerfile: ./dynamic_keyboard_bot/Dockerfile
+    env_file: ./dynamic_keyboard_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  quiz-bot:
+    build:
+      dockerfile: ./quiz_bot/Dockerfile
+    env_file: ./quiz_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  reminder-bot:
+    build:
+      dockerfile: ./reminder_bot/Dockerfile
+    env_file: ./reminder_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  say-hello-bot:
+    build:
+      dockerfile: ./say_hello_bot/Dockerfile
+    env_file: ./say_hello_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  simple-jump-bot:
+    build:
+      dockerfile: ./simple_jump_bot/Dockerfile
+    env_file: ./simple_jump_bot/.env
+    environment:
+      REDIS_PERSISTENCE_HOST: "valkey"
+    depends_on:
+      - valkey
+    restart: always
+
+  valkey:
+    image: valkey/valkey:8.0
+    restart: always
+    volumes:
+      - ./_valkey_data:/data

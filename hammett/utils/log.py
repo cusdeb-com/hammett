@@ -1,6 +1,5 @@
 """The module contains facilities for configuring logging in Hammett."""
 
-import logging
 import logging.config
 from typing import TYPE_CHECKING
 

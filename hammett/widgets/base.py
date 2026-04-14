@@ -2,7 +2,7 @@
 
 import contextlib
 import json
-import logging
+import operator
 from typing import TYPE_CHECKING, cast
 
 import telegram
@@ -12,34 +12,53 @@ from hammett.core.constants import (
     DEFAULT_STATE,
     EMPTY_KEYBOARD,
     RenderConfig,
-    SourcesTypes,
+    SourceTypes,
 )
-from hammett.core.exceptions import MissingPersistence
-from hammett.core.handlers import register_button_handler
+from hammett.core.exceptions import (
+    FailedToGetDataAttributeOfQueryError,
+    MissingPersistenceError,
+    PayloadIsEmptyError,
+)
+from hammett.core.handlers import get_payload_storage, register_button_handler
+from hammett.utils.misc import get_callback_query
 from hammett.widgets.exceptions import (
-    ChoiceEmojisAreUndefined,
-    ChoicesFormatIsInvalid,
-    FailedToGetStateKey,
-    NoChoicesSpecified,
+    ChoiceEmojisAreUndefinedError,
+    ChoicesFormatIsInvalidError,
+    FailedToGetStateKeyError,
+    NoChoicesSpecifiedError,
 )
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Self
 
     from telegram import Message, Update
     from telegram.ext import CallbackContext
     from telegram.ext._utils.types import BD, BT, CD, UD
-    from typing_extensions import Self
 
     from hammett.core.constants import FinalRenderConfig
-    from hammett.types import Keyboard, State
-    from hammett.widgets.types import Choice, Choices, InitializedChoices
-
-LOGGER = logging.getLogger(__name__)
+    from hammett.types.core import Keyboard, State
+    from hammett.types.widgets import Choice, Choices, InitializedChoices
 
 
 class BaseWidget(Screen):
     """The class implements the base interface for widgets from the library."""
+
+    async def add_extra_keyboard(
+        self: 'Self',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+    ) -> 'Keyboard':
+        """Add an extra keyboard below the widget buttons.
+
+        Returns:
+            Extra keyboard below the widget buttons.
+
+        """
+        return EMPTY_KEYBOARD
+
+
+class BaseStateWidget(BaseWidget):
+    """The class implements a base interface for stateful widgets."""
 
     async def _post_render(
         self: 'Self',
@@ -47,15 +66,20 @@ class BaseWidget(Screen):
         context: 'CallbackContext[BT, UD, CD, BD]',
         message: 'Message | tuple[Message]',
         config: 'FinalRenderConfig',
-        extra_data: 'Any | None',
+        **kwargs: 'Any',
     ) -> None:
-        """Save to user_data initialized state after screen rendering if it's new message."""
-        await super()._post_render(update, context, message, config, extra_data)
+        """Save to user_data initialized state after screen rendering if it's new message.
+
+        Raises:
+            MissingPersistenceError: If the widgets are used in jobs with no specified persistence.
+
+        """
+        await super()._post_render(update, context, message, config, **kwargs)
 
         if isinstance(message, tuple):
             message = message[-1]
 
-        if extra_data is not None:
+        if kwargs:
             state_key = await self._get_state_key(
                 chat_id=message.chat_id,
                 message_id=message.message_id,
@@ -66,33 +90,29 @@ class BaseWidget(Screen):
                     context,
                     message,
                     config,
-                    extra_data,
+                    **kwargs,
                 )
             except TypeError as exc:  # raised when messages are sent from jobs
                 if not context._application.persistence:  # noqa: SLF001
                     msg = (
                         f"It's not possible to pass data to user_data. "
                         f"To solve the issue either don't use {self.__class__.__name__} in jobs "
-                        f"or configure persistence."
+                        f'or configure persistence.'
                     )
-                    raise MissingPersistence(msg) from exc
-                user_data = cast('UD', {**context._application.user_data})  # noqa: SLF001
-                try:
-                    user_data[message.chat_id].update({  # type: ignore[index]
+                    raise MissingPersistenceError(msg) from exc
+
+                user_data = context._application.user_data[message.chat_id]  # noqa: SLF001
+                user_data.update(  # type: ignore[attr-defined]
+                    {
                         state_key: await self._initialized_state(
                             update,
                             context,
                             message,
                             config,
-                            extra_data,
+                            **kwargs,
                         ),
-                    })
-                except KeyError:
-                    msg = (
-                        f'Can not update user_data with the carousel widget message id '
-                        f'({message.id})'
-                    )
-                    LOGGER.warning(msg)
+                    },
+                )
 
                 await context._application.persistence.update_user_data(  # noqa: SLF001
                     message.chat_id,
@@ -101,11 +121,11 @@ class BaseWidget(Screen):
 
     async def _initialized_state(
         self: 'Self',
-        update: 'Update | None',
-        context: 'CallbackContext[BT, UD, CD, BD]',
-        message: 'Message',
-        config: 'FinalRenderConfig',
-        extra_data: 'Any',
+        _update: 'Update | None',
+        _context: 'CallbackContext[BT, UD, CD, BD]',
+        _message: 'Message',
+        _config: 'FinalRenderConfig',
+        **_kwargs: 'Any',
     ) -> 'dict[Any, Any]':
         """Return the post-initialization widget state to be saved in context."""
         raise NotImplementedError
@@ -116,12 +136,20 @@ class BaseWidget(Screen):
         chat_id: int = 0,
         message_id: int = 0,
     ) -> str:
-        """Return a widget state key."""
+        """Return a widget state key.
+
+        Returns:
+            Widget state key.
+
+        Raises:
+            FailedToGetStateKeyError: If the query object does not have any message.
+
+        """
         if update:
-            query = await self.get_callback_query(update)
+            query = await get_callback_query(update)
             message = getattr(query, 'message', None)
             if message is None:
-                raise FailedToGetStateKey
+                raise FailedToGetStateKeyError
 
             current_chat_id = message.chat_id
             current_message_id = message.message_id
@@ -139,14 +167,18 @@ class BaseWidget(Screen):
     ) -> 'Any | None':
         """Safely get the specified value from the widget state dictionary
         stored in user_data.
+
+        Returns:
+            Value from the widget state.
+
         """
         state_value = None
-        if context.user_data:
+        if context.user_data is not None:
             user_data = cast('dict[str, Any]', context.user_data)
             try:
                 current_state_key = await self._get_state_key(update)
                 state = user_data.get(current_state_key)
-            except FailedToGetStateKey:
+            except FailedToGetStateKeyError:
                 return None
 
             if state and state.get(state_key):
@@ -164,29 +196,23 @@ class BaseWidget(Screen):
         """Safely set the specified value to widget state dictionary
         stored in user_data.
         """
-        if not context.user_data:
+        if context.user_data is None:
             return
 
-        with contextlib.suppress(FailedToGetStateKey):  # raised when invoked on /start
+        with contextlib.suppress(FailedToGetStateKeyError):  # raised when invoked on /start
             current_state_key = await self._get_state_key(update)
             user_data = cast('dict[str, Any]', context.user_data)
 
             current_state = user_data.get(current_state_key, {})
-            current_state.update({
-                state_key: state_value,
-            })
+            current_state.update(
+                {
+                    state_key: state_value,
+                },
+            )
             context.user_data[current_state_key] = current_state  # type: ignore[index]
 
-    async def add_extra_keyboard(
-        self: 'Self',
-        _update: 'Update | None',
-        _context: 'CallbackContext[BT, UD, CD, BD]',
-    ) -> 'Keyboard':
-        """Add an extra keyboard below the widget buttons."""
-        return EMPTY_KEYBOARD
 
-
-class BaseChoiceWidget(BaseWidget):
+class BaseChoiceWidget(BaseStateWidget):
     """The class implements the base interface for the choice widgets."""
 
     choices: 'Choices' = ()
@@ -194,12 +220,18 @@ class BaseChoiceWidget(BaseWidget):
     unchosen_emoji: str = ''
 
     def __init__(self: 'Self') -> None:
-        """Initialize a base choice widget object."""
+        """Initialize a base choice widget object.
+
+        Raises:
+            ChoiceEmojisAreUndefinedError: If the `chosen_emoji` or `unchosen_emoji` attributes
+            are not specified.
+
+        """
         super().__init__()
 
-        if self.chosen_emoji == '' or self.unchosen_emoji == '':
+        if not self.chosen_emoji or not self.unchosen_emoji:
             msg = f'{self.__class__.__name__} must specify both chosen_emoji and unchosen_emoji'
-            raise ChoiceEmojisAreUndefined(msg)
+            raise ChoiceEmojisAreUndefinedError(msg)
 
     #
     # Private methods
@@ -221,11 +253,17 @@ class BaseChoiceWidget(BaseWidget):
         _context: 'CallbackContext[BT, UD, CD, BD]',
         _message: 'Message',
         _config: 'FinalRenderConfig',
-        extra_data: 'Any',
+        choices: 'Choices | None' = None,
+        **kwargs: 'Any',  # noqa: ARG002
     ) -> 'dict[Any, Any]':
-        """Return the post-initialization widget state to be saved in context."""
+        """Return the post-initialization widget state to be saved in context.
+
+        Returns:
+            Post-initialization widget state.
+
+        """
         return {
-            'choices': extra_data.get('choices', ()),
+            'choices': choices or (),
         }
 
     async def _build_keyboard(
@@ -234,10 +272,19 @@ class BaseChoiceWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
         choices: 'InitializedChoices',
     ) -> 'Keyboard':
-        """Build the keyboard based on the specified choices."""
+        """Build the keyboard based on the specified choices.
+
+        Returns:
+            Keyboard for the widget.
+
+        Raises:
+            ChoicesFormatIsInvalidError: If the type of the `choices` attribute is not correct.
+            NoChoicesSpecifiedError: If the `choices` attribute is not specified.
+
+        """
         if not len(choices):
             msg = f'{self.__class__.__name__} must specify at least one choice'
-            raise NoChoicesSpecified(msg)
+            raise NoChoicesSpecifiedError(msg)
 
         keyboard = []
         for choice in choices:
@@ -248,17 +295,19 @@ class BaseChoiceWidget(BaseWidget):
                     f'Each choice of {self.__class__.__name__} must be '
                     f'a tuple containing a code and a name'
                 )
-                raise ChoicesFormatIsInvalid(msg) from exc
+                raise ChoicesFormatIsInvalidError(msg) from exc
 
             box = self.chosen_emoji if chosen else self.unchosen_emoji
-            keyboard.append([
-                Button(
-                    f'{box} {name}',
-                    self._on_choice_click,
-                    payload=json.dumps({'code': code, 'name': name}),
-                    source_type=SourcesTypes.HANDLER_SOURCE_TYPE,
-                ),
-            ])
+            keyboard.append(
+                [
+                    Button(
+                        f'{box} {name}',
+                        self._on_choice_click,
+                        payload=json.dumps({'code': code, 'name': name}),
+                        source_type=SourceTypes.HANDLER_SOURCE_TYPE,
+                    ),
+                ],
+            )
 
         return keyboard + await self.add_extra_keyboard(update, context)
 
@@ -270,7 +319,12 @@ class BaseChoiceWidget(BaseWidget):
         choices: 'Choices | None' = None,
         **kwargs: 'Any',
     ) -> 'State':
-        """Initialize the widget."""
+        """Initialize the widget.
+
+        Returns:
+            State after widget initialization.
+
+        """
         current_choices = choices or await self.get_choices(update, context, **kwargs)
         initialized_choices = await self._initialize_choices(
             update,
@@ -290,7 +344,7 @@ class BaseChoiceWidget(BaseWidget):
             update,
             context,
             config=config,
-            extra_data={'choices': initialized_choices},
+            choices=initialized_choices,
         )
         return DEFAULT_STATE
 
@@ -302,7 +356,12 @@ class BaseChoiceWidget(BaseWidget):
         *_args: 'Any',
         **_kwargs: 'Any',
     ) -> 'State':
-        """Invoke when clicking on a choice."""
+        """Invoke when clicking on a choice.
+
+        Returns:
+            State after clicking on a choice.
+
+        """
         payload: dict[str, str] = json.loads(await self.get_payload(update, context))
 
         choices = await self.switch(update, context, (payload['code'], payload['name']))
@@ -327,7 +386,12 @@ class BaseChoiceWidget(BaseWidget):
         _context: 'CallbackContext[BT, UD, CD, BD]',
         **_kwargs: 'Any',
     ) -> 'Choices':
-        """Return the `choices` attribute of the widget."""
+        """Return the `choices` attribute of the widget.
+
+        Returns:
+            `Choices` attribute of the widget.
+
+        """
         return self.choices
 
     async def get_initialized_choices(
@@ -335,12 +399,20 @@ class BaseChoiceWidget(BaseWidget):
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'InitializedChoices':
-        """Return the initialized choices."""
-        current_choices: InitializedChoices = await self.get_state_value(
-            update,
-            context,
-            'choices',
-        ) or ()
+        """Return the initialized choices.
+
+        Returns:
+            Initialized choices.
+
+        """
+        current_choices: InitializedChoices = (
+            await self.get_state_value(
+                update,
+                context,
+                'choices',
+            )
+            or ()
+        )
 
         return current_choices
 
@@ -349,18 +421,46 @@ class BaseChoiceWidget(BaseWidget):
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
     ) -> 'InitializedChoices':
-        """Return the choices made by the user."""
-        current_choices = await self.get_initialized_choices(update, context)
-        return tuple(filter(lambda choice: choice[0], current_choices))
+        """Return the choices made by the user.
 
-    async def goto(
-        self: 'Self',
+        Returns:
+            Choices made by the user.
+
+        """
+        current_choices = await self.get_initialized_choices(update, context)
+        return tuple(filter(operator.itemgetter(0), current_choices))
+
+    @staticmethod
+    async def get_payload(
         update: 'Update',
         context: 'CallbackContext[BT, UD, CD, BD]',
-        **_kwargs: 'Any',
-    ) -> 'State':
-        """Handle the case when the widget is passed to Button as `GOTO_SOURCE_TYPE`."""
-        return await self._init(update, context)
+    ) -> str:
+        """Return the payload passed through the pressed button.
+
+        In case of the choice widgets it is necessary to keep payload
+        saved as all the choice buttons have the same payload though
+        bot's running and popping of it leads to incorrect behaviour.
+
+        Returns:
+            Payload of the button.
+
+        Raises:
+            FailedToGetDataAttributeOfQueryError: If the query object does not have any data.
+            PayloadIsEmptyError: If the attempt to retrieve the payload fails.
+
+        """
+        query = await get_callback_query(update)
+
+        data = getattr(query, 'data', None)
+        if data is None:
+            raise FailedToGetDataAttributeOfQueryError
+
+        payload_storage = get_payload_storage(context)
+        payload = payload_storage.get(data)
+        if not payload:
+            raise PayloadIsEmptyError
+
+        return payload
 
     async def jump(
         self: 'Self',
@@ -368,24 +468,45 @@ class BaseChoiceWidget(BaseWidget):
         context: 'CallbackContext[BT, UD, CD, BD]',
         **_kwargs: 'Any',
     ) -> 'State':
-        """Handle the case when the widget is used as StartScreen."""
+        """Handle the case when the widget is used as StartScreen.
+
+        Returns:
+            State after jumping to the widget.
+
+        """
         config = RenderConfig(as_new_message=True)
         return await self._init(update, context, config=config)
+
+    async def move(
+        self: 'Self',
+        update: 'Update',
+        context: 'CallbackContext[BT, UD, CD, BD]',
+        **_kwargs: 'Any',
+    ) -> 'State':
+        """Handle the case when the widget is passed to Button as `MOVE_SOURCE_TYPE`.
+
+        Returns:
+            State after moving to the widget.
+
+        """
+        return await self._init(update, context)
 
     async def send(
         self: 'Self',
         context: 'CallbackContext[BT, UD, CD, BD]',
         *,
         config: 'RenderConfig | None' = None,
-        extra_data: 'Any | None' = None,
+        choices: 'Choices | None' = None,
+        **_kwargs: 'Any',
     ) -> 'State':
-        """Handle the case when the widget is used as a notification."""
+        """Handle the case when the widget is used as a notification.
+
+        Returns:
+            State after sending the widget.
+
+        """
         config = config or RenderConfig()
         config.as_new_message = True
-
-        choices = None
-        if extra_data:
-            choices = extra_data.get('choices', None)
 
         return await self._init(None, context, config, choices=choices)
 

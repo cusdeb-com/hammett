@@ -1,2 +1,0 @@
-aiofiles<=23.1.0
-python-telegram-bot[job-queue,webhooks]==20.3

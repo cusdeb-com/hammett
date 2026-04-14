@@ -3,12 +3,11 @@
 import inspect
 import logging
 import zlib
-from contextlib import suppress
 from functools import wraps
 from typing import TYPE_CHECKING, Any, cast
 
-from hammett.core.exceptions import CommandNameIsEmpty
-from hammett.types import HandlerAlias, HandlerType, State
+from hammett.core.exceptions import CommandNameIsEmptyError
+from hammett.types.core import HandlerAlias, HandlerType, State
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -17,7 +16,7 @@ if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CD, UD
     from telegram.ext.filters import BaseFilter
 
-    from hammett.types import Handler, PayloadStorage
+    from hammett.types.core import Handler, PayloadStorage
 
 LOGGER = logging.getLogger(__name__)
 
@@ -25,19 +24,31 @@ LOGGER = logging.getLogger(__name__)
 def _clear_command_name(command_name: str) -> str:
     """Clear the specified command name.
 
-    Raise `CommandNameIsEmpty` if the name either is empty or consists only of '/'.
+    Raise `CommandNameIsEmptyError` if the name either is empty or consists only of '/'.
+
+    Returns:
+        Cleared command name.
+
+    Raises:
+        CommandNameIsEmptyError: If the provided command name is empty.
+
     """
     if command_name and command_name[0] == '/':
         command_name = command_name[1:]
 
     if not command_name.strip():
-        raise CommandNameIsEmpty
+        raise CommandNameIsEmptyError
 
     return command_name
 
 
 def _get_handler_name(handler: 'Handler') -> str:
-    """Return the full name of the specified handler."""
+    """Return the full name of the specified handler.
+
+    Returns:
+        Full name of the specified handler.
+
+    """
     try:
         return f'{type(handler.__self__).__name__}.{handler.__name__}'
     except AttributeError:  # when a handler is static
@@ -48,7 +59,12 @@ def _register_handler(
     name: str,
     value: HandlerType,
 ) -> 'Callable[[str], Callable[[HandlerAlias], Handler]]':
-    """Set the specified attribute of the decorated handler."""
+    """Set the specified attribute of the decorated handler.
+
+    Returns:
+        Wrapped handler.
+
+    """
 
     def create_decorator(
         command_name: str = '',
@@ -63,12 +79,12 @@ def _register_handler(
             if value == HandlerType.COMMAND_HANDLER:
                 try:
                     handler.command_name = _clear_command_name(command_name)
-                except CommandNameIsEmpty as exc:
+                except CommandNameIsEmptyError as exc:
                     msg = (
                         f"Unable to register the '{handler.__name__}' handler for "
-                        f"a command with an empty name."
+                        f'a command with an empty name.'
                     )
-                    raise CommandNameIsEmpty(msg) from exc
+                    raise CommandNameIsEmptyError(msg) from exc
 
             @wraps(handler)
             async def wrapper(
@@ -76,13 +92,24 @@ def _register_handler(
                 **kwargs: 'Any',
             ) -> 'Any':
                 return await handler(*args, **kwargs)
+
             return cast('Handler', wrapper)
+
         return decorator
+
     return create_decorator
 
 
 def calc_checksum(obj: 'Any') -> str:
-    """Calculate a checksum of the specified object."""
+    """Calculate a checksum of the specified object.
+
+    Returns:
+        Calculated checksum of the specified object.
+
+    Raises:
+        TypeError: If the provided object is neither a handler nor a button caption.
+
+    """
     if callable(obj):  # in a case of a handler
         handler_name = _get_handler_name(obj)
         return str(zlib.adler32(handler_name.encode('utf8')))
@@ -94,8 +121,14 @@ def calc_checksum(obj: 'Any') -> str:
 
 
 def get_payload_storage(context: 'CallbackContext[BT, UD, CD, BD]') -> 'PayloadStorage':
-    """Return the payload storage."""
+    """Return the payload storage.
+
+    Returns:
+        Payload storage.
+
+    """
     from hammett.conf import settings
+
     namespace = settings.PAYLOAD_NAMESPACE
     bot_data = cast('dict[str, PayloadStorage]', context.bot_data)
     try:
@@ -121,15 +154,11 @@ def log_unregistered_handler(obj: 'Any') -> None:
         return
 
     params = set(signature.parameters.keys())
-    with suppress(KeyError):  # remove optional parameters from the list
-        params.remove('args')
-        params.remove('kwargs')
-        params.remove('self')
-
+    params.difference_update({'self', 'args', 'kwargs'})  # remove optional parameters
     if (
-        len(params) == len(mandatory_params) and
-        params.intersection(mandatory_params) == mandatory_params and
-        signature.return_annotation in mandatory_return_annotations
+        len(params) == len(mandatory_params)
+        and params.intersection(mandatory_params) == mandatory_params
+        and signature.return_annotation in mandatory_return_annotations
     ):
         LOGGER.warning(
             '%s resembles a handler. Perhaps you forgot to register it.',
